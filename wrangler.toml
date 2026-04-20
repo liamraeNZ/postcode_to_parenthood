@@ -1,0 +1,9 @@
+name = "fertilityfund"
+main = "worker/index.ts"
+compatibility_date = "2026-04-20"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "fertilityfund"
+database_id = "a715c124-c60f-43f4-ba59-afe68ccc5a00"
+migrations_dir = "migrations"
