@@ -11,7 +11,7 @@
     "lint": "tsc --noEmit",
     "cf:dev": "wrangler dev",
     "cf:migrate:local": "wrangler d1 migrations apply DB --local",
-    "cf:migrate:remote": "wrangler d1 migrations apply DB"
+    "cf:migrate:remote": "wrangler d1 migrations apply DB --remote"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
