@@ -7,11 +7,7 @@
     "lib": [
       "ES2022",
       "DOM",
-      "DOM.Iterable",
-      "WebWorker"
-    ],
-    "types": [
-      "@cloudflare/workers-types"
+      "DOM.Iterable"
     ],
     "skipLibCheck": true,
     "moduleResolution": "bundler",

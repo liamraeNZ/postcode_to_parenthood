@@ -1,5 +1,5 @@
 name = "fertilityfund"
-main = "worker/index.ts"
+main = "index.ts"
 compatibility_date = "2026-04-20"
 
 [[d1_databases]]
