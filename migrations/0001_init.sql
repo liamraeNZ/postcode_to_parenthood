@@ -1,4 +1,4 @@
-pragma foreign_keys = on;
+pragma foreign_keys = on; --> statement-breakpoint
 
 create table if not exists icbs (
   id text primary key,
@@ -8,15 +8,7 @@ create table if not exists icbs (
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   constraint icbs_nhs_code_format check (nhs_code is null or nhs_code glob 'E[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
-);
-
-create trigger if not exists set_icbs_updated_at
-after update on icbs
-for each row
-when new.updated_at = old.updated_at
-begin
-  update icbs set updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') where id = old.id;
-end;
+); --> statement-breakpoint
 
 create table if not exists icb_aliases (
   id text primary key,
@@ -26,17 +18,9 @@ create table if not exists icb_aliases (
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   constraint icb_aliases_kind check (alias_kind in ('name', 'code'))
-);
+); --> statement-breakpoint
 
-create index if not exists icb_aliases_icb_id_idx on icb_aliases (icb_id);
-
-create trigger if not exists set_icb_aliases_updated_at
-after update on icb_aliases
-for each row
-when new.updated_at = old.updated_at
-begin
-  update icb_aliases set updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') where id = old.id;
-end;
+create index if not exists icb_aliases_icb_id_idx on icb_aliases (icb_id); --> statement-breakpoint
 
 create table if not exists icb_policies (
   id text primary key,
@@ -59,18 +43,11 @@ create table if not exists icb_policies (
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   constraint icb_policies_effective_range check (effective_to is null or effective_to >= effective_from),
   constraint icb_policies_unique_effective_from unique (icb_id, effective_from)
-);
+); --> statement-breakpoint
 
-create index if not exists icb_policies_icb_id_idx on icb_policies (icb_id);
-create index if not exists icb_policies_effective_from_idx on icb_policies (effective_from);
+create index if not exists icb_policies_icb_id_idx on icb_policies (icb_id); --> statement-breakpoint
 
-create trigger if not exists set_icb_policies_updated_at
-after update on icb_policies
-for each row
-when new.updated_at = old.updated_at
-begin
-  update icb_policies set updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') where id = old.id;
-end;
+create index if not exists icb_policies_effective_from_idx on icb_policies (effective_from); --> statement-breakpoint
 
 create table if not exists grants (
   id text primary key,
@@ -96,19 +73,13 @@ create table if not exists grants (
     and (amount_max_gbp is null or amount_max_gbp >= 0)
     and (amount_min_gbp is null or amount_max_gbp is null or amount_max_gbp >= amount_min_gbp)
   )
-);
+); --> statement-breakpoint
 
-create index if not exists grants_type_idx on grants (type);
-create index if not exists grants_region_idx on grants (region);
-create index if not exists grants_is_sponsored_idx on grants (is_sponsored);
+create index if not exists grants_type_idx on grants (type); --> statement-breakpoint
 
-create trigger if not exists set_grants_updated_at
-after update on grants
-for each row
-when new.updated_at = old.updated_at
-begin
-  update grants set updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') where id = old.id;
-end;
+create index if not exists grants_region_idx on grants (region); --> statement-breakpoint
+
+create index if not exists grants_is_sponsored_idx on grants (is_sponsored); --> statement-breakpoint
 
 create table if not exists subscribers (
   id text primary key,
@@ -116,15 +87,7 @@ create table if not exists subscribers (
   interests text not null default '{}',
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
-);
-
-create trigger if not exists set_subscribers_updated_at
-after update on subscribers
-for each row
-when new.updated_at = old.updated_at
-begin
-  update subscribers set updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') where id = old.id;
-end;
+); --> statement-breakpoint
 
 create table if not exists saved_searches (
   id text primary key,
@@ -135,32 +98,25 @@ create table if not exists saved_searches (
   user_bmi real check (user_bmi is null or user_bmi >= 0),
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
-);
+); --> statement-breakpoint
 
-create index if not exists saved_searches_user_id_idx on saved_searches (user_id);
-create index if not exists saved_searches_postcode_normalized_idx on saved_searches (postcode_normalized);
+create index if not exists saved_searches_user_id_idx on saved_searches (user_id); --> statement-breakpoint
 
-create trigger if not exists set_saved_searches_updated_at
-after update on saved_searches
-for each row
-when new.updated_at = old.updated_at
-begin
-  update saved_searches set updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') where id = old.id;
-end;
+create index if not exists saved_searches_postcode_normalized_idx on saved_searches (postcode_normalized); --> statement-breakpoint
 
 insert or ignore into icbs (id, name, region, nhs_code)
 values
   ('9b66e0f1-eab0-4f2a-ae59-6a1bb96edac5', 'NHS North East London', 'London', 'E54000029'),
   ('c692b4c7-2d08-4f93-9130-28e369c1d529', 'NHS West and North London', 'London', 'E54000027'),
   ('6e501a80-fac9-4b1d-8f74-2df7c79a5eb8', 'NHS South East London', 'London', 'E54000030'),
-  ('8543a058-d51d-4f45-abf6-5e421389b404', 'NHS Kent and Medway', 'South East', 'E54000032');
+  ('8543a058-d51d-4f45-abf6-5e421389b404', 'NHS Kent and Medway', 'South East', 'E54000032'); --> statement-breakpoint
 
 insert or ignore into icb_aliases (id, icb_id, alias_kind, alias)
 values
   ('f27d989b-03c8-4068-8f1b-274a5f7c19fe', 'c692b4c7-2d08-4f93-9130-28e369c1d529', 'name', 'NHS North West London'),
   ('65353832-604d-4fd3-b326-a8c835db2f60', 'c692b4c7-2d08-4f93-9130-28e369c1d529', 'name', 'NHS North Central London'),
   ('c315df41-004c-491f-8929-2a4aa85f0223', 'c692b4c7-2d08-4f93-9130-28e369c1d529', 'code', 'E54000028'),
-  ('fc20f4eb-f788-4de8-a316-7756acacbc24', '8543a058-d51d-4f45-abf6-5e421389b404', 'name', 'NHS Kent and Medway Integrated Care Board');
+  ('fc20f4eb-f788-4de8-a316-7756acacbc24', '8543a058-d51d-4f45-abf6-5e421389b404', 'name', 'NHS Kent and Medway Integrated Care Board'); --> statement-breakpoint
 
 insert or ignore into icb_policies (
   id,
