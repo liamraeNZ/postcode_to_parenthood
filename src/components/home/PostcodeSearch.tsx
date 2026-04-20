@@ -30,11 +30,7 @@ export function PostcodeSearch() {
         setError("We couldn't find an ICB policy for that postcode.");
       }
     } catch (err) {
-      if (err instanceof Error && err.message === 'Supabase is not configured') {
-        setError('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY and restart the dev server.');
-      } else {
-        setError('An error occurred while searching. Please try again.');
-      }
+      setError('An error occurred while searching. Please try again.');
     } finally {
       setLoading(false);
     }
