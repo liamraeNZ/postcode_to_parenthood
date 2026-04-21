@@ -84,6 +84,10 @@ function normalizePostcode(input: string) {
   return input.trim().toUpperCase().replace(/\s+/g, '');
 }
 
+function normalizeOdsCode(input: string) {
+  return input.trim().toUpperCase();
+}
+
 function redactPostcodeForLogs(normalizedPostcode: string) {
   if (!normalizedPostcode) return '';
   const visible = normalizedPostcode.slice(0, Math.min(3, normalizedPostcode.length));
@@ -125,6 +129,13 @@ async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, tim
 }
 
 async function resolveIcbId(db: D1Database, icbCode: string, icbName: string | null) {
+  const byOdsCode = await db
+    .prepare('select id from icbs where ods_code = ?1 limit 1')
+    .bind(icbCode)
+    .first<{ id: string }>();
+
+  if (byOdsCode?.id) return byOdsCode.id;
+
   const byCode = await db
     .prepare('select id from icbs where nhs_code = ?1 limit 1')
     .bind(icbCode)
@@ -149,21 +160,25 @@ async function resolveIcbId(db: D1Database, icbCode: string, icbName: string | n
   return byAliasName?.id ?? null;
 }
 
-async function lookupIcbPolicyByPostcode(db: D1Database, postcode: string, ctx: { requestId: string }) {
-  const normalized = normalizePostcode(postcode);
-  if (!normalized) return null;
-
-  const upstreamUrl = `https://api.postcodes.io/postcodes/${encodeURIComponent(normalized)}`;
-  const upstreamStartedAt = Date.now();
-  let postcodesIoResponse: Response;
+async function fetchOrdJson(url: string, ctx: { requestId: string; timeoutMs: number }) {
+  const startedAt = Date.now();
+  let response: Response;
   try {
-    postcodesIoResponse = await fetchWithTimeout(upstreamUrl, {}, 8_000);
+    response = await fetchWithTimeout(
+      url,
+      {
+        headers: {
+          accept: 'application/json',
+        },
+      },
+      ctx.timeoutMs
+    );
   } catch (err) {
     log('error', 'upstream fetch failed', {
       request_id: ctx.requestId,
-      upstream: 'api.postcodes.io',
-      url: upstreamUrl,
-      duration_ms: Date.now() - upstreamStartedAt,
+      upstream: 'spineservices.ord',
+      url,
+      duration_ms: Date.now() - startedAt,
       err: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : err,
     });
     throw err;
@@ -171,37 +186,116 @@ async function lookupIcbPolicyByPostcode(db: D1Database, postcode: string, ctx: 
 
   log('debug', 'upstream response', {
     request_id: ctx.requestId,
-    upstream: 'api.postcodes.io',
-    status: postcodesIoResponse.status,
-    duration_ms: Date.now() - upstreamStartedAt,
+    upstream: 'spineservices.ord',
+    status: response.status,
+    duration_ms: Date.now() - startedAt,
   });
 
-  if (postcodesIoResponse.status === 404) return null;
-  if (postcodesIoResponse.status === 429) {
-    throw new Error('Upstream rate limited');
-  }
-  if (!postcodesIoResponse.ok) {
-    throw new Error(`Upstream error: ${postcodesIoResponse.status}`);
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    throw new Error(`ORD error: ${response.status} ${text ? `(${text.slice(0, 200)})` : ''}`.trim());
   }
 
-  let json: { result?: { codes?: { icb?: string | null } | null } | null };
   try {
-    json = (await postcodesIoResponse.json()) as {
-      result?: { codes?: { icb?: string | null } | null } | null;
-    };
+    return (await response.json()) as unknown;
   } catch (err) {
     log('error', 'upstream returned invalid JSON', {
       request_id: ctx.requestId,
-      upstream: 'api.postcodes.io',
+      upstream: 'spineservices.ord',
       err: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : err,
     });
-    throw new Error('Upstream invalid JSON');
+    throw new Error('ORD invalid JSON');
   }
+}
 
-  const icbCode = json.result?.codes?.icb ?? null;
-  if (!icbCode) return null;
+function getStringField(value: unknown): string | null {
+  return typeof value === 'string' ? value : null;
+}
 
-  const icbId = await resolveIcbId(db, icbCode, null);
+function getPath(obj: unknown, path: string[]): unknown {
+  let current: unknown = obj;
+  for (const key of path) {
+    if (!isRecord(current)) return undefined;
+    current = current[key];
+  }
+  return current;
+}
+
+function getStringPath(obj: unknown, path: string[]): string | null {
+  return getStringField(getPath(obj, path));
+}
+
+function extractRelArray(json: unknown): unknown[] {
+  const direct = getPath(json, ['Rels']);
+  if (Array.isArray(direct)) return direct;
+  const directRel = getPath(json, ['Rels', 'Rel']);
+  if (Array.isArray(directRel)) return directRel;
+  const orgRel = getPath(json, ['Organisation', 'Rels']);
+  if (Array.isArray(orgRel)) return orgRel;
+  const orgRelRel = getPath(json, ['Organisation', 'Rels', 'Rel']);
+  if (Array.isArray(orgRelRel)) return orgRelRel;
+  return [];
+}
+
+function extractTargetPrimaryRoleId(rel: unknown): string | null {
+  return (
+    getStringPath(rel, ['Target', 'PrimaryRoleId', 'id']) ??
+    getStringPath(rel, ['Target', 'PrimaryRoleId']) ??
+    getStringPath(rel, ['Target', 'Roles', 'Role', 'id'])
+  );
+}
+
+function extractRelStatus(rel: unknown): string | null {
+  return getStringPath(rel, ['Status']) ?? getStringPath(rel, ['Rel', 'Status']);
+}
+
+function extractTargetOrgCode(rel: unknown): string | null {
+  return (
+    getStringPath(rel, ['Target', 'OrgId', 'extension']) ??
+    getStringPath(rel, ['Target', 'OrgId']) ??
+    getStringPath(rel, ['Target', 'Organisation', 'OrgId', 'extension'])
+  );
+}
+
+function findActiveRelationshipTarget(
+  rels: unknown[],
+  preferredRoleIds: string[]
+): { icbCode: string; relationshipRoleId: string } | null {
+  for (const roleId of preferredRoleIds) {
+    for (const rel of rels) {
+      const status = extractRelStatus(rel);
+      if (status !== 'Active') continue;
+      const targetRoleId = extractTargetPrimaryRoleId(rel);
+      if (targetRoleId !== roleId) continue;
+      const targetCode = extractTargetOrgCode(rel);
+      if (!targetCode) continue;
+      return { icbCode: targetCode, relationshipRoleId: roleId };
+    }
+  }
+  return null;
+}
+
+async function getIcbFromGpOds(odsCode: string, ctx: { requestId: string }) {
+  const normalizedOds = normalizeOdsCode(odsCode);
+  if (!normalizedOds) return null;
+
+  const url = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/${encodeURIComponent(
+    normalizedOds
+  )}`;
+  const json = await fetchOrdJson(url, { requestId: ctx.requestId, timeoutMs: 8_000 });
+  const rels = extractRelArray(json);
+
+  const direct = findActiveRelationshipTarget(rels, ['RO318', 'RO210']);
+  if (direct) return direct;
+
+  return findActiveRelationshipTarget(rels, ['RO98']);
+}
+
+async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) {
+  const normalized = normalizeOdsCode(icbCode);
+  if (!normalized) return null;
+
+  const icbId = await resolveIcbId(db, normalized, null);
   if (!icbId) return null;
 
   const today = new Date().toISOString().slice(0, 10);
@@ -286,8 +380,8 @@ async function handleApiRequest(request: Request, env: Env) {
       query: sanitizeSearchParams(url.searchParams),
     });
 
-    if (url.pathname === '/api/icb-policy' && request.method === 'GET') {
-      const postcode = url.searchParams.get('postcode');
+    if (url.pathname === '/api/gp-practices' && request.method === 'GET') {
+      const postcode = url.searchParams.get('postcode') || url.searchParams.get('Postcode');
       if (!postcode) {
         response = jsonResponse({ error: 'Missing postcode', request_id: reqId }, { status: 400 });
         return response;
@@ -297,7 +391,73 @@ async function handleApiRequest(request: Request, env: Env) {
         return response;
       }
 
-      const policy = await lookupIcbPolicyByPostcode(env.DB, postcode, { requestId: reqId });
+      const normalized = normalizePostcode(postcode);
+      const searchPostcode = normalized.length > 4 ? normalized.slice(0, -3) : normalized;
+      const ordUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PostCode=${encodeURIComponent(
+        searchPostcode
+      )}&PrimaryRoleId=RO177&Status=Active`;
+
+      const json = await fetchOrdJson(ordUrl, { requestId: reqId, timeoutMs: 8_000 });
+      const organisations = getPath(json, ['Organisations']);
+      if (!Array.isArray(organisations) || organisations.length === 0) {
+        response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
+        return response;
+      }
+
+      const out = organisations
+        .map((org) => {
+          const odsCode = getStringPath(org, ['OrgId']) ?? getStringPath(org, ['OrgId', 'extension']);
+          const name = getStringPath(org, ['Name']);
+          if (!odsCode || !name) return null;
+          const postCode = getStringPath(org, ['PostCode']) ?? undefined;
+          const orgLink = getStringPath(org, ['OrgLink']) ?? undefined;
+          return { odsCode, name, postcode: postCode, orgLink };
+        })
+        .filter((org): org is NonNullable<typeof org> => org !== null);
+
+      if (out.length === 0) {
+        response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
+        return response;
+      }
+
+      response = jsonResponse(out);
+      return response;
+    }
+
+    if (url.pathname === '/api/gp-icb' && request.method === 'GET') {
+      const odsCode = url.searchParams.get('odsCode');
+      if (!odsCode) {
+        response = jsonResponse({ error: 'Missing odsCode', request_id: reqId }, { status: 400 });
+        return response;
+      }
+
+      const resolved = await getIcbFromGpOds(odsCode, { requestId: reqId });
+      if (!resolved) {
+        response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
+        return response;
+      }
+
+      response = jsonResponse(resolved);
+      return response;
+    }
+
+    if (url.pathname === '/api/icb-policy' && request.method === 'GET') {
+      const postcode = url.searchParams.get('postcode');
+      if (postcode) {
+        response = jsonResponse(
+          { error: 'Use /api/gp-practices then /api/gp-icb then /api/icb-policy?icbCode=...', request_id: reqId },
+          { status: 400 }
+        );
+        return response;
+      }
+
+      const icbCode = url.searchParams.get('icbCode');
+      if (!icbCode) {
+        response = jsonResponse({ error: 'Missing icbCode', request_id: reqId }, { status: 400 });
+        return response;
+      }
+
+      const policy = await lookupIcbPolicyByIcbCode(env.DB, icbCode);
       if (!policy) {
         response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
         return response;

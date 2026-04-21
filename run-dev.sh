@@ -9,7 +9,7 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 echo "[run-dev] applying D1 migrations locally..."
-npx wrangler d1 migrations apply DB --local
+CI=1 npx wrangler d1 migrations apply DB --local
 
 echo "[run-dev] building frontend in watch mode..."
 npm run build:watch &

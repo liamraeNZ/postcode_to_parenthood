@@ -12,6 +12,13 @@ export interface ICBPolicy {
   updated_at: string;
 }
 
+export interface GpPracticeSummary {
+  odsCode: string;
+  name: string;
+  postcode?: string;
+  orgLink?: string;
+}
+
 export type GrantType = 'Grant' | 'Financing' | 'Guarantee';
 
 export interface Grant {
