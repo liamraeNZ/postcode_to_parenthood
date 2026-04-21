@@ -41,15 +41,33 @@ export function PostcodeSearch() {
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [loadingSelect, setLoadingSelect] = useState(false);
   const [gpPractices, setGpPractices] = useState<GpPracticeSummary[] | null>(null);
+  const [gpPracticeQuery, setGpPracticeQuery] = useState('');
   const [selectedGP, setSelectedGP] = useState<GpPracticeSummary | null>(null);
   const [icbCode, setIcbCode] = useState<string | null>(null);
   const [result, setResult] = useState<ICBPolicy | null>(null);
   const [error, setError] = useState('');
 
+  const sortedGpPractices = gpPractices
+    ? [...gpPractices].sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
+    : null;
+
+  const filteredGpPractices = sortedGpPractices
+    ? sortedGpPractices.filter((gp) => {
+        const q = gpPracticeQuery.trim().toLowerCase();
+        if (!q) return true;
+        return (
+          gp.name.toLowerCase().includes(q) ||
+          gp.odsCode.toLowerCase().includes(q) ||
+          (gp.postcode ?? '').toLowerCase().includes(q)
+        );
+      })
+    : null;
+
   const resetSearchState = () => {
     setError('');
     setResult(null);
     setGpPractices(null);
+    setGpPracticeQuery('');
     setSelectedGP(null);
     setIcbCode(null);
   };
@@ -143,7 +161,7 @@ export function PostcodeSearch() {
           </motion.div>
         )}
 
-        {gpPractices && gpPractices.length > 0 && (
+        {sortedGpPractices && sortedGpPractices.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -165,28 +183,46 @@ export function PostcodeSearch() {
                 )}
               </div>
 
-              <div className="space-y-2">
-                {gpPractices.map((gp) => {
-                  const isSelected = selectedGP?.odsCode === gp.odsCode;
-                  return (
-                    <Button
-                      key={gp.odsCode}
-                      type="button"
-                      variant={isSelected ? 'default' : 'outline'}
-                      disabled={loadingSelect}
-                      className="w-full justify-between rounded-lg"
-                      onClick={() => handleSelectGp(gp)}
-                    >
-                      <span className="text-left">
-                        <span className="block font-bold">{gp.name}</span>
-                        <span className="block text-xs opacity-75">{gp.odsCode}</span>
-                      </span>
-                      {isSelected && icbCode && (
-                        <span className="text-xs opacity-90">ICB {icbCode}</span>
-                      )}
-                    </Button>
-                  );
-                })}
+              <div className="flex items-center gap-2 mb-3">
+                <Input
+                  placeholder="Search GP name, postcode, or ODS…"
+                  className="h-10"
+                  value={gpPracticeQuery}
+                  onChange={(e) => setGpPracticeQuery(e.target.value)}
+                />
+                {gpPracticeQuery.trim() ? (
+                  <Button type="button" variant="outline" className="h-10" onClick={() => setGpPracticeQuery('')}>
+                    Clear
+                  </Button>
+                ) : null}
+              </div>
+
+              <div className="max-h-[340px] overflow-y-auto pr-1 -mr-1">
+                <div className="space-y-2">
+                  {filteredGpPractices && filteredGpPractices.length > 0 ? (
+                    filteredGpPractices.map((gp) => {
+                      const isSelected = selectedGP?.odsCode === gp.odsCode;
+                      return (
+                        <Button
+                          key={gp.odsCode}
+                          type="button"
+                          variant={isSelected ? 'default' : 'outline'}
+                          disabled={loadingSelect}
+                          className="w-full justify-between rounded-lg"
+                          onClick={() => handleSelectGp(gp)}
+                        >
+                          <span className="text-left">
+                            <span className="block font-bold">{gp.name}</span>
+                            <span className="block text-xs opacity-75">{gp.odsCode}</span>
+                          </span>
+                          {isSelected && icbCode && <span className="text-xs opacity-90">ICB {icbCode}</span>}
+                        </Button>
+                      );
+                    })
+                  ) : (
+                    <div className="text-sm text-gray-600 px-1 py-2">No GP practices match that search.</div>
+                  )}
+                </div>
               </div>
             </Card>
           </motion.div>
