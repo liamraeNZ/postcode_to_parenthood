@@ -10,6 +10,42 @@ function redactPostcodeForLogs(normalizedPostcode: string) {
   return `${visible}${'*'.repeat(Math.max(0, normalizedPostcode.length - visible.length))}`;
 }
 
+type ClientLogLevel = 'debug' | 'info' | 'warn' | 'error';
+
+function redactRequestUrlForLogs(requestUrl: string, redactedPostcode: string) {
+  return requestUrl.replace(
+    /([?&]postcode=)[^&]*/i,
+    `$1${encodeURIComponent(redactedPostcode)}`
+  );
+}
+
+function createClientRequestId() {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
+}
+
+async function sendClientLog(
+  apiBaseUrl: string,
+  clientRequestId: string,
+  payload: { level: ClientLogLevel; message: string; meta?: Record<string, unknown> }
+) {
+  try {
+    await fetch(`${apiBaseUrl}/api/client-log`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-client-request-id': clientRequestId
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch {
+    return;
+  }
+}
+
 export type PostcodeLookupErrorKind =
   | 'timeout'
   | 'network'
@@ -54,9 +90,24 @@ export async function lookupICBByPostcode(postcode: string): Promise<ICBPolicy |
 
   const requestUrl = `${apiBaseUrl}/api/icb-policy?postcode=${encodeURIComponent(normalized)}`;
   const startedAt = performance.now();
+  const clientRequestId = createClientRequestId();
   const logPostcode = redactPostcodeForLogs(normalized);
+  const logRequestUrl = redactRequestUrlForLogs(requestUrl, logPostcode);
   if (import.meta.env.DEV) {
     console.debug('[postcodeService] lookup start', { postcode: logPostcode, url: requestUrl });
+  }
+  if (import.meta.env.DEV) {
+    void sendClientLog(apiBaseUrl, clientRequestId, {
+      level: 'debug',
+      message: 'frontend -> backend request',
+      meta: {
+        client_request_id: clientRequestId,
+        method: 'GET',
+        url: logRequestUrl,
+        timeout_ms: 10_000,
+        api_base_url_present: Boolean(apiBaseUrl)
+      }
+    });
   }
 
   const controller = new AbortController();
@@ -64,7 +115,10 @@ export async function lookupICBByPostcode(postcode: string): Promise<ICBPolicy |
   const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const response = await fetch(requestUrl, { signal: controller.signal });
+    const response = await fetch(requestUrl, {
+      signal: controller.signal,
+      headers: { 'x-client-request-id': clientRequestId }
+    });
     const durationMs = Math.round(performance.now() - startedAt);
     if (import.meta.env.DEV) {
       console.debug('[postcodeService] lookup response', {
@@ -127,6 +181,17 @@ export async function lookupICBByPostcode(postcode: string): Promise<ICBPolicy |
           duration_ms: durationMs
         });
       }
+      void sendClientLog(apiBaseUrl, clientRequestId, {
+        level: 'warn',
+        message: 'postcode lookup timeout',
+        meta: {
+          client_request_id: clientRequestId,
+          postcode: logPostcode,
+          timeout_ms: timeoutMs,
+          duration_ms: durationMs,
+          api_base_url_present: Boolean(apiBaseUrl)
+        }
+      });
       throw new PostcodeLookupError('timeout', 'Postcode lookup timed out');
     }
 
@@ -141,6 +206,16 @@ export async function lookupICBByPostcode(postcode: string): Promise<ICBPolicy |
     }
 
     if (message.toLowerCase().includes('failed to fetch')) {
+      void sendClientLog(apiBaseUrl, clientRequestId, {
+        level: 'warn',
+        message: 'postcode lookup network error',
+        meta: {
+          client_request_id: clientRequestId,
+          postcode: logPostcode,
+          duration_ms: durationMs,
+          api_base_url_present: Boolean(apiBaseUrl)
+        }
+      });
       throw new PostcodeLookupError('network', 'Network error while looking up postcode', {
         cause: err
       });
