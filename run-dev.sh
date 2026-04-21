@@ -8,11 +8,6 @@ cleanup() {
 
 trap cleanup EXIT INT TERM
 
-if [ -d ".wrangler/state/v3/d1" ]; then
-  echo "[run-dev] resetting local D1 state..."
-  rm -rf ".wrangler/state/v3/d1"
-fi
-
 echo "[run-dev] applying D1 migrations locally..."
 CI=1 npx wrangler d1 migrations apply DB --local
 
