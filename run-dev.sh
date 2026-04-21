@@ -2,15 +2,19 @@
 set -euo pipefail
 
 cleanup() {
-  kill "${FRONTEND_PID:-}" "${WORKER_PID:-}" 2>/dev/null || true
+  echo "[run-dev] shutting down dev servers..."
+  kill "${FRONTEND_PID:-}" "${BACKEND_PID:-}" 2>/dev/null || true
 }
 
 trap cleanup EXIT INT TERM
 
+echo "[run-dev] starting frontend (npm run dev:frontend)..."
 npm run dev:frontend &
 FRONTEND_PID=$!
 
-npm run dev:worker &
-WORKER_PID=$!
+echo "[run-dev] starting backend (npm run dev:backend)..."
+npm run dev:backend &
+BACKEND_PID=$!
 
-wait "$FRONTEND_PID" "$WORKER_PID"
+echo "[run-dev] dev servers running (frontend pid=${FRONTEND_PID}, backend pid=${BACKEND_PID})"
+wait "$FRONTEND_PID" "$BACKEND_PID"

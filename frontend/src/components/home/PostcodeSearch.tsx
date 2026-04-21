@@ -30,7 +30,9 @@ export function PostcodeSearch() {
         setError("We couldn't find an ICB policy for that postcode.");
       }
     } catch (err) {
-      console.error('[PostcodeSearch] lookup failed', err);
+      if (import.meta.env.DEV) {
+        console.error('[PostcodeSearch] lookup failed', err);
+      }
 
       if (err instanceof PostcodeLookupError) {
         if (err.kind === 'timeout') {

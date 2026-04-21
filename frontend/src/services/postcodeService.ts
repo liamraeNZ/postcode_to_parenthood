@@ -45,15 +45,19 @@ export async function lookupICBByPostcode(postcode: string): Promise<ICBPolicy |
   const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? '';
   if (!apiBaseUrl && !didWarnMissingApiBaseUrl) {
     didWarnMissingApiBaseUrl = true;
-    console.warn(
-      '[postcodeService] VITE_API_BASE_URL is empty; using relative /api/... requests'
-    );
+    if (import.meta.env.DEV) {
+      console.warn(
+        '[postcodeService] VITE_API_BASE_URL is empty; using relative /api/... requests'
+      );
+    }
   }
 
   const requestUrl = `${apiBaseUrl}/api/icb-policy?postcode=${encodeURIComponent(normalized)}`;
   const startedAt = performance.now();
   const logPostcode = redactPostcodeForLogs(normalized);
-  console.debug('[postcodeService] lookup start', { postcode: logPostcode, url: requestUrl });
+  if (import.meta.env.DEV) {
+    console.debug('[postcodeService] lookup start', { postcode: logPostcode, url: requestUrl });
+  }
 
   const controller = new AbortController();
   const timeoutMs = 10_000;
@@ -62,11 +66,13 @@ export async function lookupICBByPostcode(postcode: string): Promise<ICBPolicy |
   try {
     const response = await fetch(requestUrl, { signal: controller.signal });
     const durationMs = Math.round(performance.now() - startedAt);
-    console.debug('[postcodeService] lookup response', {
-      postcode: logPostcode,
-      status: response.status,
-      duration_ms: durationMs
-    });
+    if (import.meta.env.DEV) {
+      console.debug('[postcodeService] lookup response', {
+        postcode: logPostcode,
+        status: response.status,
+        duration_ms: durationMs
+      });
+    }
 
     if (response.status === 404) return null;
 
@@ -75,14 +81,21 @@ export async function lookupICBByPostcode(postcode: string): Promise<ICBPolicy |
       try {
         responseBodyText = await response.text();
       } catch (err) {
-        console.debug('[postcodeService] failed to read error body', { postcode: logPostcode, err });
+        if (import.meta.env.DEV) {
+          console.debug('[postcodeService] failed to read error body', {
+            postcode: logPostcode,
+            err
+          });
+        }
       }
 
-      console.error('[postcodeService] lookup failed', {
-        postcode: logPostcode,
-        status: response.status,
-        body: responseBodyText
-      });
+      if (import.meta.env.DEV) {
+        console.error('[postcodeService] lookup failed', {
+          postcode: logPostcode,
+          status: response.status,
+          body: responseBodyText
+        });
+      }
 
       throw new PostcodeLookupError(
         response.status >= 500 ? 'server' : 'bad_response',
@@ -94,7 +107,9 @@ export async function lookupICBByPostcode(postcode: string): Promise<ICBPolicy |
     try {
       return (await response.json()) as ICBPolicy;
     } catch (err) {
-      console.error('[postcodeService] invalid JSON response', { postcode: logPostcode, err });
+      if (import.meta.env.DEV) {
+        console.error('[postcodeService] invalid JSON response', { postcode: logPostcode, err });
+      }
       throw new PostcodeLookupError(
         'bad_response',
         'Postcode lookup returned invalid JSON',
@@ -105,21 +120,25 @@ export async function lookupICBByPostcode(postcode: string): Promise<ICBPolicy |
     const durationMs = Math.round(performance.now() - startedAt);
 
     if (err instanceof DOMException && err.name === 'AbortError') {
-      console.error('[postcodeService] lookup timeout', {
-        postcode: logPostcode,
-        timeout_ms: timeoutMs,
-        duration_ms: durationMs
-      });
+      if (import.meta.env.DEV) {
+        console.error('[postcodeService] lookup timeout', {
+          postcode: logPostcode,
+          timeout_ms: timeoutMs,
+          duration_ms: durationMs
+        });
+      }
       throw new PostcodeLookupError('timeout', 'Postcode lookup timed out');
     }
 
     const message = err instanceof Error ? err.message : String(err);
-    console.error('[postcodeService] lookup error', {
-      postcode: logPostcode,
-      duration_ms: durationMs,
-      message,
-      err
-    });
+    if (import.meta.env.DEV) {
+      console.error('[postcodeService] lookup error', {
+        postcode: logPostcode,
+        duration_ms: durationMs,
+        message,
+        err
+      });
+    }
 
     if (message.toLowerCase().includes('failed to fetch')) {
       throw new PostcodeLookupError('network', 'Network error while looking up postcode', {
