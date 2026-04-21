@@ -72,6 +72,13 @@ function jsonResponse(body: unknown, init?: ResponseInit) {
   });
 }
 
+const POSTCODES_IO_BASE_URL = 'https://api.postcodes.io';
+const GP_SEARCH_NEAREST_OUTCODE_RADIUS_M = 7000;
+const GP_SEARCH_NEAREST_OUTCODE_LIMIT = 10;
+const GP_SEARCH_MAX_DISTANCE_M = 3500;
+const GP_SEARCH_MAX_CANDIDATES = 250;
+const GP_SEARCH_MAX_RESULTS = 40;
+
 function isAuthorizedAdmin(request: Request, env: Env) {
   const configuredToken = env.ADMIN_TOKEN?.trim();
   if (!configuredToken) return true;
@@ -229,6 +236,10 @@ function getStringField(value: unknown): string | null {
   return typeof value === 'string' ? value : null;
 }
 
+function getNumberField(value: unknown): number | null {
+  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+}
+
 function getPath(obj: unknown, path: string[]): unknown {
   let current: unknown = obj;
   for (const key of path) {
@@ -240,6 +251,188 @@ function getPath(obj: unknown, path: string[]): unknown {
 
 function getStringPath(obj: unknown, path: string[]): string | null {
   return getStringField(getPath(obj, path));
+}
+
+function getNumberPath(obj: unknown, path: string[]): number | null {
+  return getNumberField(getPath(obj, path));
+}
+
+async function fetchPostcodesIoJson(url: string, ctx: { requestId: string; timeoutMs: number }) {
+  const startedAt = Date.now();
+  let response: Response;
+  try {
+    response = await fetchWithTimeout(
+      url,
+      {
+        headers: {
+          accept: 'application/json',
+        },
+      },
+      ctx.timeoutMs
+    );
+  } catch (err) {
+    log('error', 'upstream fetch failed', {
+      request_id: ctx.requestId,
+      upstream: 'postcodes.io',
+      url,
+      duration_ms: Date.now() - startedAt,
+      err: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : err,
+    });
+    throw err;
+  }
+
+  log('debug', 'upstream response', {
+    request_id: ctx.requestId,
+    upstream: 'postcodes.io',
+    status: response.status,
+    duration_ms: Date.now() - startedAt,
+  });
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    throw new Error(`postcodes.io error: ${response.status} ${text ? `(${text.slice(0, 200)})` : ''}`.trim());
+  }
+
+  try {
+    return (await response.json()) as unknown;
+  } catch (err) {
+    log('error', 'upstream returned invalid JSON', {
+      request_id: ctx.requestId,
+      upstream: 'postcodes.io',
+      err: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : err,
+    });
+    throw new Error('postcodes.io invalid JSON');
+  }
+}
+
+async function lookupPostcodeGeo(
+  postcode: string,
+  ctx: { requestId: string }
+): Promise<{ outcode: string; latitude: number; longitude: number } | null> {
+  const normalized = normalizePostcode(postcode);
+  if (!normalized) return null;
+
+  try {
+    const url = `${POSTCODES_IO_BASE_URL}/postcodes/${encodeURIComponent(normalized)}`;
+    const json = await fetchPostcodesIoJson(url, { requestId: ctx.requestId, timeoutMs: 4_000 });
+    const status = getNumberPath(json, ['status']);
+    if (status !== 200) return null;
+    const outcode = getStringPath(json, ['result', 'outcode']);
+    const latitude = getNumberPath(json, ['result', 'latitude']);
+    const longitude = getNumberPath(json, ['result', 'longitude']);
+    if (!outcode || latitude == null || longitude == null) return null;
+    return { outcode, latitude, longitude };
+  } catch {
+    return null;
+  }
+}
+
+async function lookupNearestOutcodes(outcode: string, ctx: { requestId: string }) {
+  const normalized = normalizeOdsCode(outcode);
+  if (!normalized) return [];
+
+  try {
+    const url = `${POSTCODES_IO_BASE_URL}/outcodes/${encodeURIComponent(
+      normalized
+    )}/nearest?radius=${encodeURIComponent(String(GP_SEARCH_NEAREST_OUTCODE_RADIUS_M))}&limit=${encodeURIComponent(
+      String(GP_SEARCH_NEAREST_OUTCODE_LIMIT)
+    )}`;
+    const json = await fetchPostcodesIoJson(url, { requestId: ctx.requestId, timeoutMs: 4_000 });
+    const status = getNumberPath(json, ['status']);
+    if (status !== 200) return [];
+    const result = getPath(json, ['result']);
+    if (!Array.isArray(result)) return [];
+    return result
+      .map((entry) => getStringPath(entry, ['outcode']))
+      .filter((value): value is string => Boolean(value))
+      .map((value) => normalizeOdsCode(value))
+      .filter((value) => Boolean(value) && value !== normalized);
+  } catch {
+    return [];
+  }
+}
+
+function haversineDistanceMeters(
+  a: { latitude: number; longitude: number },
+  b: { latitude: number; longitude: number }
+) {
+  const toRad = (degrees: number) => (degrees * Math.PI) / 180;
+  const r = 6371e3;
+  const lat1 = toRad(a.latitude);
+  const lat2 = toRad(b.latitude);
+  const dLat = toRad(b.latitude - a.latitude);
+  const dLon = toRad(b.longitude - a.longitude);
+  const sinDLat = Math.sin(dLat / 2);
+  const sinDLon = Math.sin(dLon / 2);
+  const h = sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLon * sinDLon;
+  return 2 * r * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
+
+async function bulkLookupPostcodeGeos(postcodes: string[], ctx: { requestId: string }) {
+  const unique = Array.from(new Set(postcodes.map((p) => normalizePostcode(p)).filter(Boolean)));
+  const geos = new Map<string, { latitude: number; longitude: number }>();
+  if (unique.length === 0) return geos;
+
+  for (let offset = 0; offset < unique.length; offset += 100) {
+    const batch = unique.slice(offset, offset + 100);
+    const startedAt = Date.now();
+    let response: Response;
+    try {
+      response = await fetchWithTimeout(
+        `${POSTCODES_IO_BASE_URL}/postcodes`,
+        {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+            'content-type': 'application/json; charset=utf-8',
+          },
+          body: JSON.stringify({ postcodes: batch }),
+        },
+        4_000
+      );
+    } catch (err) {
+      log('error', 'upstream fetch failed', {
+        request_id: ctx.requestId,
+        upstream: 'postcodes.io',
+        url: `${POSTCODES_IO_BASE_URL}/postcodes`,
+        duration_ms: Date.now() - startedAt,
+        err: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : err,
+      });
+      continue;
+    }
+
+    log('debug', 'upstream response', {
+      request_id: ctx.requestId,
+      upstream: 'postcodes.io',
+      status: response.status,
+      duration_ms: Date.now() - startedAt,
+    });
+
+    if (!response.ok) continue;
+
+    let json: unknown;
+    try {
+      json = (await response.json()) as unknown;
+    } catch {
+      continue;
+    }
+
+    const status = getNumberPath(json, ['status']);
+    if (status !== 200) continue;
+    const result = getPath(json, ['result']);
+    if (!Array.isArray(result)) continue;
+
+    for (const entry of result) {
+      const query = getStringPath(entry, ['query']);
+      const postcode = getStringPath(entry, ['result', 'postcode']) ?? query;
+      const latitude = getNumberPath(entry, ['result', 'latitude']);
+      const longitude = getNumberPath(entry, ['result', 'longitude']);
+      if (!postcode || latitude == null || longitude == null) continue;
+      geos.set(normalizePostcode(postcode), { latitude, longitude });
+    }
+  }
+
+  return geos;
 }
 
 function extractRelArray(json: unknown): unknown[] {
@@ -388,6 +581,30 @@ async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) {
   return await fetchPolicyForIcbId(parentIcbId);
 }
 
+async function fetchGpPracticesForOutcode(outcode: string, ctx: { requestId: string }) {
+  const normalized = normalizeOdsCode(outcode);
+  if (!normalized) return [];
+
+  const ordUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PostCode=${encodeURIComponent(
+    normalized
+  )}&PrimaryRoleId=RO177&Status=Active`;
+
+  const json = await fetchOrdJson(ordUrl, { requestId: ctx.requestId, timeoutMs: 8_000 });
+  const organisations = getPath(json, ['Organisations']);
+  if (!Array.isArray(organisations) || organisations.length === 0) return [];
+
+  return organisations
+    .map((org) => {
+      const odsCode = getStringPath(org, ['OrgId']) ?? getStringPath(org, ['OrgId', 'extension']);
+      const name = getStringPath(org, ['Name']);
+      if (!odsCode || !name) return null;
+      const postCode = getStringPath(org, ['PostCode']) ?? undefined;
+      const orgLink = getStringPath(org, ['OrgLink']) ?? undefined;
+      return { odsCode, name, postcode: postCode, orgLink };
+    })
+    .filter((org): org is NonNullable<typeof org> => org !== null);
+}
+
 async function handleApiRequest(request: Request, env: Env) {
   const reqId = requestId();
   const startedAt = Date.now();
@@ -427,35 +644,71 @@ async function handleApiRequest(request: Request, env: Env) {
       }
 
       const normalized = normalizePostcode(postcode);
-      const searchPostcode = normalized.length > 4 ? normalized.slice(0, -3) : normalized;
-      const ordUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?PostCode=${encodeURIComponent(
-        searchPostcode
-      )}&PrimaryRoleId=RO177&Status=Active`;
+      const fallbackOutcode = normalized.length > 4 ? normalized.slice(0, -3) : normalized;
+      const geo = await lookupPostcodeGeo(postcode, { requestId: reqId });
+      const seedOutcode = normalizeOdsCode(geo?.outcode ?? fallbackOutcode);
 
-      const json = await fetchOrdJson(ordUrl, { requestId: reqId, timeoutMs: 8_000 });
-      const organisations = getPath(json, ['Organisations']);
-      if (!Array.isArray(organisations) || organisations.length === 0) {
+      const nearestOutcodes = await lookupNearestOutcodes(seedOutcode, { requestId: reqId });
+      const outcodesToQuery = Array.from(new Set([seedOutcode, ...nearestOutcodes]))
+        .filter(Boolean)
+        .slice(0, GP_SEARCH_NEAREST_OUTCODE_LIMIT);
+
+      const settled = await Promise.allSettled(
+        outcodesToQuery.map((outcode) => fetchGpPracticesForOutcode(outcode, { requestId: reqId }))
+      );
+
+      const byOds = new Map<string, { odsCode: string; name: string; postcode?: string; orgLink?: string }>();
+      for (const result of settled) {
+        if (result.status !== 'fulfilled') continue;
+        for (const practice of result.value) {
+          if (!byOds.has(practice.odsCode)) byOds.set(practice.odsCode, practice);
+        }
+      }
+
+      const merged = Array.from(byOds.values());
+      if (merged.length === 0) {
         response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
         return response;
       }
 
-      const out = organisations
-        .map((org) => {
-          const odsCode = getStringPath(org, ['OrgId']) ?? getStringPath(org, ['OrgId', 'extension']);
-          const name = getStringPath(org, ['Name']);
-          if (!odsCode || !name) return null;
-          const postCode = getStringPath(org, ['PostCode']) ?? undefined;
-          const orgLink = getStringPath(org, ['OrgLink']) ?? undefined;
-          return { odsCode, name, postcode: postCode, orgLink };
-        })
-        .filter((org): org is NonNullable<typeof org> => org !== null);
-
-      if (out.length === 0) {
-        response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
-        return response;
+      let candidates = merged;
+      if (candidates.length > GP_SEARCH_MAX_CANDIDATES) {
+        const seedFirst = candidates.filter((p) => normalizePostcode(p.postcode ?? '').startsWith(seedOutcode));
+        const others = candidates.filter((p) => !normalizePostcode(p.postcode ?? '').startsWith(seedOutcode));
+        candidates = [...seedFirst, ...others].slice(0, GP_SEARCH_MAX_CANDIDATES);
       }
 
-      response = jsonResponse(out);
+      let ranked = candidates;
+      if (geo) {
+        const geos = await bulkLookupPostcodeGeos(
+          candidates.map((p) => p.postcode).filter((p): p is string => Boolean(p)),
+          { requestId: reqId }
+        );
+
+        const scored = candidates.map((practice) => {
+          const geoKey = normalizePostcode(practice.postcode ?? '');
+          const practiceGeo = geos.get(geoKey);
+          const distanceMeters = practiceGeo ? haversineDistanceMeters(geo, practiceGeo) : null;
+          return { practice, distanceMeters };
+        });
+
+        const within = scored.filter(
+          (entry) => entry.distanceMeters == null || entry.distanceMeters <= GP_SEARCH_MAX_DISTANCE_M
+        );
+
+        within.sort((a, b) => {
+          const aDist = a.distanceMeters ?? Number.POSITIVE_INFINITY;
+          const bDist = b.distanceMeters ?? Number.POSITIVE_INFINITY;
+          if (aDist !== bDist) return aDist - bDist;
+          return a.practice.name.localeCompare(b.practice.name);
+        });
+
+        ranked = within.map((entry) => entry.practice);
+      } else {
+        ranked = candidates.slice().sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      response = jsonResponse(ranked.slice(0, GP_SEARCH_MAX_RESULTS));
       return response;
     }
 
