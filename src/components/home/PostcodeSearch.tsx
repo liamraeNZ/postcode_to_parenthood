@@ -6,9 +6,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog';
+import {
   getIcbFromGpOds,
   lookupICBPolicyByIcbCode,
   PostcodeLookupError,
+  searchGpPracticesByName,
   searchGpPracticesByPostcode
 } from '@/services/postcodeService';
 import { GpPracticeSummary, ICBPolicy } from '@/types';
@@ -42,6 +51,11 @@ export function PostcodeSearch() {
   const [loadingSelect, setLoadingSelect] = useState(false);
   const [gpPractices, setGpPractices] = useState<GpPracticeSummary[] | null>(null);
   const [gpPracticeQuery, setGpPracticeQuery] = useState('');
+  const [nameSearchOpen, setNameSearchOpen] = useState(false);
+  const [nameSearchQuery, setNameSearchQuery] = useState('');
+  const [nameSearchLoading, setNameSearchLoading] = useState(false);
+  const [nameSearchError, setNameSearchError] = useState('');
+  const [nameSearchResults, setNameSearchResults] = useState<GpPracticeSummary[] | null>(null);
   const [selectedGP, setSelectedGP] = useState<GpPracticeSummary | null>(null);
   const [icbCode, setIcbCode] = useState<string | null>(null);
   const [result, setResult] = useState<ICBPolicy | null>(null);
@@ -61,6 +75,10 @@ export function PostcodeSearch() {
           (gp.postcode ?? '').toLowerCase().includes(q)
         );
       })
+    : null;
+
+  const nameSearchSortedResults = nameSearchResults
+    ? [...nameSearchResults].sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
     : null;
 
   const resetSearchState = () => {
@@ -98,6 +116,30 @@ export function PostcodeSearch() {
       setError(getPostcodeLookupErrorMessage('search', err));
     } finally {
       setLoadingSearch(false);
+    }
+  };
+
+  const handleSearchByName = async () => {
+    const q = nameSearchQuery.trim();
+    if (q.length < 3) {
+      setNameSearchResults([]);
+      setNameSearchError('Type at least 3 characters.');
+      return;
+    }
+
+    setNameSearchLoading(true);
+    setNameSearchError('');
+    setNameSearchResults(null);
+    try {
+      const gps = await searchGpPracticesByName(q);
+      setNameSearchResults(gps);
+      if (gps.length === 0) setNameSearchError("We couldn't find any active GP practices with that name.");
+    } catch (err) {
+      logDevError('[PostcodeSearch] gp name search failed', err);
+      setNameSearchError(getPostcodeLookupErrorMessage('search', err));
+      setNameSearchResults([]);
+    } finally {
+      setNameSearchLoading(false);
     }
   };
 
@@ -213,7 +255,10 @@ export function PostcodeSearch() {
                         >
                           <span className="text-left">
                             <span className="block font-bold">{gp.name}</span>
-                            <span className="block text-xs opacity-75">{gp.odsCode}</span>
+                            <span className="block text-xs opacity-75">
+                              {gp.postcode ? `${gp.postcode} · ` : null}
+                              {gp.odsCode}
+                            </span>
                           </span>
                           {isSelected && icbCode && <span className="text-xs opacity-90">ICB {icbCode}</span>}
                         </Button>
@@ -223,6 +268,79 @@ export function PostcodeSearch() {
                     <div className="text-sm text-gray-600 px-1 py-2">No GP practices match that search.</div>
                   )}
                 </div>
+              </div>
+
+              <div className="mt-3 flex items-center justify-between gap-2">
+                <Dialog open={nameSearchOpen} onOpenChange={setNameSearchOpen}>
+                  <DialogTrigger render={<Button type="button" variant="link" className="px-0 h-auto" />}>
+                    Can't find your GP in this list?
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-lg">
+                    <DialogHeader>
+                      <DialogTitle>Search for your GP by name</DialogTitle>
+                      <DialogDescription>
+                        Search across England for active GP practices (useful for digital GP services or a workplace GP).
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="flex items-center gap-2">
+                      <Input
+                        placeholder="e.g. Babylon, The Vale Medical Centre…"
+                        className="h-10"
+                        value={nameSearchQuery}
+                        onChange={(e) => setNameSearchQuery(e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        className="h-10"
+                        disabled={nameSearchLoading || nameSearchQuery.trim().length < 3}
+                        onClick={handleSearchByName}
+                      >
+                        {nameSearchLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
+                      </Button>
+                    </div>
+
+                    {nameSearchError ? <div className="text-sm text-red-600">{nameSearchError}</div> : null}
+
+                    <div className="max-h-[360px] overflow-y-auto pr-1 -mr-1">
+                      <div className="space-y-2">
+                        {nameSearchSortedResults && nameSearchSortedResults.length > 0 ? (
+                          nameSearchSortedResults.map((gp) => (
+                            <Button
+                              key={gp.odsCode}
+                              type="button"
+                              variant="outline"
+                              className="w-full justify-between rounded-lg"
+                              disabled={loadingSelect}
+                              onClick={() => {
+                                void handleSelectGp(gp);
+                                setNameSearchOpen(false);
+                              }}
+                            >
+                              <span className="text-left">
+                                <span className="block font-bold">{gp.name}</span>
+                                <span className="block text-xs opacity-75">
+                                  {gp.postcode ? `${gp.postcode} · ` : null}
+                                  {gp.odsCode}
+                                </span>
+                              </span>
+                            </Button>
+                          ))
+                        ) : nameSearchResults && nameSearchResults.length === 0 ? (
+                          <div className="text-sm text-gray-600 px-1 py-2">No GP practices found.</div>
+                        ) : (
+                          <div className="text-sm text-gray-600 px-1 py-2">
+                            Type a name (3+ characters) and search.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                {filteredGpPractices ? (
+                  <div className="text-xs text-gray-500">{filteredGpPractices.length} shown</div>
+                ) : null}
               </div>
             </Card>
           </motion.div>

@@ -258,6 +258,73 @@ export async function searchGpPracticesByPostcode(postcode: string): Promise<GpP
   }
 }
 
+export async function searchGpPracticesByName(name: string): Promise<GpPracticeSummary[]> {
+  const trimmed = name.trim();
+  if (!trimmed) return [];
+
+  const apiBaseUrl = getApiBaseUrl();
+  const requestUrl = buildRequestUrl(apiBaseUrl, '/api/gp-practices', { name: trimmed });
+  const startedAt = performance.now();
+  const clientRequestId = createClientRequestId();
+
+  if (import.meta.env.DEV) {
+    console.debug('[postcodeService] gp name search start', { q: trimmed, url: requestUrl });
+    void sendClientLog(apiBaseUrl, clientRequestId, {
+      level: 'debug',
+      message: 'frontend -> backend request',
+      meta: {
+        client_request_id: clientRequestId,
+        method: 'GET',
+        url: requestUrl,
+        timeout_ms: DEFAULT_TIMEOUT_MS,
+        api_base_url_present: Boolean(apiBaseUrl)
+      }
+    });
+  }
+
+  const timeoutMs = DEFAULT_TIMEOUT_MS;
+  try {
+    const response = await fetchJsonWithTimeout<GpPracticeSummary[]>(requestUrl, {
+      clientRequestId,
+      timeoutMs
+    });
+    const durationMs = Math.round(performance.now() - startedAt);
+    if (import.meta.env.DEV) {
+      console.debug('[postcodeService] gp name search response', {
+        q: trimmed,
+        status: response.status,
+        duration_ms: durationMs
+      });
+    }
+
+    if (response.status === 404) return [];
+
+    if (!response.ok) {
+      if (import.meta.env.DEV) {
+        console.error('[postcodeService] gp name search failed', {
+          q: trimmed,
+          status: response.status,
+          body: response.text
+        });
+      }
+
+      throw new PostcodeLookupError(
+        response.status >= 500 ? 'server' : 'bad_response',
+        `GP name search failed with status ${response.status}`,
+        { status: response.status }
+      );
+    }
+
+    return response.json ?? [];
+  } catch (err) {
+    throw toPostcodeLookupError(err, {
+      timeout: 'GP search timed out',
+      network: 'Network error while searching for GP practices',
+      unexpected: 'Unexpected error while searching for GP practices'
+    });
+  }
+}
+
 export async function getIcbFromGpOds(odsCode: string): Promise<string | null> {
   const normalized = normalizeUpperTrim(odsCode);
   if (!normalized) return null;

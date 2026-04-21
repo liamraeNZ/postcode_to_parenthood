@@ -78,6 +78,7 @@ const GP_SEARCH_NEAREST_OUTCODE_LIMIT = 10;
 const GP_SEARCH_MAX_DISTANCE_M = 3500;
 const GP_SEARCH_MAX_CANDIDATES = 250;
 const GP_SEARCH_MAX_RESULTS = 40;
+const GP_NAME_SEARCH_LIMIT = 40;
 
 function isAuthorizedAdmin(request: Request, env: Env) {
   const configuredToken = env.ADMIN_TOKEN?.trim();
@@ -140,6 +141,13 @@ function isReasonablePostcodeInput(input: string) {
   if (!trimmed) return false;
   if (trimmed.length > 16) return false;
   return /^[A-Za-z0-9 ]+$/.test(trimmed);
+}
+
+function isReasonableOrgNameInput(input: string) {
+  const trimmed = input.trim();
+  if (trimmed.length < 3) return false;
+  if (trimmed.length > 80) return false;
+  return /^[A-Za-z0-9 '&(),.\-]+$/.test(trimmed);
 }
 
 async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, timeoutMs: number) {
@@ -634,6 +642,50 @@ async function handleApiRequest(request: Request, env: Env) {
 
     if (url.pathname === '/api/gp-practices' && request.method === 'GET') {
       const postcode = url.searchParams.get('postcode') || url.searchParams.get('Postcode');
+      const name = url.searchParams.get('name');
+
+      if (name != null) {
+        if (!isReasonableOrgNameInput(name)) {
+          response = jsonResponse(
+            { error: 'Invalid name. Use at least 3 characters.', request_id: reqId },
+            { status: 400 }
+          );
+          return response;
+        }
+
+        const ordUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations?Name=${encodeURIComponent(
+          name.trim()
+        )}&PrimaryRoleId=RO177&Status=Active&Limit=${encodeURIComponent(String(GP_NAME_SEARCH_LIMIT))}`;
+
+        const json = await fetchOrdJson(ordUrl, { requestId: reqId, timeoutMs: 8_000 });
+        const organisations = getPath(json, ['Organisations']);
+        if (!Array.isArray(organisations) || organisations.length === 0) {
+          response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
+          return response;
+        }
+
+        const out = organisations
+          .map((org) => {
+            const odsCode = getStringPath(org, ['OrgId']) ?? getStringPath(org, ['OrgId', 'extension']);
+            const orgName = getStringPath(org, ['Name']);
+            if (!odsCode || !orgName) return null;
+            const postCode = getStringPath(org, ['PostCode']) ?? undefined;
+            const orgLink = getStringPath(org, ['OrgLink']) ?? undefined;
+            return { odsCode, name: orgName, postcode: postCode, orgLink };
+          })
+          .filter((org): org is NonNullable<typeof org> => org !== null)
+          .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
+          .slice(0, GP_NAME_SEARCH_LIMIT);
+
+        if (out.length === 0) {
+          response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
+          return response;
+        }
+
+        response = jsonResponse(out);
+        return response;
+      }
+
       if (!postcode) {
         response = jsonResponse({ error: 'Missing postcode', request_id: reqId }, { status: 400 });
         return response;
