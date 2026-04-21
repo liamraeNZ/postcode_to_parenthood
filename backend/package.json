@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "build": "npm run lint && wrangler deploy --dry-run",
     "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
     "migrate:local": "wrangler d1 migrations apply DB --local",
     "migrate:remote": "wrangler d1 migrations apply DB --remote",
     "lint": "tsc --noEmit"

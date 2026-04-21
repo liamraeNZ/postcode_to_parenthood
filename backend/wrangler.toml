@@ -1,6 +1,8 @@
 name = "fertility-fund-backend"
 main = "index.ts"
 compatibility_date = "2026-04-20"
+workers_dev = true
+preview_urls = true
 
 [[d1_databases]]
 binding = "DB"
