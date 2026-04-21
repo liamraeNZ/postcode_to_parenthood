@@ -20,12 +20,6 @@ export default defineConfig(({mode}) => {
       watch: {
         ignored: ['**/.wrangler/**']
       },
-      proxy: {
-        '/api': {
-          target: 'http://localhost:8788',
-          changeOrigin: true,
-        },
-      },
     },
   };
 });

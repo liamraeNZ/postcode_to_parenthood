@@ -16,7 +16,7 @@ npm run build:watch &
 FRONTEND_BUILD_PID=$!
 
 echo "[run-dev] starting unified worker (wrangler dev)..."
-npx wrangler dev --port 8788 --local &
+npx wrangler dev --port 3005 --local &
 WORKER_PID=$!
 
 echo "[run-dev] dev servers running (frontend build pid=${FRONTEND_BUILD_PID}, worker pid=${WORKER_PID})"

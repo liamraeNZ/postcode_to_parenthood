@@ -5,8 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "./run-dev.sh",
-    "dev:vite": "vite --port=3005 --host=0.0.0.0",
-    "dev:worker": "npx wrangler dev --port 8788 --local",
     "build": "vite build",
     "build:watch": "vite build --watch",
     "deploy": "npx wrangler deploy",
