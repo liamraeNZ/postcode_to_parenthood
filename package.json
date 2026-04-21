@@ -4,17 +4,17 @@
   "version": "0.1.0",
   "workspaces": [
     "frontend",
-    "worker"
+    "backend"
   ],
   "scripts": {
     "dev": "./run-dev.sh",
     "dev:frontend": "npm run -w frontend dev",
-    "dev:worker": "npm run -w worker dev",
+    "dev:backend": "npm run -w backend dev",
     "build": "npm run -w frontend build",
     "preview": "npm run -w frontend preview",
-    "lint": "npm run -w frontend lint && npm run -w worker lint",
-    "cf:migrate:local": "npm run -w worker migrate:local",
-    "cf:migrate:remote": "npm run -w worker migrate:remote"
+    "lint": "npm run -w frontend lint && npm run -w backend lint",
+    "cf:migrate:local": "npm run -w backend migrate:local",
+    "cf:migrate:remote": "npm run -w backend migrate:remote"
   },
   "devDependencies": {}
 }

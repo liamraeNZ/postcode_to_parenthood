@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { lookupICBByPostcode } from '@/services/postcodeService';
+import { lookupICBByPostcode, PostcodeLookupError } from '@/services/postcodeService';
 import { ICBPolicy } from '@/types';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -30,7 +30,23 @@ export function PostcodeSearch() {
         setError("We couldn't find an ICB policy for that postcode.");
       }
     } catch (err) {
-      setError('An error occurred while searching. Please try again.');
+      console.error('[PostcodeSearch] lookup failed', err);
+
+      if (err instanceof PostcodeLookupError) {
+        if (err.kind === 'timeout') {
+          setError('That lookup took too long. Please try again.');
+        } else if (err.kind === 'network') {
+          setError('Network error. Check your connection and try again.');
+        } else if (err.kind === 'server') {
+          setError('The service is temporarily unavailable. Please try again shortly.');
+        } else if (err.kind === 'misconfigured') {
+          setError('The app is misconfigured. Please contact support.');
+        } else {
+          setError('An unexpected response was received. Please try again.');
+        }
+      } else {
+        setError('An error occurred while searching. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
