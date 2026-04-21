@@ -222,7 +222,7 @@ export async function handleApiRequest(request: Request, env: Env) {
       const sync = await syncIcbsFromOrd(env.DB, { requestId: reqId }, { fetchOrdJson, getPath, getStringPath });
       const icbs = await env.DB
         .prepare(
-          'select id, name, sub_icb_code, parent_icb_code, region, created_at, updated_at from icbs order by name asc'
+          'select id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at from icbs order by name asc'
         )
         .bind()
         .all<{
@@ -231,6 +231,7 @@ export async function handleApiRequest(request: Request, env: Env) {
           sub_icb_code: string | null;
           parent_icb_code: string | null;
           region: string | null;
+          country: string | null;
           created_at: string;
           updated_at: string;
         }>();
@@ -253,7 +254,7 @@ export async function handleApiRequest(request: Request, env: Env) {
 
       const icbs = await env.DB
         .prepare(
-          'select id, name, sub_icb_code, parent_icb_code, region, created_at, updated_at from icbs order by name asc'
+          'select id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at from icbs order by name asc'
         )
         .bind()
         .all<{
@@ -262,6 +263,7 @@ export async function handleApiRequest(request: Request, env: Env) {
           sub_icb_code: string | null;
           parent_icb_code: string | null;
           region: string | null;
+          country: string | null;
           created_at: string;
           updated_at: string;
         }>();

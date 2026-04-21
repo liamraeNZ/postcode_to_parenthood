@@ -115,6 +115,21 @@ export async function syncIcbsFromOrd(
     return (preferred ?? candidates[0] ?? null)?.targetCode ?? null;
   }
 
+  function extractLocationValue(json: unknown, key: string): string | null {
+    return (
+      deps.getStringPath(json, ['Organisation', 'GeoLoc', 'Location', key]) ??
+      deps.getStringPath(json, ['GeoLoc', 'Location', key]) ??
+      deps.getStringPath(json, ['Organisation', 'GeoLoc', key]) ??
+      deps.getStringPath(json, ['GeoLoc', key])
+    );
+  }
+
+  function extractRegionCountry(json: unknown) {
+    const country = extractLocationValue(json, 'Country');
+    const region = extractLocationValue(json, 'Region') ?? extractLocationValue(json, 'County');
+    return { region, country };
+  }
+
   async function mapWithConcurrency<T, R>(items: T[], concurrency: number, fn: (item: T) => Promise<R>) {
     const results: R[] = new Array(items.length);
     let nextIndex = 0;
@@ -161,7 +176,20 @@ export async function syncIcbsFromOrd(
     parentNameToCode.set(normalizeForMatch(p.ordName), p.parentIcbCode);
   }
 
-  for (const { parentIcbCode, ordName } of parentsByCode.values()) {
+  const parentsWithGeo = await mapWithConcurrency(Array.from(parentsByCode.values()), 8, async (parent) => {
+    try {
+      const detailUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/${encodeURIComponent(
+        parent.parentIcbCode
+      )}`;
+      const detailJson = await deps.fetchOrdJson(detailUrl, { requestId: ctx.requestId, timeoutMs: 12_000 });
+      const { region, country } = extractRegionCountry(detailJson);
+      return { ...parent, region, country };
+    } catch {
+      return { ...parent, region: null, country: null };
+    }
+  });
+
+  for (const { parentIcbCode, ordName, region, country } of parentsWithGeo) {
     const existingByCode = await db
       .prepare('select id from icbs where sub_icb_code is null and parent_icb_code = ?1 limit 1')
       .bind(parentIcbCode)
@@ -169,8 +197,10 @@ export async function syncIcbsFromOrd(
 
     if (existingByCode?.id) {
       await db
-        .prepare('update icbs set name = ?1, parent_icb_code = ?2, updated_at = ?3 where id = ?4')
-        .bind(ordName, parentIcbCode, now, existingByCode.id)
+        .prepare(
+          'update icbs set name = ?1, parent_icb_code = ?2, region = coalesce(?3, region), country = coalesce(?4, country), updated_at = ?5 where id = ?6'
+        )
+        .bind(ordName, parentIcbCode, region, country, now, existingByCode.id)
         .run();
       updated += 1;
       continue;
@@ -179,8 +209,10 @@ export async function syncIcbsFromOrd(
     const existingByName = await findParentByName(ordName);
     if (existingByName?.id) {
       await db
-        .prepare('update icbs set parent_icb_code = ?1, updated_at = ?2 where id = ?3')
-        .bind(parentIcbCode, now, existingByName.id)
+        .prepare(
+          'update icbs set parent_icb_code = ?1, region = coalesce(?2, region), country = coalesce(?3, country), updated_at = ?4 where id = ?5'
+        )
+        .bind(parentIcbCode, region, country, now, existingByName.id)
         .run();
       updated += 1;
       continue;
@@ -189,9 +221,9 @@ export async function syncIcbsFromOrd(
     const id = crypto.randomUUID();
     await db
       .prepare(
-        'insert into icbs (id, name, sub_icb_code, parent_icb_code, created_at, updated_at) values (?1, ?2, ?3, ?4, ?5, ?6)'
+        'insert into icbs (id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at) values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)'
       )
-      .bind(id, ordName, null, parentIcbCode, now, now)
+      .bind(id, ordName, null, parentIcbCode, region, country, now, now)
       .run();
     inserted += 1;
   }
@@ -240,23 +272,28 @@ export async function syncIcbsFromOrd(
       sub.orgLink ??
       `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/${encodeURIComponent(sub.subIcbCode)}`;
     let parentIcbCode: string | null = null;
+    let region: string | null = null;
+    let country: string | null = null;
     try {
       const detailJson = await deps.fetchOrdJson(detailUrl, { requestId: ctx.requestId, timeoutMs: 12_000 });
       const rels = extractRelArray(detailJson);
       parentIcbCode = findActiveParentIcbCode(rels);
+      const geo = extractRegionCountry(detailJson);
+      region = geo.region;
+      country = geo.country;
     } catch {
       parentIcbCode = null;
     }
 
     if (parentIcbCode && parentsByCode.has(parentIcbCode)) {
-      return { ...sub, parentIcbCode };
+      return { ...sub, parentIcbCode, region, country };
     }
 
     const guessed = guessParentFromName(sub.ordName, sub.subIcbCode);
-    return { ...sub, parentIcbCode: guessed };
+    return { ...sub, parentIcbCode: guessed, region, country };
   });
 
-  for (const { subIcbCode, ordName, parentIcbCode } of subsWithParent) {
+  for (const { subIcbCode, ordName, parentIcbCode, region, country } of subsWithParent) {
     const existingByCode = await db
       .prepare('select id from icbs where sub_icb_code = ?1 limit 1')
       .bind(subIcbCode)
@@ -264,8 +301,10 @@ export async function syncIcbsFromOrd(
 
     if (existingByCode?.id) {
       await db
-        .prepare('update icbs set name = ?1, parent_icb_code = ?2, updated_at = ?3 where id = ?4')
-        .bind(ordName, parentIcbCode, now, existingByCode.id)
+        .prepare(
+          'update icbs set name = ?1, parent_icb_code = ?2, region = coalesce(?3, region), country = coalesce(?4, country), updated_at = ?5 where id = ?6'
+        )
+        .bind(ordName, parentIcbCode, region, country, now, existingByCode.id)
         .run();
       updated += 1;
       continue;
@@ -274,8 +313,10 @@ export async function syncIcbsFromOrd(
     const existingByName = await findSubByName(ordName);
     if (existingByName?.id) {
       await db
-        .prepare('update icbs set sub_icb_code = ?1, parent_icb_code = ?2, updated_at = ?3 where id = ?4')
-        .bind(subIcbCode, parentIcbCode, now, existingByName.id)
+        .prepare(
+          'update icbs set sub_icb_code = ?1, parent_icb_code = ?2, region = coalesce(?3, region), country = coalesce(?4, country), updated_at = ?5 where id = ?6'
+        )
+        .bind(subIcbCode, parentIcbCode, region, country, now, existingByName.id)
         .run();
       updated += 1;
       continue;
@@ -284,9 +325,9 @@ export async function syncIcbsFromOrd(
     const id = crypto.randomUUID();
     await db
       .prepare(
-        'insert into icbs (id, name, sub_icb_code, parent_icb_code, created_at, updated_at) values (?1, ?2, ?3, ?4, ?5, ?6)'
+        'insert into icbs (id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at) values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)'
       )
-      .bind(id, ordName, subIcbCode, parentIcbCode, now, now)
+      .bind(id, ordName, subIcbCode, parentIcbCode, region, country, now, now)
       .run();
     inserted += 1;
   }

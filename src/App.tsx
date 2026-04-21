@@ -60,6 +60,7 @@ type IcbRow = {
   sub_icb_code: string | null;
   parent_icb_code: string | null;
   region: string | null;
+  country: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -175,6 +176,7 @@ function AdminIcbSyncPanel() {
                   <TableHead className="px-3">Sub ICB</TableHead>
                   <TableHead className="px-3">Parent ICB</TableHead>
                   <TableHead className="px-3">Region</TableHead>
+                  <TableHead className="px-3">Country</TableHead>
                   <TableHead className="px-3">Updated</TableHead>
                 </TableRow>
               </TableHeader>
@@ -185,6 +187,7 @@ function AdminIcbSyncPanel() {
                     <TableCell className="px-3 text-gray-700">{row.sub_icb_code ?? '—'}</TableCell>
                     <TableCell className="px-3 text-gray-700">{row.parent_icb_code ?? '—'}</TableCell>
                     <TableCell className="px-3 text-gray-700">{row.region ?? '—'}</TableCell>
+                    <TableCell className="px-3 text-gray-700">{row.country ?? '—'}</TableCell>
                     <TableCell className="px-3 text-gray-600">{row.updated_at}</TableCell>
                   </TableRow>
                 ))}
