@@ -16,3 +16,10 @@ binding = "DB"
 database_name = "fertilityfund"
 database_id = "a715c124-c60f-43f4-ba59-afe68ccc5a00"
 migrations_dir = "migrations"
+
+[observability]
+[observability.logs]
+enabled = true
+invocation_logs = true
+[observability.traces]
+enabled = true
