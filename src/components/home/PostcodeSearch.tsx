@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,28 @@ import {
 import { GpPracticeSummary, ICBPolicy } from '@/types';
 import { motion, AnimatePresence } from 'motion/react';
 
+type PostcodeLookupAction = 'search' | 'lookup';
+
+function getPostcodeLookupErrorMessage(action: PostcodeLookupAction, err: unknown) {
+  const verb = action === 'search' ? 'search' : 'lookup';
+
+  if (err instanceof PostcodeLookupError) {
+    if (err.kind === 'timeout') return `That ${verb} took too long. Please try again.`;
+    if (err.kind === 'network') return 'Network error. Check your connection and try again.';
+    if (err.kind === 'server') return 'The service is temporarily unavailable. Please try again shortly.';
+    if (err.kind === 'misconfigured') return 'The app is misconfigured. Please contact support.';
+    return 'An unexpected response was received. Please try again.';
+  }
+
+  return `An error occurred while ${verb}ing. Please try again.`;
+}
+
+function logDevError(message: string, err: unknown) {
+  if (import.meta.env.DEV) {
+    console.error(message, err);
+  }
+}
+
 export function PostcodeSearch() {
   const [postcode, setPostcode] = useState('');
   const [loadingSearch, setLoadingSearch] = useState(false);
@@ -23,16 +46,26 @@ export function PostcodeSearch() {
   const [result, setResult] = useState<ICBPolicy | null>(null);
   const [error, setError] = useState('');
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!postcode.trim()) return;
-
-    setLoadingSearch(true);
+  const resetSearchState = () => {
     setError('');
     setResult(null);
     setGpPractices(null);
     setSelectedGP(null);
     setIcbCode(null);
+  };
+
+  const resetSelectionState = () => {
+    setError('');
+    setResult(null);
+    setIcbCode(null);
+  };
+
+  const handleSearch = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!postcode.trim()) return;
+
+    setLoadingSearch(true);
+    resetSearchState();
 
     try {
       const gps = await searchGpPracticesByPostcode(postcode);
@@ -43,25 +76,8 @@ export function PostcodeSearch() {
         setError("We couldn't find any active GP practices for that postcode.");
       }
     } catch (err) {
-      if (import.meta.env.DEV) {
-        console.error('[PostcodeSearch] gp search failed', err);
-      }
-
-      if (err instanceof PostcodeLookupError) {
-        if (err.kind === 'timeout') {
-          setError('That search took too long. Please try again.');
-        } else if (err.kind === 'network') {
-          setError('Network error. Check your connection and try again.');
-        } else if (err.kind === 'server') {
-          setError('The service is temporarily unavailable. Please try again shortly.');
-        } else if (err.kind === 'misconfigured') {
-          setError('The app is misconfigured. Please contact support.');
-        } else {
-          setError('An unexpected response was received. Please try again.');
-        }
-      } else {
-        setError('An error occurred while searching. Please try again.');
-      }
+      logDevError('[PostcodeSearch] gp search failed', err);
+      setError(getPostcodeLookupErrorMessage('search', err));
     } finally {
       setLoadingSearch(false);
     }
@@ -70,9 +86,7 @@ export function PostcodeSearch() {
   const handleSelectGp = async (gp: GpPracticeSummary) => {
     setSelectedGP(gp);
     setLoadingSelect(true);
-    setError('');
-    setResult(null);
-    setIcbCode(null);
+    resetSelectionState();
 
     try {
       const resolvedIcbCode = await getIcbFromGpOds(gp.odsCode);
@@ -90,25 +104,8 @@ export function PostcodeSearch() {
 
       setResult(policy);
     } catch (err) {
-      if (import.meta.env.DEV) {
-        console.error('[PostcodeSearch] gp selection failed', err);
-      }
-
-      if (err instanceof PostcodeLookupError) {
-        if (err.kind === 'timeout') {
-          setError('That lookup took too long. Please try again.');
-        } else if (err.kind === 'network') {
-          setError('Network error. Check your connection and try again.');
-        } else if (err.kind === 'server') {
-          setError('The service is temporarily unavailable. Please try again shortly.');
-        } else if (err.kind === 'misconfigured') {
-          setError('The app is misconfigured. Please contact support.');
-        } else {
-          setError('An unexpected response was received. Please try again.');
-        }
-      } else {
-        setError('An error occurred while searching. Please try again.');
-      }
+      logDevError('[PostcodeSearch] gp selection failed', err);
+      setError(getPostcodeLookupErrorMessage('lookup', err));
     } finally {
       setLoadingSelect(false);
     }

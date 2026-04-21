@@ -1,7 +1,13 @@
 import { GpPracticeSummary, ICBPolicy } from '../types';
 
+const DEFAULT_TIMEOUT_MS = 10_000;
+
 function normalizePostcode(input: string) {
   return input.trim().toUpperCase().replace(/\s+/g, '');
+}
+
+function normalizeUpperTrim(input: string) {
+  return input.trim().toUpperCase();
 }
 
 function redactPostcodeForLogs(normalizedPostcode: string) {
@@ -17,6 +23,11 @@ function redactRequestUrlForLogs(requestUrl: string, redactedPostcode: string) {
     /([?&]postcode=)[^&]*/i,
     `$1${encodeURIComponent(redactedPostcode)}`
   );
+}
+
+function buildRequestUrl(apiBaseUrl: string, path: string, query: Record<string, string>) {
+  const qs = new URLSearchParams(query).toString();
+  return qs ? `${apiBaseUrl}${path}?${qs}` : `${apiBaseUrl}${path}`;
 }
 
 function createClientRequestId() {
@@ -72,6 +83,23 @@ export class PostcodeLookupError extends Error {
   }
 }
 
+function toPostcodeLookupError(
+  err: unknown,
+  messages: { timeout: string; network: string; unexpected: string }
+): PostcodeLookupError {
+  if (err instanceof DOMException && err.name === 'AbortError') {
+    return new PostcodeLookupError('timeout', messages.timeout, { cause: err });
+  }
+
+  const message = err instanceof Error ? err.message : String(err);
+  if (message.toLowerCase().includes('failed to fetch')) {
+    return new PostcodeLookupError('network', messages.network, { cause: err });
+  }
+
+  if (err instanceof PostcodeLookupError) return err;
+  return new PostcodeLookupError('bad_response', messages.unexpected, { cause: err });
+}
+
 let didWarnMissingApiBaseUrl = false;
 
 function getApiBaseUrl() {
@@ -116,7 +144,7 @@ export async function searchGpPracticesByPostcode(postcode: string): Promise<GpP
   if (!normalized) return [];
 
   const apiBaseUrl = getApiBaseUrl();
-  const requestUrl = `${apiBaseUrl}/api/gp-practices?postcode=${encodeURIComponent(normalized)}`;
+  const requestUrl = buildRequestUrl(apiBaseUrl, '/api/gp-practices', { postcode: normalized });
   const startedAt = performance.now();
   const clientRequestId = createClientRequestId();
   const logPostcode = redactPostcodeForLogs(normalized);
@@ -132,13 +160,13 @@ export async function searchGpPracticesByPostcode(postcode: string): Promise<GpP
         client_request_id: clientRequestId,
         method: 'GET',
         url: logRequestUrl,
-        timeout_ms: 10_000,
+        timeout_ms: DEFAULT_TIMEOUT_MS,
         api_base_url_present: Boolean(apiBaseUrl)
       }
     });
   }
 
-  const timeoutMs = 10_000;
+  const timeoutMs = DEFAULT_TIMEOUT_MS;
   try {
     const response = await fetchJsonWithTimeout<GpPracticeSummary[]>(requestUrl, {
       clientRequestId,
@@ -231,14 +259,14 @@ export async function searchGpPracticesByPostcode(postcode: string): Promise<GpP
 }
 
 export async function getIcbFromGpOds(odsCode: string): Promise<string | null> {
-  const normalized = odsCode.trim().toUpperCase();
+  const normalized = normalizeUpperTrim(odsCode);
   if (!normalized) return null;
 
   const apiBaseUrl = getApiBaseUrl();
-  const requestUrl = `${apiBaseUrl}/api/gp-icb?odsCode=${encodeURIComponent(normalized)}`;
+  const requestUrl = buildRequestUrl(apiBaseUrl, '/api/gp-icb', { odsCode: normalized });
   const startedAt = performance.now();
   const clientRequestId = createClientRequestId();
-  const timeoutMs = 10_000;
+  const timeoutMs = DEFAULT_TIMEOUT_MS;
 
   try {
     const response = await fetchJsonWithTimeout<{ icbCode: string }>(requestUrl, {
@@ -263,31 +291,23 @@ export async function getIcbFromGpOds(odsCode: string): Promise<string | null> {
     }
     return response.json?.icbCode ?? null;
   } catch (err) {
-    if (err instanceof DOMException && err.name === 'AbortError') {
-      throw new PostcodeLookupError('timeout', 'GP -> ICB lookup timed out');
-    }
-    const message = err instanceof Error ? err.message : String(err);
-    if (message.toLowerCase().includes('failed to fetch')) {
-      throw new PostcodeLookupError('network', 'Network error while looking up GP ICB mapping', {
-        cause: err
-      });
-    }
-    if (err instanceof PostcodeLookupError) throw err;
-    throw new PostcodeLookupError('bad_response', 'Unexpected error while resolving GP ICB mapping', {
-      cause: err
+    throw toPostcodeLookupError(err, {
+      timeout: 'GP -> ICB lookup timed out',
+      network: 'Network error while looking up GP ICB mapping',
+      unexpected: 'Unexpected error while resolving GP ICB mapping'
     });
   }
 }
 
 export async function lookupICBPolicyByIcbCode(icbCode: string): Promise<ICBPolicy | null> {
-  const normalized = icbCode.trim().toUpperCase();
+  const normalized = normalizeUpperTrim(icbCode);
   if (!normalized) return null;
 
   const apiBaseUrl = getApiBaseUrl();
-  const requestUrl = `${apiBaseUrl}/api/icb-policy?icbCode=${encodeURIComponent(normalized)}`;
+  const requestUrl = buildRequestUrl(apiBaseUrl, '/api/icb-policy', { icbCode: normalized });
   const startedAt = performance.now();
   const clientRequestId = createClientRequestId();
-  const timeoutMs = 10_000;
+  const timeoutMs = DEFAULT_TIMEOUT_MS;
 
   try {
     const response = await fetchJsonWithTimeout<ICBPolicy>(requestUrl, {
@@ -316,15 +336,10 @@ export async function lookupICBPolicyByIcbCode(icbCode: string): Promise<ICBPoli
     if (err instanceof DOMException && err.name === 'AbortError') {
       throw new PostcodeLookupError('timeout', 'ICB policy lookup timed out');
     }
-    const message = err instanceof Error ? err.message : String(err);
-    if (message.toLowerCase().includes('failed to fetch')) {
-      throw new PostcodeLookupError('network', 'Network error while looking up ICB policy', {
-        cause: err
-      });
-    }
-    if (err instanceof PostcodeLookupError) throw err;
-    throw new PostcodeLookupError('bad_response', 'Unexpected error while looking up ICB policy', {
-      cause: err
+    throw toPostcodeLookupError(err, {
+      timeout: 'ICB policy lookup timed out',
+      network: 'Network error while looking up ICB policy',
+      unexpected: 'Unexpected error while looking up ICB policy'
     });
   }
 }

@@ -29,7 +29,7 @@ export interface Grant {
   amount_max_gbp?: number | null;
   amount_notes?: string | null;
   description: string;
-  eligibility_criteria: Record<string, any>;
+  eligibility_criteria: Record<string, unknown>;
   deadline?: string | null;
   link_url?: string | null;
   type: GrantType;
