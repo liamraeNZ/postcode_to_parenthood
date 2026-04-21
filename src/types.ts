@@ -12,6 +12,13 @@ export interface ICBPolicy {
   updated_at: string;
 }
 
+export interface GpPracticeSummary {
+  odsCode: string;
+  name: string;
+  postcode?: string;
+  orgLink?: string;
+}
+
 export type GrantType = 'Grant' | 'Financing' | 'Guarantee';
 
 export interface Grant {
@@ -22,7 +29,7 @@ export interface Grant {
   amount_max_gbp?: number | null;
   amount_notes?: string | null;
   description: string;
-  eligibility_criteria: Record<string, any>;
+  eligibility_criteria: Record<string, unknown>;
   deadline?: string | null;
   link_url?: string | null;
   type: GrantType;

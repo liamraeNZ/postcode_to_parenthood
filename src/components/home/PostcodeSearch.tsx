@@ -1,56 +1,113 @@
-import React, { useState } from 'react';
-import { Search, Loader2, MapPin, CheckCircle2, History, Baby, UserCircle, Cigarette } from 'lucide-react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
+import { Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { lookupICBByPostcode, PostcodeLookupError } from '@/services/postcodeService';
-import { ICBPolicy } from '@/types';
+import {
+  getIcbFromGpOds,
+  lookupICBPolicyByIcbCode,
+  PostcodeLookupError,
+  searchGpPracticesByPostcode
+} from '@/services/postcodeService';
+import { GpPracticeSummary, ICBPolicy } from '@/types';
 import { motion, AnimatePresence } from 'motion/react';
+
+type PostcodeLookupAction = 'search' | 'lookup';
+
+function getPostcodeLookupErrorMessage(action: PostcodeLookupAction, err: unknown) {
+  const verb = action === 'search' ? 'search' : 'lookup';
+
+  if (err instanceof PostcodeLookupError) {
+    if (err.kind === 'timeout') return `That ${verb} took too long. Please try again.`;
+    if (err.kind === 'network') return 'Network error. Check your connection and try again.';
+    if (err.kind === 'server') return 'The service is temporarily unavailable. Please try again shortly.';
+    if (err.kind === 'misconfigured') return 'The app is misconfigured. Please contact support.';
+    return 'An unexpected response was received. Please try again.';
+  }
+
+  return `An error occurred while ${verb}ing. Please try again.`;
+}
+
+function logDevError(message: string, err: unknown) {
+  if (import.meta.env.DEV) {
+    console.error(message, err);
+  }
+}
 
 export function PostcodeSearch() {
   const [postcode, setPostcode] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
+  const [loadingSelect, setLoadingSelect] = useState(false);
+  const [gpPractices, setGpPractices] = useState<GpPracticeSummary[] | null>(null);
+  const [selectedGP, setSelectedGP] = useState<GpPracticeSummary | null>(null);
+  const [icbCode, setIcbCode] = useState<string | null>(null);
   const [result, setResult] = useState<ICBPolicy | null>(null);
   const [error, setError] = useState('');
 
-  const handleSearch = async (e: React.FormEvent) => {
+  const resetSearchState = () => {
+    setError('');
+    setResult(null);
+    setGpPractices(null);
+    setSelectedGP(null);
+    setIcbCode(null);
+  };
+
+  const resetSelectionState = () => {
+    setError('');
+    setResult(null);
+    setIcbCode(null);
+  };
+
+  const handleSearch = async (e: FormEvent) => {
     e.preventDefault();
     if (!postcode.trim()) return;
 
-    setLoading(true);
-    setError('');
-    setResult(null);
+    setLoadingSearch(true);
+    resetSearchState();
 
     try {
-      const data = await lookupICBByPostcode(postcode);
-      if (data) {
-        setResult(data);
+      const gps = await searchGpPracticesByPostcode(postcode);
+      if (gps.length > 0) {
+        setGpPractices(gps);
       } else {
-        setError("We couldn't find an ICB policy for that postcode.");
+        setGpPractices([]);
+        setError("We couldn't find any active GP practices for that postcode.");
       }
     } catch (err) {
-      if (import.meta.env.DEV) {
-        console.error('[PostcodeSearch] lookup failed', err);
+      logDevError('[PostcodeSearch] gp search failed', err);
+      setError(getPostcodeLookupErrorMessage('search', err));
+    } finally {
+      setLoadingSearch(false);
+    }
+  };
+
+  const handleSelectGp = async (gp: GpPracticeSummary) => {
+    setSelectedGP(gp);
+    setLoadingSelect(true);
+    resetSelectionState();
+
+    try {
+      const resolvedIcbCode = await getIcbFromGpOds(gp.odsCode);
+      if (!resolvedIcbCode) {
+        setError("We couldn't determine an ICB for that GP practice.");
+        return;
       }
 
-      if (err instanceof PostcodeLookupError) {
-        if (err.kind === 'timeout') {
-          setError('That lookup took too long. Please try again.');
-        } else if (err.kind === 'network') {
-          setError('Network error. Check your connection and try again.');
-        } else if (err.kind === 'server') {
-          setError('The service is temporarily unavailable. Please try again shortly.');
-        } else if (err.kind === 'misconfigured') {
-          setError('The app is misconfigured. Please contact support.');
-        } else {
-          setError('An unexpected response was received. Please try again.');
-        }
-      } else {
-        setError('An error occurred while searching. Please try again.');
+      setIcbCode(resolvedIcbCode);
+      const policy = await lookupICBPolicyByIcbCode(resolvedIcbCode);
+      if (!policy) {
+        setError("We couldn't find an ICB policy for that GP practice.");
+        return;
       }
+
+      setResult(policy);
+    } catch (err) {
+      logDevError('[PostcodeSearch] gp selection failed', err);
+      setError(getPostcodeLookupErrorMessage('lookup', err));
     } finally {
-      setLoading(false);
+      setLoadingSelect(false);
     }
   };
 
@@ -67,10 +124,10 @@ export function PostcodeSearch() {
         </div>
         <Button 
           type="submit" 
-          disabled={loading}
+          disabled={loadingSearch || loadingSelect}
           className="absolute right-2 px-6 h-10 bg-emerald-solid hover:bg-emerald-deep text-white font-bold rounded-lg shadow-md transition-all active:scale-95"
         >
-          {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Find Policy"}
+          {loadingSearch ? <Loader2 className="w-5 h-5 animate-spin" /> : "Find GP"}
         </Button>
       </form>
 
@@ -86,6 +143,55 @@ export function PostcodeSearch() {
           </motion.div>
         )}
 
+        {gpPractices && gpPractices.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="space-y-3"
+          >
+            <Card className="border-none shadow-md overflow-hidden rounded-xl bg-white p-5">
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <CardTitle className="text-gray-800 font-bold">Select your GP practice</CardTitle>
+                </div>
+                {loadingSelect && (
+                  <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none">
+                    <span className="inline-flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Loading
+                    </span>
+                  </Badge>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                {gpPractices.map((gp) => {
+                  const isSelected = selectedGP?.odsCode === gp.odsCode;
+                  return (
+                    <Button
+                      key={gp.odsCode}
+                      type="button"
+                      variant={isSelected ? 'default' : 'outline'}
+                      disabled={loadingSelect}
+                      className="w-full justify-between rounded-lg"
+                      onClick={() => handleSelectGp(gp)}
+                    >
+                      <span className="text-left">
+                        <span className="block font-bold">{gp.name}</span>
+                        <span className="block text-xs opacity-75">{gp.odsCode}</span>
+                      </span>
+                      {isSelected && icbCode && (
+                        <span className="text-xs opacity-90">ICB {icbCode}</span>
+                      )}
+                    </Button>
+                  );
+                })}
+              </div>
+            </Card>
+          </motion.div>
+        )}
+
         {result && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -95,7 +201,13 @@ export function PostcodeSearch() {
             <Card className="border-none border-l-4 border-l-emerald-500 shadow-md overflow-hidden rounded-xl bg-white p-5">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <CardTitle className="text-gray-800 font-bold">Postcode Result: {postcode.toUpperCase()}</CardTitle>
+                  <CardTitle className="text-gray-800 font-bold">
+                    {selectedGP ? selectedGP.name : 'Eligibility Result'}
+                  </CardTitle>
+                  <div className="text-xs opacity-70 mt-1">
+                    {postcode ? `Postcode ${postcode.toUpperCase()}` : null}
+                    {icbCode ? ` · ICB ${icbCode}` : null}
+                  </div>
                 </div>
                 <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none">
                   {result.icb_name}
