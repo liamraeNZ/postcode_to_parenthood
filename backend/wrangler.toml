@@ -1,4 +1,4 @@
-name = "fertilityfund"
+name = "fertility-fund-backend"
 main = "index.ts"
 compatibility_date = "2026-04-20"
 
