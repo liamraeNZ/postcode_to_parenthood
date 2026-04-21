@@ -23,3 +23,6 @@ enabled = true
 invocation_logs = true
 [observability.traces]
 enabled = true
+
+[triggers]
+crons = ["0 3 1 * *"]

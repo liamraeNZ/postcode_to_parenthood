@@ -1,3 +1,5 @@
+import { syncIcbsFromOrd } from './scripts/syncIcbsFromOrd';
+
 type ExecutionContext = {
   waitUntil: (promise: Promise<unknown>) => void;
   passThroughOnException: () => void;
@@ -11,17 +13,26 @@ type D1Database = {
   prepare: (query: string) => {
     bind: (...values: unknown[]) => {
       first: <T>(typeHint?: string) => Promise<T | null>;
+      run: () => Promise<{ success: boolean; error?: string }>;
+      all: <T>() => Promise<{ results: T[] }>;
     };
   };
 };
 
 type ExportedHandler<E> = {
   fetch: (request: Request, env: E, ctx: ExecutionContext) => Response | Promise<Response>;
+  scheduled?: (controller: ScheduledController, env: E, ctx: ExecutionContext) => void | Promise<void>;
+};
+
+type ScheduledController = {
+  cron: string;
+  scheduledTime: number;
 };
 
 type Env = {
   ASSETS: Fetcher;
   DB: D1Database;
+  ADMIN_TOKEN?: string;
 };
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
@@ -59,6 +70,12 @@ function jsonResponse(body: unknown, init?: ResponseInit) {
     ...init,
     headers,
   });
+}
+
+function isAuthorizedAdmin(request: Request, env: Env) {
+  const configuredToken = env.ADMIN_TOKEN?.trim();
+  if (!configuredToken) return true;
+  return request.headers.get('x-admin-token') === configuredToken;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -129,19 +146,19 @@ async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit, tim
 }
 
 async function resolveIcbId(db: D1Database, icbCode: string, icbName: string | null) {
-  const byOdsCode = await db
-    .prepare('select id from icbs where ods_code = ?1 limit 1')
+  const bySubIcbCode = await db
+    .prepare('select id from icbs where sub_icb_code = ?1 limit 1')
     .bind(icbCode)
     .first<{ id: string }>();
 
-  if (byOdsCode?.id) return byOdsCode.id;
+  if (bySubIcbCode?.id) return bySubIcbCode.id;
 
-  const byCode = await db
-    .prepare('select id from icbs where nhs_code = ?1 limit 1')
+  const byParentIcbCode = await db
+    .prepare('select id from icbs where sub_icb_code is null and parent_icb_code = ?1 limit 1')
     .bind(icbCode)
     .first<{ id: string }>();
 
-  if (byCode?.id) return byCode.id;
+  if (byParentIcbCode?.id) return byParentIcbCode.id;
 
   const byAliasCode = await db
     .prepare("select icb_id as id from icb_aliases where alias_kind = 'code' and alias = ?1 limit 1")
@@ -298,59 +315,77 @@ async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) {
   const icbId = await resolveIcbId(db, normalized, null);
   if (!icbId) return null;
 
-  const today = new Date().toISOString().slice(0, 10);
-  const policy = await db
-    .prepare(
+  async function fetchPolicyForIcbId(targetIcbId: string) {
+    const today = new Date().toISOString().slice(0, 10);
+    const policy = await db
+      .prepare(
+        `
+        select
+          i.name as icb_name,
+          p.cycles_offered,
+          p.max_age,
+          p.bmi_min,
+          p.bmi_max,
+          p.iui_rounds_required,
+          p.wait_time_months,
+          p.endometriosis_priority_access,
+          p.smoking_restricted,
+          p.living_children_rule,
+          p.updated_at
+        from icb_policies p
+        join icbs i on i.id = p.icb_id
+        where p.icb_id = ?1 and (p.effective_to is null or p.effective_to >= ?2)
+        order by p.effective_from desc
+        limit 1
       `
-      select
-        i.name as icb_name,
-        p.cycles_offered,
-        p.max_age,
-        p.bmi_min,
-        p.bmi_max,
-        p.iui_rounds_required,
-        p.wait_time_months,
-        p.endometriosis_priority_access,
-        p.smoking_restricted,
-        p.living_children_rule,
-        p.updated_at
-      from icb_policies p
-      join icbs i on i.id = p.icb_id
-      where p.icb_id = ?1 and (p.effective_to is null or p.effective_to >= ?2)
-      order by p.effective_from desc
-      limit 1
-    `
-    )
-    .bind(icbId, today)
-    .first<{
-      icb_name: string;
-      cycles_offered: number;
-      max_age: number;
-      bmi_min: number | null;
-      bmi_max: number | null;
-      iui_rounds_required: number;
-      wait_time_months: number | null;
-      endometriosis_priority_access: number;
-      smoking_restricted: number;
-      living_children_rule: string | null;
-      updated_at: string;
-    }>();
+      )
+      .bind(targetIcbId, today)
+      .first<{
+        icb_name: string;
+        cycles_offered: number;
+        max_age: number;
+        bmi_min: number | null;
+        bmi_max: number | null;
+        iui_rounds_required: number;
+        wait_time_months: number | null;
+        endometriosis_priority_access: number;
+        smoking_restricted: number;
+        living_children_rule: string | null;
+        updated_at: string;
+      }>();
 
-  if (!policy) return null;
+    if (!policy) return null;
 
-  return {
-    icb_name: policy.icb_name,
-    cycles_offered: policy.cycles_offered,
-    max_age: policy.max_age,
-    bmi_min: policy.bmi_min,
-    bmi_max: policy.bmi_max,
-    iui_rounds_required: policy.iui_rounds_required,
-    wait_time_months: policy.wait_time_months,
-    endometriosis_priority_access: Boolean(policy.endometriosis_priority_access),
-    smoking_restricted: Boolean(policy.smoking_restricted),
-    living_children_rule: policy.living_children_rule,
-    updated_at: policy.updated_at,
-  };
+    return {
+      icb_name: policy.icb_name,
+      cycles_offered: policy.cycles_offered,
+      max_age: policy.max_age,
+      bmi_min: policy.bmi_min,
+      bmi_max: policy.bmi_max,
+      iui_rounds_required: policy.iui_rounds_required,
+      wait_time_months: policy.wait_time_months,
+      endometriosis_priority_access: Boolean(policy.endometriosis_priority_access),
+      smoking_restricted: Boolean(policy.smoking_restricted),
+      living_children_rule: policy.living_children_rule,
+      updated_at: policy.updated_at,
+    };
+  }
+
+  const direct = await fetchPolicyForIcbId(icbId);
+  if (direct) return direct;
+
+  const parent = await db
+    .prepare('select parent_icb_code from icbs where id = ?1 limit 1')
+    .bind(icbId)
+    .first<{ parent_icb_code: string | null }>();
+
+  const parentIcbCode = parent?.parent_icb_code ?? null;
+  if (!parentIcbCode) return null;
+
+  const parentIcbId = await resolveIcbId(db, parentIcbCode, null);
+  if (!parentIcbId || parentIcbId === icbId) return null;
+
+  return await fetchPolicyForIcbId(parentIcbId);
 }
 
 async function handleApiRequest(request: Request, env: Env) {
@@ -467,6 +502,60 @@ async function handleApiRequest(request: Request, env: Env) {
       return response;
     }
 
+    if (url.pathname === '/api/admin/icb-sync' && request.method === 'POST') {
+      if (!isAuthorizedAdmin(request, env)) {
+        response = jsonResponse({ error: 'Unauthorized', request_id: reqId }, { status: 401 });
+        return response;
+      }
+
+      const startedSyncAt = Date.now();
+      const sync = await syncIcbsFromOrd(env.DB, { requestId: reqId }, { fetchOrdJson, getPath, getStringPath });
+      const icbs = await env.DB
+        .prepare('select id, name, sub_icb_code, parent_icb_code, region, created_at, updated_at from icbs order by name asc')
+        .bind()
+        .all<{
+          id: string;
+          name: string;
+          sub_icb_code: string | null;
+          parent_icb_code: string | null;
+          region: string | null;
+          created_at: string;
+          updated_at: string;
+        }>();
+
+      response = jsonResponse({
+        ok: true,
+        request_id: reqId,
+        sync,
+        sync_duration_ms: Date.now() - startedSyncAt,
+        icbs: icbs.results,
+      });
+      return response;
+    }
+
+    if (url.pathname === '/api/admin/icbs' && request.method === 'GET') {
+      if (!isAuthorizedAdmin(request, env)) {
+        response = jsonResponse({ error: 'Unauthorized', request_id: reqId }, { status: 401 });
+        return response;
+      }
+
+      const icbs = await env.DB
+        .prepare('select id, name, sub_icb_code, parent_icb_code, region, created_at, updated_at from icbs order by name asc')
+        .bind()
+        .all<{
+          id: string;
+          name: string;
+          sub_icb_code: string | null;
+          parent_icb_code: string | null;
+          region: string | null;
+          created_at: string;
+          updated_at: string;
+        }>();
+
+      response = jsonResponse({ ok: true, request_id: reqId, icbs: icbs.results });
+      return response;
+    }
+
     if (url.pathname === '/api/client-log' && request.method === 'POST') {
       const body = await readJsonBody(request, { maxBytes: 10_000 });
       if (!body.ok) {
@@ -532,5 +621,20 @@ export default {
       return handleApiRequest(request, env);
     }
     return env.ASSETS.fetch(request);
+  },
+  async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext) {
+    const reqId = requestId();
+    const startedAt = Date.now();
+    try {
+      log('info', 'scheduled sync start', { request_id: reqId, cron: controller.cron });
+      const result = await syncIcbsFromOrd(env.DB, { requestId: reqId }, { fetchOrdJson, getPath, getStringPath });
+      log('info', 'scheduled sync end', { request_id: reqId, duration_ms: Date.now() - startedAt, ...result });
+    } catch (err) {
+      log('error', 'scheduled sync failed', {
+        request_id: reqId,
+        duration_ms: Date.now() - startedAt,
+        err: err instanceof Error ? { name: err.name, message: err.message, stack: err.stack } : err,
+      });
+    }
   },
 } satisfies ExportedHandler<Env>;

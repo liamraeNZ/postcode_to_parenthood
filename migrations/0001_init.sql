@@ -3,13 +3,16 @@ pragma foreign_keys = on; --> statement-breakpoint
 create table if not exists icbs (
   id text primary key,
   name text not null collate nocase unique,
-  nhs_code text unique,
+  sub_icb_code text,
+  parent_icb_code text,
   region text,
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
-  updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
-  constraint icbs_nhs_code_format check (nhs_code is null or nhs_code glob 'E[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
+  updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 ); --> statement-breakpoint
 
+create unique index if not exists icbs_sub_icb_code_unique_idx on icbs (sub_icb_code) where sub_icb_code is not null; --> statement-breakpoint
+create unique index if not exists icbs_parent_icb_code_unique_idx on icbs (parent_icb_code) where sub_icb_code is null and parent_icb_code is not null; --> statement-breakpoint
+create index if not exists icbs_parent_icb_code_idx on icbs (parent_icb_code); --> statement-breakpoint
 create table if not exists icb_aliases (
   id text primary key,
   icb_id text not null references icbs(id) on delete cascade,
@@ -102,91 +105,4 @@ create table if not exists saved_searches (
 
 create index if not exists saved_searches_user_id_idx on saved_searches (user_id); --> statement-breakpoint
 
-create index if not exists saved_searches_postcode_normalized_idx on saved_searches (postcode_normalized); --> statement-breakpoint
-
-insert or ignore into icbs (id, name, region, nhs_code)
-values
-  ('9b66e0f1-eab0-4f2a-ae59-6a1bb96edac5', 'NHS North East London', 'London', 'E54000029'),
-  ('c692b4c7-2d08-4f93-9130-28e369c1d529', 'NHS West and North London', 'London', 'E54000027'),
-  ('6e501a80-fac9-4b1d-8f74-2df7c79a5eb8', 'NHS South East London', 'London', 'E54000030'),
-  ('8543a058-d51d-4f45-abf6-5e421389b404', 'NHS Kent and Medway', 'South East', 'E54000032'); --> statement-breakpoint
-
-insert or ignore into icb_aliases (id, icb_id, alias_kind, alias)
-values
-  ('f27d989b-03c8-4068-8f1b-274a5f7c19fe', 'c692b4c7-2d08-4f93-9130-28e369c1d529', 'name', 'NHS North West London'),
-  ('65353832-604d-4fd3-b326-a8c835db2f60', 'c692b4c7-2d08-4f93-9130-28e369c1d529', 'name', 'NHS North Central London'),
-  ('c315df41-004c-491f-8929-2a4aa85f0223', 'c692b4c7-2d08-4f93-9130-28e369c1d529', 'code', 'E54000028'),
-  ('fc20f4eb-f788-4de8-a316-7756acacbc24', '8543a058-d51d-4f45-abf6-5e421389b404', 'name', 'NHS Kent and Medway Integrated Care Board'); --> statement-breakpoint
-
-insert or ignore into icb_policies (
-  id,
-  icb_id,
-  effective_from,
-  cycles_offered,
-  max_age,
-  bmi_min,
-  bmi_max,
-  iui_rounds_required,
-  wait_time_months,
-  endometriosis_priority_access,
-  smoking_restricted,
-  living_children_rule
-)
-values
-  (
-    '2abcb99b-9ba9-4a7d-96c9-b7ea3aa1b07a',
-    '9b66e0f1-eab0-4f2a-ae59-6a1bb96edac5',
-    date('now'),
-    3,
-    40,
-    19,
-    30,
-    6,
-    null,
-    0,
-    1,
-    'No existing children'
-  ),
-  (
-    '364e4377-ae6f-42af-a280-8c91f7b09310',
-    'c692b4c7-2d08-4f93-9130-28e369c1d529',
-    date('now'),
-    1,
-    42,
-    19,
-    29.9,
-    6,
-    null,
-    0,
-    1,
-    'Neither partner has children'
-  ),
-  (
-    '7a12f18a-7cff-4782-b924-53fe8c8114dd',
-    '6e501a80-fac9-4b1d-8f74-2df7c79a5eb8',
-    date('now'),
-    2,
-    39,
-    19,
-    30,
-    6,
-    null,
-    0,
-    1,
-    'No existing children from current or previous relationships'
-  ),
-  (
-    'f97c4d6a-65c8-42ba-b041-484d77f351d1',
-    '8543a058-d51d-4f45-abf6-5e421389b404',
-    date('now'),
-    1,
-    40,
-    null,
-    null,
-    6,
-    null,
-    0,
-    1,
-    'Policy details not yet loaded'
-  );
-
+create index if not exists saved_searches_postcode_normalized_idx on saved_searches (postcode_normalized);
