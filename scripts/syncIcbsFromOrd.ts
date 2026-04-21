@@ -33,6 +33,7 @@ function shouldExcludeFromIcbSync(name: string) {
   if (upper.includes('H&J')) return true;
   if (upper.includes('HEALTH & JUSTICE')) return true;
   if (upper.includes('HEALTH AND JUSTICE')) return true;
+  if (upper.includes('SMHPC')) return true;
   return false;
 }
 

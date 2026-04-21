@@ -6,6 +6,7 @@ create table if not exists icbs (
   sub_icb_code text,
   parent_icb_code text,
   region text,
+  country text,
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 ); --> statement-breakpoint
