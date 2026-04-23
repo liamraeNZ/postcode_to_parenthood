@@ -30,7 +30,9 @@ export type ScheduledController = {
 export type Env = {
   ASSETS: Fetcher;
   DB: D1Database;
-  ADMIN_TOKEN?: string;
+  ADMIN_TOKEN?: string;      // existing — kept for icb-sync backward compat
+  ADMIN_USERNAME?: string;   // new
+  ADMIN_PASSWORD?: string;   // new
 };
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';

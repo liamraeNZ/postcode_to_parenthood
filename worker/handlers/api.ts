@@ -15,6 +15,7 @@ import {
   requestId,
   sanitizeSearchParams
 } from '../lib';
+import { checkBasicAuth } from '../auth';
 import { lookupIcbPolicyByIcbCode, resolveIcbIdFromPostcodesIo } from '../services/icbPolicy';
 import {
   fetchGpPracticesForOutcode,
@@ -29,6 +30,14 @@ import {
   lookupPostcodeAdminLookup,
   lookupPostcodeGeo
 } from '../services/postcodesIo';
+import {
+  listIcbs,
+  createIcb,
+  updateIcb,
+  listPoliciesForIcb,
+  createPolicy,
+  type ConflictError
+} from '../services/adminService';
 
 const GP_SEARCH_NEAREST_OUTCODE_RADIUS_M = 7000;
 const GP_SEARCH_NEAREST_OUTCODE_LIMIT = 10;
@@ -299,29 +308,164 @@ export async function handleApiRequest(request: Request, env: Env) {
     }
 
     if (url.pathname === '/api/admin/icbs' && request.method === 'GET') {
-      if (!isAuthorizedAdmin(request, env)) {
-        response = jsonResponse({ error: 'Unauthorized', request_id: reqId }, { status: 401 });
+      const authErr = checkBasicAuth(request, env);
+      if (authErr) { response = authErr; return response; }
+
+      const icbs = await listIcbs(env.DB);
+      response = jsonResponse({ icbs, request_id: reqId });
+      return response;
+    }
+
+    if (url.pathname === '/api/admin/icbs' && request.method === 'POST') {
+      const authErr = checkBasicAuth(request, env);
+      if (authErr) { response = authErr; return response; }
+
+      const body = await readJsonBody(request, { maxBytes: 100_000 });
+      if (!body.ok) {
+        response = jsonResponse({ error: body.error, request_id: reqId }, { status: 400 });
+        return response;
+      }
+      if (!isRecord(body.value)) {
+        response = jsonResponse({ error: 'Invalid payload', request_id: reqId }, { status: 400 });
         return response;
       }
 
-      const icbs = await env.DB
-        .prepare(
-          "select id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at from icbs order by case when sub_icb_code is null then 0 else 1 end asc, case when sub_icb_code is null then coalesce(parent_icb_code, id) else coalesce(parent_icb_code, 'ZZZZZ') end asc, case when sub_icb_code is null then name else coalesce(sub_icb_code, '') end asc, name asc"
-        )
-        .bind()
-        .all<{
-          id: string;
-          name: string;
-          sub_icb_code: string | null;
-          parent_icb_code: string | null;
-          region: string | null;
-          country: string | null;
-          created_at: string;
-          updated_at: string;
-        }>();
+      const { id, name } = body.value;
+      if (typeof id !== 'string' || id.trim() === '') {
+        response = jsonResponse({ error: 'Missing required field: id', request_id: reqId }, { status: 400 });
+        return response;
+      }
+      if (typeof name !== 'string' || name.trim() === '') {
+        response = jsonResponse({ error: 'Missing required field: name', request_id: reqId }, { status: 400 });
+        return response;
+      }
 
-      response = jsonResponse({ ok: true, request_id: reqId, icbs: icbs.results });
+      try {
+        const icb = await createIcb(env.DB, {
+          id: id.trim(),
+          name: name.trim(),
+          sub_icb_code: typeof body.value.sub_icb_code === 'string' ? body.value.sub_icb_code : null,
+          parent_icb_code: typeof body.value.parent_icb_code === 'string' ? body.value.parent_icb_code : null,
+          region: typeof body.value.region === 'string' ? body.value.region : null,
+          country: typeof body.value.country === 'string' ? body.value.country : null,
+        });
+        response = jsonResponse({ icb, request_id: reqId }, { status: 201 });
+        return response;
+      } catch (err) {
+        if (isRecord(err) && (err as unknown as ConflictError).type === 'conflict') {
+          const conflict = err as unknown as ConflictError;
+          response = jsonResponse({ error: conflict.message, request_id: reqId }, { status: 409 });
+          return response;
+        }
+        throw err;
+      }
+    }
+
+    if (url.pathname.startsWith('/api/admin/icbs/') && !url.pathname.includes('/policies') && request.method === 'PATCH') {
+      const authErr = checkBasicAuth(request, env);
+      if (authErr) { response = authErr; return response; }
+
+      const id = url.pathname.slice('/api/admin/icbs/'.length);
+
+      const body = await readJsonBody(request, { maxBytes: 100_000 });
+      if (!body.ok) {
+        response = jsonResponse({ error: body.error, request_id: reqId }, { status: 400 });
+        return response;
+      }
+      if (!isRecord(body.value)) {
+        response = jsonResponse({ error: 'Invalid payload', request_id: reqId }, { status: 400 });
+        return response;
+      }
+
+      const data: Record<string, unknown> = {};
+      if (typeof body.value.name === 'string') data.name = body.value.name;
+      if ('region' in body.value) data.region = typeof body.value.region === 'string' ? body.value.region : null;
+      if ('country' in body.value) data.country = typeof body.value.country === 'string' ? body.value.country : null;
+      if ('sub_icb_code' in body.value) data.sub_icb_code = typeof body.value.sub_icb_code === 'string' ? body.value.sub_icb_code : null;
+      if ('parent_icb_code' in body.value) data.parent_icb_code = typeof body.value.parent_icb_code === 'string' ? body.value.parent_icb_code : null;
+      if (body.value.status === 'active' || body.value.status === 'inactive') data.status = body.value.status;
+
+      const icb = await updateIcb(env.DB, id, data);
+      if (!icb) {
+        response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
+        return response;
+      }
+      response = jsonResponse({ icb, request_id: reqId });
       return response;
+    }
+
+    {
+      const policiesMatch = url.pathname.match(/^\/api\/admin\/icbs\/([^/]+)\/policies$/);
+      if (policiesMatch && request.method === 'GET') {
+        const authErr = checkBasicAuth(request, env);
+        if (authErr) { response = authErr; return response; }
+
+        const icbId = policiesMatch[1];
+        const policies = await listPoliciesForIcb(env.DB, icbId);
+        response = jsonResponse({ policies, request_id: reqId });
+        return response;
+      }
+
+      if (policiesMatch && request.method === 'POST') {
+        const authErr = checkBasicAuth(request, env);
+        if (authErr) { response = authErr; return response; }
+
+        const icbId = policiesMatch[1];
+
+        const body = await readJsonBody(request, { maxBytes: 100_000 });
+        if (!body.ok) {
+          response = jsonResponse({ error: body.error, request_id: reqId }, { status: 400 });
+          return response;
+        }
+        if (!isRecord(body.value)) {
+          response = jsonResponse({ error: 'Invalid payload', request_id: reqId }, { status: 400 });
+          return response;
+        }
+
+        const { cycles_offered, max_age, iui_rounds_required, living_children_rule } = body.value;
+        if (typeof cycles_offered !== 'number') {
+          response = jsonResponse({ error: 'Missing required field: cycles_offered', request_id: reqId }, { status: 400 });
+          return response;
+        }
+        if (typeof max_age !== 'number') {
+          response = jsonResponse({ error: 'Missing required field: max_age', request_id: reqId }, { status: 400 });
+          return response;
+        }
+        if (typeof iui_rounds_required !== 'number') {
+          response = jsonResponse({ error: 'Missing required field: iui_rounds_required', request_id: reqId }, { status: 400 });
+          return response;
+        }
+        if (typeof living_children_rule !== 'string' || living_children_rule.trim() === '') {
+          response = jsonResponse({ error: 'Missing required field: living_children_rule', request_id: reqId }, { status: 400 });
+          return response;
+        }
+
+        try {
+          const policy = await createPolicy(env.DB, icbId, {
+            cycles_offered,
+            max_age,
+            iui_rounds_required,
+            living_children_rule,
+            effective_from: typeof body.value.effective_from === 'string' ? body.value.effective_from : null,
+            effective_to: typeof body.value.effective_to === 'string' ? body.value.effective_to : null,
+            bmi_min: typeof body.value.bmi_min === 'number' ? body.value.bmi_min : null,
+            bmi_max: typeof body.value.bmi_max === 'number' ? body.value.bmi_max : null,
+            wait_time_months: typeof body.value.wait_time_months === 'number' ? body.value.wait_time_months : null,
+            endometriosis_priority_access: body.value.endometriosis_priority_access === true,
+            smoking_restricted: body.value.smoking_restricted !== false,
+            source_url: typeof body.value.source_url === 'string' ? body.value.source_url : null,
+          });
+          response = jsonResponse({ policy, request_id: reqId }, { status: 201 });
+          return response;
+        } catch (err) {
+          if (isRecord(err) && (err as unknown as ConflictError).type === 'conflict') {
+            const conflict = err as unknown as ConflictError;
+            response = jsonResponse({ error: conflict.message, request_id: reqId }, { status: 409 });
+            return response;
+          }
+          throw err;
+        }
+      }
     }
 
     if (url.pathname === '/api/client-log' && request.method === 'POST') {
