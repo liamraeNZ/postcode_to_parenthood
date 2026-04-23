@@ -14,7 +14,7 @@ run_worker_first = true
 [[d1_databases]]
 binding = "DB"
 database_name = "fertilityfund"
-database_id = "a715c124-c60f-43f4-ba59-afe68ccc5a00"
+database_id = "0d01ebee-9961-4da7-a402-87ec678b48e8"
 migrations_dir = "migrations"
 
 [observability]
