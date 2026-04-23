@@ -47,6 +47,7 @@ export async function syncIcbsFromOrd(
   const now = new Date().toISOString();
   let inserted = 0;
   let updated = 0;
+  let aliased = 0;
 
   async function findParentByName(name: string) {
     return await db
@@ -60,6 +61,37 @@ export async function syncIcbsFromOrd(
       .prepare('select id, name from icbs where sub_icb_code is not null and upper(name) = upper(?1) limit 1')
       .bind(name)
       .first<{ id: string; name: string }>();
+  }
+
+  async function findIcbIdById(id: string) {
+    return await db.prepare('select id from icbs where id = ?1 limit 1').bind(id).first<{ id: string }>();
+  }
+
+  async function findIcbIdBySubIcbCode(code: string) {
+    return await db.prepare('select id from icbs where sub_icb_code = ?1 limit 1').bind(code).first<{ id: string }>();
+  }
+
+  async function findParentIcbRowIdByParentIcbCode(code: string) {
+    return await db
+      .prepare('select id from icbs where sub_icb_code is null and parent_icb_code = ?1 limit 1')
+      .bind(code)
+      .first<{ id: string }>();
+  }
+
+  async function ensureCodeAlias(icbId: string, code: string) {
+    const existing = await db
+      .prepare("select id from icb_aliases where alias_kind = 'code' and alias = ?1 limit 1")
+      .bind(code)
+      .first<{ id: string }>();
+    if (existing?.id) return false;
+
+    await db
+      .prepare(
+        "insert or ignore into icb_aliases (id, icb_id, alias_kind, alias, created_at, updated_at) values (?1, ?2, 'code', ?3, ?4, ?5)"
+      )
+      .bind(crypto.randomUUID(), icbId, code, now, now)
+      .run();
+    return true;
   }
 
   function extractRelArray(json: unknown): unknown[] {
@@ -190,18 +222,20 @@ export async function syncIcbsFromOrd(
   });
 
   for (const { parentIcbCode, ordName, region, country } of parentsWithGeo) {
-    const existingByCode = await db
-      .prepare('select id from icbs where sub_icb_code is null and parent_icb_code = ?1 limit 1')
-      .bind(parentIcbCode)
-      .first<{ id: string }>();
+    const existingById = await findIcbIdById(parentIcbCode);
+    const existingByParentCode = existingById?.id ? null : await findParentIcbRowIdByParentIcbCode(parentIcbCode);
+    const existingId = existingById?.id ?? existingByParentCode?.id ?? null;
 
-    if (existingByCode?.id) {
+    if (existingId) {
       await db
         .prepare(
-          'update icbs set name = ?1, parent_icb_code = ?2, region = coalesce(?3, region), country = coalesce(?4, country), updated_at = ?5 where id = ?6'
+          'update icbs set name = ?1, sub_icb_code = null, parent_icb_code = null, region = coalesce(?2, region), country = coalesce(?3, country), updated_at = ?4 where id = ?5'
         )
-        .bind(ordName, parentIcbCode, region, country, now, existingByCode.id)
+        .bind(ordName, region, country, now, existingId)
         .run();
+      if (existingId !== parentIcbCode) {
+        if (await ensureCodeAlias(existingId, parentIcbCode)) aliased += 1;
+      }
       updated += 1;
       continue;
     }
@@ -210,20 +244,20 @@ export async function syncIcbsFromOrd(
     if (existingByName?.id) {
       await db
         .prepare(
-          'update icbs set parent_icb_code = ?1, region = coalesce(?2, region), country = coalesce(?3, country), updated_at = ?4 where id = ?5'
+          'update icbs set name = ?1, sub_icb_code = null, parent_icb_code = null, region = coalesce(?2, region), country = coalesce(?3, country), updated_at = ?4 where id = ?5'
         )
-        .bind(parentIcbCode, region, country, now, existingByName.id)
+        .bind(ordName, region, country, now, existingByName.id)
         .run();
+      if (await ensureCodeAlias(existingByName.id, parentIcbCode)) aliased += 1;
       updated += 1;
       continue;
     }
 
-    const id = crypto.randomUUID();
     await db
       .prepare(
         'insert into icbs (id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at) values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)'
       )
-      .bind(id, ordName, null, parentIcbCode, region, country, now, now)
+      .bind(parentIcbCode, ordName, null, null, region, country, now, now)
       .run();
     inserted += 1;
   }
@@ -294,17 +328,17 @@ export async function syncIcbsFromOrd(
   });
 
   for (const { subIcbCode, ordName, parentIcbCode, region, country } of subsWithParent) {
-    const existingByCode = await db
-      .prepare('select id from icbs where sub_icb_code = ?1 limit 1')
-      .bind(subIcbCode)
-      .first<{ id: string }>();
+    const existingById = await findIcbIdById(subIcbCode);
+    const existingBySubCode = existingById?.id ? null : await findIcbIdBySubIcbCode(subIcbCode);
 
-    if (existingByCode?.id) {
+    const existingId = existingById?.id ?? existingBySubCode?.id ?? null;
+
+    if (existingId) {
       await db
         .prepare(
-          'update icbs set name = ?1, parent_icb_code = ?2, region = coalesce(?3, region), country = coalesce(?4, country), updated_at = ?5 where id = ?6'
+          'update icbs set name = ?1, sub_icb_code = ?2, parent_icb_code = ?3, region = coalesce(?4, region), country = coalesce(?5, country), updated_at = ?6 where id = ?7'
         )
-        .bind(ordName, parentIcbCode, region, country, now, existingByCode.id)
+        .bind(ordName, subIcbCode, parentIcbCode, region, country, now, existingId)
         .run();
       updated += 1;
       continue;
@@ -318,19 +352,19 @@ export async function syncIcbsFromOrd(
         )
         .bind(subIcbCode, parentIcbCode, region, country, now, existingByName.id)
         .run();
+      if (await ensureCodeAlias(existingByName.id, subIcbCode)) aliased += 1;
       updated += 1;
       continue;
     }
 
-    const id = crypto.randomUUID();
     await db
       .prepare(
         'insert into icbs (id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at) values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)'
       )
-      .bind(id, ordName, subIcbCode, parentIcbCode, region, country, now, now)
+      .bind(subIcbCode, ordName, subIcbCode, parentIcbCode, region, country, now, now)
       .run();
     inserted += 1;
   }
 
-  return { total: parentsByCode.size + subsByCode.size, inserted, updated, aliased: 0 };
+  return { total: parentsByCode.size + subsByCode.size, inserted, updated, aliased };
 }
