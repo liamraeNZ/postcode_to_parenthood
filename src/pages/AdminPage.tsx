@@ -13,14 +13,15 @@ import { IcbTable } from '../components/admin/IcbTable';
 import { IcbForm } from '../components/admin/IcbForm';
 import { PolicyList } from '../components/admin/PolicyList';
 import { PolicyForm } from '../components/admin/PolicyForm';
+import { DbSyncPanel } from '../components/admin/DbSyncPanel';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 function getErrorMessage(err: unknown): string {
   if (err instanceof ConnectionError) return 'Connection error — please try again';
   if (err instanceof ApiError) {
     if (err.status === 401) return 'Authentication failed — check your credentials';
     if (err.status >= 500) return 'Server error — please try again';
-    // 400 / 409 — use server error field if available
     const body = err.body as Record<string, unknown> | null;
     if (body && typeof body.error === 'string') return body.error;
     return `Request failed (${err.status})`;
@@ -36,22 +37,16 @@ export function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // ICB form state
   const [icbFormOpen, setIcbFormOpen] = useState(false);
   const [editingIcb, setEditingIcb] = useState<AdminIcb | null>(null);
-
-  // Policy form state
   const [policyFormOpen, setPolicyFormOpen] = useState(false);
-
-  // Confirmation dialog for status toggle
   const [confirmToggle, setConfirmToggle] = useState<AdminIcb | null>(null);
 
   const loadIcbs = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await listIcbs();
-      setIcbs(data);
+      setIcbs(await listIcbs());
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
@@ -61,26 +56,16 @@ export function AdminPage() {
 
   useEffect(() => { loadIcbs(); }, [loadIcbs]);
 
-  async function handleSelectIcb(icb: AdminIcb) {
+  function handleSelectIcb(icb: AdminIcb) {
     setSelectedIcb(icb);
     setError(null);
-    try {
-      const data = await listPoliciesForIcb(icb.id);
-      setPolicies(data);
-    } catch (err) {
-      setError(getErrorMessage(err));
-    }
+    listPoliciesForIcb(icb.id)
+      .then(setPolicies)
+      .catch(err => setError(getErrorMessage(err)));
   }
 
-  function handleEditIcb(icb: AdminIcb) {
-    setEditingIcb(icb);
-    setIcbFormOpen(true);
-  }
-
-  function handleCreateIcb() {
-    setEditingIcb(null);
-    setIcbFormOpen(true);
-  }
+  function handleEditIcb(icb: AdminIcb) { setEditingIcb(icb); setIcbFormOpen(true); }
+  function handleCreateIcb() { setEditingIcb(null); setIcbFormOpen(true); }
 
   async function handleIcbSubmit(data: CreateIcbInput | UpdateIcbInput) {
     setError(null);
@@ -98,13 +83,11 @@ export function AdminPage() {
       setTimeout(() => setSuccessMsg(null), 3000);
     } catch (err) {
       setError(getErrorMessage(err));
-      throw err; // re-throw so form stays open
+      throw err;
     }
   }
 
-  function handleToggleStatus(icb: AdminIcb) {
-    setConfirmToggle(icb);
-  }
+  function handleToggleStatus(icb: AdminIcb) { setConfirmToggle(icb); }
 
   async function confirmStatusToggle() {
     if (!confirmToggle) return;
@@ -128,8 +111,7 @@ export function AdminPage() {
     setError(null);
     try {
       await createPolicy(selectedIcb.id, data);
-      const updated = await listPoliciesForIcb(selectedIcb.id);
-      setPolicies(updated);
+      setPolicies(await listPoliciesForIcb(selectedIcb.id));
       setSuccessMsg('Policy created successfully');
       setTimeout(() => setSuccessMsg(null), 3000);
     } catch (err) {
@@ -140,62 +122,71 @@ export function AdminPage() {
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Admin — ICB Management</h1>
-        <Button onClick={handleCreateIcb}>Add ICB</Button>
-      </div>
+      <h1 className="text-xl font-semibold">Admin</h1>
 
-      {error && (
-        <div role="alert" className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-          {error}
-        </div>
-      )}
+      <Tabs defaultValue="icb-management">
+        <TabsList>
+          <TabsTrigger value="icb-management">ICB Management</TabsTrigger>
+          <TabsTrigger value="db-sync">DB Sync</TabsTrigger>
+        </TabsList>
 
-      {successMsg && (
-        <div role="status" className="rounded-lg border border-green-500/50 bg-green-500/10 px-4 py-3 text-sm text-green-700 dark:text-green-400">
-          {successMsg}
-        </div>
-      )}
+        <TabsContent value="icb-management">
+          <div className="space-y-6 pt-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Manage ICB records and funding policies</span>
+              <Button onClick={handleCreateIcb}>Add ICB</Button>
+            </div>
 
-      {loading ? (
-        <p className="text-sm text-muted-foreground">Loading…</p>
-      ) : (
-        <IcbTable
-          icbs={icbs}
-          onEdit={handleEditIcb}
-          onToggleStatus={handleToggleStatus}
-          onLoadPolicies={async (icb) => {
-            setSelectedIcb(icb)
-            const data = await listPoliciesForIcb(icb.id)
-            setPolicies(data)
-            return data
-          }}
-          onNewPolicy={(icb) => {
-            setSelectedIcb(icb)
-            setPolicyFormOpen(true)
-          }}
-        />
-      )}
+            {error && (
+              <div role="alert" className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
 
-      {selectedIcb && (
-        <div className="border-t pt-6">
-          <p className="text-sm text-muted-foreground mb-3">
-            Policies for: <span className="font-medium text-foreground">{selectedIcb.name}</span>
-          </p>
-          <PolicyList
-            icbId={selectedIcb.id}
-            policies={policies}
-            onNewPolicy={() => setPolicyFormOpen(true)}
-          />
-        </div>
-      )}
+            {successMsg && (
+              <div role="status" className="rounded-lg border border-green-500/50 bg-green-500/10 px-4 py-3 text-sm text-green-700 dark:text-green-400">
+                {successMsg}
+              </div>
+            )}
+
+            {loading ? (
+              <p className="text-sm text-muted-foreground">Loading…</p>
+            ) : (
+              <IcbTable
+                icbs={icbs}
+                onSelect={handleSelectIcb}
+                onEdit={handleEditIcb}
+                onToggleStatus={handleToggleStatus}
+              />
+            )}
+
+            {selectedIcb && (
+              <div className="border-t pt-6">
+                <p className="text-sm text-muted-foreground mb-3">
+                  Policies for: <span className="font-medium text-foreground">{selectedIcb.name}</span>
+                </p>
+                <PolicyList
+                  icbId={selectedIcb.id}
+                  policies={policies}
+                  onNewPolicy={() => setPolicyFormOpen(true)}
+                />
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="db-sync">
+          <div className="pt-4">
+            <DbSyncPanel />
+          </div>
+        </TabsContent>
+      </Tabs>
 
       <IcbForm
         open={icbFormOpen}
         onOpenChange={setIcbFormOpen}
         icb={editingIcb}
         onSubmit={handleIcbSubmit}
-        onToggleStatus={handleToggleStatus}
       />
 
       {selectedIcb && (
@@ -207,7 +198,6 @@ export function AdminPage() {
         />
       )}
 
-      {/* Status toggle confirmation */}
       {confirmToggle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
           <div className="bg-popover rounded-xl p-6 ring-1 ring-foreground/10 max-w-sm w-full space-y-4">
