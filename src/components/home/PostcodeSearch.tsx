@@ -487,9 +487,8 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
               <div className="font-bold text-gray-800">Disclaimer on NHS funding data</div>
               <div className="mt-2 space-y-2">
                 <p>
-                  We work hard to keep the information accurate and current. The policy data is
-                  compiled from publicly available documents published by each Integrated Care Board (ICB), and we check
-                  it regularly.
+                  We aim to keep the information accurate and current. The policy data is compiled from publicly
+                  available documents published by each Integrated Care Board (ICB).
                 </p>
                 <p>
                   NHS IVF eligibility criteria can be updated with little notice, and some local exceptions may not be

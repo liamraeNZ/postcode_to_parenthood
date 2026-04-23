@@ -28,11 +28,11 @@ type WhyFeature = {
 const whyFeatures: WhyFeature[] = [
   {
     icon: <Sparkles className="w-4 h-4 text-emerald-700" />,
-    text: 'AI-powered eligibility matching against 40+ private trusts and regional NHS policies.'
+    text: 'Postcode → ICB lookup with a clear summary of key IVF eligibility criteria.'
   },
   {
     icon: <BarChart3 className="w-4 h-4 text-emerald-700" />,
-    text: 'Real-time cost comparison between UK clinics and European "Refund Guarantee" schemes.'
+    text: 'Policy summaries compiled from publicly available ICB documents (always confirm with your ICB/GP).'
   }
 ];
 
@@ -140,8 +140,8 @@ function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
           <div className="font-bold text-gray-800">Disclaimer on NHS funding data</div>
           <div className="mt-2 space-y-2">
             <p>
-              We work hard to keep the information accurate and current. The policy data is compiled from publicly
-              available documents published by each Integrated Care Board (ICB), and we check it regularly.
+              We aim to keep the information accurate and current. The policy data is compiled from publicly available
+              documents published by each Integrated Care Board (ICB).
             </p>
             <p>
               NHS IVF eligibility criteria can be updated with little notice, and some local exceptions may not be
