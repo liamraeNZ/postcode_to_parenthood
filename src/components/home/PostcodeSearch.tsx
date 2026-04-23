@@ -467,7 +467,8 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                     : 'Not specified'}
                 </div>
                 <div>
-                  <strong>IUI rounds required:</strong> {result.iui_rounds_required}
+                  <strong>IUI rounds required:</strong>{' '}
+                  {result.iui_rounds_required > 0 ? result.iui_rounds_required : 'Policy-specific (see ICB policy)'}
                 </div>
                 <div>
                   <strong>Wait time (months):</strong>{' '}
