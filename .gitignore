@@ -10,3 +10,4 @@ coverage/
 **/.wrangler/
 *.csv
 .trae/
+documents/*
