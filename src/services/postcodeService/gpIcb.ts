@@ -2,14 +2,22 @@ import { DEFAULT_TIMEOUT_MS, getApiBaseUrl } from './config';
 import { PostcodeLookupError, toPostcodeLookupError } from './errors';
 import { fetchJsonWithTimeout, buildRequestUrl } from './http';
 import { createClientRequestId } from './logging';
-import { normalizeUpperTrim } from './normalize';
+import { normalizePostcode, normalizeUpperTrim, redactPostcodeForLogs } from './normalize';
 
-export async function getIcbFromGpOds(odsCode: string): Promise<string | null> {
-  const normalized = normalizeUpperTrim(odsCode);
-  if (!normalized) return null;
+export async function getIcbFromGpPractice(gp: {
+  odsCode: string;
+  postcode?: string | null | undefined;
+}): Promise<string | null> {
+  const normalizedPostcode = gp.postcode ? normalizePostcode(gp.postcode) : '';
+  const normalizedOds = normalizeUpperTrim(gp.odsCode);
+  if (!normalizedPostcode && !normalizedOds) return null;
 
   const apiBaseUrl = getApiBaseUrl();
-  const requestUrl = buildRequestUrl(apiBaseUrl, '/api/gp-icb', { odsCode: normalized });
+  const requestUrl = buildRequestUrl(
+    apiBaseUrl,
+    '/api/gp-icb',
+    normalizedPostcode ? { postcode: normalizedPostcode } : { odsCode: normalizedOds }
+  );
   const startedAt = performance.now();
   const clientRequestId = createClientRequestId();
   const timeoutMs = DEFAULT_TIMEOUT_MS;
@@ -22,7 +30,8 @@ export async function getIcbFromGpOds(odsCode: string): Promise<string | null> {
     const durationMs = Math.round(performance.now() - startedAt);
     if (import.meta.env.DEV) {
       console.debug('[postcodeService] gp icb response', {
-        odsCode: normalized,
+        odsCode: normalizedOds,
+        postcode: normalizedPostcode ? redactPostcodeForLogs(normalizedPostcode) : undefined,
         status: response.status,
         duration_ms: durationMs
       });

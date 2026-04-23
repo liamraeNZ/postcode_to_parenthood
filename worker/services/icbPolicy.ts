@@ -11,11 +11,85 @@ function normalizeIcbNameForMatch(value: string) {
     .trim();
 }
 
+function normalizeIcbNameForLooseMatch(value: string) {
+  const normalized = normalizeIcbNameForMatch(value);
+  if (!normalized) return '';
+  return normalized.replace(/\s+ICB$/g, '').trim();
+}
+
 function extractOrdOrgName(json: unknown): string | null {
   if (!json || typeof json !== 'object') return null;
   const top = json as { Name?: unknown; Organisation?: { Name?: unknown } };
   if (typeof top.Organisation?.Name === 'string' && top.Organisation.Name.trim()) return top.Organisation.Name;
   if (typeof top.Name === 'string' && top.Name.trim()) return top.Name;
+  return null;
+}
+
+async function resolveIcbIdByCode(db: D1Database, code: string) {
+  const normalized = normalizeOdsCode(code);
+  if (!normalized) return null;
+
+  const directId = await db
+    .prepare('select id from icbs where id = ?1 limit 1')
+    .bind(normalized)
+    .first<{ id: string }>();
+  if (directId?.id) return directId.id;
+
+  const bySubIcbCode = await db
+    .prepare('select id from icbs where sub_icb_code = ?1 limit 1')
+    .bind(normalized)
+    .first<{ id: string }>();
+  if (bySubIcbCode?.id) return bySubIcbCode.id;
+
+  const byParentIcbCode = await db
+    .prepare('select id from icbs where sub_icb_code is null and parent_icb_code = ?1 limit 1')
+    .bind(normalized)
+    .first<{ id: string }>();
+  if (byParentIcbCode?.id) return byParentIcbCode.id;
+
+  const byAliasCode = await db
+    .prepare("select icb_id as id from icb_aliases where alias_kind = 'code' and alias = ?1 limit 1")
+    .bind(normalized)
+    .first<{ id: string }>();
+  if (byAliasCode?.id) return byAliasCode.id;
+
+  return null;
+}
+
+async function resolveIcbIdByName(db: D1Database, name: string, mode: 'exact' | 'compatible') {
+  const trimmed = name.trim();
+  if (!trimmed) return null;
+
+  const byNameExact = await db
+    .prepare('select id from icbs where name = ?1 limit 1')
+    .bind(trimmed)
+    .first<{ id: string }>();
+  if (byNameExact?.id) return byNameExact.id;
+
+  const byAliasName = await db
+    .prepare("select icb_id as id from icb_aliases where alias_kind = 'name' and alias = ?1 limit 1")
+    .bind(trimmed)
+    .first<{ id: string }>();
+  if (byAliasName?.id) return byAliasName.id;
+
+  const normalizedStrict = normalizeIcbNameForMatch(trimmed);
+  const normalizedLoose = normalizeIcbNameForLooseMatch(trimmed);
+  if (!normalizedStrict) return null;
+
+  const rows = await db.prepare('select id, name from icbs').bind().all<{ id: string; name: string }>();
+  for (const row of rows.results) {
+    const rowStrict = normalizeIcbNameForMatch(row.name);
+    if (!rowStrict) continue;
+    if (rowStrict === normalizedStrict) return row.id;
+
+    if (mode === 'compatible') {
+      const rowLoose = normalizeIcbNameForLooseMatch(row.name);
+      if (rowLoose && normalizedLoose && rowLoose === normalizedLoose) return row.id;
+      if (rowStrict.startsWith(normalizedStrict) && rowStrict.slice(normalizedStrict.length).trim() === 'ICB') return row.id;
+      if (normalizedStrict.startsWith(rowStrict) && normalizedStrict.slice(rowStrict.length).trim() === 'ICB') return row.id;
+    }
+  }
+
   return null;
 }
 
@@ -76,6 +150,28 @@ async function resolveIcbId(db: D1Database, icbCode: string, icbName: string | n
 
   for (const row of subs.results) {
     if (normalizeIcbNameForMatch(row.name) === normalizedName) return row.id;
+  }
+
+  return null;
+}
+
+export async function resolveIcbIdFromPostcodesIo(
+  db: D1Database,
+  identifiers: { icb: string | null; ccg_id: string | null; ccg: string | null }
+) {
+  if (identifiers.icb) {
+    const byIcbName = await resolveIcbIdByName(db, identifiers.icb, 'exact');
+    if (byIcbName) return { icbId: byIcbName, matched_on: 'icb' as const };
+  }
+
+  if (identifiers.ccg_id) {
+    const byCcgId = await resolveIcbIdByCode(db, identifiers.ccg_id);
+    if (byCcgId) return { icbId: byCcgId, matched_on: 'ccg_id' as const };
+  }
+
+  if (identifiers.ccg) {
+    const byCcgName = await resolveIcbIdByName(db, identifiers.ccg, 'compatible');
+    if (byCcgName) return { icbId: byCcgName, matched_on: 'ccg' as const };
   }
 
   return null;

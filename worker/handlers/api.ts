@@ -15,7 +15,7 @@ import {
   requestId,
   sanitizeSearchParams
 } from '../lib';
-import { lookupIcbPolicyByIcbCode } from '../services/icbPolicy';
+import { lookupIcbPolicyByIcbCode, resolveIcbIdFromPostcodesIo } from '../services/icbPolicy';
 import {
   fetchGpPracticesForOutcode,
   fetchOrdJson,
@@ -23,7 +23,12 @@ import {
   getIcbFromGpOds,
   searchGpPracticesByName
 } from '../services/ord';
-import { bulkLookupPostcodeGeos, lookupNearestOutcodes, lookupPostcodeGeo } from '../services/postcodesIo';
+import {
+  bulkLookupPostcodeGeos,
+  lookupNearestOutcodes,
+  lookupPostcodeAdminLookup,
+  lookupPostcodeGeo
+} from '../services/postcodesIo';
 
 const GP_SEARCH_NEAREST_OUTCODE_RADIUS_M = 7000;
 const GP_SEARCH_NEAREST_OUTCODE_LIMIT = 10;
@@ -170,7 +175,46 @@ export async function handleApiRequest(request: Request, env: Env) {
     }
 
     if (url.pathname === '/api/gp-icb' && request.method === 'GET') {
+      const postcode = url.searchParams.get('postcode');
       const odsCode = url.searchParams.get('odsCode');
+      if (postcode) {
+        if (!isReasonablePostcodeInput(postcode)) {
+          response = jsonResponse({ error: 'Invalid postcode', request_id: reqId }, { status: 400 });
+          return response;
+        }
+
+        const admin = await lookupPostcodeAdminLookup(postcode, { requestId: reqId });
+        if (!admin) {
+          response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
+          return response;
+        }
+
+        const resolved = await resolveIcbIdFromPostcodesIo(env.DB, {
+          icb: admin.icb,
+          ccg_id: admin.ccg_id,
+          ccg: admin.ccg
+        });
+
+        if (!resolved) {
+          response = jsonResponse(
+            {
+              error: 'Not found',
+              request_id: reqId,
+              upstream: { icb: admin.icb, ccg_id: admin.ccg_id, ccg: admin.ccg }
+            },
+            { status: 404 }
+          );
+          return response;
+        }
+
+        response = jsonResponse({
+          icbCode: resolved.icbId,
+          matched_on: resolved.matched_on,
+          upstream: { icb: admin.icb, ccg_id: admin.ccg_id, ccg: admin.ccg }
+        });
+        return response;
+      }
+
       if (!odsCode) {
         response = jsonResponse({ error: 'Missing odsCode', request_id: reqId }, { status: 400 });
         return response;
@@ -182,7 +226,15 @@ export async function handleApiRequest(request: Request, env: Env) {
         return response;
       }
 
-      response = jsonResponse(resolved);
+      let preferredIcbCode = resolved.icbCode;
+      if (resolved.subIcbCode) {
+        const exists = await env.DB.prepare('select 1 as ok from icbs where id = ?1 limit 1')
+          .bind(resolved.subIcbCode)
+          .first<{ ok: number }>();
+        if (exists?.ok) preferredIcbCode = resolved.subIcbCode;
+      }
+
+      response = jsonResponse({ ...resolved, icbCode: preferredIcbCode });
       return response;
     }
 

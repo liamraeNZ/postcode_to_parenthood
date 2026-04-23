@@ -139,26 +139,35 @@ export async function getIcbFromGpOds(odsCode: string, ctx: { requestId: string 
   const json = await fetchOrdJson(url, { requestId: ctx.requestId, timeoutMs: 8_000 });
   const rels = extractRelArray(json);
 
+  const subIcb = findActiveRelationshipTargetPreferredRelType(rels, 'RO98', ['RE6', 'RE4']);
+
   const directToIcb = findActiveRelationshipTargetPreferredRelType(rels, 'RO261', ['RE5']);
-  if (directToIcb) return directToIcb;
-
   const direct = findActiveRelationshipTarget(rels, ['RO318', 'RO210']);
-  if (direct) return direct;
 
-  const fallback = findActiveRelationshipTarget(rels, ['RO98']);
-  if (!fallback) return null;
+  let parentIcbCode: string | null = directToIcb?.icbCode ?? direct?.icbCode ?? null;
 
-  try {
-    const intermediateUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/${encodeURIComponent(
-      fallback.icbCode
-    )}`;
-    const intermediateJson = await fetchOrdJson(intermediateUrl, { requestId: ctx.requestId, timeoutMs: 8_000 });
-    const intermediateRels = extractRelArray(intermediateJson);
-    const mappedToIcb = findActiveRelationshipTargetPreferredRelType(intermediateRels, 'RO261', ['RE5']);
-    return mappedToIcb ?? fallback;
-  } catch {
-    return fallback;
+  if (!parentIcbCode && subIcb) {
+    try {
+      const intermediateUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/${encodeURIComponent(
+        subIcb.icbCode
+      )}`;
+      const intermediateJson = await fetchOrdJson(intermediateUrl, { requestId: ctx.requestId, timeoutMs: 8_000 });
+      const intermediateRels = extractRelArray(intermediateJson);
+      const mappedToIcb = findActiveRelationshipTargetPreferredRelType(intermediateRels, 'RO261', ['RE5']);
+      parentIcbCode = mappedToIcb?.icbCode ?? null;
+    } catch {
+      parentIcbCode = null;
+    }
   }
+
+  if (!subIcb && !parentIcbCode) return null;
+
+  return {
+    icbCode: subIcb?.icbCode ?? parentIcbCode ?? '',
+    relationshipRoleId: subIcb?.relationshipRoleId ?? directToIcb?.relationshipRoleId ?? direct?.relationshipRoleId ?? '',
+    subIcbCode: subIcb?.icbCode ?? null,
+    parentIcbCode
+  };
 }
 
 export async function fetchGpPracticesForOutcode(outcode: string, ctx: { requestId: string }) {

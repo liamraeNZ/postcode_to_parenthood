@@ -58,6 +58,13 @@ async function fetchPostcodesIoJson(url: string, ctx: { requestId: string; timeo
   }
 }
 
+export type PostcodesIoAdminLookup = {
+  postcode: string;
+  icb: string | null;
+  ccg: string | null;
+  ccg_id: string | null;
+};
+
 export async function lookupPostcodeGeo(
   postcode: string,
   ctx: { requestId: string }
@@ -75,6 +82,36 @@ export async function lookupPostcodeGeo(
     const longitude = getNumberPath(json, ['result', 'longitude']);
     if (!outcode || latitude == null || longitude == null) return null;
     return { outcode, latitude, longitude };
+  } catch {
+    return null;
+  }
+}
+
+export async function lookupPostcodeAdminLookup(
+  postcode: string,
+  ctx: { requestId: string }
+): Promise<PostcodesIoAdminLookup | null> {
+  const normalized = normalizePostcode(postcode);
+  if (!normalized) return null;
+
+  try {
+    const url = `${POSTCODES_IO_BASE_URL}/postcodes/${encodeURIComponent(normalized)}`;
+    const json = await fetchPostcodesIoJson(url, { requestId: ctx.requestId, timeoutMs: 4_000 });
+    const status = getNumberPath(json, ['status']);
+    if (status !== 200) return null;
+
+    const resolvedPostcode = getStringPath(json, ['result', 'postcode']) ?? normalized;
+    const icb = getStringPath(json, ['result', 'icb']);
+    const ccg = getStringPath(json, ['result', 'ccg']);
+    const ccg_id =
+      getStringPath(json, ['result', 'codes', 'ccg_id']) ?? getStringPath(json, ['result', 'codes', 'ccg']);
+
+    return {
+      postcode: resolvedPostcode,
+      icb: icb?.trim() ? icb : null,
+      ccg: ccg?.trim() ? ccg : null,
+      ccg_id: ccg_id?.trim() ? ccg_id : null
+    };
   } catch {
     return null;
   }

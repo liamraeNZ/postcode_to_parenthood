@@ -14,7 +14,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog';
 import {
-  getIcbFromGpOds,
+  getIcbFromGpPractice,
   lookupICBPolicyByIcbCode,
   PostcodeLookupError,
   searchGpPracticesByName,
@@ -178,7 +178,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
     });
 
     try {
-      const resolvedIcbCode = await getIcbFromGpOds(gp.odsCode);
+      const resolvedIcbCode = await getIcbFromGpPractice(gp);
       if (!resolvedIcbCode) {
         const message = "We couldn't determine an ICB for that GP practice.";
         setError(message);
