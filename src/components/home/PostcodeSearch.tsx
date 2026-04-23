@@ -416,6 +416,22 @@ export function PostcodeSearch() {
                 View All {42} Resources →
               </Button>
             </div>
+
+            <div className="mt-4 rounded-lg border border-gray-200 bg-white/60 p-4 text-xs text-gray-600 leading-relaxed">
+              <div className="font-bold text-gray-800">Disclaimer on NHS funding data</div>
+              <div className="mt-2 space-y-2">
+                <p>
+                  We work hard to keep the information accurate and current. The policy data is
+                  compiled from publicly available documents published by each Integrated Care Board (ICB), and we check
+                  it regularly.
+                </p>
+                <p>
+                  NHS IVF eligibility criteria can be updated with little notice, and some local exceptions may not be
+                  widely published. For the latest guidance on your circumstances, always confirm with your ICB or speak
+                  to your GP.
+                </p>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
