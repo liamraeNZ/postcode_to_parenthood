@@ -11,3 +11,4 @@ coverage/
 *.csv
 .trae/
 documents/*
+.kiro/*
