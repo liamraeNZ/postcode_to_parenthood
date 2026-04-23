@@ -25,6 +25,19 @@ import { motion, AnimatePresence } from 'motion/react';
 
 type PostcodeLookupAction = 'search' | 'lookup';
 
+export type PolicyPanelState = {
+  postcode: string;
+  selectedGP: GpPracticeSummary | null;
+  icbCode: string | null;
+  policy: ICBPolicy | null;
+  isLoading: boolean;
+  error: string | null;
+};
+
+type PostcodeSearchProps = {
+  onPolicyPanelChange?: (state: PolicyPanelState) => void;
+};
+
 function getPostcodeLookupErrorMessage(action: PostcodeLookupAction, err: unknown) {
   const verb = action === 'search' ? 'search' : 'lookup';
 
@@ -45,7 +58,7 @@ function logDevError(message: string, err: unknown) {
   }
 }
 
-export function PostcodeSearch() {
+export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
   const [postcode, setPostcode] = useState('');
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [loadingSelect, setLoadingSelect] = useState(false);
@@ -88,6 +101,14 @@ export function PostcodeSearch() {
     setGpPracticeQuery('');
     setSelectedGP(null);
     setIcbCode(null);
+    onPolicyPanelChange?.({
+      postcode,
+      selectedGP: null,
+      icbCode: null,
+      policy: null,
+      isLoading: false,
+      error: null
+    });
   };
 
   const resetSelectionState = () => {
@@ -147,32 +168,83 @@ export function PostcodeSearch() {
     setSelectedGP(gp);
     setLoadingSelect(true);
     resetSelectionState();
+    onPolicyPanelChange?.({
+      postcode,
+      selectedGP: gp,
+      icbCode: null,
+      policy: null,
+      isLoading: true,
+      error: null
+    });
 
     try {
       const resolvedIcbCode = await getIcbFromGpOds(gp.odsCode);
       if (!resolvedIcbCode) {
-        setError("We couldn't determine an ICB for that GP practice.");
+        const message = "We couldn't determine an ICB for that GP practice.";
+        setError(message);
+        onPolicyPanelChange?.({
+          postcode,
+          selectedGP: gp,
+          icbCode: null,
+          policy: null,
+          isLoading: false,
+          error: message
+        });
         return;
       }
 
       setIcbCode(resolvedIcbCode);
+      onPolicyPanelChange?.({
+        postcode,
+        selectedGP: gp,
+        icbCode: resolvedIcbCode,
+        policy: null,
+        isLoading: true,
+        error: null
+      });
       const policy = await lookupICBPolicyByIcbCode(resolvedIcbCode);
       if (!policy) {
-        setError("We couldn't find an ICB policy for that GP practice.");
+        const message = "We couldn't find an ICB policy for that GP practice.";
+        setError(message);
+        onPolicyPanelChange?.({
+          postcode,
+          selectedGP: gp,
+          icbCode: resolvedIcbCode,
+          policy: null,
+          isLoading: false,
+          error: message
+        });
         return;
       }
 
       setResult(policy);
+      onPolicyPanelChange?.({
+        postcode,
+        selectedGP: gp,
+        icbCode: resolvedIcbCode,
+        policy,
+        isLoading: false,
+        error: null
+      });
     } catch (err) {
       logDevError('[PostcodeSearch] gp selection failed', err);
-      setError(getPostcodeLookupErrorMessage('lookup', err));
+      const message = getPostcodeLookupErrorMessage('lookup', err);
+      setError(message);
+      onPolicyPanelChange?.({
+        postcode,
+        selectedGP: gp,
+        icbCode: null,
+        policy: null,
+        isLoading: false,
+        error: message
+      });
     } finally {
       setLoadingSelect(false);
     }
   };
 
   return (
-    <div className="w-full max-w-2xl space-y-6">
+    <div className="w-full space-y-6">
       <form onSubmit={handleSearch} className="relative flex items-center max-w-md group">
         <div className="relative flex-1">
           <Input 
@@ -350,7 +422,7 @@ export function PostcodeSearch() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-4"
+            className="space-y-4 lg:hidden"
           >
             <Card className="border-none border-l-4 border-l-emerald-500 shadow-md overflow-hidden rounded-xl bg-white p-5">
               <div className="flex justify-between items-start mb-4">
@@ -410,12 +482,6 @@ export function PostcodeSearch() {
                 </div>
               </div>
             </Card>
-            
-            <div className="flex justify-start">
-              <Button variant="link" className="text-emerald-700 font-bold hover:text-emerald-900 p-0 h-auto text-sm">
-                View All {42} Resources →
-              </Button>
-            </div>
 
             <div className="mt-4 rounded-lg border border-gray-200 bg-white/60 p-4 text-xs text-gray-600 leading-relaxed">
               <div className="font-bold text-gray-800">Disclaimer on NHS funding data</div>
