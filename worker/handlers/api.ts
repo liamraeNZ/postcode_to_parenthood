@@ -274,7 +274,7 @@ export async function handleApiRequest(request: Request, env: Env) {
       const sync = await syncIcbsFromOrd(env.DB, { requestId: reqId }, { fetchOrdJson, getPath, getStringPath });
       const icbs = await env.DB
         .prepare(
-          'select id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at from icbs order by name asc'
+          "select id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at from icbs order by case when sub_icb_code is null then 0 else 1 end asc, case when sub_icb_code is null then coalesce(parent_icb_code, id) else coalesce(parent_icb_code, 'ZZZZZ') end asc, case when sub_icb_code is null then name else coalesce(sub_icb_code, '') end asc, name asc"
         )
         .bind()
         .all<{
@@ -306,7 +306,7 @@ export async function handleApiRequest(request: Request, env: Env) {
 
       const icbs = await env.DB
         .prepare(
-          'select id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at from icbs order by name asc'
+          "select id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at from icbs order by case when sub_icb_code is null then 0 else 1 end asc, case when sub_icb_code is null then coalesce(parent_icb_code, id) else coalesce(parent_icb_code, 'ZZZZZ') end asc, case when sub_icb_code is null then name else coalesce(sub_icb_code, '') end asc, name asc"
         )
         .bind()
         .all<{
