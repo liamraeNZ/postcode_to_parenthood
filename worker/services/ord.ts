@@ -72,6 +72,10 @@ function extractRelStatus(rel: unknown): string | null {
   return getStringPath(rel, ['Status']) ?? getStringPath(rel, ['Rel', 'Status']);
 }
 
+function extractRelTypeId(rel: unknown): string | null {
+  return getStringPath(rel, ['id']) ?? getStringPath(rel, ['Rel', 'id']);
+}
+
 function extractTargetOrgCode(rel: unknown): string | null {
   return (
     getStringPath(rel, ['Target', 'OrgId', 'extension']) ??
@@ -98,6 +102,33 @@ function findActiveRelationshipTarget(
   return null;
 }
 
+function findActiveRelationshipTargetPreferredRelType(
+  rels: unknown[],
+  targetRoleId: string,
+  preferredRelTypeIds: string[]
+): { icbCode: string; relationshipRoleId: string } | null {
+  const activeMatching = rels
+    .map((rel) => {
+      const status = extractRelStatus(rel);
+      if (status !== 'Active') return null;
+      const roleId = extractTargetPrimaryRoleId(rel);
+      if (roleId !== targetRoleId) return null;
+      const code = extractTargetOrgCode(rel);
+      if (!code) return null;
+      const relTypeId = extractRelTypeId(rel) ?? '';
+      return { icbCode: code, relationshipRoleId: roleId, relTypeId };
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null);
+
+  for (const pref of preferredRelTypeIds) {
+    const found = activeMatching.find((x) => x.relTypeId === pref);
+    if (found) return { icbCode: found.icbCode, relationshipRoleId: found.relationshipRoleId };
+  }
+  const first = activeMatching[0] ?? null;
+  if (!first) return null;
+  return { icbCode: first.icbCode, relationshipRoleId: first.relationshipRoleId };
+}
+
 export async function getIcbFromGpOds(odsCode: string, ctx: { requestId: string }) {
   const normalizedOds = normalizeOdsCode(odsCode);
   if (!normalizedOds) return null;
@@ -108,10 +139,26 @@ export async function getIcbFromGpOds(odsCode: string, ctx: { requestId: string 
   const json = await fetchOrdJson(url, { requestId: ctx.requestId, timeoutMs: 8_000 });
   const rels = extractRelArray(json);
 
+  const directToIcb = findActiveRelationshipTargetPreferredRelType(rels, 'RO261', ['RE5']);
+  if (directToIcb) return directToIcb;
+
   const direct = findActiveRelationshipTarget(rels, ['RO318', 'RO210']);
   if (direct) return direct;
 
-  return findActiveRelationshipTarget(rels, ['RO98']);
+  const fallback = findActiveRelationshipTarget(rels, ['RO98']);
+  if (!fallback) return null;
+
+  try {
+    const intermediateUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/${encodeURIComponent(
+      fallback.icbCode
+    )}`;
+    const intermediateJson = await fetchOrdJson(intermediateUrl, { requestId: ctx.requestId, timeoutMs: 8_000 });
+    const intermediateRels = extractRelArray(intermediateJson);
+    const mappedToIcb = findActiveRelationshipTargetPreferredRelType(intermediateRels, 'RO261', ['RE5']);
+    return mappedToIcb ?? fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 export async function fetchGpPracticesForOutcode(outcode: string, ctx: { requestId: string }) {

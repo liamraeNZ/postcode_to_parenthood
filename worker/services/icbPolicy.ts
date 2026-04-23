@@ -1,5 +1,23 @@
 import type { D1Database } from '../types';
 import { normalizeOdsCode } from '../lib';
+import { fetchOrdJson } from './ord';
+
+function normalizeIcbNameForMatch(value: string) {
+  return value
+    .toUpperCase()
+    .replace(/INTEGRATED CARE BOARD/g, 'ICB')
+    .replace(/[(),]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function extractOrdOrgName(json: unknown): string | null {
+  if (!json || typeof json !== 'object') return null;
+  const top = json as { Name?: unknown; Organisation?: { Name?: unknown } };
+  if (typeof top.Organisation?.Name === 'string' && top.Organisation.Name.trim()) return top.Organisation.Name;
+  if (typeof top.Name === 'string' && top.Name.trim()) return top.Name;
+  return null;
+}
 
 async function resolveIcbId(db: D1Database, icbCode: string, icbName: string | null) {
   const bySubIcbCode = await db
@@ -25,19 +43,70 @@ async function resolveIcbId(db: D1Database, icbCode: string, icbName: string | n
 
   if (!icbName) return null;
 
+  const byNameExact = await db
+    .prepare('select id from icbs where name = ?1 limit 1')
+    .bind(icbName)
+    .first<{ id: string }>();
+
+  if (byNameExact?.id) return byNameExact.id;
+
   const byAliasName = await db
     .prepare("select icb_id as id from icb_aliases where alias_kind = 'name' and alias = ?1 limit 1")
     .bind(icbName)
     .first<{ id: string }>();
 
-  return byAliasName?.id ?? null;
+  if (byAliasName?.id) return byAliasName.id;
+
+  const normalizedName = normalizeIcbNameForMatch(icbName);
+  if (!normalizedName) return null;
+
+  const parents = await db
+    .prepare('select id, name from icbs where sub_icb_code is null')
+    .bind()
+    .all<{ id: string; name: string }>();
+
+  for (const row of parents.results) {
+    if (normalizeIcbNameForMatch(row.name) === normalizedName) return row.id;
+  }
+
+  const subs = await db
+    .prepare('select id, name from icbs where sub_icb_code is not null')
+    .bind()
+    .all<{ id: string; name: string }>();
+
+  for (const row of subs.results) {
+    if (normalizeIcbNameForMatch(row.name) === normalizedName) return row.id;
+  }
+
+  return null;
 }
 
 export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) {
   const normalized = normalizeOdsCode(icbCode);
   if (!normalized) return null;
 
-  const icbId = await resolveIcbId(db, normalized, null);
+  let icbId = await resolveIcbId(db, normalized, null);
+  if (!icbId) {
+    try {
+      const ordUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/${encodeURIComponent(normalized)}`;
+      const ordJson = await fetchOrdJson(ordUrl, { requestId: crypto.randomUUID(), timeoutMs: 8_000 });
+      const ordName = extractOrdOrgName(ordJson);
+
+      icbId = await resolveIcbId(db, normalized, ordName);
+      if (icbId && ordName) {
+        const now = new Date().toISOString();
+        await db
+          .prepare(
+            "insert or ignore into icb_aliases (id, icb_id, alias_kind, alias, created_at, updated_at) values (?1, ?2, 'code', ?3, ?4, ?5)"
+          )
+          .bind(crypto.randomUUID(), icbId, normalized, now, now)
+          .run();
+      }
+    } catch {
+      return null;
+    }
+  }
+
   if (!icbId) return null;
 
   async function fetchPolicyForIcbId(targetIcbId: string) {
