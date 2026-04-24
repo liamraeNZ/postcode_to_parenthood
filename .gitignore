@@ -12,4 +12,4 @@ coverage/
 .trae/
 documents/*
 .kiro/*
-.dev.vars*
+.dev.vars
