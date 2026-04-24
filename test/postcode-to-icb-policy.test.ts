@@ -1,0 +1,382 @@
+import { describe, it, expect } from "vitest";
+import { SELF } from "cloudflare:test";
+
+/**
+ * End-to-end tests for the postcode → ICB → policy matching flow.
+ *
+ * Each test case picks a real postcode within an ICB's area, then verifies:
+ *   1. /api/gp-icb?postcode=... resolves to the expected ICB code
+ *   2. /api/icb-policy?icbCode=... returns the correct policy
+ *   3. /api/icb-documents?icbCode=... resolves the correct document folder
+ *
+ * These tests hit the live postcodes.io API so they require network access.
+ */
+
+interface IcbTestCase {
+  /** Human-readable label */
+  name: string;
+  /** A real postcode inside this ICB's area */
+  postcode: string;
+  /** The ICB ODS code we expect to resolve to */
+  expectedIcbCode: string;
+  /** Substring of the ICB name we expect in the policy response */
+  expectedIcbNameContains: string;
+  /** Expected policy fields */
+  expectedPolicy: {
+    cycles_offered: number;
+    max_age: number;
+    iui_rounds_required: number;
+  };
+  /** Expected document folder name (from 0004 migration) */
+  expectedDocumentFolder: string;
+}
+
+// One postcode per ICB that has a seeded policy.
+// Postcodes chosen to be well-known locations within each ICB area.
+const ICB_TEST_CASES: IcbTestCase[] = [
+  {
+    name: "Bath and North East Somerset, Swindon and Wiltshire",
+    postcode: "BA1 1SU",
+    expectedIcbCode: "QOX",
+    expectedIcbNameContains: "BATH",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 10 },
+    expectedDocumentFolder: "Bath and North East Somerset, Swindon and Wiltshire",
+  },
+  {
+    name: "Birmingham and Solihull",
+    postcode: "B1 1BB",
+    expectedIcbCode: "QHL",
+    expectedIcbNameContains: "BIRMINGHAM",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Birmingham and Solihull",
+  },
+  {
+    name: "Black Country",
+    postcode: "WV1 1SH",
+    expectedIcbCode: "QUA",
+    expectedIcbNameContains: "BLACK COUNTRY",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Black Country",
+  },
+  {
+    name: "Bristol, North Somerset and South Gloucestershire",
+    postcode: "BS1 1HT",
+    expectedIcbCode: "QUY",
+    expectedIcbNameContains: "BRISTOL",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Bristol, North Somerset and South Gloucestershire",
+  },
+  {
+    name: "Cornwall and the Isles of Scilly",
+    postcode: "TR1 1EP",
+    expectedIcbCode: "QT6",
+    expectedIcbNameContains: "CORNWALL",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 12 },
+    expectedDocumentFolder: "Cornwall and the Isles of Scilly",
+  },
+  {
+    name: "Coventry and Warwickshire",
+    postcode: "CV1 1FE",
+    expectedIcbCode: "QWU",
+    expectedIcbNameContains: "COVENTRY",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Coventry and Warwickshire",
+  },
+  {
+    name: "Derby and Derbyshire",
+    postcode: "DE22 1GP",
+    expectedIcbCode: "QJ2",
+    expectedIcbNameContains: "DERBY",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Derby and Derbyshire",
+  },
+  {
+    name: "Devon",
+    postcode: "EX1 1EE",
+    expectedIcbCode: "QJK",
+    expectedIcbNameContains: "DEVON",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Devon",
+  },
+  {
+    name: "Dorset",
+    postcode: "DT1 1JJ",
+    expectedIcbCode: "QVV",
+    expectedIcbNameContains: "DORSET",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Dorset",
+  },
+  {
+    name: "Gloucestershire",
+    postcode: "GL1 1DG",
+    expectedIcbCode: "QR1",
+    expectedIcbNameContains: "GLOUCESTERSHIRE",
+    expectedPolicy: { cycles_offered: 2, max_age: 39, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Gloucestershire",
+  },
+  {
+    name: "Hampshire and Isle of Wight",
+    postcode: "SO14 7DU",
+    expectedIcbCode: "QRL",
+    expectedIcbNameContains: "HAMPSHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 35, iui_rounds_required: 12 },
+    expectedDocumentFolder: "Hampshire and Isle of Wight",
+  },
+  {
+    name: "Herefordshire and Worcestershire",
+    postcode: "WR1 2ET",
+    expectedIcbCode: "QGH",
+    expectedIcbNameContains: "HEREFORDSHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 39, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Herefordshire and Worcestershire",
+  },
+  {
+    name: "Hertfordshire and West Essex",
+    postcode: "AL1 3QQ",
+    expectedIcbCode: "QM7",
+    expectedIcbNameContains: "HERTFORDSHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Hertfordshire and West Essex",
+  },
+  {
+    name: "Kent and Medway",
+    postcode: "ME1 1PD",
+    expectedIcbCode: "QKS",
+    expectedIcbNameContains: "KENT",
+    expectedPolicy: { cycles_offered: 2, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Kent and Medway",
+  },
+  {
+    name: "Lancashire and South Cumbria",
+    postcode: "LA1 1AY",
+    expectedIcbCode: "QE1",
+    expectedIcbNameContains: "LANCASHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 12 },
+    expectedDocumentFolder: "Lancashire and South Cumbria",
+  },
+  {
+    name: "Lincolnshire",
+    postcode: "LN1 1YL",
+    expectedIcbCode: "QJM",
+    expectedIcbNameContains: "LINCOLNSHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 0 },
+    expectedDocumentFolder: "Lincolnshire",
+  },
+  {
+    name: "North East and North Cumbria",
+    postcode: "NE1 4ST",
+    expectedIcbCode: "QHM",
+    expectedIcbNameContains: "NORTH EAST",
+    expectedPolicy: { cycles_offered: 3, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "North East and North Cumbria",
+  },
+  {
+    name: "North East London",
+    postcode: "E1 6AN",
+    expectedIcbCode: "QMF",
+    expectedIcbNameContains: "NORTH EAST LONDON",
+    expectedPolicy: { cycles_offered: 3, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "North East London",
+  },
+  {
+    name: "Northamptonshire",
+    postcode: "NN1 1ED",
+    expectedIcbCode: "QPM",
+    expectedIcbNameContains: "NORTHAMPTONSHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 0 },
+    expectedDocumentFolder: "Northamptonshire",
+  },
+  {
+    name: "Nottingham and Nottinghamshire",
+    postcode: "NG1 1GF",
+    expectedIcbCode: "QT1",
+    expectedIcbNameContains: "NOTTINGHAM",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 0 },
+    expectedDocumentFolder: "Nottingham and Nottinghamshire",
+  },
+  {
+    name: "Shropshire, Telford and Wrekin",
+    postcode: "SY1 1NB",
+    expectedIcbCode: "QOC",
+    expectedIcbNameContains: "SHROPSHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Shropshire, Telford and Wrekin",
+  },
+  {
+    name: "Somerset",
+    postcode: "TA1 1RN",
+    expectedIcbCode: "QSL",
+    expectedIcbNameContains: "SOMERSET",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Somerset",
+  },
+  {
+    name: "South East London",
+    postcode: "SE1 7EH",
+    expectedIcbCode: "QKK",
+    expectedIcbNameContains: "SOUTH EAST LONDON",
+    expectedPolicy: { cycles_offered: 2, max_age: 39, iui_rounds_required: 6 },
+    expectedDocumentFolder: "South East London",
+  },
+  {
+    name: "South West London",
+    postcode: "SW19 1AA",
+    expectedIcbCode: "QWE",
+    expectedIcbNameContains: "SOUTH WEST LONDON",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 12 },
+    expectedDocumentFolder: "South West London",
+  },
+  {
+    name: "South Yorkshire",
+    postcode: "S1 2BJ",
+    expectedIcbCode: "QF7",
+    expectedIcbNameContains: "SOUTH YORKSHIRE",
+    expectedPolicy: { cycles_offered: 2, max_age: 42, iui_rounds_required: 6 },
+    expectedDocumentFolder: "South Yorkshire",
+  },
+  {
+    name: "Staffordshire and Stoke-on-Trent",
+    postcode: "ST4 2DE",
+    expectedIcbCode: "QNC",
+    expectedIcbNameContains: "STAFFORDSHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 39, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Staffordshire and Stoke-on-Trent",
+  },
+  {
+    name: "West Yorkshire",
+    postcode: "LS1 1UR",
+    expectedIcbCode: "QWO",
+    expectedIcbNameContains: "WEST YORKSHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 6 },
+    expectedDocumentFolder: "West Yorkshire",
+  },
+  // --- Sub-ICB test cases (these have their own policies distinct from parent) ---
+  {
+    name: "Cambridgeshire and Peterborough (sub-ICB 06H)",
+    postcode: "CB2 1TN",
+    expectedIcbCode: "06H",
+    expectedIcbNameContains: "CAMBRIDGESHIRE",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 12 },
+    expectedDocumentFolder: "Cambridgeshire and Peterborough",
+  },
+  {
+    name: "Norfolk and Waveney (sub-ICB 06L)",
+    postcode: "NR1 3JU",
+    expectedIcbCode: "06L",
+    expectedIcbNameContains: "NORFOLK",
+    expectedPolicy: { cycles_offered: 2, max_age: 39, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Norfolk and Waveney",
+  },
+  {
+    name: "Suffolk and North East Essex (sub-ICB 07K)",
+    postcode: "IP1 1DH",
+    expectedIcbCode: "07K",
+    expectedIcbNameContains: "SUFFOLK",
+    expectedPolicy: { cycles_offered: 2, max_age: 39, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Suffolk and North East Essex",
+  },
+  {
+    name: "North Central London (sub-ICB 07P)",
+    postcode: "N1 9GU",
+    expectedIcbCode: "07P",
+    expectedIcbNameContains: "NORTH CENTRAL LONDON",
+    expectedPolicy: { cycles_offered: 3, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "North Central London",
+  },
+  {
+    name: "North West London (sub-ICB 08Y)",
+    postcode: "W2 1NY",
+    expectedIcbCode: "08Y",
+    expectedIcbNameContains: "NORTH WEST LONDON",
+    expectedPolicy: { cycles_offered: 1, max_age: 40, iui_rounds_required: 12 },
+    expectedDocumentFolder: "North West London",
+  },
+  {
+    name: "Sussex (sub-ICB 09D)",
+    postcode: "BN1 1EE",
+    expectedIcbCode: "09D",
+    expectedIcbNameContains: "SUSSEX",
+    expectedPolicy: { cycles_offered: 1, max_age: 42, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Sussex",
+  },
+  {
+    name: "Surrey Heartlands (sub-ICB 92A)",
+    postcode: "GU1 4PU",
+    expectedIcbCode: "92A",
+    expectedIcbNameContains: "SURREY",
+    expectedPolicy: { cycles_offered: 2, max_age: 40, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Surrey Heartlands",
+  },
+  {
+    name: "Mid and South Essex (sub-ICB 99E)",
+    postcode: "SS1 1AB",
+    expectedIcbCode: "99E",
+    expectedIcbNameContains: "ESSEX",
+    expectedPolicy: { cycles_offered: 2, max_age: 39, iui_rounds_required: 6 },
+    expectedDocumentFolder: "Mid and South Essex",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Test suite
+// ---------------------------------------------------------------------------
+
+describe("Postcode → ICB → Policy end-to-end matching", () => {
+  describe.each(ICB_TEST_CASES)("$name ($postcode)", (tc) => {
+    it("resolves postcode to the expected ICB via /api/gp-icb", async () => {
+      const res = await SELF.fetch(
+        `https://test.local/api/gp-icb?postcode=${encodeURIComponent(tc.postcode)}`
+      );
+
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as {
+        icbCode: string;
+        matched_on: string;
+        upstream: { icb: string | null; ccg_id: string | null; ccg: string | null };
+      };
+
+      expect(body.icbCode).toBe(tc.expectedIcbCode);
+      expect(body.matched_on).toBeTruthy();
+    });
+
+    it("returns the correct policy via /api/icb-policy", async () => {
+      const res = await SELF.fetch(
+        `https://test.local/api/icb-policy?icbCode=${encodeURIComponent(tc.expectedIcbCode)}`
+      );
+
+      expect(res.status).toBe(200);
+      const policy = (await res.json()) as {
+        icb_name: string;
+        cycles_offered: number;
+        max_age: number;
+        iui_rounds_required: number;
+        bmi_min: number | null;
+        bmi_max: number | null;
+        living_children_rule: string | null;
+      };
+
+      expect(policy.icb_name.toUpperCase()).toContain(tc.expectedIcbNameContains);
+      expect(policy.cycles_offered).toBe(tc.expectedPolicy.cycles_offered);
+      expect(policy.max_age).toBe(tc.expectedPolicy.max_age);
+      expect(policy.iui_rounds_required).toBe(tc.expectedPolicy.iui_rounds_required);
+      // All seeded policies share these BMI values
+      expect(policy.bmi_min).toBe(19.0);
+      expect(policy.bmi_max).toBe(30.0);
+    });
+
+    it("resolves the correct document folder via /api/icb-documents", async () => {
+      const res = await SELF.fetch(
+        `https://test.local/api/icb-documents?icbCode=${encodeURIComponent(tc.expectedIcbCode)}`
+      );
+
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as {
+        icbCode: string;
+        folder: string;
+        documents: unknown[];
+      };
+
+      expect(body.folder).toBe(tc.expectedDocumentFolder);
+    });
+  });
+});
