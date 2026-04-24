@@ -319,6 +319,7 @@ export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) 
   const direct = await fetchPolicyForIcbId(icbId);
   if (direct) return direct;
 
+  // Fallback UP: if this is a sub-ICB, try the parent ICB's policy
   const parent = await db
     .prepare('select parent_icb_code from icbs where id = ?1 limit 1')
     .bind(icbId)
