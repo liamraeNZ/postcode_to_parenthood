@@ -1,4 +1,17 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+/**
+ * Syncs the remote R2 bucket with the documents/ folder.
+ * - Skips files that already exist in the bucket
+ * - Uploads new files that don't exist in the bucket
+ * - Removes bucket files that no longer exist locally
+ *
+ * Run with: npx tsx scripts/seedRemoteR2.ts
+ */
+import {
+  S3Client,
+  PutObjectCommand,
+  ListObjectsV2Command,
+  DeleteObjectsCommand,
+} from "@aws-sdk/client-s3";
 import { readFileSync, readdirSync, statSync } from "fs";
 import { join, relative, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -7,7 +20,6 @@ import { lookup } from "mime-types";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Load .dev.vars as env
 config({ path: ".dev.vars" });
 
 const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID!;
@@ -29,14 +41,14 @@ const client = new S3Client({
 const BUCKET = "fertilityfund";
 const LOCAL_DIR = join(__dirname, "..", "documents");
 
-function getFiles(dir: string): string[] {
+function getLocalFiles(dir: string): string[] {
   const entries = readdirSync(dir);
   const files: string[] = [];
   for (const entry of entries) {
     if (entry === ".DS_Store") continue;
     const full = join(dir, entry);
     if (statSync(full).isDirectory()) {
-      files.push(...getFiles(full));
+      files.push(...getLocalFiles(full));
     } else {
       files.push(full);
     }
@@ -44,14 +56,40 @@ function getFiles(dir: string): string[] {
   return files;
 }
 
-async function upload() {
-  const files = getFiles(LOCAL_DIR);
-  console.log(`Found ${files.length} files to upload.\n`);
+/** List all keys currently in the remote R2 bucket */
+async function listRemoteKeys(): Promise<Set<string>> {
+  const keys = new Set<string>();
+  let continuationToken: string | undefined;
+  do {
+    const res = await client.send(
+      new ListObjectsV2Command({
+        Bucket: BUCKET,
+        ContinuationToken: continuationToken,
+      })
+    );
+    for (const obj of res.Contents ?? []) {
+      if (obj.Key) keys.add(obj.Key);
+    }
+    continuationToken = res.IsTruncated ? res.NextContinuationToken : undefined;
+  } while (continuationToken);
+  return keys;
+}
 
-  for (const file of files) {
-    const key = relative(LOCAL_DIR, file); // preserves folder structure as the R2 key
+async function sync() {
+  const localFiles = getLocalFiles(LOCAL_DIR);
+  const localKeys = new Set(localFiles.map(f => relative(LOCAL_DIR, f)));
+  const remoteKeys = await listRemoteKeys();
+
+  const toUpload = localFiles.filter(f => !remoteKeys.has(relative(LOCAL_DIR, f)));
+  const toDelete = [...remoteKeys].filter(k => !localKeys.has(k));
+
+  console.log(`Local: ${localKeys.size} files | Remote: ${remoteKeys.size} files`);
+  console.log(`To upload: ${toUpload.length} | To delete: ${toDelete.length}\n`);
+
+  // Upload new files
+  for (const file of toUpload) {
+    const key = relative(LOCAL_DIR, file);
     const contentType = lookup(file) || "application/octet-stream";
-
     await client.send(
       new PutObjectCommand({
         Bucket: BUCKET,
@@ -60,14 +98,29 @@ async function upload() {
         ContentType: contentType,
       })
     );
-
-    console.log(`✓ ${key}`);
+    console.log(`✓ uploaded: ${key}`);
   }
 
-  console.log(`\nDone. Uploaded ${files.length} files to r2://${BUCKET}`);
+  // Delete orphaned files (batch delete, max 1000 per request)
+  if (toDelete.length > 0) {
+    for (let i = 0; i < toDelete.length; i += 1000) {
+      const batch = toDelete.slice(i, i + 1000);
+      await client.send(
+        new DeleteObjectsCommand({
+          Bucket: BUCKET,
+          Delete: { Objects: batch.map(k => ({ Key: k })) },
+        })
+      );
+      for (const key of batch) {
+        console.log(`✓ deleted: ${key}`);
+      }
+    }
+  }
+
+  console.log("\nSync complete.");
 }
 
-upload().catch((err) => {
-  console.error("Upload failed:", err);
+sync().catch((err) => {
+  console.error("Sync failed:", err);
   process.exit(1);
 });

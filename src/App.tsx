@@ -45,30 +45,22 @@ function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
   return (
     <div className="space-y-4">
       <Card className="border-none border-l-4 border-l-emerald-500 shadow-md overflow-hidden rounded-xl bg-white p-6">
-        <div className="flex justify-between items-start gap-4 mb-4">
-          <div className="min-w-0">
-            <CardTitle className="text-gray-800 font-bold truncate">
-              {panel.selectedGP ? panel.selectedGP.name : 'Eligibility Result'}
-            </CardTitle>
-            <div className="text-xs opacity-70 mt-1">
-              {panel.postcode ? `Postcode ${panel.postcode.toUpperCase()}` : null}
-              {panel.icbCode ? ` · ICB ${panel.icbCode}` : null}
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {panel.isLoading ? (
-              <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none">
-                <span className="inline-flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Loading
-                </span>
-              </Badge>
-            ) : policy ? (
-              <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none">
-                {policy.icb_name}
-              </Badge>
-            ) : null}
-          </div>
+        <div className="mb-4">
+          <CardTitle className="text-gray-800 font-bold">
+            {panel.selectedGP ? panel.selectedGP.name : 'Eligibility Result'}
+          </CardTitle>
+          {panel.isLoading ? (
+            <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none mt-1">
+              <span className="inline-flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Loading
+              </span>
+            </Badge>
+          ) : policy ? (
+            <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none mt-1">
+              {policy.icb_name}
+            </Badge>
+          ) : null}
         </div>
 
         {panel.error ? (
@@ -115,19 +107,14 @@ function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
               {policy ? (policy.living_children_rule || 'Not specified') : <span className="opacity-40">—</span>}
             </div>
           </div>
-        </div>
 
-        {policy ? (
-          <div className="mt-4 p-3 border border-dashed border-emerald-300 rounded-lg text-sm text-emerald-900 bg-emerald-50/30 space-y-1">
-            <div>
-              <strong>IUI rounds required:</strong> {policy.iui_rounds_required}
+          <div className="p-3 bg-sage rounded-lg">
+            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">IUI Rounds Required</div>
+            <div className="text-2xl font-black text-sage-text leading-tight">
+              {policy ? policy.iui_rounds_required : <span className="opacity-40">—</span>}
             </div>
-            <div>
-              <strong>Endometriosis priority:</strong> {policy.endometriosis_priority_access ? 'Yes' : 'No'}
-            </div>
-            <div className="opacity-75">Updated {new Date(policy.updated_at).toLocaleDateString()}</div>
           </div>
-        ) : null}
+        </div>
       </Card>
 
       <IcbDocuments icbCode={panel.icbCode} />

@@ -333,7 +333,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                               {gp.odsCode}
                             </span>
                           </span>
-                          {isSelected && icbCode && <span className="text-xs opacity-90">ICB {icbCode}</span>}
+                          {isSelected && icbCode && result && <span className="text-xs opacity-90">{result.icb_name}</span>}
                         </Button>
                       );
                     })
@@ -426,17 +426,11 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
             className="space-y-4 lg:hidden"
           >
             <Card className="border-none border-l-4 border-l-emerald-500 shadow-md overflow-hidden rounded-xl bg-white p-5">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <CardTitle className="text-gray-800 font-bold">
-                    {selectedGP ? selectedGP.name : 'Eligibility Result'}
-                  </CardTitle>
-                  <div className="text-xs opacity-70 mt-1">
-                    {postcode ? `Postcode ${postcode.toUpperCase()}` : null}
-                    {icbCode ? ` · ICB ${icbCode}` : null}
-                  </div>
-                </div>
-                <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none">
+              <div className="mb-4">
+                <CardTitle className="text-gray-800 font-bold">
+                  {selectedGP ? selectedGP.name : 'Eligibility Result'}
+                </CardTitle>
+                <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none mt-1">
                   {result.icb_name}
                 </Badge>
               </div>
@@ -455,28 +449,28 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                     Up to {result.max_age}
                   </div>
                 </div>
-              </div>
 
-              <div className="mt-4 p-3 border border-dashed border-emerald-300 rounded-lg text-sm text-emerald-900 bg-emerald-50/30 space-y-1">
-                <div>
-                  <strong>Parental Status:</strong> {result.living_children_rule || 'Not specified'}
+                <div className="p-3 bg-sage rounded-lg">
+                  <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">BMI</div>
+                  <div className="text-lg font-black text-sage-text leading-tight">
+                    {result.bmi_min != null || result.bmi_max != null
+                      ? `${result.bmi_min ?? '–'} to ${result.bmi_max ?? '–'}`
+                      : 'Not specified'}
+                  </div>
                 </div>
-                <div>
-                  <strong>BMI:</strong>{' '}
-                  {result.bmi_min != null || result.bmi_max != null
-                    ? `${result.bmi_min ?? '–'} to ${result.bmi_max ?? '–'}`
-                    : 'Not specified'}
+
+                <div className="p-3 bg-sage rounded-lg">
+                  <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">IUI Rounds Required</div>
+                  <div className="text-2xl font-black text-sage-text leading-tight">
+                    {result.iui_rounds_required}
+                  </div>
                 </div>
-                <div>
-                  <strong>IUI rounds required:</strong>{' '}
-                  {result.iui_rounds_required > 0 ? result.iui_rounds_required : 'Policy-specific (see ICB policy)'}
-                </div>
-                <div>
-                  <strong>Endometriosis priority:</strong>{' '}
-                  {result.endometriosis_priority_access ? 'Yes' : 'No'}
-                </div>
-                <div className="opacity-75">
-                  Updated {new Date(result.updated_at).toLocaleDateString()}
+
+                <div className="p-3 bg-sage rounded-lg col-span-2">
+                  <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Parental Status</div>
+                  <div className="text-sm font-bold text-sage-text leading-tight">
+                    {result.living_children_rule || 'Not specified'}
+                  </div>
                 </div>
               </div>
             </Card>
