@@ -1,8 +1,5 @@
-import { syncIcbsFromOrd } from '../../scripts/syncIcbsFromOrd';
 import type { Env } from '../types';
 import {
-  getPath,
-  getStringPath,
   haversineDistanceMeters,
   isReasonableOrgNameInput,
   isReasonablePostcodeInput,
@@ -19,7 +16,6 @@ import { checkBasicAuth } from '../auth';
 import { lookupIcbPolicyByIcbCode, resolveIcbIdFromPostcodesIo, resolveDocumentFolder } from '../services/icbPolicy';
 import {
   fetchGpPracticesForOutcode,
-  fetchOrdJson,
   getFallbackOutcodeFromPostcode,
   getIcbFromGpOds,
   searchGpPracticesByName
@@ -45,12 +41,6 @@ const GP_SEARCH_MAX_DISTANCE_M = 3500;
 const GP_SEARCH_MAX_CANDIDATES = 250;
 const GP_SEARCH_MAX_RESULTS = 40;
 const GP_NAME_SEARCH_LIMIT = 40;
-
-function isAuthorizedAdmin(request: Request, env: Env) {
-  const configuredToken = env.ADMIN_TOKEN?.trim();
-  if (!configuredToken) return true;
-  return request.headers.get('x-admin-token') === configuredToken;
-}
 
 export async function handleApiRequest(request: Request, env: Env) {
   const reqId = requestId();
@@ -343,40 +333,6 @@ export async function handleApiRequest(request: Request, env: Env) {
       headers.set('Cache-Control', 'public, max-age=86400');
 
       response = new Response(object.body, { headers });
-      return response;
-    }
-
-    if (url.pathname === '/api/admin/icb-sync' && request.method === 'POST') {
-      if (!isAuthorizedAdmin(request, env)) {
-        response = jsonResponse({ error: 'Unauthorized', request_id: reqId }, { status: 401 });
-        return response;
-      }
-
-      const startedSyncAt = Date.now();
-      const sync = await syncIcbsFromOrd(env.DB, { requestId: reqId }, { fetchOrdJson, getPath, getStringPath });
-      const icbs = await env.DB
-        .prepare(
-          "select id, name, sub_icb_code, parent_icb_code, region, country, created_at, updated_at from icbs order by case when sub_icb_code is null then 0 else 1 end asc, case when sub_icb_code is null then coalesce(parent_icb_code, id) else coalesce(parent_icb_code, 'ZZZZZ') end asc, case when sub_icb_code is null then name else coalesce(sub_icb_code, '') end asc, name asc"
-        )
-        .bind()
-        .all<{
-          id: string;
-          name: string;
-          sub_icb_code: string | null;
-          parent_icb_code: string | null;
-          region: string | null;
-          country: string | null;
-          created_at: string;
-          updated_at: string;
-        }>();
-
-      response = jsonResponse({
-        ok: true,
-        request_id: reqId,
-        sync,
-        sync_duration_ms: Date.now() - startedSyncAt,
-        icbs: icbs.results
-      });
       return response;
     }
 

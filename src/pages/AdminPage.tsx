@@ -13,7 +13,6 @@ import { IcbTable } from '../components/admin/IcbTable';
 import { IcbForm } from '../components/admin/IcbForm';
 import { PolicyList } from '../components/admin/PolicyList';
 import { PolicyForm } from '../components/admin/PolicyForm';
-import { DbSyncPanel } from '../components/admin/DbSyncPanel';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
@@ -127,7 +126,6 @@ export function AdminPage() {
       <Tabs defaultValue="icb-management">
         <TabsList>
           <TabsTrigger value="icb-management">ICB Management</TabsTrigger>
-          <TabsTrigger value="db-sync">DB Sync</TabsTrigger>
         </TabsList>
 
         <TabsContent value="icb-management">
@@ -172,12 +170,6 @@ export function AdminPage() {
                 />
               </div>
             )}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="db-sync">
-          <div className="pt-4">
-            <DbSyncPanel />
           </div>
         </TabsContent>
       </Tabs>

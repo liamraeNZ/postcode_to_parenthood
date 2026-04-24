@@ -19,12 +19,6 @@ export type D1Database = {
 
 export type ExportedHandler<E> = {
   fetch: (request: Request, env: E, ctx: ExecutionContext) => Response | Promise<Response>;
-  scheduled?: (controller: ScheduledController, env: E, ctx: ExecutionContext) => void | Promise<void>;
-};
-
-export type ScheduledController = {
-  cron: string;
-  scheduledTime: number;
 };
 
 export type R2Bucket = {
@@ -45,9 +39,8 @@ export type Env = {
   ASSETS: Fetcher;
   DB: D1Database;
   r2bucket: R2Bucket;
-  ADMIN_TOKEN?: string;      // existing — kept for icb-sync backward compat
-  ADMIN_USERNAME?: string;   // new
-  ADMIN_PASSWORD?: string;   // new
+  ADMIN_USERNAME?: string;
+  ADMIN_PASSWORD?: string;
 };
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';

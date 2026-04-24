@@ -1,0 +1,37 @@
+{
+    "Organisations": [
+        {
+            "Name": "NHS BEDFORDSHIRE CCG",
+            "OrgId": "06F",
+            "Status": "Inactive",
+            "OrgRecordClass": "RC1",
+            "PostCode": "MK45 4HR",
+            "LastChangeDate": "2023-09-21",
+            "PrimaryRoleId": "RO98",
+            "PrimaryRoleDescription": "CLINICAL COMMISSIONING GROUP",
+            "OrgLink": "https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/06F"
+        },
+        {
+            "Name": "NHS BEDFORDSHIRE, LUTON AND MILTON KEYNES INTEGRATED CARE BOARD",
+            "OrgId": "QHG",
+            "Status": "Active",
+            "OrgRecordClass": "RC1",
+            "PostCode": "SG17 5TQ",
+            "LastChangeDate": "2026-04-08",
+            "PrimaryRoleId": "RO261",
+            "PrimaryRoleDescription": "STRATEGIC PARTNERSHIP",
+            "OrgLink": "https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/QHG"
+        },
+        {
+            "Name": "SERVICES HUB FOR NHS BEDFORDSHIRE, LUTON AND MILTON KEYNES CCG",
+            "OrgId": "S1K6H",
+            "Status": "Active",
+            "OrgRecordClass": "RC1",
+            "PostCode": "LU1 2LJ",
+            "LastChangeDate": "2026-04-01",
+            "PrimaryRoleId": "RO172",
+            "PrimaryRoleDescription": "INDEPENDENT SECTOR HEALTHCARE PROVIDER",
+            "OrgLink": "https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/S1K6H"
+        }
+    ]
+}
