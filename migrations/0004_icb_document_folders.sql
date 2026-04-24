@@ -16,11 +16,11 @@ UPDATE icbs SET document_folder_name = 'Frimley' WHERE sub_icb_code = 'D4U1Y'; -
 UPDATE icbs SET document_folder_name = 'Gloucestershire' WHERE id = 'QR1'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Hampshire and Isle of Wight' WHERE id = 'QRL'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Herefordshire and Worcestershire' WHERE id = 'QGH'; --> statement-breakpoint
-UPDATE icbs SET document_folder_name = 'Hertfordshire and West Essex' WHERE sub_icb_code = '06K'; --> statement-breakpoint
+UPDATE icbs SET document_folder_name = 'Hertfordshire and West Essex' WHERE id = 'QM7'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Kent and Medway' WHERE id = 'QKS'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Lancashire and South Cumbria' WHERE id = 'QE1'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Lincolnshire' WHERE id = 'QJM'; --> statement-breakpoint
-UPDATE icbs SET document_folder_name = 'Mid and South Essex' WHERE id = '99E'; --> statement-breakpoint
+UPDATE icbs SET document_folder_name = 'Mid and South Essex' WHERE sub_icb_code = '99E'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Norfolk and Waveney' WHERE sub_icb_code = '06L'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'North Central London' WHERE sub_icb_code = '07P'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'North East and North Cumbria' WHERE id = 'QHM'; --> statement-breakpoint

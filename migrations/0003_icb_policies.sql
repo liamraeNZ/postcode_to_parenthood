@@ -65,10 +65,10 @@ INSERT OR IGNORE INTO icb_policies (id, icb_id, effective_from, cycles_offered, 
 SELECT 'pol-qgh', id, '2025-09-11', 1, 39, 19.0, 30.0, 6, 'No children from current or previous relationships', 'https://www.gov.uk/government/publications/nhs-funded-ivf-in-england/nhs-funded-in-vitro-fertilisation-ivf-in-england'
 FROM icbs WHERE id = 'QGH' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
 
--- Hertfordshire and West Essex (sub-ICB 06K under Central East S1Y5D)
+-- Hertfordshire and West Essex (ODS code QM7)
 INSERT OR IGNORE INTO icb_policies (id, icb_id, effective_from, cycles_offered, max_age, bmi_min, bmi_max, iui_rounds_required, living_children_rule, source_url)
 SELECT 'pol-herts', id, '2025-09-11', 1, 42, 19.0, 30.0, 6, 'No children from current or previous relationships', 'https://www.gov.uk/government/publications/nhs-funded-ivf-in-england/nhs-funded-in-vitro-fertilisation-ivf-in-england'
-FROM icbs WHERE sub_icb_code = '06K' LIMIT 1; --> statement-breakpoint
+FROM icbs WHERE id = 'QM7' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
 
 INSERT OR IGNORE INTO icb_policies (id, icb_id, effective_from, cycles_offered, max_age, bmi_min, bmi_max, iui_rounds_required, living_children_rule, source_url)
 SELECT 'pol-qks', id, '2025-09-11', 2, 40, 19.0, 30.0, 6, 'No children from current or previous relationships', 'https://www.gov.uk/government/publications/nhs-funded-ivf-in-england/nhs-funded-in-vitro-fertilisation-ivf-in-england'
@@ -82,7 +82,7 @@ INSERT OR IGNORE INTO icb_policies (id, icb_id, effective_from, cycles_offered, 
 SELECT 'pol-qjm', id, '2025-09-11', 1, 40, 19.0, 30.0, 0, 'No children from current or previous relationships', 'https://www.gov.uk/government/publications/nhs-funded-ivf-in-england/nhs-funded-in-vitro-fertilisation-ivf-in-england'
 FROM icbs WHERE id = 'QJM' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
 
--- Mid and South Essex (sub-ICB 99E under Essex D7T5G)
+-- Mid and South Essex (sub-ICB 99E under Essex D7T5G, parent ODS code QH8)
 INSERT OR IGNORE INTO icb_policies (id, icb_id, effective_from, cycles_offered, max_age, bmi_min, bmi_max, iui_rounds_required, living_children_rule, source_url)
 SELECT 'pol-mid-south-essex', id, '2025-09-11', 2, 39, 19.0, 30.0, 6, 'No children from current or previous relationships', 'https://www.gov.uk/government/publications/nhs-funded-ivf-in-england/nhs-funded-in-vitro-fertilisation-ivf-in-england'
 FROM icbs WHERE sub_icb_code = '99E' LIMIT 1; --> statement-breakpoint
