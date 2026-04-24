@@ -22,6 +22,7 @@ import {
 } from '@/services/postcodeService';
 import { GpPracticeSummary, ICBPolicy } from '@/types';
 import { motion, AnimatePresence } from 'motion/react';
+import { IcbDocuments } from './IcbDocuments';
 
 type PostcodeLookupAction = 'search' | 'lookup';
 
@@ -458,7 +459,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
 
               <div className="mt-4 p-3 border border-dashed border-emerald-300 rounded-lg text-sm text-emerald-900 bg-emerald-50/30 space-y-1">
                 <div>
-                  <strong>Policy Note:</strong> {result.living_children_rule || 'No policy note recorded'}.
+                  <strong>Parental Status:</strong> {result.living_children_rule || 'Not specified'}
                 </div>
                 <div>
                   <strong>BMI:</strong>{' '}
@@ -471,10 +472,6 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                   {result.iui_rounds_required > 0 ? result.iui_rounds_required : 'Policy-specific (see ICB policy)'}
                 </div>
                 <div>
-                  <strong>Wait time (months):</strong>{' '}
-                  {result.wait_time_months != null ? result.wait_time_months : 'Unknown'}
-                </div>
-                <div>
                   <strong>Endometriosis priority:</strong>{' '}
                   {result.endometriosis_priority_access ? 'Yes' : 'No'}
                 </div>
@@ -483,6 +480,8 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                 </div>
               </div>
             </Card>
+
+            <IcbDocuments icbCode={icbCode} />
 
             <div className="mt-4 rounded-lg border border-gray-200 bg-white/60 p-4 text-xs text-gray-600 leading-relaxed">
               <div className="font-bold text-gray-800">Disclaimer on NHS funding data</div>

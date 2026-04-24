@@ -2,6 +2,54 @@ import type { D1Database } from '../types';
 import { normalizeOdsCode } from '../lib';
 import { fetchOrdJson } from './ord';
 
+export async function resolveDocumentFolder(db: D1Database, icbCode: string): Promise<string | null> {
+  const normalized = normalizeOdsCode(icbCode);
+  if (!normalized) return null;
+
+  // Try direct match first
+  const direct = await db
+    .prepare('select document_folder_name from icbs where id = ?1 and document_folder_name is not null limit 1')
+    .bind(normalized)
+    .first<{ document_folder_name: string }>();
+  if (direct?.document_folder_name) return direct.document_folder_name;
+
+  // Try sub_icb_code match
+  const bySub = await db
+    .prepare('select document_folder_name from icbs where sub_icb_code = ?1 and document_folder_name is not null limit 1')
+    .bind(normalized)
+    .first<{ document_folder_name: string }>();
+  if (bySub?.document_folder_name) return bySub.document_folder_name;
+
+  // Try parent ICB code match
+  const byParent = await db
+    .prepare('select document_folder_name from icbs where sub_icb_code is null and parent_icb_code = ?1 and document_folder_name is not null limit 1')
+    .bind(normalized)
+    .first<{ document_folder_name: string }>();
+  if (byParent?.document_folder_name) return byParent.document_folder_name;
+
+  // Try alias code match
+  const byAlias = await db
+    .prepare("select i.document_folder_name from icb_aliases a join icbs i on i.id = a.icb_id where a.alias_kind = 'code' and a.alias = ?1 and i.document_folder_name is not null limit 1")
+    .bind(normalized)
+    .first<{ document_folder_name: string }>();
+  if (byAlias?.document_folder_name) return byAlias.document_folder_name;
+
+  // If this is a sub-ICB without its own folder, try the parent
+  const parentCode = await db
+    .prepare('select parent_icb_code from icbs where (id = ?1 or sub_icb_code = ?1) and parent_icb_code is not null limit 1')
+    .bind(normalized)
+    .first<{ parent_icb_code: string }>();
+  if (parentCode?.parent_icb_code) {
+    const parentFolder = await db
+      .prepare('select document_folder_name from icbs where (id = ?1 or parent_icb_code = ?1) and sub_icb_code is null and document_folder_name is not null limit 1')
+      .bind(parentCode.parent_icb_code)
+      .first<{ document_folder_name: string }>();
+    if (parentFolder?.document_folder_name) return parentFolder.document_folder_name;
+  }
+
+  return null;
+}
+
 function normalizeIcbNameForMatch(value: string) {
   return value
     .toUpperCase()

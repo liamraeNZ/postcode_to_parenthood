@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { TrustBar } from './components/layout/TrustBar';
 import { Hero } from './components/home/Hero';
+import { IcbDocuments } from './components/home/IcbDocuments';
 import type { PolicyPanelState } from './components/home/PostcodeSearch';
 import { Card, CardTitle } from './components/ui/card';
 import { Badge } from './components/ui/badge';
@@ -40,7 +41,6 @@ function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
     policy && (policy.bmi_min != null || policy.bmi_max != null)
       ? `${policy.bmi_min ?? '–'} to ${policy.bmi_max ?? '–'}`
       : 'Not specified';
-  const waitLabel = policy ? (policy.wait_time_months != null ? `${policy.wait_time_months} months` : 'Unknown') : '—';
 
   return (
     <div className="space-y-4">
@@ -110,18 +110,15 @@ function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
           </div>
 
           <div className="p-3 bg-sage rounded-lg">
-            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Wait Time</div>
-            <div className="text-lg font-black text-sage-text leading-tight">
-              {policy ? waitLabel : <span className="opacity-40">—</span>}
+            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Parental Status</div>
+            <div className="text-sm font-bold text-sage-text leading-tight">
+              {policy ? (policy.living_children_rule || 'Not specified') : <span className="opacity-40">—</span>}
             </div>
           </div>
         </div>
 
         {policy ? (
           <div className="mt-4 p-3 border border-dashed border-emerald-300 rounded-lg text-sm text-emerald-900 bg-emerald-50/30 space-y-1">
-            <div>
-              <strong>Policy Note:</strong> {policy.living_children_rule || 'No policy note recorded'}.
-            </div>
             <div>
               <strong>IUI rounds required:</strong> {policy.iui_rounds_required}
             </div>
@@ -132,6 +129,8 @@ function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
           </div>
         ) : null}
       </Card>
+
+      <IcbDocuments icbCode={panel.icbCode} />
 
       {policy ? (
         <div className="rounded-lg border border-gray-200 bg-white/60 p-4 text-xs text-gray-600 leading-relaxed">
