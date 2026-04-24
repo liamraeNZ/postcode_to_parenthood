@@ -1,8 +1,5 @@
--- Add document_folder_name column to icbs table
--- This maps ICB records to their R2 folder name under policies/
-ALTER TABLE icbs ADD COLUMN document_folder_name text; --> statement-breakpoint
+-- Map ICB records to their R2 folder name under policies/
 
--- Populate folder names for ICBs that have policy documents in R2
 UPDATE icbs SET document_folder_name = 'Bath and North East Somerset, Swindon and Wiltshire' WHERE id = 'QOX'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Bedfordshire, Luton and Milton Keynes' WHERE sub_icb_code = 'M1J4Y'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Birmingham and Solihull' WHERE id = 'QHL'; --> statement-breakpoint
@@ -23,7 +20,7 @@ UPDATE icbs SET document_folder_name = 'Hertfordshire and West Essex' WHERE sub_
 UPDATE icbs SET document_folder_name = 'Kent and Medway' WHERE id = 'QKS'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Lancashire and South Cumbria' WHERE id = 'QE1'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Lincolnshire' WHERE id = 'QJM'; --> statement-breakpoint
-UPDATE icbs SET document_folder_name = 'Mid and South Essex' WHERE sub_icb_code = '06N'; --> statement-breakpoint
+UPDATE icbs SET document_folder_name = 'Mid and South Essex' WHERE id = '99E'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Norfolk and Waveney' WHERE sub_icb_code = '06L'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'North Central London' WHERE sub_icb_code = '07P'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'North East and North Cumbria' WHERE id = 'QHM'; --> statement-breakpoint
@@ -40,4 +37,4 @@ UPDATE icbs SET document_folder_name = 'Staffordshire and Stoke-on-Trent' WHERE 
 UPDATE icbs SET document_folder_name = 'Suffolk and North East Essex' WHERE sub_icb_code = '07K'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Surrey Heartlands' WHERE sub_icb_code = '92A'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Sussex' WHERE sub_icb_code = '09D'; --> statement-breakpoint
-UPDATE icbs SET document_folder_name = 'West Yorkshire' WHERE id = 'QWO'; --> statement-breakpoint
+UPDATE icbs SET document_folder_name = 'West Yorkshire' WHERE id = 'QWO';

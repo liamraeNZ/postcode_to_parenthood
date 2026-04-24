@@ -24,9 +24,6 @@ invocation_logs = true
 [observability.traces]
 enabled = true
 
-[triggers]
-crons = ["0 3 1 * *"]
-
 [[r2_buckets]]
 binding = "r2bucket"
 bucket_name = "fertilityfund"

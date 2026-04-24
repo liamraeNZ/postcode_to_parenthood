@@ -7,6 +7,8 @@ create table if not exists icbs (
   parent_icb_code text,
   region text,
   country text,
+  status text not null default 'active' check (status in ('active', 'inactive')),
+  document_folder_name text,
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 ); --> statement-breakpoint
@@ -14,6 +16,7 @@ create table if not exists icbs (
 create unique index if not exists icbs_sub_icb_code_unique_idx on icbs (sub_icb_code) where sub_icb_code is not null; --> statement-breakpoint
 create unique index if not exists icbs_parent_icb_code_unique_idx on icbs (parent_icb_code) where sub_icb_code is null and parent_icb_code is not null; --> statement-breakpoint
 create index if not exists icbs_parent_icb_code_idx on icbs (parent_icb_code); --> statement-breakpoint
+
 create table if not exists icb_aliases (
   id text primary key,
   icb_id text not null references icbs(id) on delete cascade,
