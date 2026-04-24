@@ -15,6 +15,7 @@
     "cf:migrate:remote": "npx wrangler d1 migrations apply DB --remote"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1036.0",
     "@base-ui/react": "^1.4.0",
     "@fontsource-variable/geist": "^5.2.8",
     "@google/genai": "^1.29.0",
@@ -36,8 +37,10 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260407.0",
     "@types/express": "^4.17.21",
+    "@types/mime-types": "^3.0.1",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
+    "mime-types": "^3.0.2",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

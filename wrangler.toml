@@ -27,9 +27,6 @@ enabled = true
 [triggers]
 crons = ["0 3 1 * *"]
 
-# Admin credentials — set via Wrangler secrets (do NOT commit real values here):
-#   wrangler secret put ADMIN_USERNAME
-#   wrangler secret put ADMIN_PASSWORD
-# [vars]
-# ADMIN_USERNAME = "admin"
-# ADMIN_PASSWORD = "changeme"
+[[r2_buckets]]
+binding = "r2bucket"
+bucket_name = "fertilityfund"
