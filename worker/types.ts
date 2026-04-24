@@ -27,9 +27,24 @@ export type ScheduledController = {
   scheduledTime: number;
 };
 
+export type R2Bucket = {
+  list: (options?: { prefix?: string; delimiter?: string; cursor?: string; limit?: number }) => Promise<{
+    objects: { key: string; size: number; uploaded: Date; httpMetadata?: { contentType?: string } }[];
+    truncated: boolean;
+    cursor?: string;
+    delimitedPrefixes: string[];
+  }>;
+  get: (key: string) => Promise<{
+    body: ReadableStream;
+    httpMetadata?: { contentType?: string };
+    size: number;
+  } | null>;
+};
+
 export type Env = {
   ASSETS: Fetcher;
   DB: D1Database;
+  r2bucket: R2Bucket;
   ADMIN_TOKEN?: string;      // existing — kept for icb-sync backward compat
   ADMIN_USERNAME?: string;   // new
   ADMIN_PASSWORD?: string;   // new

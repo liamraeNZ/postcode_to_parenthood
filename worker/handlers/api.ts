@@ -16,7 +16,7 @@ import {
   sanitizeSearchParams
 } from '../lib';
 import { checkBasicAuth } from '../auth';
-import { lookupIcbPolicyByIcbCode, resolveIcbIdFromPostcodesIo } from '../services/icbPolicy';
+import { lookupIcbPolicyByIcbCode, resolveIcbIdFromPostcodesIo, resolveDocumentFolder } from '../services/icbPolicy';
 import {
   fetchGpPracticesForOutcode,
   fetchOrdJson,
@@ -270,6 +270,79 @@ export async function handleApiRequest(request: Request, env: Env) {
       }
 
       response = jsonResponse(policy);
+      return response;
+    }
+
+    if (url.pathname === '/api/icb-documents' && request.method === 'GET') {
+      const icbCode = url.searchParams.get('icbCode');
+      if (!icbCode) {
+        response = jsonResponse({ error: 'Missing icbCode', request_id: reqId }, { status: 400 });
+        return response;
+      }
+
+      const folder = await resolveDocumentFolder(env.DB, icbCode);
+      if (!folder) {
+        response = jsonResponse({ documents: [], request_id: reqId });
+        return response;
+      }
+
+      const prefix = `policies/${folder}/`;
+
+      // List all objects under this ICB's folder (no delimiter — flat list)
+      const allObjects: { key: string; size: number }[] = [];
+      let cursor: string | undefined;
+      let truncated = true;
+      while (truncated) {
+        const listed = await env.r2bucket.list({ prefix, cursor });
+        for (const obj of listed.objects) {
+          allObjects.push({ key: obj.key, size: obj.size });
+        }
+        truncated = listed.truncated;
+        cursor = listed.cursor;
+      }
+
+      // Group by year extracted from the key path: policies/{folder}/{year}/{filename}
+      const byYear = new Map<string, { name: string; key: string; size: number }[]>();
+      for (const obj of allObjects) {
+        const parts = obj.key.slice(prefix.length).split('/');
+        if (parts.length < 2) continue; // skip if not in a year subfolder
+        const year = parts[0];
+        if (!/^\d{4}$/.test(year)) continue;
+        const name = parts.slice(1).join('/');
+        if (!byYear.has(year)) byYear.set(year, []);
+        byYear.get(year)!.push({ name, key: obj.key, size: obj.size });
+      }
+
+      // Sort years descending (most recent first)
+      const documentsByYear = [...byYear.entries()]
+        .sort((a, b) => b[0].localeCompare(a[0]))
+        .map(([year, files]) => ({ year, files }));
+
+      response = jsonResponse({ icbCode, folder, documents: documentsByYear, request_id: reqId });
+      return response;
+    }
+
+    if (url.pathname === '/api/icb-documents/download' && request.method === 'GET') {
+      const key = url.searchParams.get('key');
+      if (!key || !key.startsWith('policies/')) {
+        response = jsonResponse({ error: 'Missing or invalid key', request_id: reqId }, { status: 400 });
+        return response;
+      }
+
+      const object = await env.r2bucket.get(key);
+      if (!object) {
+        response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
+        return response;
+      }
+
+      const filename = key.split('/').pop() || 'document';
+      const headers = new Headers();
+      headers.set('Content-Type', object.httpMetadata?.contentType || 'application/octet-stream');
+      headers.set('Content-Disposition', `inline; filename="${filename}"`);
+      headers.set('Content-Length', String(object.size));
+      headers.set('Cache-Control', 'public, max-age=86400');
+
+      response = new Response(object.body, { headers });
       return response;
     }
 
