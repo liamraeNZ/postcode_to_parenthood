@@ -142,6 +142,13 @@ async function resolveIcbIdByName(db: D1Database, name: string, mode: 'exact' | 
 }
 
 async function resolveIcbId(db: D1Database, icbCode: string, icbName: string | null) {
+  const byDirectId = await db
+    .prepare('select id from icbs where id = ?1 limit 1')
+    .bind(icbCode)
+    .first<{ id: string }>();
+
+  if (byDirectId?.id) return byDirectId.id;
+
   const bySubIcbCode = await db
     .prepare('select id from icbs where sub_icb_code = ?1 limit 1')
     .bind(icbCode)
