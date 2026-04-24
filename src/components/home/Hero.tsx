@@ -21,7 +21,7 @@ export function Hero({ onPolicyPanelChange }: HeroProps) {
             </span>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 text-sage-text">
-              Stop the Postcode Lottery. <br />
+              Stop the IVF Postcode Lottery. <br />
               <span className="text-emerald-solid underline decoration-emerald-200 underline-offset-4 decoration-4">Find IVF funding rules</span> for your area.
             </h1>
             
