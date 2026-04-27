@@ -8,6 +8,7 @@ import type { PolicyPanelState } from './components/home/PostcodeSearch';
 import { Card, CardTitle } from './components/ui/card';
 import { Badge } from './components/ui/badge';
 import { Sparkles, BarChart3, Loader2 } from 'lucide-react';
+import { getCycleColorClasses } from './utils/cycleColors';
 
 type MatchingResource = {
   initials: string;
@@ -70,18 +71,23 @@ function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
         ) : null}
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="p-3 bg-sage rounded-lg">
-            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Cycles Offered</div>
-            <div className="text-2xl font-black text-sage-text leading-tight">
-              {policy ? (
-                <>
-                  {policy.cycles_offered} Full <span className="text-sm font-normal">Cycles</span>
-                </>
-              ) : (
-                <span className="opacity-40">—</span>
-              )}
-            </div>
-          </div>
+          {(() => {
+            const cc = policy ? getCycleColorClasses(policy.cycles_offered) : null;
+            return (
+              <div className={`p-3 rounded-lg ${cc ? cc.bg : 'bg-sage'}`}>
+                <div className={`text-[10px] uppercase font-bold opacity-70 mb-1 ${cc ? cc.label : 'text-emerald-800'}`}>Cycles Offered</div>
+                <div className={`text-2xl font-black leading-tight ${cc ? cc.text : 'text-sage-text'}`}>
+                  {policy ? (
+                    <>
+                      {policy.cycles_offered} Full <span className="text-sm font-normal">Cycles</span>
+                    </>
+                  ) : (
+                    <span className="opacity-40">—</span>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
 
           <div className="p-3 bg-sage rounded-lg">
             <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Age Limit</div>

@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
+import { getCycleColorClasses } from '@/utils/cycleColors';
 import {
   getIcbFromGpPractice,
   lookupICBPolicyByIcbCode,
@@ -436,12 +437,17 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-3 bg-sage rounded-lg">
-                  <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Cycles Offered</div>
-                  <div className="text-2xl font-black text-sage-text leading-tight">
-                    {result.cycles_offered} Full <span className="text-sm font-normal">Cycles</span>
-                  </div>
-                </div>
+                {(() => {
+                  const cc = getCycleColorClasses(result.cycles_offered);
+                  return (
+                    <div className={`p-3 rounded-lg ${cc.bg}`}>
+                      <div className={`text-[10px] uppercase font-bold opacity-70 mb-1 ${cc.label}`}>Cycles Offered</div>
+                      <div className={`text-2xl font-black leading-tight ${cc.text}`}>
+                        {result.cycles_offered} Full <span className="text-sm font-normal">Cycles</span>
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 <div className="p-3 bg-sage rounded-lg">
                   <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Age Limit</div>
