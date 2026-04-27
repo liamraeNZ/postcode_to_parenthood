@@ -39,7 +39,7 @@ const GP_SEARCH_NEAREST_OUTCODE_RADIUS_M = 7000;
 const GP_SEARCH_NEAREST_OUTCODE_LIMIT = 10;
 const GP_SEARCH_MAX_DISTANCE_M = 3500;
 const GP_SEARCH_MAX_CANDIDATES = 250;
-const GP_SEARCH_MAX_RESULTS = 40;
+const GP_SEARCH_MAX_RESULTS = 10;
 const GP_NAME_SEARCH_LIMIT = 40;
 
 export async function handleApiRequest(request: Request, env: Env) {

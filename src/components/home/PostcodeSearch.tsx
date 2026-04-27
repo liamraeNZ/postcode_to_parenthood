@@ -345,8 +345,8 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
 
               <div className="mt-3 flex items-center justify-between gap-2">
                 <Dialog open={nameSearchOpen} onOpenChange={setNameSearchOpen}>
-                  <DialogTrigger render={<Button type="button" variant="link" className="px-0 h-auto" />}>
-                    Can't find your GP in this list?
+                  <DialogTrigger render={<Button type="button" variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300" />}>
+                    Can't find your GP? Search by name
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-lg">
                     <DialogHeader>
