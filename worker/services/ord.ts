@@ -191,7 +191,81 @@ export async function fetchGpPracticesForOutcode(outcode: string, ctx: { request
       const orgLink = getStringPath(org, ['OrgLink']) ?? undefined;
       return { odsCode, name, postcode: postCode, orgLink };
     })
-    .filter((org): org is NonNullable<typeof org> => org !== null);
+    .filter((org): org is NonNullable<typeof org> => org !== null)
+    .filter((org) => isLikelyGpPractice(org.name));
+}
+
+/**
+ * Returns true if the organisation name looks like a GP practice or medical centre,
+ * filtering out non-GP entities (e.g. substance abuse services, pharmacies, dental,
+ * opticians, hospices, etc.) that share the RO177 prescribing role.
+ */
+function isLikelyGpPractice(name: string): boolean {
+  const upper = name.toUpperCase();
+
+  // Exclude known non-GP organisation types
+  const excludePatterns = [
+    'ALCOHOL',
+    'SUBSTANCE',
+    'DRUG SERVICE',
+    'DRUG & ALCOHOL',
+    'PHARMACY',
+    'DENTAL',
+    'OPTICIAN',
+    'OPTIC',
+    'HOSPICE',
+    'HOSPITAL',
+    'WALK-IN',
+    'WALK IN',
+    'URGENT CARE',
+    'OUT OF HOURS',
+    'OUT-OF-HOURS',
+    'MINOR INJURIES',
+    'PRISON',
+    'HMP ',
+    'CUSTODY',
+    'IMMIGRATION',
+    'HOMELESS',
+    'REFUGEE',
+    'ASYLUM',
+    'SEXUAL HEALTH',
+    'CONTRACEPTI',
+    'FAMILY PLANNING',
+    'DERMATOLOGY',
+    'PHYSIOTHERAPY',
+    'CHIROPOD',
+    'PODIATRY',
+    'COUNSELLING',
+    'MENTAL HEALTH',
+    'PSYCHIATR',
+    'PSYCHOLOG',
+    'COMMUNITY INTEREST',
+    'NURSING HOME',
+    'CARE HOME',
+    'RESIDENTIAL',
+  ];
+
+  if (excludePatterns.some((pattern) => upper.includes(pattern))) {
+    return false;
+  }
+
+  // Include if name contains common GP/medical centre indicators
+  const includePatterns = [
+    'SURGERY',
+    'PRACTICE',
+    'MEDICAL CENT',
+    'HEALTH CENT',
+    'GP ',
+    'DOCTOR',
+    'GROUP PRACTICE',
+    'FAMILY HEALTH',
+    'PRIMARY CARE',
+    'MEDICAL GROUP',
+    'CLINIC',
+    'PARTNERS',
+  ];
+
+  return includePatterns.some((pattern) => upper.includes(pattern));
 }
 
 export async function searchGpPracticesByName(name: string, ctx: { requestId: string; limit: number }) {
