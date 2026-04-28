@@ -337,3 +337,113 @@ export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) 
 
   return await fetchPolicyForIcbId(parentIcbId);
 }
+
+export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: string) {
+  const normalized = normalizeOdsCode(icbCode);
+  if (!normalized) return null;
+
+  let icbId = await resolveIcbId(db, normalized, null);
+  if (!icbId) {
+    try {
+      const ordUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/${encodeURIComponent(normalized)}`;
+      const ordJson = await fetchOrdJson(ordUrl, { requestId: crypto.randomUUID(), timeoutMs: 8_000 });
+      const ordName = extractOrdOrgName(ordJson);
+      icbId = await resolveIcbId(db, normalized, ordName);
+    } catch {
+      return null;
+    }
+  }
+
+  if (!icbId) return null;
+
+  async function fetchAllPoliciesForIcbId(targetIcbId: string) {
+    const today = new Date().toISOString().slice(0, 10);
+    const { results } = await db
+      .prepare(
+        `
+        select
+          i.name as icb_name,
+          p.treatment_type_id,
+          t.name as treatment_type_name,
+          p.cycles_offered,
+          p.max_age,
+          p.bmi_min,
+          p.bmi_max,
+          p.iui_rounds_required,
+          p.wait_time_months,
+          p.endometriosis_priority_access,
+          p.smoking_restricted,
+          p.living_children_rule,
+          p.updated_at
+        from icb_policies p
+        join icbs i on i.id = p.icb_id
+        join treatment_types t on t.id = p.treatment_type_id
+        where p.icb_id = ?1
+          and (p.effective_to is null or p.effective_to >= ?2)
+        order by
+          case p.treatment_type_id
+            when 'ivf' then 1
+            when 'icsi' then 2
+            when 'iui' then 3
+            when 'di' then 4
+            when 'fet' then 5
+            else 6
+          end,
+          p.effective_from desc
+      `
+      )
+      .bind(targetIcbId, today)
+      .all<{
+        icb_name: string;
+        treatment_type_id: string;
+        treatment_type_name: string;
+        cycles_offered: number;
+        max_age: number;
+        bmi_min: number | null;
+        bmi_max: number | null;
+        iui_rounds_required: number;
+        wait_time_months: number | null;
+        endometriosis_priority_access: number;
+        smoking_restricted: number;
+        living_children_rule: string | null;
+        updated_at: string;
+      }>();
+
+    if (!results.length) return null;
+
+    return {
+      icb_name: results[0].icb_name,
+      policies: results.map((r) => ({
+        treatment_type_id: r.treatment_type_id,
+        treatment_type_name: r.treatment_type_name,
+        cycles_offered: r.cycles_offered,
+        max_age: r.max_age,
+        bmi_min: r.bmi_min,
+        bmi_max: r.bmi_max,
+        iui_rounds_required: r.iui_rounds_required,
+        wait_time_months: r.wait_time_months,
+        endometriosis_priority_access: Boolean(r.endometriosis_priority_access),
+        smoking_restricted: Boolean(r.smoking_restricted),
+        living_children_rule: r.living_children_rule,
+        updated_at: r.updated_at,
+      })),
+    };
+  }
+
+  const direct = await fetchAllPoliciesForIcbId(icbId);
+  if (direct) return direct;
+
+  // Fallback UP: if this is a sub-ICB, try the parent ICB's policies
+  const parent = await db
+    .prepare('select parent_icb_code from icbs where id = ?1 limit 1')
+    .bind(icbId)
+    .first<{ parent_icb_code: string | null }>();
+
+  const parentIcbCode = parent?.parent_icb_code ?? null;
+  if (!parentIcbCode) return null;
+
+  const parentIcbId = await resolveIcbId(db, parentIcbCode, null);
+  if (!parentIcbId || parentIcbId === icbId) return null;
+
+  return await fetchAllPoliciesForIcbId(parentIcbId);
+}

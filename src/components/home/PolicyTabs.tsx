@@ -1,0 +1,90 @@
+import { useState } from 'react';
+import type { ICBTreatmentPolicy } from '@/types';
+import { getCycleColorClasses } from '@/utils/cycleColors';
+
+interface PolicyTabsProps {
+  policies: ICBTreatmentPolicy[];
+}
+
+const TAB_ORDER = ['ivf', 'icsi', 'iui', 'di', 'fet'];
+
+export function PolicyTabs({ policies }: PolicyTabsProps) {
+  const sorted = [...policies].sort(
+    (a, b) => (TAB_ORDER.indexOf(a.treatment_type_id) ?? 99) - (TAB_ORDER.indexOf(b.treatment_type_id) ?? 99)
+  );
+  const [activeId, setActiveId] = useState(sorted[0]?.treatment_type_id ?? 'ivf');
+  const active = sorted.find((p) => p.treatment_type_id === activeId) ?? sorted[0];
+
+  if (!active) return null;
+
+  const bmiLabel =
+    active.bmi_min != null || active.bmi_max != null
+      ? `${active.bmi_min ?? '–'} to ${active.bmi_max ?? '–'}`
+      : 'Not specified';
+
+  return (
+    <div>
+      <div className="flex gap-1 mb-4 overflow-x-auto" role="tablist" aria-label="Treatment type">
+        {sorted.map((p) => (
+          <button
+            key={p.treatment_type_id}
+            role="tab"
+            aria-selected={p.treatment_type_id === activeId}
+            onClick={() => setActiveId(p.treatment_type_id)}
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors whitespace-nowrap ${
+              p.treatment_type_id === activeId
+                ? 'bg-emerald-600 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            {p.treatment_type_name}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-4" role="tabpanel">
+        {(() => {
+          const cc = getCycleColorClasses(active.cycles_offered);
+          return (
+            <div className={`p-3 rounded-lg ${cc.bg}`}>
+              <div className={`text-[10px] uppercase font-bold opacity-70 mb-1 ${cc.label}`}>Cycles Offered</div>
+              <div className={`text-2xl font-black leading-tight ${cc.text}`}>
+                {active.cycles_offered > 0 ? (
+                  <>{active.cycles_offered} Full <span className="text-sm font-normal">Cycles</span></>
+                ) : (
+                  'Not specified'
+                )}
+              </div>
+            </div>
+          );
+        })()}
+
+        <div className="p-3 bg-sage rounded-lg">
+          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Age Limit</div>
+          <div className="text-2xl font-black text-sage-text leading-tight">
+            {active.max_age > 0 ? `Up to ${active.max_age}` : 'Not specified'}
+          </div>
+        </div>
+
+        <div className="p-3 bg-sage rounded-lg">
+          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">BMI</div>
+          <div className="text-lg font-black text-sage-text leading-tight">{bmiLabel}</div>
+        </div>
+
+        <div className="p-3 bg-sage rounded-lg">
+          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">IUI Rounds Required</div>
+          <div className="text-2xl font-black text-sage-text leading-tight">
+            {active.iui_rounds_required}
+          </div>
+        </div>
+
+        <div className="p-3 bg-sage rounded-lg col-span-2">
+          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Parental Status</div>
+          <div className="text-sm font-bold text-sage-text leading-tight">
+            {active.living_children_rule || 'Not specified'}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

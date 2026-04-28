@@ -131,8 +131,8 @@ function generateInserts(extraction: IcbExtraction): string[] {
       'id', // selected from icbs
       sqlVal(typeId),
       "'2025-09-11'",
-      sqlVal(p.cycles_offered),
-      sqlVal(p.max_age),
+      sqlVal(p.cycles_offered ?? 0),
+      sqlVal(p.max_age ?? 0),
       sqlVal(p.bmi_min),
       sqlVal(p.bmi_max),
       sqlVal(p.amh_min_pmol),

@@ -13,7 +13,7 @@ import {
   sanitizeSearchParams
 } from '../lib';
 import { checkBasicAuth } from '../auth';
-import { lookupIcbPolicyByIcbCode, resolveIcbIdFromPostcodesIo, resolveDocumentFolder } from '../services/icbPolicy';
+import { lookupAllIcbPoliciesByIcbCode, resolveIcbIdFromPostcodesIo, resolveDocumentFolder } from '../services/icbPolicy';
 import {
   fetchGpPracticesForOutcode,
   getFallbackOutcodeFromPostcode,
@@ -253,13 +253,13 @@ export async function handleApiRequest(request: Request, env: Env) {
         return response;
       }
 
-      const policy = await lookupIcbPolicyByIcbCode(env.DB, icbCode);
-      if (!policy) {
+      const result = await lookupAllIcbPoliciesByIcbCode(env.DB, icbCode);
+      if (!result) {
         response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
         return response;
       }
 
-      response = jsonResponse(policy);
+      response = jsonResponse(result);
       return response;
     }
 

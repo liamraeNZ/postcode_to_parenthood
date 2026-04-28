@@ -76,6 +76,8 @@ Extract ALL distinct treatment eligibility policies from these documents. Many I
 
 IMPORTANT: You may receive multiple documents from different years for the same ICB. When the same treatment type is covered in more than one document, always use the criteria from the MOST RECENT document. However, if an older document covers a treatment type that the newer document does not mention at all, include that older policy too. Never output more than one entry per treatment_type — each treatment_type must appear exactly once in the output.
 
+CRITICAL: Many ICB documents state general eligibility criteria (age limits, BMI, smoking, children rules, etc.) once at the top or in a shared section, then list treatment-specific details separately. These general criteria apply to ALL treatment types unless a specific treatment section explicitly overrides them. When extracting IUI, DI, FET or other treatments, you MUST carry forward the general eligibility criteria (especially max_age, bmi_min, bmi_max, smoking_restricted, living_children_rule) from the shared/general section. Do NOT leave these as null just because the IUI/DI section doesn't restate them.
+
 For each treatment policy found, extract these fields:
 
 - treatment_type: The treatment this policy covers. Use one of: "IVF", "ICSI", "IUI", "DI" (donor insemination), "FET" (frozen embryo transfer), or describe if other. IMPORTANT: If the policy covers IVF and ICSI together (which is common), you MUST output TWO separate entries — one with treatment_type "IVF" and one with treatment_type "ICSI". Even if the criteria are identical, always split them into separate entries. Never use "IVF/ICSI" as a combined type.

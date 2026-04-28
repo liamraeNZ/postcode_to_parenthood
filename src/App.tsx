@@ -8,7 +8,7 @@ import type { PolicyPanelState } from './components/home/PostcodeSearch';
 import { Card, CardTitle } from './components/ui/card';
 import { Badge } from './components/ui/badge';
 import { Sparkles, BarChart3, Loader2 } from 'lucide-react';
-import { getCycleColorClasses } from './utils/cycleColors';
+import { PolicyTabs } from './components/home/PolicyTabs';
 
 type MatchingResource = {
   initials: string;
@@ -37,11 +37,7 @@ const whyFeatures: WhyFeature[] = [
 ];
 
 function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
-  const policy = panel.policy;
-  const bmiLabel =
-    policy && (policy.bmi_min != null || policy.bmi_max != null)
-      ? `${policy.bmi_min ?? '–'} to ${policy.bmi_max ?? '–'}`
-      : 'Not specified';
+  const policiesResponse = panel.policiesResponse;
 
   return (
     <div className="space-y-4">
@@ -57,9 +53,9 @@ function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
                 Loading
               </span>
             </Badge>
-          ) : policy ? (
+          ) : policiesResponse ? (
             <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none mt-1">
-              {policy.icb_name}
+              {policiesResponse.icb_name}
             </Badge>
           ) : null}
         </div>
@@ -70,62 +66,14 @@ function PolicyResultsAside({ panel }: { panel: PolicyPanelState }) {
           </div>
         ) : null}
 
-        <div className="grid grid-cols-2 gap-4">
-          {(() => {
-            const cc = policy ? getCycleColorClasses(policy.cycles_offered) : null;
-            return (
-              <div className={`p-3 rounded-lg ${cc ? cc.bg : 'bg-sage'}`}>
-                <div className={`text-[10px] uppercase font-bold opacity-70 mb-1 ${cc ? cc.label : 'text-emerald-800'}`}>Cycles Offered</div>
-                <div className={`text-2xl font-black leading-tight ${cc ? cc.text : 'text-sage-text'}`}>
-                  {policy ? (
-                    <>
-                      {policy.cycles_offered} Full <span className="text-sm font-normal">Cycles</span>
-                    </>
-                  ) : (
-                    <span className="opacity-40">—</span>
-                  )}
-                </div>
-              </div>
-            );
-          })()}
-
-          <div className="p-3 bg-sage rounded-lg">
-            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Age Limit</div>
-            <div className="text-2xl font-black text-sage-text leading-tight">
-              {policy ? (
-                <>Up to {policy.max_age}</>
-              ) : (
-                <span className="opacity-40">—</span>
-              )}
-            </div>
-          </div>
-
-          <div className="p-3 bg-sage rounded-lg">
-            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">BMI</div>
-            <div className="text-lg font-black text-sage-text leading-tight">
-              {policy ? bmiLabel : <span className="opacity-40">—</span>}
-            </div>
-          </div>
-
-          <div className="p-3 bg-sage rounded-lg">
-            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Parental Status</div>
-            <div className="text-sm font-bold text-sage-text leading-tight">
-              {policy ? (policy.living_children_rule || 'Not specified') : <span className="opacity-40">—</span>}
-            </div>
-          </div>
-
-          <div className="p-3 bg-sage rounded-lg">
-            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">IUI Rounds Required</div>
-            <div className="text-2xl font-black text-sage-text leading-tight">
-              {policy ? policy.iui_rounds_required : <span className="opacity-40">—</span>}
-            </div>
-          </div>
-        </div>
+        {policiesResponse ? (
+          <PolicyTabs policies={policiesResponse.policies} />
+        ) : null}
       </Card>
 
       <IcbDocuments icbCode={panel.icbCode} />
 
-      {policy ? (
+      {policiesResponse ? (
         <div className="rounded-lg border border-gray-200 bg-white/60 p-4 text-xs text-gray-600 leading-relaxed">
           <div className="font-bold text-gray-800">Disclaimer on NHS funding data</div>
           <div className="mt-2 space-y-2">
@@ -159,7 +107,7 @@ export default function App() {
           <section className="col-span-12 lg:col-span-5 flex flex-col gap-6">
             <div className="hidden lg:block">
               <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-auto pr-1">
-                {policyPanel && (policyPanel.policy || policyPanel.isLoading || policyPanel.error) ? (
+                {policyPanel && (policyPanel.policiesResponse || policyPanel.isLoading || policyPanel.error) ? (
                   <PolicyResultsAside panel={policyPanel} />
                 ) : null}
               </div>

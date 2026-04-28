@@ -13,17 +13,17 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { getCycleColorClasses } from '@/utils/cycleColors';
 import {
   getIcbFromGpPractice,
-  lookupICBPolicyByIcbCode,
+  lookupICBPoliciesByIcbCode,
   PostcodeLookupError,
   searchGpPracticesByName,
   searchGpPracticesByPostcode
 } from '@/services/postcodeService';
-import { GpPracticeSummary, ICBPolicy } from '@/types';
+import { GpPracticeSummary, ICBPoliciesResponse } from '@/types';
 import { motion, AnimatePresence } from 'motion/react';
 import { IcbDocuments } from './IcbDocuments';
+import { PolicyTabs } from './PolicyTabs';
 
 type PostcodeLookupAction = 'search' | 'lookup';
 
@@ -31,7 +31,7 @@ export type PolicyPanelState = {
   postcode: string;
   selectedGP: GpPracticeSummary | null;
   icbCode: string | null;
-  policy: ICBPolicy | null;
+  policiesResponse: ICBPoliciesResponse | null;
   isLoading: boolean;
   error: string | null;
 };
@@ -73,7 +73,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
   const [nameSearchResults, setNameSearchResults] = useState<GpPracticeSummary[] | null>(null);
   const [selectedGP, setSelectedGP] = useState<GpPracticeSummary | null>(null);
   const [icbCode, setIcbCode] = useState<string | null>(null);
-  const [result, setResult] = useState<ICBPolicy | null>(null);
+  const [result, setResult] = useState<ICBPoliciesResponse | null>(null);
   const [error, setError] = useState('');
 
   const sortedGpPractices = gpPractices
@@ -107,7 +107,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
       postcode,
       selectedGP: null,
       icbCode: null,
-      policy: null,
+      policiesResponse: null,
       isLoading: false,
       error: null
     });
@@ -174,7 +174,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
       postcode,
       selectedGP: gp,
       icbCode: null,
-      policy: null,
+      policiesResponse: null,
       isLoading: true,
       error: null
     });
@@ -188,7 +188,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
           postcode,
           selectedGP: gp,
           icbCode: null,
-          policy: null,
+          policiesResponse: null,
           isLoading: false,
           error: message
         });
@@ -200,31 +200,31 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
         postcode,
         selectedGP: gp,
         icbCode: resolvedIcbCode,
-        policy: null,
+        policiesResponse: null,
         isLoading: true,
         error: null
       });
-      const policy = await lookupICBPolicyByIcbCode(resolvedIcbCode);
-      if (!policy) {
+      const policiesResult = await lookupICBPoliciesByIcbCode(resolvedIcbCode);
+      if (!policiesResult) {
         const message = "We couldn't find an ICB policy for that GP practice.";
         setError(message);
         onPolicyPanelChange?.({
           postcode,
           selectedGP: gp,
           icbCode: resolvedIcbCode,
-          policy: null,
+          policiesResponse: null,
           isLoading: false,
           error: message
         });
         return;
       }
 
-      setResult(policy);
+      setResult(policiesResult);
       onPolicyPanelChange?.({
         postcode,
         selectedGP: gp,
         icbCode: resolvedIcbCode,
-        policy,
+        policiesResponse: policiesResult,
         isLoading: false,
         error: null
       });
@@ -236,7 +236,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
         postcode,
         selectedGP: gp,
         icbCode: null,
-        policy: null,
+        policiesResponse: null,
         isLoading: false,
         error: message
       });
@@ -436,49 +436,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                 </Badge>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                {(() => {
-                  const cc = getCycleColorClasses(result.cycles_offered);
-                  return (
-                    <div className={`p-3 rounded-lg ${cc.bg}`}>
-                      <div className={`text-[10px] uppercase font-bold opacity-70 mb-1 ${cc.label}`}>Cycles Offered</div>
-                      <div className={`text-2xl font-black leading-tight ${cc.text}`}>
-                        {result.cycles_offered} Full <span className="text-sm font-normal">Cycles</span>
-                      </div>
-                    </div>
-                  );
-                })()}
-
-                <div className="p-3 bg-sage rounded-lg">
-                  <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Age Limit</div>
-                  <div className="text-2xl font-black text-sage-text leading-tight">
-                    Up to {result.max_age}
-                  </div>
-                </div>
-
-                <div className="p-3 bg-sage rounded-lg">
-                  <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">BMI</div>
-                  <div className="text-lg font-black text-sage-text leading-tight">
-                    {result.bmi_min != null || result.bmi_max != null
-                      ? `${result.bmi_min ?? '–'} to ${result.bmi_max ?? '–'}`
-                      : 'Not specified'}
-                  </div>
-                </div>
-
-                <div className="p-3 bg-sage rounded-lg">
-                  <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">IUI Rounds Required</div>
-                  <div className="text-2xl font-black text-sage-text leading-tight">
-                    {result.iui_rounds_required}
-                  </div>
-                </div>
-
-                <div className="p-3 bg-sage rounded-lg col-span-2">
-                  <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Parental Status</div>
-                  <div className="text-sm font-bold text-sage-text leading-tight">
-                    {result.living_children_rule || 'Not specified'}
-                  </div>
-                </div>
-              </div>
+              <PolicyTabs policies={result.policies} />
             </Card>
 
             <IcbDocuments icbCode={icbCode} />
