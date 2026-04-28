@@ -13,3 +13,4 @@ coverage/
 documents/*
 .kiro/*
 .dev.vars
+scripts/output/*

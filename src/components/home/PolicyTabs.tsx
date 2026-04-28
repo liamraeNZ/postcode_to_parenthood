@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { ICBTreatmentPolicy } from '@/types';
 import { getCycleColorClasses } from '@/utils/cycleColors';
-import { CheckCircle2, XCircle, AlertCircle, ChevronDown, ChevronRight, Info } from 'lucide-react';
+import { CheckCircle2, XCircle, AlertCircle, Info } from 'lucide-react';
 
 interface PolicyTabsProps {
   policies: ICBTreatmentPolicy[];
@@ -158,39 +158,18 @@ export function PolicyTabs({ policies }: PolicyTabsProps) {
       </div>
 
       {active.additional_notes && (
-        <AdditionalNotesAccordion notes={active.additional_notes} />
-      )}
-    </div>
-  );
-}
-
-
-function AdditionalNotesAccordion({ notes }: { notes: string }) {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <div className="mt-4 rounded-lg border border-gray-100 overflow-hidden">
-      <button
-        type="button"
-        onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-sage hover:bg-emerald-50 transition-colors text-left"
-        aria-expanded={expanded}
-      >
-        <span className="flex items-center gap-2">
-          {expanded
-            ? <ChevronDown className="w-4 h-4 text-emerald-700" />
-            : <ChevronRight className="w-4 h-4 text-emerald-700" />
-          }
-          <Info className="w-4 h-4 text-emerald-600" />
-          <span className="font-semibold text-sm text-sage-text">Additional Policy Notes</span>
-        </span>
-      </button>
-
-      {expanded && (
-        <div className="px-4 py-3 text-sm text-gray-700 leading-relaxed bg-white">
-          {notes}
+        <div className="mt-4 rounded-lg border border-gray-100 overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-3 bg-sage">
+            <Info className="w-4 h-4 text-emerald-600" />
+            <span className="font-semibold text-sm text-sage-text">Additional Policy Notes</span>
+          </div>
+          <div className="px-4 py-3 text-sm text-gray-700 leading-relaxed bg-white">
+            {active.additional_notes}
+          </div>
         </div>
       )}
     </div>
   );
 }
+
+
