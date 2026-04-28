@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { SELF } from "cloudflare:test";
-import goldenPolicies from "../scripts/extracted-policies.json";
+import goldenPolicies from "../scripts/output/extracted-policies.json";
 
 /**
  * End-to-end tests for the postcode → ICB → policy matching flow.
@@ -126,10 +126,10 @@ describe("Postcode → ICB → Policy end-to-end matching", () => {
         ).toBeDefined();
 
         expect(actual!.cycles_offered, `cycles_offered mismatch for ${treatmentId}`).toBe(
-          goldenPolicy.cycles_offered
+          goldenPolicy.cycles_offered ?? 0
         );
         expect(actual!.max_age, `max_age mismatch for ${treatmentId}`).toBe(
-          goldenPolicy.max_age
+          goldenPolicy.max_age ?? 0
         );
 
         if (goldenPolicy.iui_rounds_required != null) {

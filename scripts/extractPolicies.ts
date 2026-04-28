@@ -16,13 +16,13 @@
  *   --dry-run               List files that would be processed without calling Gemini
  *   --output path.json      Custom output path (default: documents/extracted-policies.json)
  */
-import { GoogleGenAI, Type } from '@google/genai';
+import { GoogleGenAI, Type, ThinkingLevel } from '@google/genai';
 import { readFileSync, readdirSync, statSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { config } from 'dotenv';
 
-const MODEL = 'gemini-3.1-flash-lite-preview';
+const MODEL = 'gemini-3.1-pro-preview';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -69,7 +69,8 @@ const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 // ── Prompt ─────────────────────────────────────────────────────────────────
 
-const EXTRACTION_PROMPT = `Role: You are a specialized medical policy analyst expert in NHS Integrated Care Board (ICB) fertility documents. Your task is to transform unstructured policy text into a precise JSON dataset.
+const EXTRACTION_PROMPT = `Role: You are a specialized medical policy analyst expert in NHS Integrated Care Board (ICB) fertility documents. 
+Your task is to extract unstructured policy text for each of the assister fertility treatments, to aid patients in finding their eligibility for NHS.
 
 Task Objectives:
 1. Deduplicate & Version Control: Process multiple documents. If documents conflict, the newest version takes precedence. If an older document contains a treatment type (e.g., IUI) not mentioned in the newer one, retain the older policy. Never output more than one entry per treatment_type.
@@ -101,32 +102,13 @@ For every treatment found, extract:
 - additional_notes: String, max 50 words (Include details on alcohol, same-sex provisions, or sterilization rules).
 
 Output Requirements:
-- Format: Valid JSON only.
-- No Markdown: Do not use \`\`\`json backticks or any introductory text.
 - Nulls: Use null for any field not found in any provided text.
-
-Structure:
-{
-  "policies": [
-    {
-      "treatment_type": "string",
-      "cycles_offered": integer,
-      "max_age": integer,
-      "min_age": integer,
-      "bmi_min": number,
-      "bmi_max": number,
-      "amh_min_pmol": number,
-      "fsh_max_iu": number,
-      "iui_rounds_required": integer,
-      "endometriosis_priority_access": boolean,
-      "smoking_restricted": boolean,
-      "living_children_rule": "string",
-      "additional_notes": "string"
-    }
-  ],
-  "extraction_confidence": "high|medium|low",
-  "extraction_notes": "string"
-}`;
+- Include your confidence score
+- Confidence Levels:
+  - HIGH: All fields populated, clear treatment sections, no ambiguity
+  - MEDIUM: Some fields null, but enough context to infer or make reasonable assumptions
+  - LOW: Missing key info, ambiguous treatment definitions, or unclear age/bmi ranges
+`;
 
 // ── Response Schema (Controlled Generation) ────────────────────────────────
 
@@ -298,7 +280,7 @@ async function extractFromIcb(icbFolder: string): Promise<IcbExtraction | null> 
       responseMimeType: 'application/json',
       responseSchema: RESPONSE_SCHEMA,
       systemInstruction: EXTRACTION_PROMPT,
-      maxOutputTokens: 16384,
+      maxOutputTokens: 16384
     },
   });
   const inferenceTime = ((performance.now() - inferenceStart) / 1000).toFixed(1);
@@ -359,7 +341,7 @@ async function main() {
   const outputIdx = args.indexOf('--output');
   const outputPath = outputIdx !== -1
     ? args[outputIdx + 1]
-    : join(__dirname, '..', 'scripts', 'extracted-policies.json');
+    : join(__dirname, 'output', `extracted-policies-${MODEL}.json`);
 
   const folders = icbFilter
     ? getIcbFolders().filter(f => f.toLowerCase().includes(icbFilter.toLowerCase()))
