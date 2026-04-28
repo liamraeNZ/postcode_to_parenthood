@@ -1,5 +1,5 @@
 -- ICB policy seed data (generated from extracted PDF policies)
--- Generated: 2026-04-28T14:15:34.460Z
+-- Generated: 2026-04-28T14:21:44.838Z
 -- Source: 38 ICB policy documents via scripts/extractPolicies.ts
 
 -- Bath and North East Somerset, Swindon and Wiltshire (high confidence, 2022)

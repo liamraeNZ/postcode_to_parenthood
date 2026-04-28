@@ -232,108 +232,6 @@ export async function resolveIcbIdFromPostcodesIo(
   return null;
 }
 
-export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) {
-  const normalized = normalizeOdsCode(icbCode);
-  if (!normalized) return null;
-
-  let icbId = await resolveIcbId(db, normalized, null);
-  if (!icbId) {
-    try {
-      const ordUrl = `https://directory.spineservices.nhs.uk/ORD/2-0-0/organisations/${encodeURIComponent(normalized)}`;
-      const ordJson = await fetchOrdJson(ordUrl, { requestId: crypto.randomUUID(), timeoutMs: 8_000 });
-      const ordName = extractOrdOrgName(ordJson);
-
-      icbId = await resolveIcbId(db, normalized, ordName);
-      if (icbId && ordName) {
-        const now = new Date().toISOString();
-        await db
-          .prepare(
-            "insert or ignore into icb_aliases (id, icb_id, alias_kind, alias, created_at, updated_at) values (?1, ?2, 'code', ?3, ?4, ?5)"
-          )
-          .bind(crypto.randomUUID(), icbId, normalized, now, now)
-          .run();
-      }
-    } catch {
-      return null;
-    }
-  }
-
-  if (!icbId) return null;
-
-  async function fetchPolicyForIcbId(targetIcbId: string) {
-    const today = new Date().toISOString().slice(0, 10);
-    const policy = await db
-      .prepare(
-        `
-        select
-          i.name as icb_name,
-          p.treatment_type_id,
-          p.cycles_offered,
-          p.max_age,
-          p.bmi_min,
-          p.bmi_max,
-          p.iui_rounds_required,
-          p.endometriosis_priority_access,
-          p.smoking_restricted,
-          p.living_children_rule,
-          p.updated_at
-        from icb_policies p
-        join icbs i on i.id = p.icb_id
-        where p.icb_id = ?1
-          and p.treatment_type_id = 'ivf'
-          and (p.effective_to is null or p.effective_to >= ?2)
-        order by p.effective_from desc
-        limit 1
-      `
-      )
-      .bind(targetIcbId, today)
-      .first<{
-        icb_name: string;
-        treatment_type_id: string;
-        cycles_offered: number;
-        max_age: number;
-        bmi_min: number | null;
-        bmi_max: number | null;
-        iui_rounds_required: number;
-        endometriosis_priority_access: number;
-        smoking_restricted: number;
-        living_children_rule: string | null;
-        updated_at: string;
-      }>();
-
-    if (!policy) return null;
-
-    return {
-      icb_name: policy.icb_name,
-      cycles_offered: policy.cycles_offered,
-      max_age: policy.max_age,
-      bmi_min: policy.bmi_min,
-      bmi_max: policy.bmi_max,
-      iui_rounds_required: policy.iui_rounds_required,
-      endometriosis_priority_access: Boolean(policy.endometriosis_priority_access),
-      smoking_restricted: Boolean(policy.smoking_restricted),
-      living_children_rule: policy.living_children_rule,
-      updated_at: policy.updated_at
-    };
-  }
-
-  const direct = await fetchPolicyForIcbId(icbId);
-  if (direct) return direct;
-
-  // Fallback UP: if this is a sub-ICB, try the parent ICB's policy
-  const parent = await db
-    .prepare('select parent_icb_code from icbs where id = ?1 limit 1')
-    .bind(icbId)
-    .first<{ parent_icb_code: string | null }>();
-
-  const parentIcbCode = parent?.parent_icb_code ?? null;
-  if (!parentIcbCode) return null;
-
-  const parentIcbId = await resolveIcbId(db, parentIcbCode, null);
-  if (!parentIcbId || parentIcbId === icbId) return null;
-
-  return await fetchPolicyForIcbId(parentIcbId);
-}
 
 export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: string) {
   const normalized = normalizeOdsCode(icbCode);
@@ -373,6 +271,7 @@ export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: str
           p.endometriosis_priority_access,
           p.smoking_restricted,
           p.living_children_rule,
+          p.additional_notes,
           p.updated_at
         from icb_policies p
         join icbs i on i.id = p.icb_id
@@ -407,6 +306,7 @@ export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: str
         endometriosis_priority_access: number;
         smoking_restricted: number;
         living_children_rule: string | null;
+        additional_notes: string | null;
         updated_at: string;
       }>();
 
@@ -428,6 +328,7 @@ export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: str
         endometriosis_priority_access: Boolean(r.endometriosis_priority_access),
         smoking_restricted: Boolean(r.smoking_restricted),
         living_children_rule: r.living_children_rule,
+        additional_notes: r.additional_notes,
         updated_at: r.updated_at,
       })),
     };

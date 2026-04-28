@@ -1,17 +1,3 @@
-export interface ICBPolicy {
-  icb_name: string;
-  treatment_type_id: string;
-  cycles_offered: number;
-  max_age: number;
-  bmi_min: number | null;
-  bmi_max: number | null;
-  iui_rounds_required: number;
-  endometriosis_priority_access: boolean;
-  smoking_restricted: boolean;
-  living_children_rule: string | null;
-  updated_at: string;
-}
-
 export interface ICBTreatmentPolicy {
   treatment_type_id: string;
   treatment_type_name: string;
@@ -26,6 +12,7 @@ export interface ICBTreatmentPolicy {
   endometriosis_priority_access: boolean;
   smoking_restricted: boolean;
   living_children_rule: string | null;
+  additional_notes: string | null;
   updated_at: string;
 }
 
