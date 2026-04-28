@@ -16,11 +16,13 @@
  *   --dry-run               List files that would be processed without calling Gemini
  *   --output path.json      Custom output path (default: documents/extracted-policies.json)
  */
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, Type } from '@google/genai';
 import { readFileSync, readdirSync, statSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { config } from 'dotenv';
+
+const MODEL = 'gemini-3-flash-preview';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -34,7 +36,6 @@ interface ExtractedPolicy {
   amh_min_pmol: number | null;
   fsh_max_iu: number | null;
   iui_rounds_required: number | null;
-  wait_time_months: number | null;
   endometriosis_priority_access: boolean | null;
   smoking_restricted: boolean | null;
   living_children_rule: string | null;
@@ -66,52 +67,102 @@ if (!GEMINI_API_KEY) {
 
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
-const MODEL = 'gemini-3.1-flash-lite-preview';
-
 // ── Prompt ─────────────────────────────────────────────────────────────────
 
-const EXTRACTION_PROMPT = `You are an expert at reading NHS Integrated Care Board (ICB) fertility policy documents.
+const EXTRACTION_PROMPT = `Role: You are a specialized medical policy analyst expert in NHS Integrated Care Board (ICB) fertility documents. Your task is to transform unstructured policy text into a precise JSON dataset.
 
-Extract ALL distinct treatment eligibility policies from these documents. Many ICBs have separate criteria for different treatment types (IVF, ICSI, IUI, etc.). Extract each as a separate policy entry.
+Task Objectives:
+1. Deduplicate & Version Control: Process multiple documents. If documents conflict, the newest version takes precedence. If an older document contains a treatment type (e.g., IUI) not mentioned in the newer one, retain the older policy. Never output more than one entry per treatment_type.
+2. Inheritance Logic: Most ICBs list "General Criteria" (Age, BMI, Smoking, Living Children) in a shared section. You MUST carry these rules forward to every specific treatment (IVF, ICSI, IUI, etc.) unless a specific section explicitly overrides them. Do not leave these as null in the specific treatment entries.
+3. Treatment Splitting: Each entry must have exactly one treatment_type. If a policy covers "IVF/ICSI," you MUST create two separate entries: one for "IVF" and one for "ICSI," even if the criteria are identical.
 
-IMPORTANT: You may receive multiple documents from different years for the same ICB. When the same treatment type is covered in more than one document, always use the criteria from the MOST RECENT document. However, if an older document covers a treatment type that the newer document does not mention at all, include that older policy too. Never output more than one entry per treatment_type — each treatment_type must appear exactly once in the output.
-
-CRITICAL: Many ICB documents state general eligibility criteria (age limits, BMI, smoking, children rules, etc.) once at the top or in a shared section, then list treatment-specific details separately. These general criteria apply to ALL treatment types unless a specific treatment section explicitly overrides them. When extracting IUI, DI, FET or other treatments, you MUST carry forward the general eligibility criteria (especially max_age, bmi_min, bmi_max, smoking_restricted, living_children_rule) from the shared/general section. Do NOT leave these as null just because the IUI/DI section doesn't restate them.
-
-For each treatment policy found, extract these fields:
-
-- treatment_type: The treatment this policy covers. Use one of: "IVF", "ICSI", "IUI", "DI" (donor insemination), "FET" (frozen embryo transfer), or describe if other. IMPORTANT: If the policy covers IVF and ICSI together (which is common), you MUST output TWO separate entries — one with treatment_type "IVF" and one with treatment_type "ICSI". Even if the criteria are identical, always split them into separate entries. Never use "IVF/ICSI" as a combined type.
-- cycles_offered: Number of funded cycles/attempts offered (integer). For IUI this is often 6.
-- max_age: Maximum age for the female partner at time of treatment (integer). Look for phrases like "up to X", "under X", "not yet reached Xth birthday". "Up to 40" means max_age=40. "Under 40" means max_age=39.
-- min_age: Minimum age if specified (integer), often not stated.
-- bmi_min: Minimum BMI required for the female partner (number). Often 19 or not specified.
-- bmi_max: Maximum BMI for the female partner (number). Often 30 but can be 35 or other values. Some policies specify different BMI for male vs female — extract the FEMALE partner's BMI max.
-- amh_min_pmol: Minimum AMH level in pmol/L if specified (number).
-- fsh_max_iu: Maximum FSH level in IU/L if specified (number).
-- iui_rounds_required: Number of IUI rounds required before IVF funding (integer). 0 if not required. This only applies to IVF/ICSI policies.
-- wait_time_months: Months of trying to conceive naturally before eligible (integer). Often 24 or 36 months.
-- endometriosis_priority_access: Whether patients with endometriosis get priority/expedited access (true/false).
-- smoking_restricted: Whether there is a smoking restriction — e.g. must be non-smoker or have quit (true/false).
+Data Extraction Schema:
+For every treatment found, extract:
+- treatment_type: Use exactly "IVF", "ICSI", "IUI", "DI", or "FET". No combined types like "IVF/ICSI".
+  IMPORTANT guidance on DI (Donor Insemination) vs IUI:
+  - Only extract DI as a SEPARATE entry if the document explicitly defines distinct eligibility criteria or cycle counts for donor insemination that differ from IUI.
+  - If the document describes IUI as available with either partner sperm or donor sperm (same criteria, same cycle count), do NOT create a separate DI entry — it's just IUI.
+  - If the document mentions donor sperm only in the context of eligibility (e.g. "same-sex couples must complete X self-funded AI/DI cycles"), that is a prerequisite for IVF/IUI, not a separate funded DI treatment.
+  - A separate DI entry is appropriate when the document says something like "6 cycles of donor insemination are funded for patients with azoospermia" with its own criteria.
+- cycles_offered: Integer. This MUST always be populated. If the document doesn't state a specific number for a treatment, look for it in the general criteria or infer from context (e.g. "up to 6 cycles of IUI/DI" means both IUI and DI get 6). If truly not determinable, use the same value as the most similar treatment (e.g. DI inherits from IUI).
+- max_age: Integer (Female). Calculation: "Up to 40" = 40; "Under 40" = 39. This MUST always be populated — inherit from general criteria if not stated in the treatment-specific section.
+- min_age: Integer or null.
+- bmi_min / bmi_max: Numeric (Female partner).
+- amh_min_pmol / fsh_max_iu: Numeric or null.
+- iui_rounds_required: Integer (Specifically for IVF/ICSI eligibility). Use 0 if not required.
+- endometriosis_priority_access: Boolean.
+- smoking_restricted: Boolean (True if "non-smoker" or "must quit" is required).
 - living_children_rule: The rule about existing children. Common patterns:
   - "No children from current or previous relationships"
   - "No children from current relationship"
   - "At least one person should have no children from current or previous relationships"
   - "No living children" (either partner)
   Use the exact wording from the document where possible, normalised to a short summary.
-- additional_notes: Any other notable eligibility criteria not captured above (e.g. alcohol restrictions, specific medical conditions, same-sex couple provisions, previous sterilisation rules).
+- additional_notes: String, max 50 words (Include details on alcohol, same-sex provisions, or sterilization rules).
 
-Also provide:
-- extraction_confidence: "high" if the document clearly states criteria, "medium" if some interpretation was needed, "low" if the document is vague or criteria are unclear.
-- extraction_notes: Any notes about ambiguity, missing information, or assumptions made.
+Output Requirements:
+- Format: Valid JSON only.
+- No Markdown: Do not use \`\`\`json backticks or any introductory text.
+- Nulls: Use null for any field not found in any provided text.
 
-Respond with valid JSON only, no markdown fencing. Use this exact structure:
+Structure:
 {
-  "policies": [ ... array of policy objects ... ],
+  "policies": [
+    {
+      "treatment_type": "string",
+      "cycles_offered": integer,
+      "max_age": integer,
+      "min_age": integer,
+      "bmi_min": number,
+      "bmi_max": number,
+      "amh_min_pmol": number,
+      "fsh_max_iu": number,
+      "iui_rounds_required": integer,
+      "endometriosis_priority_access": boolean,
+      "smoking_restricted": boolean,
+      "living_children_rule": "string",
+      "additional_notes": "string"
+    }
+  ],
   "extraction_confidence": "high|medium|low",
-  "extraction_notes": "string or null"
-}
+  "extraction_notes": "string"
+}`;
 
-If a field cannot be determined from the document, use null.`;
+// ── Response Schema (Controlled Generation) ────────────────────────────────
+
+const RESPONSE_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    policies: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          treatment_type: { type: Type.STRING },
+          cycles_offered: { type: Type.INTEGER, nullable: true, minimum: 0, maximum: 20 },
+          max_age: { type: Type.INTEGER, nullable: true, minimum: 0, maximum: 100 },
+          min_age: { type: Type.INTEGER, nullable: true, minimum: 0, maximum: 100 },
+          bmi_min: { type: Type.NUMBER, nullable: true, minimum: 0, maximum: 100 },
+          bmi_max: { type: Type.NUMBER, nullable: true, minimum: 0, maximum: 100 },
+          amh_min_pmol: { type: Type.NUMBER, nullable: true, minimum: 0, maximum: 200 },
+          fsh_max_iu: { type: Type.NUMBER, nullable: true, minimum: 0, maximum: 200 },
+          iui_rounds_required: { type: Type.INTEGER, nullable: true, minimum: 0, maximum: 20 },
+          endometriosis_priority_access: { type: Type.BOOLEAN, nullable: true },
+          smoking_restricted: { type: Type.BOOLEAN, nullable: true },
+          living_children_rule: { type: Type.STRING, nullable: true, maxLength: 150 },
+          additional_notes: { type: Type.STRING, nullable: true, maxLength: 350 },
+        },
+        required: ['treatment_type'],
+      },
+    },
+    extraction_confidence: {
+      type: Type.STRING,
+      enum: ['high', 'medium', 'low'],
+    },
+    extraction_notes: { type: Type.STRING, nullable: true, maxLength: 500 },
+  },
+  required: ['policies', 'extraction_confidence'],
+};
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -165,58 +216,85 @@ async function extractFromIcb(icbFolder: string): Promise<IcbExtraction | null> 
   console.log(`  📄 ${files.length} file(s) from ${years.join(', ')}`);
 
   // Upload files to Gemini
+  const uploadStart = performance.now();
   const uploadedFiles = [];
   for (const filePath of files) {
     const ext = extname(filePath).toLowerCase();
-    const mimeType = ext === '.pdf' ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const mimeType = 'application/pdf';
+    const fileName = filePath.split('/').pop();
+    const fileSize = statSync(filePath).size;
 
     try {
+      const t0 = performance.now();
       const uploaded = await ai.files.upload({
         file: filePath,
         config: { mimeType },
       });
       uploadedFiles.push(uploaded);
-      console.log(`    ✓ uploaded ${filePath.split('/').pop()}`);
+      console.log(`    ✓ uploaded ${fileName} (${(fileSize / 1024).toFixed(0)} KB) in ${((performance.now() - t0) / 1000).toFixed(1)}s`);
     } catch (err) {
-      console.error(`    ✗ upload failed for ${filePath.split('/').pop()}:`, (err as Error).message);
+      console.error(`    ✗ upload failed for ${fileName}:`, (err as Error).message);
     }
   }
+  console.log(`    ⏱ uploads total: ${((performance.now() - uploadStart) / 1000).toFixed(1)}s`);
 
   if (uploadedFiles.length === 0) {
     return null;
   }
 
   // Wait for files to be processed
+  const processingStart = performance.now();
   for (const file of uploadedFiles) {
     if (!file.name) continue;
     let status = file.state;
+    let polls = 0;
     while (status === 'PROCESSING') {
+      polls++;
       await sleep(2000);
       const updated = await ai.files.get({ name: file.name });
       status = updated.state;
     }
     if (status === 'FAILED') {
       console.error(`    ✗ processing failed for ${file.name}`);
+    } else if (polls > 0) {
+      console.log(`    ⏱ ${file.name?.split('/').pop()} processing settled after ${polls} poll(s) (${((performance.now() - processingStart) / 1000).toFixed(1)}s)`);
     }
   }
+  if (uploadedFiles.length > 0) {
+    console.log(`    ⏱ file processing total: ${((performance.now() - processingStart) / 1000).toFixed(1)}s`);
+  }
 
-  // Build content parts
+  // Build content parts — just the files, system instruction handles the prompt
   const parts: Array<{ fileData: { fileUri: string; mimeType: string } } | { text: string }> = [];
   for (const file of uploadedFiles) {
     if (file.uri && file.mimeType) {
       parts.push({ fileData: { fileUri: file.uri, mimeType: file.mimeType } });
     }
   }
-  parts.push({ text: EXTRACTION_PROMPT });
+  parts.push({ text: `Extract the fertility eligibility policies from these ${icbFolder} ICB documents.` });
 
-  // Call Gemini
+  // Call Gemini with controlled generation
+  console.log(`    🤖 calling ${MODEL} with ${uploadedFiles.length} file(s) and schema enforcement...`);
+  const inferenceStart = performance.now();
   const response = await ai.models.generateContent({
     model: MODEL,
     contents: [{ role: 'user', parts }],
     config: {
       temperature: 0.1, // low temperature for factual extraction
+      responseMimeType: 'application/json',
+      responseSchema: RESPONSE_SCHEMA,
+      systemInstruction: EXTRACTION_PROMPT,
+      maxOutputTokens: 16384,
     },
   });
+  const inferenceTime = ((performance.now() - inferenceStart) / 1000).toFixed(1);
+
+  const usage = response.usageMetadata;
+  if (usage) {
+    console.log(`    ⏱ inference: ${inferenceTime}s | tokens — prompt: ${usage.promptTokenCount ?? '?'}, response: ${usage.candidatesTokenCount ?? '?'}, total: ${usage.totalTokenCount ?? '?'}`);
+  } else {
+    console.log(`    ⏱ inference: ${inferenceTime}s (no usage metadata returned)`);
+  }
 
   const text = response.text?.trim();
   if (!text) {
@@ -224,11 +302,10 @@ async function extractFromIcb(icbFolder: string): Promise<IcbExtraction | null> 
     return null;
   }
 
-  // Parse JSON response (strip markdown fencing if present)
+  // Parse the guaranteed-valid JSON response
   let parsed: { policies: ExtractedPolicy[]; extraction_confidence: 'high' | 'medium' | 'low'; extraction_notes: string | null };
   try {
-    const jsonStr = text.replace(/^```json?\n?/, '').replace(/\n?```$/, '');
-    parsed = JSON.parse(jsonStr);
+    parsed = JSON.parse(text);
   } catch (err) {
     console.error(`    ✗ failed to parse JSON response:`, text.slice(0, 200));
     return null;

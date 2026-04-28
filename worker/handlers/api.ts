@@ -479,7 +479,6 @@ export async function handleApiRequest(request: Request, env: Env) {
             effective_to: typeof body.value.effective_to === 'string' ? body.value.effective_to : null,
             bmi_min: typeof body.value.bmi_min === 'number' ? body.value.bmi_min : null,
             bmi_max: typeof body.value.bmi_max === 'number' ? body.value.bmi_max : null,
-            wait_time_months: typeof body.value.wait_time_months === 'number' ? body.value.wait_time_months : null,
             endometriosis_priority_access: body.value.endometriosis_priority_access === true,
             smoking_restricted: body.value.smoking_restricted !== false,
             source_url: typeof body.value.source_url === 'string' ? body.value.source_url : null,

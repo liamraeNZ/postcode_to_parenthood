@@ -56,7 +56,6 @@ create table if not exists icb_policies (
   amh_min_pmol real,
   fsh_max_iu real,
   iui_rounds_required integer not null default 6 check (iui_rounds_required >= 0),
-  wait_time_months integer check (wait_time_months is null or wait_time_months >= 0),
   endometriosis_priority_access integer not null default 0,
   smoking_restricted integer not null default 1,
   living_children_rule text,

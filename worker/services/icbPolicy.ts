@@ -273,7 +273,6 @@ export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) 
           p.bmi_min,
           p.bmi_max,
           p.iui_rounds_required,
-          p.wait_time_months,
           p.endometriosis_priority_access,
           p.smoking_restricted,
           p.living_children_rule,
@@ -296,7 +295,6 @@ export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) 
         bmi_min: number | null;
         bmi_max: number | null;
         iui_rounds_required: number;
-        wait_time_months: number | null;
         endometriosis_priority_access: number;
         smoking_restricted: number;
         living_children_rule: string | null;
@@ -312,7 +310,6 @@ export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) 
       bmi_min: policy.bmi_min,
       bmi_max: policy.bmi_max,
       iui_rounds_required: policy.iui_rounds_required,
-      wait_time_months: policy.wait_time_months,
       endometriosis_priority_access: Boolean(policy.endometriosis_priority_access),
       smoking_restricted: Boolean(policy.smoking_restricted),
       living_children_rule: policy.living_children_rule,
@@ -370,7 +367,6 @@ export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: str
           p.bmi_min,
           p.bmi_max,
           p.iui_rounds_required,
-          p.wait_time_months,
           p.endometriosis_priority_access,
           p.smoking_restricted,
           p.living_children_rule,
@@ -402,7 +398,6 @@ export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: str
         bmi_min: number | null;
         bmi_max: number | null;
         iui_rounds_required: number;
-        wait_time_months: number | null;
         endometriosis_priority_access: number;
         smoking_restricted: number;
         living_children_rule: string | null;
@@ -421,7 +416,6 @@ export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: str
         bmi_min: r.bmi_min,
         bmi_max: r.bmi_max,
         iui_rounds_required: r.iui_rounds_required,
-        wait_time_months: r.wait_time_months,
         endometriosis_priority_access: Boolean(r.endometriosis_priority_access),
         smoking_restricted: Boolean(r.smoking_restricted),
         living_children_rule: r.living_children_rule,

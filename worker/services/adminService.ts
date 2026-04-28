@@ -170,10 +170,10 @@ export async function createPolicy(
         `INSERT INTO icb_policies (
           id, icb_id, treatment_type_id, effective_from, effective_to,
           cycles_offered, max_age, bmi_min, bmi_max,
-          iui_rounds_required, wait_time_months,
+          iui_rounds_required,
           endometriosis_priority_access, smoking_restricted,
           living_children_rule, source_url
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
         policyId,
@@ -186,7 +186,6 @@ export async function createPolicy(
         data.bmi_min ?? null,
         data.bmi_max ?? null,
         data.iui_rounds_required,
-        data.wait_time_months ?? null,
         data.endometriosis_priority_access ? 1 : 0,
         data.smoking_restricted !== false ? 1 : 0,
         data.living_children_rule,

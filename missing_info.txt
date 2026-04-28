@@ -2,33 +2,27 @@
 
 Bath and North East Somerset, Swindon and Wiltshire:
   DI -> cycles_offered = null
-Cambridgeshire and Peterborough:
-  DI -> cycles_offered = null
-Cornwall and the Isles of Scilly:
-  DI -> cycles_offered = null
-Coventry and Warwickshire:
-  IUI -> cycles_offered = null
-  IUI -> max_age = null
-  DI -> cycles_offered = null
-Hertfordshire and West Essex:
-  DI -> cycles_offered = null
+Buckinghamshire, Oxfordshire and Berkshire West:
+  FET -> cycles_offered = 0
+Frimley:
+  FET -> cycles_offered = 0
 Mid and South Essex:
   IUI -> cycles_offered = 0
-  DI -> cycles_offered = null
-  FET -> cycles_offered = null
+  DI -> cycles_offered = 0
+  FET -> cycles_offered = 0
 Norfolk and Waveney:
-  IUI -> max_age = null
-  DI -> max_age = null
-North Central London:
   FET -> cycles_offered = null
-South West London:
-  IUI -> max_age = null
+North East and North Cumbria:
+  FET -> cycles_offered = null
+South East London:
+  FET -> cycles_offered = null
 South Yorkshire:
-  IUI -> max_age = null
+  FET -> cycles_offered = null
 Staffordshire and Stoke-on-Trent:
   IUI -> cycles_offered = 0
-  IUI -> max_age = null
-Sussex:
-  IUI -> max_age = null
+  DI -> cycles_offered = 0
+  FET -> cycles_offered = 0
+Suffolk and North East Essex:
+  FET -> cycles_offered = null
 
-18 issues across 12 ICBs
+14 issues across 10 ICBs

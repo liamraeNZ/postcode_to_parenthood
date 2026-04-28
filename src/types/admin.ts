@@ -22,7 +22,6 @@ export interface AdminPolicy {
   bmi_min: number | null;
   bmi_max: number | null;
   iui_rounds_required: number;
-  wait_time_months: number | null;
   endometriosis_priority_access: boolean;
   smoking_restricted: boolean;
   living_children_rule: string | null;
@@ -59,7 +58,6 @@ export interface CreatePolicyInput {
   effective_to?: string | null;
   bmi_min?: number | null;
   bmi_max?: number | null;
-  wait_time_months?: number | null;
   endometriosis_priority_access?: boolean;
   smoking_restricted?: boolean;
   source_url?: string | null;

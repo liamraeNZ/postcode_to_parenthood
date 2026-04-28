@@ -25,7 +25,6 @@ interface ExtractedPolicy {
   amh_min_pmol: number | null;
   fsh_max_iu: number | null;
   iui_rounds_required: number | null;
-  wait_time_months: number | null;
   endometriosis_priority_access: boolean | null;
   smoking_restricted: boolean | null;
   living_children_rule: string | null;
@@ -121,7 +120,7 @@ function generateInserts(extraction: IcbExtraction): string[] {
       'id', 'icb_id', 'treatment_type_id', 'effective_from',
       'cycles_offered', 'max_age', 'bmi_min', 'bmi_max',
       'amh_min_pmol', 'fsh_max_iu',
-      'iui_rounds_required', 'wait_time_months',
+      'iui_rounds_required',
       'endometriosis_priority_access', 'smoking_restricted',
       'living_children_rule',
     ];
@@ -138,7 +137,6 @@ function generateInserts(extraction: IcbExtraction): string[] {
       sqlVal(p.amh_min_pmol),
       sqlVal(p.fsh_max_iu),
       sqlVal(p.iui_rounds_required ?? 0),
-      sqlVal(p.wait_time_months),
       sqlVal(p.endometriosis_priority_access ?? false),
       sqlVal(p.smoking_restricted ?? true),
       sqlVal(p.living_children_rule),
