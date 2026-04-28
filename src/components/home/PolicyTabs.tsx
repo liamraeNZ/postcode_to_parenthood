@@ -78,14 +78,16 @@ export function PolicyTabs({ policies }: PolicyTabsProps) {
           <div className="text-lg font-black text-sage-text leading-tight">{bmiLabel}</div>
         </div>
 
-        <div className="p-3 bg-sage rounded-lg">
-          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">
-            Insemination Rounds Before Treatment
+        {(active.treatment_type_id !== 'iui' || (active.iui_rounds_required != null && active.iui_rounds_required > 0)) && (
+          <div className="p-3 bg-sage rounded-lg">
+            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">
+              Insemination Rounds Before Treatment
+            </div>
+            <div className="text-2xl font-black text-sage-text leading-tight">
+              {active.iui_rounds_required > 0 ? active.iui_rounds_required : 'None'}
+            </div>
           </div>
-          <div className="text-2xl font-black text-sage-text leading-tight">
-            {active.iui_rounds_required > 0 ? active.iui_rounds_required : 'None'}
-          </div>
-        </div>
+        )}
 
         {active.amh_min_pmol != null && (
           <div className="p-3 bg-sage rounded-lg">

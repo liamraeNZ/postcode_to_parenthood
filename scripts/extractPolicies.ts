@@ -99,7 +99,12 @@ For every treatment found, extract:
   - "At least one person should have no children from current or previous relationships"
   - "No living children" (either partner)
   Use the exact wording from the document where possible, normalised to a short summary.
-- additional_notes: String, max 50 words (Include details on alcohol, same-sex provisions, or sterilization rules).
+- additional_notes: String, max 80 words. MUST include:
+  - Referral pathway nuances (e.g. "Referral for assessment after 6 self-funded IUI cycles, or 3 if aged 36+")
+  - Clinical-cause bypass rules (e.g. "IVF without delay if known clinical cause and IVF is only effective treatment")
+  - Age-dependent cycle variations (e.g. "Under 40: 3 cycles; 40-42: 1 cycle")
+  - Same-sex/single person provisions and any self-funded cycle prerequisites
+  - Sterilisation exclusions, alcohol rules, or other notable restrictions
 
 Output Requirements:
 - Nulls: Use null for any field not found in any provided text.
@@ -132,7 +137,7 @@ const RESPONSE_SCHEMA = {
           endometriosis_priority_access: { type: Type.BOOLEAN, nullable: true },
           smoking_restricted: { type: Type.BOOLEAN, nullable: true },
           living_children_rule: { type: Type.STRING, nullable: true, maxLength: 150 },
-          additional_notes: { type: Type.STRING, nullable: true, maxLength: 350 },
+          additional_notes: { type: Type.STRING, nullable: true, maxLength: 500 },
         },
         required: [
           'treatment_type',

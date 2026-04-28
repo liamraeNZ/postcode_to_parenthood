@@ -60,6 +60,7 @@ create table if not exists icb_policies (
   endometriosis_priority_access integer not null default 0,
   smoking_restricted integer not null default 1,
   living_children_rule text,
+  additional_notes text,
   source_url text,
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),

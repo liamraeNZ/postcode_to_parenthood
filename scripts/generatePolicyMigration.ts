@@ -123,6 +123,7 @@ function generateInserts(extraction: IcbExtraction): string[] {
       'iui_rounds_required',
       'endometriosis_priority_access', 'smoking_restricted',
       'living_children_rule',
+      'additional_notes',
     ];
 
     const vals = [
@@ -141,6 +142,7 @@ function generateInserts(extraction: IcbExtraction): string[] {
       sqlVal(p.endometriosis_priority_access ?? false),
       sqlVal(p.smoking_restricted ?? true),
       sqlVal(p.living_children_rule),
+      sqlVal(p.additional_notes),
     ];
 
     statements.push(
