@@ -118,7 +118,7 @@ function generateInserts(extraction: IcbExtraction): string[] {
 
     const cols = [
       'id', 'icb_id', 'treatment_type_id', 'effective_from',
-      'cycles_offered', 'max_age', 'bmi_min', 'bmi_max',
+      'cycles_offered', 'min_age', 'max_age', 'bmi_min', 'bmi_max',
       'amh_min_pmol', 'fsh_max_iu',
       'iui_rounds_required',
       'endometriosis_priority_access', 'smoking_restricted',
@@ -131,6 +131,7 @@ function generateInserts(extraction: IcbExtraction): string[] {
       sqlVal(typeId),
       "'2025-09-11'",
       sqlVal(p.cycles_offered ?? 0),
+      sqlVal(p.min_age),
       sqlVal(p.max_age ?? 0),
       sqlVal(p.bmi_min),
       sqlVal(p.bmi_max),

@@ -363,9 +363,12 @@ export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: str
           p.treatment_type_id,
           t.name as treatment_type_name,
           p.cycles_offered,
+          p.min_age,
           p.max_age,
           p.bmi_min,
           p.bmi_max,
+          p.amh_min_pmol,
+          p.fsh_max_iu,
           p.iui_rounds_required,
           p.endometriosis_priority_access,
           p.smoking_restricted,
@@ -394,9 +397,12 @@ export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: str
         treatment_type_id: string;
         treatment_type_name: string;
         cycles_offered: number;
+        min_age: number | null;
         max_age: number;
         bmi_min: number | null;
         bmi_max: number | null;
+        amh_min_pmol: number | null;
+        fsh_max_iu: number | null;
         iui_rounds_required: number;
         endometriosis_priority_access: number;
         smoking_restricted: number;
@@ -412,9 +418,12 @@ export async function lookupAllIcbPoliciesByIcbCode(db: D1Database, icbCode: str
         treatment_type_id: r.treatment_type_id,
         treatment_type_name: r.treatment_type_name,
         cycles_offered: r.cycles_offered,
+        min_age: r.min_age,
         max_age: r.max_age,
         bmi_min: r.bmi_min,
         bmi_max: r.bmi_max,
+        amh_min_pmol: r.amh_min_pmol,
+        fsh_max_iu: r.fsh_max_iu,
         iui_rounds_required: r.iui_rounds_required,
         endometriosis_priority_access: Boolean(r.endometriosis_priority_access),
         smoking_restricted: Boolean(r.smoking_restricted),

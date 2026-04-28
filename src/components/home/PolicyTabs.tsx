@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ICBTreatmentPolicy } from '@/types';
 import { getCycleColorClasses } from '@/utils/cycleColors';
+import { CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 
 interface PolicyTabsProps {
   policies: ICBTreatmentPolicy[];
@@ -60,21 +61,87 @@ export function PolicyTabs({ policies }: PolicyTabsProps) {
         })()}
 
         <div className="p-3 bg-sage rounded-lg">
-          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Age Limit</div>
+          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Age Range</div>
           <div className="text-2xl font-black text-sage-text leading-tight">
-            {active.max_age > 0 ? `Up to ${active.max_age}` : 'Not specified'}
+            {active.min_age != null && active.max_age > 0
+              ? `${active.min_age} – ${active.max_age}`
+              : active.max_age > 0
+                ? `Up to ${active.max_age}`
+                : active.min_age != null
+                  ? `${active.min_age}+`
+                  : 'Not specified'}
           </div>
         </div>
 
         <div className="p-3 bg-sage rounded-lg">
-          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">BMI</div>
+          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">BMI Range</div>
           <div className="text-lg font-black text-sage-text leading-tight">{bmiLabel}</div>
         </div>
 
         <div className="p-3 bg-sage rounded-lg">
-          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">IUI Rounds Required</div>
+          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">
+            Insemination Rounds Before Treatment
+          </div>
           <div className="text-2xl font-black text-sage-text leading-tight">
-            {active.iui_rounds_required}
+            {active.iui_rounds_required > 0 ? active.iui_rounds_required : 'None'}
+          </div>
+        </div>
+
+        {active.amh_min_pmol != null && (
+          <div className="p-3 bg-sage rounded-lg">
+            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">
+              Min. Ovarian Reserve (AMH)
+            </div>
+            <div className="text-lg font-black text-sage-text leading-tight">
+              {active.amh_min_pmol} <span className="text-xs font-normal">pmol/L</span>
+            </div>
+          </div>
+        )}
+
+        {active.fsh_max_iu != null && (
+          <div className="p-3 bg-sage rounded-lg">
+            <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">
+              Max. FSH Level
+            </div>
+            <div className="text-lg font-black text-sage-text leading-tight">
+              {active.fsh_max_iu} <span className="text-xs font-normal">IU/L</span>
+            </div>
+          </div>
+        )}
+
+        <div className="p-3 bg-sage rounded-lg">
+          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">Smoking</div>
+          <div className="flex items-center gap-1.5">
+            {active.smoking_restricted ? (
+              <>
+                <XCircle className="w-4 h-4 text-red-600 shrink-0" aria-hidden="true" />
+                <span className="text-sm font-bold text-sage-text">Must be non-smoker</span>
+              </>
+            ) : (
+              <>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                <span className="text-sm font-bold text-sage-text">No restriction</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="p-3 bg-sage rounded-lg">
+          <div className="text-[10px] uppercase font-bold text-emerald-800 opacity-70 mb-1">
+            Endometriosis Priority
+          </div>
+          <div className="flex items-center gap-1.5">
+            {active.endometriosis_priority_access ? (
+              <>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                <span className="text-sm font-bold text-sage-text">Priority access</span>
+              </>
+            ) : (
+              <>
+                <AlertCircle className="w-4 h-4 text-gray-400 shrink-0" aria-hidden="true" />
+                <span className="text-sm font-bold text-sage-text">Standard pathway</span>
+              </>
+            )}
           </div>
         </div>
 
