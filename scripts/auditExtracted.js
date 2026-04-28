@@ -4,7 +4,7 @@
  * Run with: node scripts/auditExtracted.js
  */
 import { readFileSync } from 'fs';
-const data = JSON.parse(readFileSync('./documents/extracted-policies.json', 'utf-8'));
+const data = JSON.parse(readFileSync('./scripts/extracted-policies.json', 'utf-8'));
 
 const issues = [];
 

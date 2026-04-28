@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { SELF } from "cloudflare:test";
-import goldenPolicies from "../documents/extracted-policies.json";
+import goldenPolicies from "../scripts/extracted-policies.json";
 
 /**
  * End-to-end tests for the postcode → ICB → policy matching flow.

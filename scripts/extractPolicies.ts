@@ -22,7 +22,7 @@ import { join, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { config } from 'dotenv';
 
-const MODEL = 'gemini-3-flash-preview';
+const MODEL = 'gemini-3.1-flash-lite-preview';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -152,7 +152,21 @@ const RESPONSE_SCHEMA = {
           living_children_rule: { type: Type.STRING, nullable: true, maxLength: 150 },
           additional_notes: { type: Type.STRING, nullable: true, maxLength: 350 },
         },
-        required: ['treatment_type'],
+        required: [
+          'treatment_type',
+          'cycles_offered',
+          'max_age',
+          'min_age',
+          'bmi_min',
+          'bmi_max',
+          'iui_rounds_required',
+          'amh_min_pmol',
+          'fsh_max_iu',
+          'endometriosis_priority_access',
+          'smoking_restricted',
+          'living_children_rule',
+          'additional_notes',
+        ],
       },
     },
     extraction_confidence: {
@@ -345,7 +359,7 @@ async function main() {
   const outputIdx = args.indexOf('--output');
   const outputPath = outputIdx !== -1
     ? args[outputIdx + 1]
-    : join(__dirname, '..', 'documents', 'extracted-policies.json');
+    : join(__dirname, '..', 'scripts', 'extracted-policies.json');
 
   const folders = icbFilter
     ? getIcbFolders().filter(f => f.toLowerCase().includes(icbFilter.toLowerCase()))

@@ -1,0 +1,2232 @@
+[
+  {
+    "icb_folder_name": "Kent and Medway",
+    "document_files": [
+      "policies/Kent and Medway/2024/Kent_and_Medway_ART_policy_document_June_2024-1.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:16:53.648Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 2,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner in a couple should have a living child from their relationship or any previous relationship; single persons should not have a living child.",
+        "additional_notes": "Maximum 4 embryo transfers total (max 2 from fresh cycles). Prior approval required for each fresh cycle. Partner BMI must be below 30. E-cigarettes allowed. No funding for surrogacy."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 2,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner in a couple should have a living child from their relationship or any previous relationship; single persons should not have a living child.",
+        "additional_notes": "Follows same eligibility and cycle limits as IVF. Prior approval required. Partner BMI must be below 30. E-cigarettes allowed."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner in a couple should have a living child from their relationship or any previous relationship; single persons should not have a living child.",
+        "additional_notes": "Unstimulated IUI. Available for specific clinical conditions or as an alternative to IVF for those with social/cultural/religious objections. Partner BMI must be below 30. E-cigarettes allowed."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": 4,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner in a couple should have a living child from their relationship or any previous relationship; single persons should not have a living child.",
+        "additional_notes": "Part of the total 4 embryo transfer limit (max 2 fresh). Storage of supernumerary embryos funded for 2 years post-fresh cycle."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Policies are consistent across the document. IVF/ICSI/FET share the same cycle and eligibility constraints. IUI is limited to 6 cycles. Age limit is 'under 40' (interpreted as 39). Partner BMI requirement applies to all treatments."
+  },
+  {
+    "icb_folder_name": "Bath and North East Somerset, Swindon and Wiltshire",
+    "document_files": [
+      "policies/Bath and North East Somerset, Swindon and Wiltshire/2022/BSW-ICB-CP022-Assisted-Conception.pdf",
+      "policies/Bath and North East Somerset, Swindon and Wiltshire/2022/BSW-ICB-CP022-FC-Assisted-conception-Criteria-Checklist.pdf"
+    ],
+    "document_year": "2022",
+    "extracted_at": "2026-04-28T12:17:51.379Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": 25,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationship (either partner). Single patients must not have children.",
+        "additional_notes": "Funding is for 1 fresh cycle. Max 2 embryo transfers (1 fresh, 1 frozen). Male partner must be under 55. Stable relationship for 2 years required. Alcohol must be within guidelines; no recreational drugs. No funding for surrogacy or reversal of sterilization."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": 25,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationship (either partner). Single patients must not have children.",
+        "additional_notes": "Funding is for 1 fresh cycle. Max 2 embryo transfers (1 fresh, 1 frozen). Male partner must be under 55. Stable relationship for 2 years required. Alcohol must be within guidelines; no recreational drugs. No funding for surrogacy or reversal of sterilization."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 2,
+        "max_age": 40,
+        "min_age": 25,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationship (either partner). Single patients must not have children.",
+        "additional_notes": "NHS funds 2 cycles of IUI after 10 self-funded cycles (4 of which must be IUI) for same-sex/single women. Male partner must be under 55. Stable relationship for 2 years required. Alcohol must be within guidelines; no recreational drugs."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy specifies 1 full cycle of IVF/ICSI (defined as 1 fresh and 1 frozen transfer). IUI is only funded as a specific pathway for same-sex/single women after 10 self-funded cycles. General criteria (Age, BMI, Smoking, Childlessness, Residency, Stable Relationship) apply to all treatments."
+  },
+  {
+    "icb_folder_name": "Bedfordshire, Luton and Milton Keynes",
+    "document_files": [
+      "policies/Bedfordshire, Luton and Milton Keynes/2022/Fertility Services Commissioning Policy v1.3-FINAL.pdf"
+    ],
+    "document_year": "2022",
+    "extracted_at": "2026-04-28T12:17:53.319Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships, to either partner.",
+        "additional_notes": "One full cycle includes 1 fresh and up to 3 frozen transfers. Patients who have previously self-funded are eligible for one NHS-funded cycle if they have not had more than two self-funded fresh cycles. Same-sex female couples/single people eligible after 6 cycles of self-funded AI/IUI."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships, to either partner.",
+        "additional_notes": "One full cycle includes 1 fresh and up to 3 frozen transfers. Patients who have previously self-funded are eligible for one NHS-funded cycle if they have not had more than two self-funded fresh cycles. Sperm donation must be through a licensed UK clinic."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships, to either partner.",
+        "additional_notes": "Unstimulated IUI is offered as an alternative to vaginal intercourse for specific groups (disability, HIV, same-sex, single people) or after 2 years of unexplained infertility. Donor insemination is funded up to 6 cycles."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy specifies one full cycle of IVF/ICSI. IUI is offered up to 6 cycles. Age criteria (23-39, with consideration up to 42) and BMI (19-30) are applied across all treatments. Living children rule is strictly applied to all."
+  },
+  {
+    "icb_folder_name": "Birmingham and Solihull",
+    "document_files": [
+      "policies/Birmingham and Solihull/2018/Fertility Services Commissioning Policy v1.3-FINAL.pdf"
+    ],
+    "document_year": "2018",
+    "extracted_at": "2026-04-28T12:18:09.442Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships, to either partner.",
+        "additional_notes": "One full cycle includes 1 fresh and up to 3 frozen transfers. Patients who have previously self-funded are eligible for one NHS-funded cycle if they have not already undertaken more than two self-funded fresh cycles. Same-sex female couples/single people eligible after 6 cycles of self-funded IUI."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships, to either partner.",
+        "additional_notes": "One full cycle includes 1 fresh and up to 3 frozen transfers. Patients who have previously self-funded are eligible for one NHS-funded cycle if they have not already undertaken more than two self-funded fresh cycles."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships, to either partner.",
+        "additional_notes": "Unstimulated IUI is offered as an alternative to vaginal intercourse for specific groups (disability, HIV positive, same-sex relationships, single people) after 6 cycles of self-funded insemination."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy specifies 1 full cycle of IVF/ICSI. IUI is offered as a treatment option for specific groups up to 6 cycles. Age criteria (23-39, with consideration for 40-42) and BMI (19-30) are applied consistently across treatments."
+  },
+  {
+    "icb_folder_name": "Black Country",
+    "document_files": [
+      "policies/Black Country/2022/ICB_SC_084_04_V1.1BCICB_POLICY_-_Assisted_Conception_FINAL.pdf"
+    ],
+    "document_year": "2022",
+    "extracted_at": "2026-04-28T12:17:49.757Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": null,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither couple have living children of any age (including adopted or from previous relationships).",
+        "additional_notes": "Treatment is limited to one cycle using a fresh embryo. Both partners must be registered with a Black Country GP. Male partner must be under 55. No previous IVF/ICSI treatment. No sterilization. Non-smokers (including vaping) for at least 3 months. No recreational drugs in last 12 months."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": null,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither couple have living children of any age (including adopted or from previous relationships).",
+        "additional_notes": "Treatment is limited to one cycle using a fresh embryo. Both partners must be registered with a Black Country GP. Male partner must be under 55. No previous IVF/ICSI treatment. No sterilization. Non-smokers (including vaping) for at least 3 months. No recreational drugs in last 12 months."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": null,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither couple have living children of any age (including adopted or from previous relationships).",
+        "additional_notes": "Funded only for patients with a permanent physical disability preventing natural conception or where the male partner has an infection requiring sperm-washing (e.g. HIV). Both partners must be registered with a Black Country GP."
+      },
+      {
+        "treatment_type": "DI",
+        "cycles_offered": 6,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": null,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither couple have living children of any age (including adopted or from previous relationships).",
+        "additional_notes": "Funded for heterosexual couples where the male partner has azoospermia or oligospermia, or for patients with a permanent physical disability as outlined in section 2.10.4. Both partners must be registered with a Black Country GP."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": null,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither couple have living children of any age (including adopted or from previous relationships).",
+        "additional_notes": "Funded only if transfer of fresh embryos is unable to take place for a clinical reason (e.g. OHSS, risk to mother/child, infection/bleeding). Both partners must be registered with a Black Country GP."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Age criteria: 'Under 40' is interpreted as 39. Cycles for IUI/DI are explicitly stated as 6. IVF/ICSI are limited to 1 cycle. General criteria (BMI, smoking, childlessness) are applied to all treatments as per policy instructions."
+  },
+  {
+    "icb_folder_name": "Bristol, North Somerset and South Gloucestershire",
+    "document_files": [
+      "policies/Bristol, North Somerset and South Gloucestershire/2023/Infertility-Assessment-Treatment-Policy-CBA-PA.pdf"
+    ],
+    "document_year": "2023",
+    "extracted_at": "2026-04-28T12:17:50.553Z",
+    "policies": [
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 3,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 15,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships",
+        "additional_notes": "Offered up to 3 cycles of IUI as part of a total of 6 treatments of three techniques. If IVF is unsuccessful, patients are not eligible for further IUI. Donor sperm requires written joint legal responsibility."
+      },
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 12,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships",
+        "additional_notes": "One full cycle includes fresh transfer and one frozen embryo transfer within 12 months. Prospective father must be under 54. BMI 19-35 allowed for ages 37-39."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 12,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships",
+        "additional_notes": "One full cycle includes fresh transfer and one frozen embryo transfer within 12 months. Prospective father must be under 54. BMI 19-35 allowed for ages 37-39."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy specifies that for heterosexual and same-sex couples, if either partner has living offspring, they are not eligible. For single women, if they have living offspring, they are not eligible. IVF/ICSI cycle counts and criteria are identical. IUI is offered as part of a total of 6 treatments of three techniques, with a maximum of 3 IUI cycles."
+  },
+  {
+    "icb_folder_name": "Buckinghamshire, Oxfordshire and Berkshire West",
+    "document_files": [
+      "policies/Buckinghamshire, Oxfordshire and Berkshire West/2024/bobfpc11g-assisted-reproduction-services-for-infertile-patients.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:18:16.790Z",
+    "policies": [
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 34,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships.",
+        "additional_notes": "Funded for patients with specific physical/psychosexual barriers or specific medical conditions (e.g. azoospermia, rhesus isoimmunisation). Must be non-smoker for at least 6 months. Referral must occur before 35th birthday."
+      },
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 34,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships.",
+        "additional_notes": "Funded for 1 cycle. Must be referred before 35th birthday. Previous self-funded cycles count towards eligibility. Must be non-smoker for at least 6 months."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 34,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships.",
+        "additional_notes": "Funded for 1 cycle as part of IVF provision. Must be referred before 35th birthday. Must be non-smoker for at least 6 months."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states that referral to specialist services must occur before the patient's 35th birthday. The BMI range for treatment is 19-29.9. Only 1 cycle of IVF/ICSI is funded. IUI is funded for up to 6 cycles for specific clinical indications."
+  },
+  {
+    "icb_folder_name": "Cambridgeshire and Peterborough",
+    "document_files": [
+      "policies/Cambridgeshire and Peterborough/2022/ASSISTED-CONCEPTION-NOV-2022-V9.pdf"
+    ],
+    "document_year": "2022",
+    "extracted_at": "2026-04-28T12:18:16.436Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": true,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships, including adopted children.",
+        "additional_notes": "One full/abandoned cycle offered. Male partner BMI <35. Female same-sex BMI applies only to partner undergoing treatment. Both partners must be non-smokers. Paternal age 23-55. Couples with absolute infertility have immediate access."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": true,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships, including adopted children.",
+        "additional_notes": "One full/abandoned cycle offered. Male partner BMI <35. Female same-sex BMI applies only to partner undergoing treatment. Both partners must be non-smokers. Paternal age 23-55. Couples with absolute infertility have immediate access."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 3,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships, including adopted children.",
+        "additional_notes": "Offered only under exceptional circumstances with prior approval. Male partner BMI <35. Both partners must be non-smokers. Paternal age 23-55."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Cycles offered for IVF/ICSI is explicitly stated as 'One full/abandoned cycle'. IUI is limited to 3 cycles under exceptional circumstances. Age criteria 'less than 43' is interpreted as 42. BMI criteria for male partner is <35, female is 19-30."
+  },
+  {
+    "icb_folder_name": "Cornwall and the Isles of Scilly",
+    "document_files": [
+      "policies/Cornwall and the Isles of Scilly/2018/CommissioningPolicies.pdf"
+    ],
+    "document_year": "2018",
+    "extracted_at": "2026-04-28T12:18:30.221Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from the current relationship and at least 1 partner does not have any living children from previous relationships",
+        "additional_notes": "Couples must have been in a stable, financially interdependent relationship for 2 years. Both partners must be registered with a local GP. Smoking cessation required for 6 months prior to treatment. Previous sterilisation not funded."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from the current relationship and at least 1 partner does not have any living children from previous relationships",
+        "additional_notes": "Offered if few/poor quality sperm, no sperm in semen but recoverable surgically, or failed IVF. Couples must have been in a stable, financially interdependent relationship for 2 years. Smoking cessation required for 6 months."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 4,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from the current relationship and at least 1 partner does not have any living children from previous relationships",
+        "additional_notes": "Offered as part of the treatment plan before IVF/ICSI. Couples must have been in a stable, financially interdependent relationship for 2 years. Smoking cessation required for 6 months."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy document (page 205-212) outlines criteria for assisted conception. IVF is limited to 1 cycle, IUI/SO to 4 cycles. Age limit is 40. BMI range 19-29.9. Smoking cessation required for 6 months. Living children rule applies to all fertility treatments."
+  },
+  {
+    "icb_folder_name": "Coventry and Warwickshire",
+    "document_files": [
+      "policies/Coventry and Warwickshire/2024/CWICB Policy for Specialist Treatment of Infertility FV.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:18:24.658Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner has living or adopted children of any age.",
+        "additional_notes": "Includes 2 frozen embryo transfers. Couples unable to have vaginal intercourse or same-sex couples must complete 6 cycles of self-funded donor/partner insemination or 2 cycles of self-funded IVF first. Sterilisation is an exclusion."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner has living or adopted children of any age.",
+        "additional_notes": "Includes 2 frozen embryo transfers. Couples unable to have vaginal intercourse or same-sex couples must complete 6 cycles of self-funded donor/partner insemination or 2 cycles of self-funded IVF first. Sterilisation is an exclusion."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": 2,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner has living or adopted children of any age.",
+        "additional_notes": "Associated with the funded IVF/ICSI cycle. Must be completed within 12 months of referral."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "IUI and DI are explicitly stated as not commissioned. IVF/ICSI criteria are identical and inherited from the general policy. Age limit is 'under 40' (39). BMI and smoking restrictions apply to the maternal partner."
+  },
+  {
+    "icb_folder_name": "Derby and Derbyshire",
+    "document_files": [
+      "policies/Derby and Derbyshire/2023/IVF_and_ICSI.pdf",
+      "policies/Derby and Derbyshire/2023/Intrauterine_Insemination.pdf"
+    ],
+    "document_year": "2023",
+    "extracted_at": "2026-04-28T12:18:20.866Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationship.",
+        "additional_notes": "For women aged 40-42, 1 cycle is offered if no evidence of low ovarian reserve and discussion held. Couples/single women with previous self-funded IVF may be eligible for 1 NHS cycle if they have not had more than 2 private cycles."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationship.",
+        "additional_notes": "Criteria inherited from IVF policy. For women aged 40-42, 1 cycle is offered if no evidence of low ovarian reserve and discussion held."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 12,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationship.",
+        "additional_notes": "Funded only for specific groups (e.g., physical disability, HIV positive male partner, same-sex couples, single women). Initial 6 cycles must be self-funded before NHS funding for 6-12 cycles."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "IVF/ICSI policies are combined in the source document; criteria applied to both. IUI policy is separate and specifies that 12 cycles of IUI are a prerequisite for IVF consideration for specific patient groups."
+  },
+  {
+    "icb_folder_name": "Devon",
+    "document_files": [
+      "policies/Devon/2022/Assisted conception.pdf"
+    ],
+    "document_year": "2022",
+    "extracted_at": "2026-04-28T12:18:37.614Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 3,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current relationship, and at least one partner must have no living children from previous relationships.",
+        "additional_notes": "A cycle is defined as one fresh and one frozen implantation. Couples must be in a stable relationship for at least two years. Neither partner can be sterilised. Previous NHS-funded assisted conception is generally excluded."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 3,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current relationship, and at least one partner must have no living children from previous relationships.",
+        "additional_notes": "Offered for severe male factor infertility, surgical sperm retrieval cases, or failed fertilisation in previous IVF. Couples must be in a stable relationship for at least two years. Neither partner can be sterilised."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 12,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current relationship, and at least one partner must have no living children from previous relationships.",
+        "additional_notes": "Funded for specific groups (disability, psychosexual problems, HIV sperm washing) or same-sex couples (6 cycles). Couples must be in a stable relationship for at least two years. Neither partner can be sterilised."
+      },
+      {
+        "treatment_type": "DI",
+        "cycles_offered": 6,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current relationship, and at least one partner must have no living children from previous relationships.",
+        "additional_notes": "Funded for azoospermia, severe semen quality issues, genetic/infectious disease risk, or rhesus isoimmunisation. Couples must be in a stable relationship for at least two years. Neither partner can be sterilised."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Cycles offered for IVF/ICSI is 3 total (including self-funded). IUI cycles are 12 for specific clinical groups, 6 for same-sex couples. DI cycles are 6 for clinical indications. Age, BMI, and living children rules are inherited from the general policy section."
+  },
+  {
+    "icb_folder_name": "Dorset",
+    "document_files": [
+      "policies/Dorset/2021/Fertility-EBI.pdf"
+    ],
+    "document_year": "2021",
+    "extracted_at": "2026-04-28T12:18:38.524Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 6,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "At least one partner must have no living children and there must be no living children from the current partnership.",
+        "additional_notes": "A full cycle is 1 fresh and 1 frozen embryo transfer. Patients must be non-smokers for 6 months. Both partners must be registered with a Dorset GP. Reversal of sterilisation is ineligible. Maximum 1 NHS funded cycle."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 6,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "At least one partner must have no living children and there must be no living children from the current partnership.",
+        "additional_notes": "ICSI is considered for severe semen deficits, obstructive/non-obstructive azoospermia, or failed/poor fertilization. Maximum 1 NHS funded cycle."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "At least one partner must have no living children and there must be no living children from the current partnership.",
+        "additional_notes": "Offered for specific groups (e.g., physical disability, same-sex relationships, HIV positive). Not routinely offered for unexplained infertility or mild endometriosis."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy specifies a maximum of 1 NHS funded cycle for IVF/ICSI. IUI is offered as a separate treatment pathway with up to 6 cycles. Age limit is 42 for completion of treatment. BMI criteria apply to both partners (19-30 for female, <30 for male)."
+  },
+  {
+    "icb_folder_name": "Frimley",
+    "document_files": [
+      "policies/Frimley/2024/bobfpc11g-assisted-reproduction-services-for-infertile-patients.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:18:36.151Z",
+    "policies": [
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 34,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationship, including adopted children.",
+        "additional_notes": "Funded for patients with specific physical/psychosexual barriers or specific medical conditions (e.g. azoospermia, rhesus isoimmunisation). Must be non-smoker for at least 6 months. Referral must occur before 35th birthday."
+      },
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 34,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 6,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationship, including adopted children.",
+        "additional_notes": "Requires 12 cycles of AI (at least 6 IUI) or 2 years of unprotected intercourse. Must be non-smoker for at least 6 months. Referral must occur before 35th birthday."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 34,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 6,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationship, including adopted children.",
+        "additional_notes": "Funded as part of the single IVF cycle. Requires 12 cycles of AI (at least 6 IUI) or 2 years of unprotected intercourse. Must be non-smoker for at least 6 months. Referral must occur before 35th birthday."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states that referral for specialist treatment must occur before the patient's 35th birthday. BMI criteria for specialist treatment is 19-29.9. IVF/ICSI is limited to 1 cycle. IUI is limited to 6 cycles."
+  },
+  {
+    "icb_folder_name": "Gloucestershire",
+    "document_files": [
+      "policies/Gloucestershire/2025/Assisted-Conception-Treatment.pdf"
+    ],
+    "document_year": "2025",
+    "extracted_at": "2026-04-28T12:18:37.549Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 2,
+        "max_age": 39,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 29.5,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 12,
+        "endometriosis_priority_access": true,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships.",
+        "additional_notes": "Funding for 2 fresh cycles. Frozen embryos used in preference to fresh for second cycle. If no frozen embryos, one further fresh embryo provided. Must be non-smoker for 6 months. Alcohol must be within Dept of Health guidelines. No funding for surrogacy or surgical sperm retrieval."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 2,
+        "max_age": 39,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 29.5,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 12,
+        "endometriosis_priority_access": true,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships.",
+        "additional_notes": "Funding for 2 fresh cycles. Frozen embryos used in preference to fresh for second cycle. If no frozen embryos, one further fresh embryo provided. Must be non-smoker for 6 months. Alcohol must be within Dept of Health guidelines. No funding for surrogacy or surgical sperm retrieval."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 3,
+        "max_age": 39,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 29.5,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 12,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships.",
+        "additional_notes": "Funded only for specific groups: physical disability/psychosexual problems, same-sex couples, single women, or heterosexual couples with social/religious objections to IVF. Replaces one cycle of IVF/ICSI. Must be provided in a licensed unit."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states that IUI replaces one cycle of IVF/ICSI and is only funded for specific groups. IVF and ICSI share the same criteria and cycle limits. DI is not a separate funded treatment; IUI is available with donor sperm under the same criteria as partner sperm."
+  },
+  {
+    "icb_folder_name": "Hampshire and Isle of Wight",
+    "document_files": [
+      "policies/Hampshire and Isle of Wight/2024/002-Assisted-reproduction-services-for-infertile-patients.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:18:38.618Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 34,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationship, including adopted children.",
+        "additional_notes": "Age at referral must be before 35th birthday. One cycle includes up to two embryo transfers. Previous self-funded cycles count towards eligibility. Patients paying immigration surcharge are generally ineligible. Sterilisation is an exclusion criterion."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 34,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationship, including adopted children.",
+        "additional_notes": "ICSI is provided within the single funded IVF cycle if clinically indicated. Age at referral must be before 35th birthday. Sterilisation is an exclusion criterion."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 34,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationship, including adopted children.",
+        "additional_notes": "Funded for specific physical/psychosexual disabilities or as an alternative to IVF for those with social/cultural/religious objections. Age at referral must be before 35th birthday. Sterilisation is an exclusion criterion."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states that patients must be referred before their 35th birthday. IUI and IVF/ICSI share the same general eligibility criteria (sections 1-6). DI is not listed as a separate funded treatment cycle count but is provided as a method for IUI/IVF, so it is not extracted as a separate treatment type per instructions."
+  },
+  {
+    "icb_folder_name": "Herefordshire and Worcestershire",
+    "document_files": [
+      "policies/Herefordshire and Worcestershire/2024/ICB_Assisted_Conception_Policy_v1.4_FINAL_Aug_24.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:18:46.515Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 29,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children (of any age) from current or previous relationships.",
+        "additional_notes": "Must be registered with a GP in Herefordshire or Worcestershire for at least 12 months. Couples must be non-smokers for 6 consecutive months. Male BMI must be 29 or less if male factor infertility is identified."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 29,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children (of any age) from current or previous relationships.",
+        "additional_notes": "Must be registered with a GP in Herefordshire or Worcestershire for at least 12 months. Couples must be non-smokers for 6 consecutive months. Male BMI must be 29 or less if male factor infertility is identified."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 3,
+        "max_age": 39,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 29,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children (of any age) from current or previous relationships.",
+        "additional_notes": "Only for specific groups: those unable to have vaginal intercourse due to disability/psychosexual problems or same-sex couples. Must be registered with a GP in Herefordshire or Worcestershire for at least 12 months. Couples must be non-smokers for 6 consecutive months."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states 1 cycle of IVF/ICSI and up to 3 cycles of IUI. General criteria (Age 18-39, BMI 19-29, no living children, 6-month smoking cessation) apply to all treatments. Male BMI 29 limit applies if male factor infertility is present."
+  },
+  {
+    "icb_folder_name": "Hertfordshire and West Essex",
+    "document_files": [
+      "policies/Hertfordshire and West Essex/2023/IVF-policy-v5.1-Nov-2023.pdf"
+    ],
+    "document_year": "2023",
+    "extracted_at": "2026-04-28T12:18:48.255Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships, including adopted children.",
+        "additional_notes": "Funding valid for 12 months. For women over 42, valid until 43rd birthday. Includes abandoned/unsuccessful cycles. Partners providing gametes must have BMI <30. Non-smokers for at least 8 weeks required. Previous fertility treatment counts towards entitlement."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships, including adopted children.",
+        "additional_notes": "Funding valid for 12 months. For women over 42, valid until 43rd birthday. Includes abandoned/unsuccessful cycles. Partners providing gametes must have BMI <30. Non-smokers for at least 8 weeks required. Previous fertility treatment counts towards entitlement."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships, including adopted children.",
+        "additional_notes": "Offered to specific groups (disability, psychosexual, same-sex). Requires prior approval. Couple must have previously self-funded 6 cycles."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Policies for IVF, ICSI, and IUI were extracted. DI is not listed as a separate funded treatment with distinct criteria, so it is not included as a separate entry. FET is included within the 'full cycle' definition of IVF/ICSI."
+  },
+  {
+    "icb_folder_name": "Lancashire and South Cumbria",
+    "document_files": [
+      "policies/Lancashire and South Cumbria/2022/LSCICB_Clin20_Policy_for_Assisted_Conception_Services_v2.1.pdf"
+    ],
+    "document_year": "2022",
+    "extracted_at": "2026-04-28T12:18:46.865Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "The patient, and their partner in the case of couples, must not have a living biological or adopted child from their current or any previous relationship.",
+        "additional_notes": "One treatment unit defined as one programme of IVF. Female partner must be under 43 at commencement. E-cigarettes are considered equivalent to non-smoking. For ages 40-42, no evidence of low ovarian reserve required and discussion of implications."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "The patient, and their partner in the case of couples, must not have a living biological or adopted child from their current or any previous relationship.",
+        "additional_notes": "ICSI is regarded as a type of IVF. One treatment unit defined as one programme of IVF. Female partner must be under 43 at commencement. E-cigarettes are considered equivalent to non-smoking."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 12,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "The patient, and their partner in the case of couples, must not have a living biological or adopted child from their current or any previous relationship.",
+        "additional_notes": "One treatment unit defined as up to 12 separate attempts at IUI. Female partner must be under 43 at commencement. E-cigarettes are considered equivalent to non-smoking."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy defines a 'treatment unit' as either 12 cycles of IUI or one programme of IVF/ICSI. Age, BMI, and smoking criteria apply to all treatments. AMH/FSH values are derived from the definition of 'Ovarian Reserve' in Appendix 1."
+  },
+  {
+    "icb_folder_name": "Lincolnshire",
+    "document_files": [
+      "policies/Lincolnshire/2020/CG - 004 - In Vitro Fertilisation (IVF) Policy.pdf",
+      "policies/Lincolnshire/2020/CG_20-_20001_20-_20Intrauterine_20Insemination_20(IUI)_20Policy.pdf"
+    ],
+    "document_year": "2020",
+    "extracted_at": "2026-04-28T12:18:50.237Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships",
+        "additional_notes": "Funding available for same-sex couples and people with physical disabilities. Couples who have self-funded are entitled to one NHS cycle if they have not had more than two complete cycles of privately funded treatment. Sterilisation is an exclusion criteria."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships",
+        "additional_notes": "Funding available for same-sex couples and people with physical disabilities. Couples who have self-funded are entitled to one NHS cycle if they have not had more than two complete cycles of privately funded treatment. Sterilisation is an exclusion criteria."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 3,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 6,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships",
+        "additional_notes": "Funded for same-sex couples and those with physical/psychosexual disabilities. Same-sex couples must complete 6 cycles of privately funded donor insemination before NHS referral. Unstimulated IUI only. No previous IVF cycles allowed."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "IUI cycles are explicitly stated as 3 in the IUI policy document. IVF/ICSI cycles are 1. Age criteria for IUI is 23-42, while IVF/ICSI is up to 42. FSH max is inherited from the IVF policy for IVF/ICSI entries."
+  },
+  {
+    "icb_folder_name": "Mid and South Essex",
+    "document_files": [
+      "policies/Mid and South Essex/2024/SRP 101 Tertiary Fertility Services  - Mid and South Essex Integrated Care System.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:18:44.850Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 2,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No surviving children from this or previous relationships (excluding fostered children).",
+        "additional_notes": "For women 40-42, max 1 cycle/2 transfers. For under 40, max 2 cycles/4 transfers. Male BMI must be <35. Both partners must be non-smokers and not sterilised. Must be registered with Mid and South Essex ICB for 12 months."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 2,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No surviving children from this or previous relationships (excluding fostered children).",
+        "additional_notes": "Offered for male factor infertility, poor/no fertilisation in previous IVF, or surgical sperm retrieval cases. Follows same cycle/age limits as IVF."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "IUI and DI are explicitly stated as not funded (or self-funded for same-sex couples) and therefore excluded from the funded treatment list. IVF/ICSI cycle counts are age-dependent (2 cycles for <40, 1 cycle for 40-42)."
+  },
+  {
+    "icb_folder_name": "Norfolk and Waveney",
+    "document_files": [
+      "policies/Norfolk and Waveney/2019/Assisted-Conception-Policy-2019-inc-OHSS.pdf"
+    ],
+    "document_year": "2019",
+    "extracted_at": "2026-04-28T12:18:58.025Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 2,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships.",
+        "additional_notes": "Patients aged 40-41 may be eligible for 1 cycle if they have never had IVF, have no evidence of low ovarian reserve, and have discussed implications. Previous sterilisation makes patients ineligible."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 2,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships.",
+        "additional_notes": "Patients aged 40-41 are not eligible for further cycles of ICSI. Previous sterilisation makes patients ineligible."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships.",
+        "additional_notes": "Funded for those with physical disability/psychosexual problems, same-sex couples, or single parents. Previous sterilisation makes patients ineligible."
+      },
+      {
+        "treatment_type": "DI",
+        "cycles_offered": 6,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships.",
+        "additional_notes": "Funded for azoospermia, severe semen quality deficits, infectious disease, rhesus isoimmunisation, or high genetic risk. Previous sterilisation makes patients ineligible."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Age criteria for IVF/ICSI is 23-39. Patients 40-41 have restricted access. BMI and AMH/FSH criteria apply to the female partner. Living children rule applies to all treatments."
+  },
+  {
+    "icb_folder_name": "North Central London",
+    "document_files": [
+      "policies/North Central London/2022/Fertility-policy-NCL-ICB-V1.0_250722-V2.pdf"
+    ],
+    "document_year": "2022",
+    "extracted_at": "2026-04-28T12:19:01.463Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 3,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "At least one individual in a couple must not have a living child; single persons must not have a living child.",
+        "additional_notes": "For women under 40, up to 6 embryo transfers from 3 fresh cycles. For women 40-42, up to 2 embryo transfers from 1 fresh cycle. Vaping is not considered smoking. Ovarian reserve criteria apply."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 3,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "At least one individual in a couple must not have a living child; single persons must not have a living child.",
+        "additional_notes": "Follows same cycle and age rules as IVF. ICSI is used for male factor infertility or where IVF is otherwise indicated."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "At least one individual in a couple must not have a living child; single persons must not have a living child.",
+        "additional_notes": "Funded for specific conditions (disability, HIV, spinal injury) or exceptional circumstances. Unstimulated IUI only."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "At least one individual in a couple must not have a living child; single persons must not have a living child.",
+        "additional_notes": "FET is part of the total embryo transfer allowance (up to 6 for under 40s). Storage funded for 2 years post-fresh cycle."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Cycles offered for IVF/ICSI are defined as 3 fresh cycles with up to 6 total embryo transfers for women under 40. For women 40-42, 1 fresh cycle with up to 2 transfers. IUI is limited to 6 cycles. Ovarian reserve criteria (AMH <= 5.4, FSH > 8.9, AFC <= 4) apply to most treatments except donor egg IVF."
+  },
+  {
+    "icb_folder_name": "North East London",
+    "document_files": [
+      "policies/North East London/2023/NHS-North-East-London-Fertility-Policy_FINAL_April-2023.pdf"
+    ],
+    "document_year": "2023",
+    "extracted_at": "2026-04-28T12:19:00.911Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 3,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No children from current or previous relationships; neither partner has a child, or one partner has a child from a previous relationship but the other does not.",
+        "additional_notes": "Under 40: 3 cycles. 40-42: 1 cycle. IVF using donor eggs funded for specific medical conditions; ovarian reserve criteria waived. Donor eggs/sperm must be self-funded."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 3,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No children from current or previous relationships; neither partner has a child, or one partner has a child from a previous relationship but the other does not.",
+        "additional_notes": "ICSI is considered part of the IVF cycle allowance. Under 40: 3 cycles. 40-42: 1 cycle."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No children from current or previous relationships; neither partner has a child, or one partner has a child from a previous relationship but the other does not.",
+        "additional_notes": "Funded for specific conditions (e.g., physical disability, psychosexual problems, azoospermia, severe semen deficits, or high risk of genetic/infectious transmission). Donor sperm must be self-funded."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy specifies that IVF cycles (including ICSI) are limited to 3 for those under 40 and 1 for those aged 40-42. IUI is limited to 6 cycles for specific clinical indications. Ovarian reserve criteria (AFC <= 4, AMH <= 5.4, FSH > 8.9) apply to general IVF/ICSI/IUI, but are waived for donor egg IVF."
+  },
+  {
+    "icb_folder_name": "North East and North Cumbria",
+    "document_files": [
+      "policies/North East and North Cumbria/2025/icbp040-value-based-commissioning-policy-14.pdf"
+    ],
+    "document_year": "2025",
+    "extracted_at": "2026-04-28T12:19:09.345Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 3,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children for any party to the pregnancy with proposed parental responsibility.",
+        "additional_notes": "For women aged 40-42, 1 cycle is offered if they have never had IVF, have good ovarian reserve (AMH >= 5.4 pmol/l, AFC >= 4), and have discussed implications. Previous private cycles are deducted from NHS entitlement."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 3,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children for any party to the pregnancy with proposed parental responsibility.",
+        "additional_notes": "ICSI is included within the IVF cycle limits. For women aged 40-42, 1 cycle is offered if criteria are met. Previous private cycles are deducted from NHS entitlement."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 12,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": null,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children for any party to the pregnancy with proposed parental responsibility.",
+        "additional_notes": "12 cycles of IUI using partner sperm or 6 cycles of donor sperm. BMI <30 and non-smoking required for both parties."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy document specifies 12 cycles of IUI (partner sperm) or 6 cycles (donor sperm). IVF/ICSI cycles are capped at 3 for women under 40 and 1 for women aged 40-42. Living children rule applies to any party to the pregnancy."
+  },
+  {
+    "icb_folder_name": "North West London",
+    "document_files": [
+      "policies/North West London/2016/IVF-v7.pdf"
+    ],
+    "document_year": "2016",
+    "extracted_at": "2026-04-28T12:18:58.904Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": null,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living biological or adopted children from current or previous relationships.",
+        "additional_notes": "Both partners must be non-smokers for at least 6 months. IVF is for women up to 40. Ovarian stimulation must start before 40th birthday. Same-sex couples must provide evidence of 12 self-funded AI cycles (at least 6 by IUI)."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": null,
+        "bmi_min": null,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living biological or adopted children from current or previous relationships.",
+        "additional_notes": "Both partners must be non-smokers for at least 6 months. IVF is for women up to 40. Ovarian stimulation must start before 40th birthday. Same-sex couples must provide evidence of 12 self-funded AI cycles (at least 6 by IUI)."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states 1 cycle of IVF (+/- ICSI) is provided. Criteria for IVF and ICSI are identical. Same-sex couples must complete 12 self-funded AI cycles (6 by IUI) as a prerequisite for IVF/ICSI, not as a separate funded treatment."
+  },
+  {
+    "icb_folder_name": "Northamptonshire",
+    "document_files": [
+      "policies/Northamptonshire/2025/Assisted-Conception-Policy-IVF-ICSI.pdf"
+    ],
+    "document_year": "2025",
+    "extracted_at": "2026-04-28T12:19:17.001Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationships.",
+        "additional_notes": "Couples must be non-smokers for 28 days. Sterilisation is an exclusion. For women 40-42, must have no previous IVF and no evidence of low ovarian reserve. Ovarian stimulation must be completed before 43rd birthday."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationships.",
+        "additional_notes": "Couples must be non-smokers for 28 days. Sterilisation is an exclusion. For women 40-42, must have no previous IVF/ICSI and no evidence of low ovarian reserve. Ovarian stimulation must be completed before 43rd birthday."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states that IUI/DI are outside the scope of this document. IVF and ICSI are treated under the same eligibility criteria. The age limit for funding is up to 42, with ovarian stimulation to be completed before the 43rd birthday."
+  },
+  {
+    "icb_folder_name": "Nottingham and Nottinghamshire",
+    "document_files": [
+      "policies/Nottingham and Nottinghamshire/2014/EMSCG-IVF-ICSI-Policy-ICB.pdf"
+    ],
+    "document_year": "2014",
+    "extracted_at": "2026-04-28T12:19:17.950Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationships.",
+        "additional_notes": "Ovarian stimulation must be completed before the woman's 43rd birthday. Couples who have self-funded are entitled to 1 NHS cycle if they have not received more than 2 private cycles. Sterilisation is an exclusion criteria."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationships.",
+        "additional_notes": "Ovarian stimulation must be completed before the woman's 43rd birthday. Couples who have self-funded are entitled to 1 NHS cycle if they have not received more than 2 private cycles. Sterilisation is an exclusion criteria."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states IUI/DI are outside the scope of this document. IVF and ICSI are treated under the same criteria. FSH threshold of 8.9 IU/l is specified. BMI range 19-30 is explicitly stated in the Schedule of Eligibility Criteria."
+  },
+  {
+    "icb_folder_name": "Shropshire, Telford and Wrekin",
+    "document_files": [
+      "policies/Shropshire, Telford and Wrekin/2022/STW-CCG-Policy-on-the-Management-of-Fertility-Treatment-Final-COM001.pdf"
+    ],
+    "document_year": "2022",
+    "extracted_at": "2026-04-28T12:19:18.361Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Couples must not have a living child from their current or any previous relationships.",
+        "additional_notes": "One full cycle includes fresh transfer and subsequent frozen embryo transfer if fresh fails. No funding for subsequent cycles if a baby is born, conceived naturally, or a child is adopted after the fresh cycle."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Couples must not have a living child from their current or any previous relationships.",
+        "additional_notes": "One full cycle includes fresh transfer and subsequent frozen embryo transfer if fresh fails. No funding for subsequent cycles if a baby is born, conceived naturally, or a child is adopted after the fresh cycle."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Couples must not have a living child from their current or any previous relationships.",
+        "additional_notes": "Commissioned as part of the one full cycle of IVF/ICSI where appropriate. Each attempt is classed as a cycle."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": 1,
+        "max_age": 40,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Couples must not have a living child from their current or any previous relationships.",
+        "additional_notes": "Funded as part of the one full cycle of IVF/ICSI if the fresh transfer is not successful. No subsequent cycles funded if a baby is born or child adopted."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states one full cycle of IVF/ICSI includes one cycle of IUI and FET as part of that single cycle. BMI criteria for tertiary care (19-30) overrides the primary care referral criteria (19-35)."
+  },
+  {
+    "icb_folder_name": "Somerset",
+    "document_files": [
+      "policies/Somerset/2023/Fertility-Assessment-and-Treatment-Policy-2526.v7e-20251103.pdf"
+    ],
+    "document_year": "2023",
+    "extracted_at": "2026-04-28T12:19:20.202Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 15,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from the current relationship or previous relationships for either partner.",
+        "additional_notes": "Includes one full cycle of IVF (includes transfer of frozen embryo(s)). Male partner age <54. Stable relationship for 2 years. Both partners registered with GP in Somerset. No sterilization. No funding for visa holders."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 15,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from the current relationship or previous relationships for either partner.",
+        "additional_notes": "Indications: severe semen quality deficits, obstructive or non-obstructive azoospermia. Male partner age <54. Stable relationship for 2 years. Both partners registered with GP in Somerset. No sterilization. No funding for visa holders."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 9,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 15,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from the current relationship or previous relationships for either partner.",
+        "additional_notes": "Up to 6 initial cycles, followed by 3 more if clinically appropriate. Considered for same-sex couples or those unable to have vaginal intercourse. Male partner age <54. Stable relationship for 2 years. No sterilization. No funding for visa holders."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 15,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from the current relationship or previous relationships for either partner.",
+        "additional_notes": "One further full cycle using frozen embryo(s) follows a fresh cycle if clinically appropriate. Male partner age <54. Stable relationship for 2 years. No sterilization. No funding for visa holders."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Cycles offered for IUI is 6+3=9. IVF/ICSI/FET cycles are defined as 1 fresh + 1 frozen. Age criteria (23-39) and BMI (19-30) are applied to the prospective birth parent. Male partner age limit is <54."
+  },
+  {
+    "icb_folder_name": "South East London",
+    "document_files": [
+      "policies/South East London/2024/SEL-Fertility-Treatment-and-Preservation-Policy-July-2024.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:19:17.170Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 2,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner in a couple should have a living child from their relationship or any previous relationship; single persons should not have a living child.",
+        "additional_notes": "Fund 2 cycles for under 40s; 1 cycle for 40-42s. Ovarian reserve criteria applies only to 40-42 age group. Donor eggs/sperm must be sourced and paid for by the patient."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 2,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner in a couple should have a living child from their relationship or any previous relationship; single persons should not have a living child.",
+        "additional_notes": "ICSI is included within the definition of a full IVF cycle. Eligibility criteria follow standard IVF rules."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner in a couple should have a living child from their relationship or any previous relationship; single persons should not have a living child.",
+        "additional_notes": "Funded for specific clinical indications (e.g., disability, HIV, azoospermia) or as an alternative to IVF for those with religious/cultural objections. If IUI is used as an alternative to IVF, IVF will not subsequently be funded."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Cycles offered for IVF are 2 for under 40s and 1 for 40-42s. IUI cycles are capped at 6. Ovarian reserve criteria (AMH <= 5.4) applies only to the 40-42 age group."
+  },
+  {
+    "icb_folder_name": "South West London",
+    "document_files": [
+      "policies/South West London/2023/NHS-South-West-London-evidence-based-interventions-policy-4.1.pdf"
+    ],
+    "document_year": "2023",
+    "extracted_at": "2026-04-28T12:19:37.699Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current relationship and no living children from previous relationships.",
+        "additional_notes": "Age limit is 42 (before 43rd birthday). FSH threshold is 8.9, but if between 8.9 and 11.8, funding may be approved if AMH > 5.4. Couples must demonstrate 24 months of regular unprotected intercourse."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current relationship and no living children from previous relationships.",
+        "additional_notes": "Indications include severe semen quality deficits, obstructive/non-obstructive azoospermia, or previous failed/poor fertilization. Age limit is 42 (before 43rd birthday)."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 12,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current relationship and no living children from previous relationships.",
+        "additional_notes": "Funded only for heterosexual couples unable to have vaginal intercourse due to physical disability or diagnosed psychosexual problems. Not funded for same-sex couples or single women."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Policies extracted from the SWL ICB EBI Policy V4.1. IVF/ICSI cycle counts and eligibility criteria are explicitly stated in sections 21, 22, and 23. FSH/AMH criteria are from the table on page 133-134."
+  },
+  {
+    "icb_folder_name": "South Yorkshire",
+    "document_files": [
+      "policies/South Yorkshire/2025/SY_ICB_Access_to_Infertility_Treatment_Policy_V1.0_3.12.25_Final.pdf",
+      "policies/South Yorkshire/2025/SY_ICB_Fertility_Preservation_Commissioning_Policy_V1.0_3.12.25_Final.pdf"
+    ],
+    "document_year": "2025",
+    "extracted_at": "2026-04-28T12:19:35.851Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children from their relationship together or any previous relationship.",
+        "additional_notes": "Women aged 40-42 must have no evidence of low ovarian reserve (AFC <=4, AMH <=5.4 pmol/l, or FSH >8.9 IU/l) and no previous IVF. Couples must be co-habiting for 2 years. Alcohol must be within guidelines. No recreational drugs."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children from their relationship together or any previous relationship.",
+        "additional_notes": "ICSI is provided as part of the IVF cycle if clinically indicated. Same eligibility criteria as IVF apply."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children from their relationship together or any previous relationship.",
+        "additional_notes": "Funded for specific conditions (e.g. physical disability, same-sex relationships) or anovulatory infertility. Not funded for unexplained infertility. Not funded after IVF."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy document specifies 1 cycle of IVF for South Yorkshire ICB. General criteria (BMI, smoking, living children, co-habitation) are applied across all treatments. IUI is restricted to specific clinical indications and is not funded after IVF."
+  },
+  {
+    "icb_folder_name": "Staffordshire and Stoke-on-Trent",
+    "document_files": [
+      "policies/Staffordshire and Stoke-on-Trent/2024/IVF Aligned Policy V1.1 March 2024.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:19:28.342Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 3,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships (includes adopted children, excludes foster children).",
+        "additional_notes": "One partial cycle funded. Couples must be in a stable relationship of at least two years. Previous self-funded cycles count towards the limit. Donor sperm not funded. Sterilisation makes couples ineligible."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 3,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or any previous relationships (includes adopted children, excludes foster children).",
+        "additional_notes": "One partial cycle funded. Couples must be in a stable relationship of at least two years. Previous self-funded cycles count towards the limit. Donor sperm not funded. Sterilisation makes couples ineligible."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states that IUI is not funded. IVF and ICSI are both commissioned as a single partial cycle. Age criteria is defined as referral before the 39th birthday. AMH >3 is required for women aged 35-39."
+  },
+  {
+    "icb_folder_name": "Suffolk and North East Essex",
+    "document_files": [
+      "policies/Suffolk and North East Essex/2021/SNEE-ICB-CPP-Feb-2026.pdf"
+    ],
+    "document_year": "2021",
+    "extracted_at": "2026-04-28T12:19:36.121Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 2,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither couple has a living child from the current or any previous relationships.",
+        "additional_notes": "Age 23-39: 2 cycles if self-funded 0-1 previously. Age 40-42: 1 cycle if never previously had IVF. Male partner age 23-54. Both partners must be non-smokers. Same-sex couples: SNEE ICB will not fund donor sperm but will fund associated IVF/ICSI treatment."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 2,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither couple has a living child from the current or any previous relationships.",
+        "additional_notes": "Age 23-39: 2 cycles if self-funded 0-1 previously. Age 40-42: 1 cycle if never previously had IVF. Male partner age 23-54. Both partners must be non-smokers. Same-sex couples: SNEE ICB will not fund donor sperm but will fund associated IVF/ICSI treatment."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": 23,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither couple has a living child from the current or any previous relationships.",
+        "additional_notes": "IUI is only offered in exceptional circumstances. A maximum of 6 cycles of donor insemination (IUI) will be funded for anovulatory women followed by IVF with donor sperm if criteria are met."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy document specifies that IUI is only offered in exceptional circumstances, but explicitly mentions funding up to 6 cycles of donor insemination (IUI) for anovulatory women. IVF and ICSI cycle counts are derived from the age-based criteria (2 cycles for 23-39, 1 cycle for 40-42)."
+  },
+  {
+    "icb_folder_name": "Surrey Heartlands",
+    "document_files": [
+      "policies/Surrey Heartlands/2024/Assisted-Conception-Policy-v11.pdf"
+    ],
+    "document_year": "2024",
+    "extracted_at": "2026-04-28T12:19:27.984Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 2,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships",
+        "additional_notes": "Eligibility determined at point of referral. Up to 2 full cycles funded if aged 39 or under at referral. If woman reaches 40 during treatment, current cycle funded but no further cycles. Must be non-smoker for 6 months. BMI 19-30 for 6 months."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 2,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships",
+        "additional_notes": "Eligibility determined at point of referral. Up to 2 full cycles funded if aged 39 or under at referral. If woman reaches 40 during treatment, current cycle funded but no further cycles. Must be non-smoker for 6 months. BMI 19-30 for 6 months."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from current or previous relationships",
+        "additional_notes": "Funded only for specific groups: disability/psychosexual issues, HIV positive partner, same-sex couples, social/cultural/religious objections to IVF, or females with no partner requiring donor sperm. Must be non-smoker for 6 months. BMI 19-30 for 6 months."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states IVF/ICSI eligibility criteria are identical. IUI is restricted to specific groups as defined in the policy. Age limit is 39 years and zero days at referral. Living children rule applies to both partners."
+  },
+  {
+    "icb_folder_name": "Sussex",
+    "document_files": [
+      "policies/Sussex/2025/SX022-Assisted-Conception-Services-Policy-2025.pdf"
+    ],
+    "document_year": "2025",
+    "extracted_at": "2026-04-28T12:19:45.905Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Couples must not have any living children from their current relationship. A single woman must not have any living children.",
+        "additional_notes": "Age 40-42 criteria: 1 cycle if no previous IVF, no low ovarian reserve, and discussion of implications. Must be non-smoker for 6 months. No surrogacy. No shared motherhood/reciprocal IVF. BMI 19-29.9 required."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Couples must not have any living children from their current relationship. A single woman must not have any living children.",
+        "additional_notes": "Age 40-42 criteria: 1 cycle if no previous IVF, no low ovarian reserve, and discussion of implications. Must be non-smoker for 6 months. No surrogacy. No shared motherhood/reciprocal IVF. BMI 19-29.9 required."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 39,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Couples must not have any living children from their current relationship. A single woman must not have any living children.",
+        "additional_notes": "Offered as alternative to vaginal intercourse for specific groups (disability, HIV, same-sex, single women) following 6 self-funded AI cycles. Must be non-smoker for 6 months. BMI 19-29.9 required."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy specifies 1 cycle of IVF/ICSI. IUI is offered as a separate pathway (6 cycles) for specific groups. Age criteria for 40-42 is conditional. BMI and smoking rules apply to all treatments."
+  },
+  {
+    "icb_folder_name": "West Yorkshire",
+    "document_files": [
+      "policies/West Yorkshire/2025/Infertility_Treatment_07.2025.pdf"
+    ],
+    "document_year": "2025",
+    "extracted_at": "2026-04-28T12:19:48.670Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children from their relationship together or any previous relationship.",
+        "additional_notes": "West Yorkshire ICB funds 1 cycle. Females 40-42 must meet specific criteria (no previous IVF, no low ovarian reserve). Couples must co-habit for 2 years. Alcohol must be within guidelines; no recreational drugs. Sterilisation reversal not funded."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children from their relationship together or any previous relationship.",
+        "additional_notes": "West Yorkshire ICB funds 1 cycle. Females 40-42 must meet specific criteria. Couples must co-habit for 2 years. Alcohol must be within guidelines; no recreational drugs. Sterilisation reversal not funded."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children from their relationship together or any previous relationship.",
+        "additional_notes": "Funded for specific conditions (e.g., physical disability, psychosexual problems, same-sex relationships). Not funded for unexplained infertility or after IVF. Up to 6 cycles."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children from their relationship together or any previous relationship.",
+        "additional_notes": "Frozen embryo transfer is part of a full cycle. All stored viable embryos must be used before a new cycle commences."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy explicitly states West Yorkshire ICB only funds one cycle of IVF. Other treatments like IUI and FET are governed by the same overarching eligibility criteria (age, BMI, smoking, living children). DI is treated as part of IUI/IVF/ICSI funding pathways rather than a separate treatment type with distinct cycle counts."
+  }
+]

@@ -158,7 +158,7 @@ function main() {
   const inputIdx = args.indexOf('--input');
   const inputPath = inputIdx !== -1
     ? args[inputIdx + 1]
-    : join(__dirname, '..', 'documents', 'extracted-policies.json');
+    : join(__dirname, '..', 'scripts', 'extracted-policies.json');
 
   const outputPath = join(__dirname, '..', 'migrations', '0003_icb_policies.sql');
 
