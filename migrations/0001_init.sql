@@ -29,9 +29,24 @@ create table if not exists icb_aliases (
 
 create index if not exists icb_aliases_icb_id_idx on icb_aliases (icb_id); --> statement-breakpoint
 
+create table if not exists treatment_types (
+  id text primary key,
+  name text not null unique,
+  description text,
+  created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+); --> statement-breakpoint
+
+insert or ignore into treatment_types (id, name, description) values
+  ('ivf', 'IVF', 'In vitro fertilisation'),
+  ('icsi', 'ICSI', 'Intracytoplasmic sperm injection'),
+  ('iui', 'IUI', 'Intrauterine insemination'),
+  ('di', 'DI', 'Donor insemination'),
+  ('fet', 'FET', 'Frozen embryo transfer'); --> statement-breakpoint
+
 create table if not exists icb_policies (
   id text primary key,
   icb_id text not null references icbs(id) on delete cascade,
+  treatment_type_id text not null default 'ivf' references treatment_types(id),
   effective_from text not null default (date('now')),
   effective_to text,
   cycles_offered integer not null default 1 check (cycles_offered >= 0),
@@ -49,12 +64,14 @@ create table if not exists icb_policies (
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   constraint icb_policies_effective_range check (effective_to is null or effective_to >= effective_from),
-  constraint icb_policies_unique_effective_from unique (icb_id, effective_from)
+  constraint icb_policies_unique_treatment unique (icb_id, treatment_type_id, effective_from)
 ); --> statement-breakpoint
 
 create index if not exists icb_policies_icb_id_idx on icb_policies (icb_id); --> statement-breakpoint
 
 create index if not exists icb_policies_effective_from_idx on icb_policies (effective_from); --> statement-breakpoint
+
+create index if not exists icb_policies_treatment_type_idx on icb_policies (treatment_type_id); --> statement-breakpoint
 
 create table if not exists grants (
   id text primary key,

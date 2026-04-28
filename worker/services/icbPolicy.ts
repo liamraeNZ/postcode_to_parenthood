@@ -267,6 +267,7 @@ export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) 
         `
         select
           i.name as icb_name,
+          p.treatment_type_id,
           p.cycles_offered,
           p.max_age,
           p.bmi_min,
@@ -279,7 +280,9 @@ export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) 
           p.updated_at
         from icb_policies p
         join icbs i on i.id = p.icb_id
-        where p.icb_id = ?1 and (p.effective_to is null or p.effective_to >= ?2)
+        where p.icb_id = ?1
+          and p.treatment_type_id = 'ivf'
+          and (p.effective_to is null or p.effective_to >= ?2)
         order by p.effective_from desc
         limit 1
       `
@@ -287,6 +290,7 @@ export async function lookupIcbPolicyByIcbCode(db: D1Database, icbCode: string) 
       .bind(targetIcbId, today)
       .first<{
         icb_name: string;
+        treatment_type_id: string;
         cycles_offered: number;
         max_age: number;
         bmi_min: number | null;

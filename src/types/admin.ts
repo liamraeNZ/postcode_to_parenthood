@@ -14,6 +14,7 @@ export interface AdminIcb {
 export interface AdminPolicy {
   id: string;
   icb_id: string;
+  treatment_type_id: string;
   effective_from: string;
   effective_to: string | null;
   cycles_offered: number;
@@ -49,6 +50,7 @@ export interface UpdateIcbInput {
 }
 
 export interface CreatePolicyInput {
+  treatment_type_id?: string;
   cycles_offered: number;
   max_age: number;
   iui_rounds_required: number;

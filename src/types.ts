@@ -1,5 +1,6 @@
 export interface ICBPolicy {
   icb_name: string;
+  treatment_type_id: string;
   cycles_offered: number;
   max_age: number;
   bmi_min: number | null;

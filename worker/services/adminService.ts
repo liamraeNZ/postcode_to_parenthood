@@ -168,16 +168,17 @@ export async function createPolicy(
     await db
       .prepare(
         `INSERT INTO icb_policies (
-          id, icb_id, effective_from, effective_to,
+          id, icb_id, treatment_type_id, effective_from, effective_to,
           cycles_offered, max_age, bmi_min, bmi_max,
           iui_rounds_required, wait_time_months,
           endometriosis_priority_access, smoking_restricted,
           living_children_rule, source_url
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
         policyId,
         icbId,
+        data.treatment_type_id ?? 'ivf',
         effectiveFrom,
         data.effective_to ?? null,
         data.cycles_offered,
