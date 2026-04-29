@@ -112,7 +112,7 @@ export default function App() {
                   <PolicyResultsAside panel={policyPanel} />
                 ) : (
                   <img
-                    src="/assets/hand-hold.jpg"
+                    src="/assets/hand-hold.webp"
                     alt="Two people holding hands in a supportive gesture"
                     className="rounded-2xl object-cover w-full max-h-[500px] shadow-lg"
                   />
