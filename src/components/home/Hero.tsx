@@ -39,10 +39,19 @@ export function Hero({ onPolicyPanelChange, onSearchStarted, hasResults, hasSear
             <p>
               Enter your postcode below. We'll show you:
             </p>
-            <ul className="list-disc list-inside space-y-1 text-deep-slate/70">
-              <li>Which integrated care board (ICB) covers your GP</li>
-              <li>Whether NHS-funded care is available in that area</li>
-              <li>The eligibility criteria you'll need to meet</li>
+            <ul className="space-y-2 mt-1">
+              <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
+                <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
+                <span className="text-deep-slate font-medium">Which integrated care board (ICB) covers your GP</span>
+              </li>
+              <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
+                <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
+                <span className="text-deep-slate font-medium">Whether NHS-funded care is available in that area</span>
+              </li>
+              <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
+                <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
+                <span className="text-deep-slate font-medium">The eligibility criteria you'll need to meet</span>
+              </li>
             </ul>
             <p className="text-xs text-deep-slate/60 italic">
               Eligibility is determined by your GP practice's location, not your home address.
