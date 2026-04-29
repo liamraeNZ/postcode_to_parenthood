@@ -22,8 +22,7 @@ import {
 } from '@/services/postcodeService';
 import { GpPracticeSummary, ICBPoliciesResponse } from '@/types';
 import { motion, AnimatePresence } from 'motion/react';
-import { IcbDocuments } from './IcbDocuments';
-import { PolicyTabs } from './PolicyTabs';
+import { PolicyResults } from './PolicyResults';
 
 type PostcodeLookupAction = 'search' | 'lookup';
 
@@ -429,37 +428,9 @@ export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: Postcod
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-4 lg:hidden"
+            className="lg:hidden"
           >
-            <Card className="border-none border-l-4 border-l-sage-green shadow-md overflow-hidden rounded-xl bg-cream p-5">
-              <div className="mb-4">
-                <CardTitle className="text-deep-slate font-bold">
-                  {selectedGP ? selectedGP.name : 'Eligibility Result'}
-                </CardTitle>
-                <p className="text-[0.7rem] font-medium text-deep-slate/70 mt-1 leading-snug">
-                  {result.icb_name}
-                </p>
-              </div>
-
-              <PolicyTabs policies={result.policies} />
-            </Card>
-
-            <IcbDocuments icbCode={icbCode} />
-
-            <div className="mt-4 rounded-lg border border-warm-sand-dark bg-cream/60 p-4 text-xs text-deep-slate/70 leading-relaxed">
-              <div className="font-bold text-deep-slate">Disclaimer on NHS funding data</div>
-              <div className="mt-2 space-y-2">
-                <p>
-                  We aim to keep the information accurate and current. The policy data is compiled from publicly
-                  available documents published by each Integrated Care Board (ICB).
-                </p>
-                <p>
-                  NHS IVF eligibility criteria can be updated with little notice, and some local exceptions may not be
-                  widely published. For the latest guidance on your circumstances, always confirm with your ICB or speak
-                  to your GP.
-                </p>
-              </div>
-            </div>
+            <PolicyResults panel={{ postcode, selectedGP, icbCode, policiesResponse: result, isLoading: loadingSelect, error: error || null }} />
           </motion.div>
         )}
       </AnimatePresence>
