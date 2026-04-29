@@ -1,13 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+@import "@fontsource-variable/lora";
+@import "@fontsource-variable/inter";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: 'Geist Variable', sans-serif;
+    --font-heading: 'Lora Variable', serif;
+    --font-sans: 'Inter Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -34,13 +35,17 @@
     --color-primary-foreground: var(--primary-foreground);
     --color-primary: var(--primary);
     --color-popover-foreground: var(--popover-foreground);
-    --color-sage: #EBF2ED;
-    --color-sage-text: #3E5C45;
-    --color-sage-btn: #4A6D55;
-    --color-emerald-deep: #0F5132;
-    --color-emerald-light: #D1E7DD;
-    --color-emerald-solid: #059669;
-    --color-soft-bg: #F7F9F7;
+    --color-warm-sand: #F5F2ED;
+    --color-warm-sand-dark: #E8E4DD;
+    --color-cream: #FDFCFA;
+    --color-deep-slate: #333D31;
+    --color-sage-green: #8FA88B;
+    --color-sage-light: #D4DFD1;
+    --color-sage-dark: #5C7A56;
+    --color-sage-hover: #4A6B45;
+    --color-sage-btn: #5C7A56;
+    --color-warm-bg: #F5F2ED;
+    --color-focus-glow: rgba(143,168,139,0.3);
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
     --color-card: var(--card);
@@ -79,7 +84,7 @@
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
+    --radius: 1rem;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
@@ -130,6 +135,7 @@
     }
   body {
     @apply bg-background text-foreground;
+    line-height: 1.75;
     }
   html {
     @apply font-sans;

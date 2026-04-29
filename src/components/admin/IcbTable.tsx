@@ -29,6 +29,7 @@ export function IcbTable({ icbs, onSelect, onEdit, onToggleStatus }: IcbTablePro
       <div className="flex gap-2">
         <Input
           placeholder="Search by name..."
+          aria-label="Search ICBs by name"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="max-w-xs"

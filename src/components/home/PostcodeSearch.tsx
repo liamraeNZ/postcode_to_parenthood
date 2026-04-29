@@ -38,6 +38,7 @@ export type PolicyPanelState = {
 
 type PostcodeSearchProps = {
   onPolicyPanelChange?: (state: PolicyPanelState) => void;
+  onSearchStarted?: () => void;
 };
 
 function getPostcodeLookupErrorMessage(action: PostcodeLookupAction, err: unknown) {
@@ -60,7 +61,7 @@ function logDevError(message: string, err: unknown) {
   }
 }
 
-export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
+export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: PostcodeSearchProps) {
   const [postcode, setPostcode] = useState('');
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [loadingSelect, setLoadingSelect] = useState(false);
@@ -130,6 +131,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
       const gps = await searchGpPracticesByPostcode(postcode);
       if (gps.length > 0) {
         setGpPractices(gps);
+        onSearchStarted?.();
       } else {
         setGpPractices([]);
         setError("We couldn't find any active GP practices for that postcode.");
@@ -251,7 +253,8 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
         <div className="relative flex-1">
           <Input 
             placeholder="Enter your postcode (e.g. SE26 5EN)..." 
-            className="w-full px-6 py-4 h-14 text-lg font-medium border-2 border-emerald-100 focus-visible:border-emerald-500 focus-visible:ring-0 rounded-xl bg-white shadow-lg transition-all"
+            aria-label="Enter your postcode"
+            className="w-full px-6 py-4 h-14 text-lg font-medium border-2 border-warm-sand-dark focus-visible:border-sage-green focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(143,168,139,0.3)] rounded-2xl bg-white shadow-lg transition-all"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />
@@ -259,9 +262,9 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
         <Button 
           type="submit" 
           disabled={loadingSearch || loadingSelect}
-          className="absolute right-2 px-6 h-10 bg-emerald-solid hover:bg-emerald-deep text-white font-bold rounded-lg shadow-md transition-all active:scale-95"
+          className="absolute right-2 px-6 h-11 bg-sage-dark hover:bg-sage-hover text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
         >
-          {loadingSearch ? <Loader2 className="w-5 h-5 animate-spin" /> : "Find GP"}
+          {loadingSearch ? <Loader2 className="w-5 h-5 animate-spin" /> : "Find your GP"}
         </Button>
       </form>
 
@@ -284,13 +287,13 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
             exit={{ opacity: 0, y: 10 }}
             className="space-y-3"
           >
-            <Card className="border-none shadow-md overflow-hidden rounded-xl bg-white p-5">
+            <Card className="border-none shadow-md overflow-hidden rounded-xl bg-cream p-5">
               <div className="flex justify-between items-start mb-3">
                 <div>
-                  <CardTitle className="text-gray-800 font-bold">Select your GP practice</CardTitle>
+                  <CardTitle className="text-deep-slate font-bold">Select your GP practice</CardTitle>
                 </div>
                 {loadingSelect && (
-                  <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none">
+                  <Badge className="bg-sage-light text-deep-slate hover:bg-sage-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none">
                     <span className="inline-flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
                       Loading
@@ -302,6 +305,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
               <div className="flex items-center gap-2 mb-3">
                 <Input
                   placeholder="Search GP name, postcode, or ODS…"
+                  aria-label="Filter GP practices"
                   className="h-10"
                   value={gpPracticeQuery}
                   onChange={(e) => setGpPracticeQuery(e.target.value)}
@@ -334,19 +338,19 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                               {gp.odsCode}
                             </span>
                           </span>
-                          {isSelected && icbCode && result && <span className="text-xs opacity-90">{result.icb_name}</span>}
+                          {isSelected && icbCode && result && <span className="text-xs opacity-90 truncate max-w-[120px]">{result.icb_name}</span>}
                         </Button>
                       );
                     })
                   ) : (
-                    <div className="text-sm text-gray-600 px-1 py-2">No GP practices match that search.</div>
+                    <div className="text-sm text-deep-slate/60 px-1 py-2">No GP practices match that search.</div>
                   )}
                 </div>
               </div>
 
               <div className="mt-3 flex items-center justify-between gap-2">
                 <Dialog open={nameSearchOpen} onOpenChange={setNameSearchOpen}>
-                  <DialogTrigger render={<Button type="button" variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300" />}>
+                  <DialogTrigger render={<Button type="button" variant="outline" className="border-warm-sand-dark text-sage-dark hover:bg-sage-light hover:border-sage-green" />}>
                     Can't find your GP? Search by name
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-lg">
@@ -360,6 +364,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                     <div className="flex items-center gap-2">
                       <Input
                         placeholder="e.g. Babylon, The Vale Medical Centre…"
+                        aria-label="Search GP practice by name"
                         className="h-10"
                         value={nameSearchQuery}
                         onChange={(e) => setNameSearchQuery(e.target.value)}
@@ -401,9 +406,9 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                             </Button>
                           ))
                         ) : nameSearchResults && nameSearchResults.length === 0 ? (
-                          <div className="text-sm text-gray-600 px-1 py-2">No GP practices found.</div>
+                          <div className="text-sm text-deep-slate/60 px-1 py-2">No GP practices found.</div>
                         ) : (
-                          <div className="text-sm text-gray-600 px-1 py-2">
+                          <div className="text-sm text-deep-slate/60 px-1 py-2">
                             Type a name (3+ characters) and search.
                           </div>
                         )}
@@ -413,7 +418,7 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
                 </Dialog>
 
                 {filteredGpPractices ? (
-                  <div className="text-xs text-gray-500">{filteredGpPractices.length} shown</div>
+                  <div className="text-xs text-deep-slate/60">{filteredGpPractices.length} shown</div>
                 ) : null}
               </div>
             </Card>
@@ -426,14 +431,14 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4 lg:hidden"
           >
-            <Card className="border-none border-l-4 border-l-emerald-500 shadow-md overflow-hidden rounded-xl bg-white p-5">
+            <Card className="border-none border-l-4 border-l-sage-green shadow-md overflow-hidden rounded-xl bg-cream p-5">
               <div className="mb-4">
-                <CardTitle className="text-gray-800 font-bold">
+                <CardTitle className="text-deep-slate font-bold">
                   {selectedGP ? selectedGP.name : 'Eligibility Result'}
                 </CardTitle>
-                <Badge className="bg-emerald-light text-emerald-deep hover:bg-emerald-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none mt-1">
+                <p className="text-[0.7rem] font-medium text-deep-slate/70 mt-1 leading-snug">
                   {result.icb_name}
-                </Badge>
+                </p>
               </div>
 
               <PolicyTabs policies={result.policies} />
@@ -441,8 +446,8 @@ export function PostcodeSearch({ onPolicyPanelChange }: PostcodeSearchProps) {
 
             <IcbDocuments icbCode={icbCode} />
 
-            <div className="mt-4 rounded-lg border border-gray-200 bg-white/60 p-4 text-xs text-gray-600 leading-relaxed">
-              <div className="font-bold text-gray-800">Disclaimer on NHS funding data</div>
+            <div className="mt-4 rounded-lg border border-warm-sand-dark bg-cream/60 p-4 text-xs text-deep-slate/70 leading-relaxed">
+              <div className="font-bold text-deep-slate">Disclaimer on NHS funding data</div>
               <div className="mt-2 space-y-2">
                 <p>
                   We aim to keep the information accurate and current. The policy data is compiled from publicly

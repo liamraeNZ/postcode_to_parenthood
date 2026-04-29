@@ -10,6 +10,6 @@ FertilityFund UK is a small web app that helps UK residents find IVF funding opt
 
 - Looks up your NHS ICB from a postcode and summarizes key policy details (cycles, age limits, BMI, wait times, and notes)
 - Highlights additional funding resources beyond NHS eligibility (private grants, loans, and refund/guarantee programs)
-- Aims to reduce the “postcode lottery” confusion so you can quickly understand your options and next steps
+- Aims to reduce confusion around regional variation so you can quickly understand your options and next steps
 
 This project is informational only and isn’t medical, legal, or financial advice. Always confirm details with your ICB, clinic, and the provider of any grant or scheme.
