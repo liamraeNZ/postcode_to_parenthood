@@ -57,7 +57,7 @@ export function PolicyList({ icbId: _icbId, policies, onNewPolicy }: PolicyListP
                         href={policy.source_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline"
+                        className="underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-green focus-visible:ring-offset-1 rounded-sm"
                       >
                         {policy.source_url}
                       </a>
