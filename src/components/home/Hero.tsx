@@ -36,8 +36,8 @@ export function Hero({ onPolicyPanelChange, onSearchStarted, hasResults, hasSear
             <p>
               Where you live affects whether you qualify for support; a "postcode lottery" that leaves many people confused and frustrated.
             </p>
-            <p>
-              Enter your postcode below. We'll show you:
+            <p><b>Enter your postcode below. We'll show you:</b>
+              
             </p>
             <ul className="space-y-2 mt-1">
               <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
