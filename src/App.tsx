@@ -101,8 +101,8 @@ export default function App() {
     <div className="min-h-screen bg-warm-bg font-sans selection:bg-sage-light selection:text-deep-slate flex flex-col">
       <Navbar />
       
-      <main className="flex-1 container mx-auto px-4 md:px-8 py-6">
-        <div className="grid grid-cols-12 gap-12">
+      <main className="flex-1 container mx-auto px-3 sm:px-4 md:px-8 py-4 md:py-6">
+        <div className="grid grid-cols-12 gap-4 md:gap-8 lg:gap-12">
           <Hero onPolicyPanelChange={setPolicyPanel} onSearchStarted={() => setHasSearched(true)} hasResults={!!(policyPanel && (policyPanel.policiesResponse || policyPanel.isLoading || policyPanel.error))} hasSearched={hasSearched} />
           
           <section className="col-span-12 lg:col-span-5 flex flex-col gap-6">

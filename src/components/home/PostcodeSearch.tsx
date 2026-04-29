@@ -248,13 +248,13 @@ export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: Postcod
   };
 
   return (
-    <div className="w-full space-y-6">
-      <form onSubmit={handleSearch} className="relative flex items-center max-w-md group">
+    <div className="w-full space-y-4 md:space-y-6">
+      <form onSubmit={handleSearch} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 max-w-md sm:relative group">
         <div className="relative flex-1">
           <Input 
-            placeholder="Enter your postcode (e.g. SE26 5EN)..." 
+            placeholder="Enter your postcode (e.g. SE26 5EN)" 
             aria-label="Enter your postcode"
-            className="w-full px-6 py-4 h-14 text-lg font-medium border-2 border-warm-sand-dark focus-visible:border-sage-green focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(143,168,139,0.3)] rounded-2xl bg-white shadow-lg transition-all"
+            className="w-full px-4 sm:px-6 py-3 sm:py-4 h-12 sm:h-14 text-base sm:text-lg font-medium border-2 border-warm-sand-dark focus-visible:border-sage-green focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(143,168,139,0.3)] rounded-xl sm:rounded-2xl bg-white shadow-lg transition-all"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />
@@ -262,7 +262,7 @@ export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: Postcod
         <Button 
           type="submit" 
           disabled={loadingSearch || loadingSelect}
-          className="absolute right-2 px-6 h-11 bg-sage-dark hover:bg-sage-hover text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
+          className="sm:absolute sm:right-2 w-full sm:w-auto px-6 h-11 bg-sage-dark hover:bg-sage-hover text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
         >
           {loadingSearch ? <Loader2 className="w-5 h-5 animate-spin" /> : "Find your GP"}
         </Button>
