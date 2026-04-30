@@ -11,6 +11,9 @@ trap cleanup EXIT INT TERM
 echo "[run-dev] applying D1 migrations locally..."
 CI=1 npx wrangler d1 migrations apply DB --local
 
+echo "[run-dev] initial frontend build..."
+npm run build
+
 echo "[run-dev] building frontend in watch mode..."
 npm run build:watch &
 FRONTEND_BUILD_PID=$!

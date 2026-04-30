@@ -1,6 +1,6 @@
 -- ICB policy seed data (generated from extracted PDF policies)
--- Generated: 2026-04-28T14:21:44.838Z
--- Source: 38 ICB policy documents via scripts/extractPolicies.ts
+-- Generated: 2026-04-30T16:38:11.292Z
+-- Source: 42 ICB policy documents via scripts/extractPolicies.ts
 
 -- Bath and North East Somerset, Swindon and Wiltshire (high confidence, 2022)
 INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
@@ -666,4 +666,72 @@ FROM icbs WHERE id = 'QT6' AND sub_icb_code IS NULL LIMIT 1; --> statement-break
 
 INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT 'pol-fet-cornwall-and-the-isles-of-scil', id, 'fet', '2025-09-11', 1, NULL, 40, 19, 29.9, NULL, NULL, 4, 0, 1, 'No living children from current relationship; at least 1 partner has no children from previous relationships', 'Available from remaining embryos if fresh cycle unsuccessful. NHS funds cryopreservation for 1 year.'
-FROM icbs WHERE id = 'QT6' AND sub_icb_code IS NULL LIMIT 1;
+FROM icbs WHERE id = 'QT6' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+-- Greater Manchester (high confidence, 2026)
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-ivf-greater-manchester', id, 'ivf', '2025-09-11', 1, NULL, 42, 19, 30, NULL, NULL, 12, 0, 1, 'No living child from current relationship and one partner must have no living children from previous relationships.', '1 full cycle for women under 43. Women 40-42 must not have had previous IVF. Same-sex/single women require 6 self-funded AI cycles (3 if >36) plus 6 NHS-funded IUI cycles before IVF. Unexplained infertility requires 2 years expectant management or 12 AI cycles. Donor eggs permitted for 40-42 if AFC<=4, AMH<=5.4, or FSH>8.9.'
+FROM icbs WHERE id = 'QOP' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-icsi-greater-manchester', id, 'icsi', '2025-09-11', 1, NULL, 42, 19, 30, NULL, NULL, 12, 0, 1, 'No living child from current relationship and one partner must have no living children from previous relationships.', 'Indications include severe semen deficits, azoospermia, or previous IVF failure. 1 full cycle for women under 43. Women 40-42 must not have had previous IVF. Same-sex/single women require 6 self-funded AI cycles plus 6 NHS-funded IUI cycles before IVF/ICSI.'
+FROM icbs WHERE id = 'QOP' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-iui-greater-manchester', id, 'iui', '2025-09-11', 6, NULL, 42, 19, 30, NULL, NULL, 0, 0, 1, 'No living child from current relationship and one partner must have no living children from previous relationships.', '6 NHS-funded IUI cycles offered to same-sex couples and single women after 6 self-funded vaginal insemination cycles (or 3 if aged over 36). Not routinely offered for unexplained infertility.'
+FROM icbs WHERE id = 'QOP' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-fet-greater-manchester', id, 'fet', '2025-09-11', 0, NULL, 42, 19, 30, NULL, NULL, 0, 0, 1, 'No living child from current relationship and one partner must have no living children from previous relationships.', 'FET is included as part of a ''full cycle'' of IVF/ICSI, which ends with the final transfer of all resultant fresh and frozen embryos or a successful live birth.'
+FROM icbs WHERE id = 'QOP' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+-- Humber and North Yorkshire (high confidence, 2023)
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-ivf-humber-and-north-yorkshire', id, 'ivf', '2025-09-11', 1, 18, 42, 19, 30, 5, 9, 0, 0, 1, 'Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.', '1 full cycle funded. Previous cycles (NHS/private) count towards the total. Same-sex couples/physical disability receive up to 6 funded IUI cycles before IVF. Unexplained infertility requires 2 years of trying to conceive. Women 40-42 must not have had previous IVF and must meet ovarian reserve criteria. No funding if previously sterilised. Couples must be co-habiting in a stable relationship for at least 2 years.'
+FROM icbs WHERE id = 'QOQ' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-icsi-humber-and-north-yorkshire', id, 'icsi', '2025-09-11', 1, 18, 42, 19, 30, 5, 9, 0, 0, 1, 'Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.', '1 full cycle funded. Previous cycles (NHS/private) count towards the total. Same-sex couples/physical disability receive up to 6 funded IUI cycles before ICSI. Unexplained infertility requires 2 years of trying to conceive. Women 40-42 must not have had previous IVF and must meet ovarian reserve criteria. No funding if previously sterilised. Couples must be co-habiting in a stable relationship for at least 2 years.'
+FROM icbs WHERE id = 'QOQ' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-iui-humber-and-north-yorkshire', id, 'iui', '2025-09-11', 6, 18, 42, 19, 30, NULL, NULL, 0, 0, 1, 'Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.', 'Up to 6 cycles funded for same-sex couples, physical disabilities, or anovulatory infertility. Not routinely funded for unexplained infertility, mild endometriosis, or mild male factor infertility (2 years expectant management required instead). Couples must be co-habiting in a stable relationship for at least 2 years.'
+FROM icbs WHERE id = 'QOQ' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-di-humber-and-north-yorkshire', id, 'di', '2025-09-11', 6, 18, 42, 19, 30, NULL, NULL, 0, 0, 1, 'Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.', 'Up to 6 cycles of donor insemination offered where clinically indicated. Patients requiring donor gametes are placed on a waiting list for an initial 3 years before review. Couples must be co-habiting in a stable relationship for at least 2 years.'
+FROM icbs WHERE id = 'QOQ' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-fet-humber-and-north-yorkshire', id, 'fet', '2025-09-11', 0, 18, 42, 19, 30, NULL, NULL, 0, 0, 1, 'Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.', 'FET is included as part of a full IVF/ICSI cycle. All stored and viable embryos must be used before a new cycle commences, including embryos resulting from previously self-funded cycles. Couples must be co-habiting in a stable relationship for at least 2 years.'
+FROM icbs WHERE id = 'QOQ' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+-- Cheshire and Merseyside (high confidence, 2025)
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-ivf-cheshire-and-merseyside', id, 'ivf', '2025-09-11', 1, NULL, 42, 19, 29.9, 5.4, NULL, 12, 0, 1, 'No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).', '1 cycle for women under 40. 1 cycle for women aged 40-42 provided no previous IVF, no low ovarian reserve, and cycle commences before 43rd birthday. Same-sex couples/single women must complete 6 self-funded and 6 NHS-funded IUI cycles (12 total) before IVF. Reversal of sterilisation is not funded. Single embryo transfer is standard.'
+FROM icbs WHERE id = 'QYG' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-icsi-cheshire-and-merseyside', id, 'icsi', '2025-09-11', 1, NULL, 42, 19, 29.9, 5.4, NULL, 12, 0, 1, 'No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).', 'Routinely funded for severe deficits in semen quality, or obstructive/non-obstructive azoospermia. Inherits IVF age and cycle criteria: 1 cycle max. Same-sex/single women must complete 12 IUI cycles before IVF/ICSI is considered.'
+FROM icbs WHERE id = 'QYG' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-iui-cheshire-and-merseyside', id, 'iui', '2025-09-11', 6, NULL, 42, 19, 29.9, NULL, NULL, 0, 0, 1, 'No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).', 'Funded for physical/psychosexual problems, specific conditions (e.g., HIV sperm washing), and same-sex/single women. Same-sex/single women must first complete 6 self-funded IUI cycles before NHS funds a further 6 cycles. Not routinely offered for unexplained infertility, mild endometriosis, or mild male factor.'
+FROM icbs WHERE id = 'QYG' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-di-cheshire-and-merseyside', id, 'di', '2025-09-11', 6, NULL, 42, 19, 29.9, NULL, NULL, 0, 0, 1, 'No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).', 'Considered for obstructive/non-obstructive azoospermia, severe semen deficits (if declining ICSI), high risk of genetic/infectious disease transmission, or severe rhesus isoimmunisation. Patients failing to achieve pregnancy using IUI/DI will be considered for IVF.'
+FROM icbs WHERE id = 'QYG' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-fet-cheshire-and-merseyside', id, 'fet', '2025-09-11', 0, NULL, 42, 19, 29.9, NULL, NULL, 0, 0, 1, 'No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).', 'A full cycle of IVF includes the transfer of all resultant fresh and/or frozen embryos. The cycle only ends when all frozen embryos are used, a live birth occurs, or a child is adopted.'
+FROM icbs WHERE id = 'QYG' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+-- Leicester, Leicestershire and Rutland (high confidence, 2013)
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-ivf-leicester-leicestershire-and-r', id, 'ivf', '2025-09-11', 1, NULL, 42, 19, 30, NULL, 8.9, 0, 0, 1, 'No living child from current or previous relationships', '1 cycle offered for women up to age 42 (stimulation completed before 43rd birthday). Women aged 40-42 must not have had previous IVF. Maximum of 2 previous self-funded cycles allowed. Same-sex couples require prior AI as per local CCG policy. Neither partner can be previously sterilised.'
+FROM icbs WHERE id = 'QK1' AND sub_icb_code IS NULL LIMIT 1; --> statement-breakpoint
+
+INSERT OR IGNORE INTO icb_policies (id, icb_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
+SELECT 'pol-icsi-leicester-leicestershire-and-r', id, 'icsi', '2025-09-11', 1, NULL, 42, 19, 30, NULL, 8.9, 0, 0, 1, 'No living child from current or previous relationships', '1 cycle offered for women up to age 42 (stimulation completed before 43rd birthday). Women aged 40-42 must not have had previous IVF. Maximum of 2 previous self-funded cycles allowed. Same-sex couples require prior AI as per local CCG policy. Neither partner can be previously sterilised.'
+FROM icbs WHERE id = 'QK1' AND sub_icb_code IS NULL LIMIT 1;

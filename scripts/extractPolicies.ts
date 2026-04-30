@@ -346,7 +346,7 @@ async function main() {
   const outputIdx = args.indexOf('--output');
   const outputPath = outputIdx !== -1
     ? args[outputIdx + 1]
-    : join(__dirname, 'output', `extracted-policies-${MODEL}.json`);
+    : join(__dirname, 'output', 'extracted-policies.json');
 
   const folders = icbFilter
     ? getIcbFolders().filter(f => f.toLowerCase().includes(icbFilter.toLowerCase()))
