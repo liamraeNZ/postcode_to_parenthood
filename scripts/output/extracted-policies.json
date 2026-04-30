@@ -2727,7 +2727,7 @@
     "extraction_confidence": "high",
     "extraction_notes": "West Yorkshire ICB specifically funds 1 cycle of IVF/ICSI, overriding the general Yorkshire and Humber 3-cycle recommendation. General criteria (age, BMI, smoking, living children) applied to all treatments."
   },
-    {
+  {
     "icb_folder_name": "Cornwall and the Isles of Scilly",
     "document_files": [
       "policies/Cornwall and the Isles of Scilly/2018/CommissioningPolicies.pdf"
@@ -2813,5 +2813,293 @@
     ],
     "extraction_confidence": "high",
     "extraction_notes": "General criteria (Age, BMI, Smoking, Living Children) were inherited across all treatments as per policy. Cycle counts for IVF and IUI were explicitly stated. ICSI and FET cycle counts were inferred from the policy's definition of a full cycle and standard clinical practice. IUI rounds were set as a prerequisite for IVF based on the 'agreed algorithm' requirement."
+  },
+  {
+    "icb_folder_name": "Greater Manchester",
+    "document_files": [
+      "policies/Greater Manchester/2026/NHSGM - 035.pdf"
+    ],
+    "document_year": "2026",
+    "extracted_at": "2026-04-30T16:21:31.324Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current relationship and one partner must have no living children from previous relationships.",
+        "additional_notes": "1 full cycle for women under 43. Women 40-42 must not have had previous IVF. Same-sex/single women require 6 self-funded AI cycles (3 if >36) plus 6 NHS-funded IUI cycles before IVF. Unexplained infertility requires 2 years expectant management or 12 AI cycles. Donor eggs permitted for 40-42 if AFC<=4, AMH<=5.4, or FSH>8.9."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current relationship and one partner must have no living children from previous relationships.",
+        "additional_notes": "Indications include severe semen deficits, azoospermia, or previous IVF failure. 1 full cycle for women under 43. Women 40-42 must not have had previous IVF. Same-sex/single women require 6 self-funded AI cycles plus 6 NHS-funded IUI cycles before IVF/ICSI."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current relationship and one partner must have no living children from previous relationships.",
+        "additional_notes": "6 NHS-funded IUI cycles offered to same-sex couples and single women after 6 self-funded vaginal insemination cycles (or 3 if aged over 36). Not routinely offered for unexplained infertility."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": null,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": null,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current relationship and one partner must have no living children from previous relationships.",
+        "additional_notes": "FET is included as part of a 'full cycle' of IVF/ICSI, which ends with the final transfer of all resultant fresh and frozen embryos or a successful live birth."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "All general criteria (BMI 19-30, non-smoking, childlessness definition) were clearly stated and inherited across treatments. IVF and ICSI were split into separate entries. DI was not extracted separately as it does not have distinct cycle counts or criteria from IUI. IUI rounds required for IVF is set to 12 based on the requirement of 6 self-funded + 6 NHS-funded cycles for same-sex/single women, or 12 AI cycles for unexplained infertility."
+  },
+  {
+    "icb_folder_name": "Humber and North Yorkshire",
+    "document_files": [
+      "policies/Humber and North Yorkshire/2023/NYCCG-Access-to-Infertility-Treatment-YH-V14-March-22.pdf"
+    ],
+    "document_year": "2023",
+    "extracted_at": "2026-04-30T16:21:41.125Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.",
+        "additional_notes": "1 full cycle funded. Previous cycles (NHS/private) count towards the total. Same-sex couples/physical disability receive up to 6 funded IUI cycles before IVF. Unexplained infertility requires 2 years of trying to conceive. Women 40-42 must not have had previous IVF and must meet ovarian reserve criteria. No funding if previously sterilised. Couples must be co-habiting in a stable relationship for at least 2 years."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": 5,
+        "fsh_max_iu": 9,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.",
+        "additional_notes": "1 full cycle funded. Previous cycles (NHS/private) count towards the total. Same-sex couples/physical disability receive up to 6 funded IUI cycles before ICSI. Unexplained infertility requires 2 years of trying to conceive. Women 40-42 must not have had previous IVF and must meet ovarian reserve criteria. No funding if previously sterilised. Couples must be co-habiting in a stable relationship for at least 2 years."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.",
+        "additional_notes": "Up to 6 cycles funded for same-sex couples, physical disabilities, or anovulatory infertility. Not routinely funded for unexplained infertility, mild endometriosis, or mild male factor infertility (2 years expectant management required instead). Couples must be co-habiting in a stable relationship for at least 2 years."
+      },
+      {
+        "treatment_type": "DI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.",
+        "additional_notes": "Up to 6 cycles of donor insemination offered where clinically indicated. Patients requiring donor gametes are placed on a waiting list for an initial 3 years before review. Couples must be co-habiting in a stable relationship for at least 2 years."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": null,
+        "max_age": 42,
+        "min_age": 18,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": false,
+        "smoking_restricted": true,
+        "living_children_rule": "Neither partner should have any living children (including adopted, excluding fostered) from that or any previous relationship.",
+        "additional_notes": "FET is included as part of a full IVF/ICSI cycle. All stored and viable embryos must be used before a new cycle commences, including embryos resulting from previously self-funded cycles. Couples must be co-habiting in a stable relationship for at least 2 years."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "The policy clearly outlines 1 funded IVF/ICSI cycle for North Yorkshire CCG. General criteria (Age 18-42, BMI 19-30, no living children) apply across all treatments. Ovarian reserve criteria (AMH > 5, FSH < 9) are explicitly stated for women aged 40-42. IUI and DI are clearly separated with up to 6 cycles funded for specific indications (same-sex, physical disability, anovulatory infertility)."
+  },
+  {
+    "icb_folder_name": "Cheshire and Merseyside",
+    "document_files": [
+      "policies/Cheshire and Merseyside/2025/pol-clin115-subfertility-final-march-2026.pdf"
+    ],
+    "document_year": "2025",
+    "extracted_at": "2026-04-30T16:24:51.093Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).",
+        "additional_notes": "1 cycle for women under 40. 1 cycle for women aged 40-42 provided no previous IVF, no low ovarian reserve, and cycle commences before 43rd birthday. Same-sex couples/single women must complete 6 self-funded and 6 NHS-funded IUI cycles (12 total) before IVF. Reversal of sterilisation is not funded. Single embryo transfer is standard."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 12,
+        "amh_min_pmol": 5.4,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).",
+        "additional_notes": "Routinely funded for severe deficits in semen quality, or obstructive/non-obstructive azoospermia. Inherits IVF age and cycle criteria: 1 cycle max. Same-sex/single women must complete 12 IUI cycles before IVF/ICSI is considered."
+      },
+      {
+        "treatment_type": "IUI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).",
+        "additional_notes": "Funded for physical/psychosexual problems, specific conditions (e.g., HIV sperm washing), and same-sex/single women. Same-sex/single women must first complete 6 self-funded IUI cycles before NHS funds a further 6 cycles. Not routinely offered for unexplained infertility, mild endometriosis, or mild male factor."
+      },
+      {
+        "treatment_type": "DI",
+        "cycles_offered": 6,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).",
+        "additional_notes": "Considered for obstructive/non-obstructive azoospermia, severe semen deficits (if declining ICSI), high risk of genetic/infectious disease transmission, or severe rhesus isoimmunisation. Patients failing to achieve pregnancy using IUI/DI will be considered for IVF."
+      },
+      {
+        "treatment_type": "FET",
+        "cycles_offered": null,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 29.9,
+        "iui_rounds_required": 0,
+        "amh_min_pmol": null,
+        "fsh_max_iu": null,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living children from a current or any previous relationship (applies to both partners; adopted children count as biological).",
+        "additional_notes": "A full cycle of IVF includes the transfer of all resultant fresh and/or frozen embryos. The cycle only ends when all frozen embryos are used, a live birth occurs, or a child is adopted."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "Document is highly structured. General criteria (BMI 19-29.9, max age 42, strict non-smoking including e-cigs, and strict childlessness) apply to all treatments. IUI/DI cycle counts are clearly defined, as are the 12 total IUI rounds (6 self-funded + 6 NHS) required for same-sex couples before IVF."
+  },
+  {
+    "icb_folder_name": "Leicester, Leicestershire and Rutland",
+    "document_files": [
+      "policies/Leicester, Leicestershire and Rutland/2013/Current-LLR-GEM-IVF-Policy-wordformat (1).pdf"
+    ],
+    "document_year": "2013",
+    "extracted_at": "2026-04-30T16:34:11.449Z",
+    "policies": [
+      {
+        "treatment_type": "IVF",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": null,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationships",
+        "additional_notes": "1 cycle offered for women up to age 42 (stimulation completed before 43rd birthday). Women aged 40-42 must not have had previous IVF. Maximum of 2 previous self-funded cycles allowed. Same-sex couples require prior AI as per local CCG policy. Neither partner can be previously sterilised."
+      },
+      {
+        "treatment_type": "ICSI",
+        "cycles_offered": 1,
+        "max_age": 42,
+        "min_age": null,
+        "bmi_min": 19,
+        "bmi_max": 30,
+        "iui_rounds_required": null,
+        "amh_min_pmol": null,
+        "fsh_max_iu": 8.9,
+        "endometriosis_priority_access": null,
+        "smoking_restricted": true,
+        "living_children_rule": "No living child from current or previous relationships",
+        "additional_notes": "1 cycle offered for women up to age 42 (stimulation completed before 43rd birthday). Women aged 40-42 must not have had previous IVF. Maximum of 2 previous self-funded cycles allowed. Same-sex couples require prior AI as per local CCG policy. Neither partner can be previously sterilised."
+      }
+    ],
+    "extraction_confidence": "high",
+    "extraction_notes": "IUI and DI are explicitly excluded from this policy document. Criteria for IVF and ICSI are clearly defined."
   }
 ]

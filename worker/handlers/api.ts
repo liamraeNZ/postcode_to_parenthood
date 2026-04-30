@@ -496,6 +496,30 @@ export async function handleApiRequest(request: Request, env: Env) {
       }
     }
 
+    if (url.pathname === '/api/map-data' && request.method === 'GET') {
+      const { results } = await env.DB.prepare(`
+        select
+          i.id as icb_id,
+          i.name as icb_name,
+          p.treatment_type_id,
+          p.cycles_offered
+        from icb_policies p
+        join icbs i on i.id = p.icb_id
+        join treatment_types t on t.id = p.treatment_type_id
+        where i.status = 'active'
+          and p.effective_from <= date('now')
+          and (p.effective_to is null or p.effective_to >= date('now'))
+      `).bind().all<{
+        icb_id: string;
+        icb_name: string;
+        treatment_type_id: string;
+        cycles_offered: number;
+      }>();
+
+      response = jsonResponse({ data: results, request_id: reqId });
+      return response;
+    }
+
     if (url.pathname === '/api/client-log' && request.method === 'POST') {
       const body = await readJsonBody(request, { maxBytes: 10_000 });
       if (!body.ok) {
