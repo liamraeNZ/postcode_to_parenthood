@@ -1,12 +1,11 @@
-import { createRequestHandler } from "@react-router/cloudflare";
+import { createRequestHandler } from "react-router";
 import type { Env } from "./types";
 import { handleApiRequest } from "./handlers/api";
 
 const requestHandler = createRequestHandler(
-  // @ts-expect-error - virtual module provided by React Router Vite plugin
+  // @ts-expect-error - virtual module resolved via wrangler alias
   () => import("virtual:react-router/server-build"),
-  // @ts-expect-error - import.meta.env is provided by Vite at build time
-  import.meta.env.MODE
+  "production"
 );
 
 /**
@@ -39,7 +38,6 @@ export default {
     }
 
     // Everything else goes through React Router SSR
-    // @ts-expect-error - loadContext typing mismatch between @react-router/cloudflare and workers-types
     return requestHandler(request, {
       cloudflare: { env, ctx },
     });

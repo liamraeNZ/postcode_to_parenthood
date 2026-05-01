@@ -5,6 +5,12 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 preview_urls = true
 
+[build]
+command = "npm run build"
+
+[alias]
+"virtual:react-router/server-build" = "./build/server/index.js"
+
 [assets]
 directory = "./build/client"
 binding = "ASSETS"
