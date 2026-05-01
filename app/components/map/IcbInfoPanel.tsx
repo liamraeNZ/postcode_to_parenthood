@@ -1,28 +1,29 @@
+import { Link } from 'react-router';
 import type { MapPolicyEntry } from './IcbBoundaryLayer';
+import { toSlug } from '../../lib/slug';
 
 export interface IcbInfoPanelProps {
   icbId: string;
   icbName: string;
   policy: MapPolicyEntry | null;
-  onViewFullPolicy: (icbId: string) => void;
   onClose: () => void;
 }
 
 /**
  * IcbInfoPanel displays expanded policy details for a selected ICB region.
- * Shows ICB name, cycles offered, age range, and BMI range.
- * Includes a "View full policy" link to navigate to the full policy view.
+ * Shows ICB name, cycles offered, and age range.
+ * Includes a "View full policy" link to navigate to the ICB policy page.
  */
 export function IcbInfoPanel({
-  icbId,
   icbName,
   policy,
-  onViewFullPolicy,
   onClose,
 }: IcbInfoPanelProps) {
+  const slug = policy?.document_folder_name ? toSlug(policy.document_folder_name) : null;
+
   return (
     <div
-      className="absolute inset-x-0 bottom-0 z-[1000] w-full rounded-t-xl sm:inset-x-auto sm:bottom-auto sm:top-4 sm:right-4 sm:w-72 sm:rounded-xl bg-white shadow-lg ring-1 ring-warm-sand-dark"
+      className="absolute inset-x-0 bottom-0 z-[1000] w-full rounded-t-xl sm:inset-x-auto sm:bottom-auto sm:top-20 sm:right-4 sm:w-72 sm:rounded-xl bg-white shadow-lg ring-1 ring-warm-sand-dark"
       role="region"
       aria-label={`Policy details for ${icbName}`}
     >
@@ -60,48 +61,33 @@ export function IcbInfoPanel({
             <div className="flex justify-between">
               <dt className="text-deep-slate/60">Age range</dt>
               <dd className="font-medium text-deep-slate">
-                {formatRange((policy as PolicyWithExtras).age_min, (policy as PolicyWithExtras).age_max, 'Not specified')}
-              </dd>
-            </div>
-            <div className="flex justify-between">
-              <dt className="text-deep-slate/60">BMI range</dt>
-              <dd className="font-medium text-deep-slate">
-                {formatRange((policy as PolicyWithExtras).bmi_min, (policy as PolicyWithExtras).bmi_max, 'Not specified')}
+                {formatAgeRange(policy.min_age, policy.max_age)}
               </dd>
             </div>
           </dl>
         )}
 
         {/* View full policy link */}
-        {policy !== null && (
-          <button
-            onClick={() => onViewFullPolicy(icbId)}
-            className="mt-3 w-full rounded-lg bg-sage-dark px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-sage-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-green focus-visible:ring-offset-1"
+        {policy !== null && slug && (
+          <Link
+            to={`/icb/${slug}`}
+            className="mt-3 block w-full rounded-lg bg-sage-dark px-3 py-2 text-xs font-bold text-white text-center transition-colors hover:bg-sage-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-green focus-visible:ring-offset-1"
           >
             View full policy
-          </button>
+          </Link>
         )}
       </div>
     </div>
   );
 }
 
-/** Extended policy type that may include age/BMI fields from the API */
-interface PolicyWithExtras extends MapPolicyEntry {
-  age_min?: number | null;
-  age_max?: number | null;
-  bmi_min?: number | null;
-  bmi_max?: number | null;
-}
-
-/** Formats a min/max range into a readable string */
-function formatRange(
+/** Formats a min/max age range into a readable string */
+function formatAgeRange(
   min: number | null | undefined,
   max: number | null | undefined,
-  fallback: string
 ): string {
   if (min != null && max != null) return `${min}–${max}`;
   if (min != null) return `${min}+`;
   if (max != null) return `Up to ${max}`;
-  return fallback;
+  return 'Not specified';
 }

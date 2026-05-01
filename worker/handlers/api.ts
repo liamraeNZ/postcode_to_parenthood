@@ -509,8 +509,11 @@ export async function handleApiRequest(request: Request, env: Env) {
         select
           i.id as icb_id,
           i.name as icb_name,
+          i.document_folder_name,
           p.treatment_type_id,
-          p.cycles_offered
+          p.cycles_offered,
+          p.min_age,
+          p.max_age
         from icb_policies p
         join icbs i on i.id = p.icb_id
         join treatment_types t on t.id = p.treatment_type_id
@@ -520,8 +523,11 @@ export async function handleApiRequest(request: Request, env: Env) {
       `).bind().all<{
         icb_id: string;
         icb_name: string;
+        document_folder_name: string | null;
         treatment_type_id: string;
         cycles_offered: number;
+        min_age: number | null;
+        max_age: number;
       }>();
 
       response = jsonResponse({ data: results, request_id: reqId });

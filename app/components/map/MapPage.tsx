@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { useSearchParams, useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { feature } from 'topojson-client';
 import type { Topology, Objects } from 'topojson-specification';
@@ -87,7 +87,6 @@ function parseTreatmentParam(value: string | null): TreatmentTypeId {
 
 function MapPageContent() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const selectedTreatment = parseTreatmentParam(searchParams.get('treatment'));
 
@@ -183,14 +182,6 @@ function MapPageContent() {
     setSelectedIcbId(null);
   }, []);
 
-  // Navigate to full policy view
-  const handleViewFullPolicy = useCallback(
-    (_icbId: string) => {
-      navigate('/');
-    },
-    [navigate]
-  );
-
   // Get selected ICB info for the panel
   const selectedIcbInfo = useMemo(() => {
     if (!selectedIcbId) return null;
@@ -282,7 +273,6 @@ function MapPageContent() {
           icbId={selectedIcbInfo.icbId}
           icbName={selectedIcbInfo.icbName}
           policy={selectedIcbInfo.policy}
-          onViewFullPolicy={handleViewFullPolicy}
           onClose={handleClosePanel}
         />
       )}

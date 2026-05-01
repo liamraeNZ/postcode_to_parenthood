@@ -10,8 +10,11 @@ import { getIcbAriaLabel } from '@/utils/ariaLabels';
 export interface MapPolicyEntry {
   icb_id: string;
   icb_name: string;
+  document_folder_name: string | null;
   treatment_type_id: string;
   cycles_offered: number;
+  min_age: number | null;
+  max_age: number;
 }
 
 export interface IcbBoundaryLayerProps {
