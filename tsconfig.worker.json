@@ -8,7 +8,15 @@
     "strict": true,
     "isolatedModules": true,
     "noEmit": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./app/*"]
+    }
   },
-  "include": ["worker.ts"]
+  "include": [
+    "worker.ts",
+    "worker/**/*.ts",
+    "app/lib/slug.ts",
+    "app/types/admin.ts"
+  ]
 }

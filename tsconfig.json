@@ -17,15 +17,26 @@
     "jsx": "react-jsx",
     "paths": {
       "@/*": [
-        "./src/*"
+        "./app/*"
       ]
     },
     "allowImportingTsExtensions": true,
-    "noEmit": true
+    "noEmit": true,
+    "rootDirs": [
+      ".",
+      ".react-router/types"
+    ]
   },
+  "include": [
+    "app",
+    "worker/services",
+    "worker/types.ts",
+    "worker/lib.ts",
+    "env.d.ts",
+    ".react-router/types/**/*.ts"
+  ],
   "exclude": [
     "dist",
-    "node_modules",
-    "worker.ts"
+    "node_modules"
   ]
 }

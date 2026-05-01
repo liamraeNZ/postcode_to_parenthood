@@ -5,10 +5,16 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 preview_urls = true
 
+[build]
+command = "npm run build"
+
+[alias]
+"virtual:react-router/server-build" = "./build/server/index.js"
+
 [assets]
-directory = "./dist"
+directory = "./build/client"
 binding = "ASSETS"
-not_found_handling = "single-page-application"
+not_found_handling = "none"
 run_worker_first = true
 
 [[d1_databases]]

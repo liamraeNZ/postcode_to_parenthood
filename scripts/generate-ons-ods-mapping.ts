@@ -15,9 +15,9 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 
-const TOPOJSON_PATH = "static/data/icb-boundaries.topojson";
+const TOPOJSON_PATH = "public/data/icb-boundaries.topojson";
 const SQL_PATH = "migrations/0002_icbs.sql";
-const OUTPUT_PATH = "public/data/ons-to-ods.json";
+const OUTPUT_PATH = "app/data/ons-to-ods.json";
 
 interface TopoGeometry {
   properties: {

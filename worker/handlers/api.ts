@@ -14,6 +14,7 @@ import {
 } from '../lib';
 import { checkBasicAuth } from '../auth';
 import { lookupAllIcbPoliciesByIcbCode, resolveIcbIdFromPostcodesIo, resolveDocumentFolder } from '../services/icbPolicy';
+import { toSlug } from '../../app/lib/slug';
 import {
   fetchGpPracticesForOutcode,
   getFallbackOutcodeFromPostcode,
@@ -206,9 +207,13 @@ export async function handleApiRequest(request: Request, env: Env) {
           return response;
         }
 
+        const documentFolder = await resolveDocumentFolder(env.DB, resolved.icbId);
+        const slug = documentFolder ? toSlug(documentFolder) : null;
+
         response = jsonResponse({
           icbCode: resolved.icbId,
           matched_on: resolved.matched_on,
+          slug,
           upstream: { icb: admin.icb, ccg_id: admin.ccg_id, ccg: admin.ccg }
         });
         return response;
@@ -233,7 +238,10 @@ export async function handleApiRequest(request: Request, env: Env) {
         if (exists?.ok) preferredIcbCode = resolved.subIcbCode;
       }
 
-      response = jsonResponse({ ...resolved, icbCode: preferredIcbCode });
+      const documentFolder = await resolveDocumentFolder(env.DB, preferredIcbCode);
+      const slug = documentFolder ? toSlug(documentFolder) : null;
+
+      response = jsonResponse({ ...resolved, icbCode: preferredIcbCode, slug });
       return response;
     }
 
@@ -288,7 +296,7 @@ export async function handleApiRequest(request: Request, env: Env) {
           allObjects.push({ key: obj.key, size: obj.size });
         }
         truncated = listed.truncated;
-        cursor = listed.cursor;
+        cursor = listed.truncated ? listed.cursor : undefined;
       }
 
       // Group by year extracted from the key path: policies/{folder}/{year}/{filename}
