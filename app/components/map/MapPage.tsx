@@ -12,8 +12,13 @@ import 'leaflet/dist/leaflet.css';
 
 const VALID_TREATMENTS: TreatmentTypeId[] = ['ivf', 'icsi', 'iui', 'di', 'fet'];
 const DEFAULT_TREATMENT: TreatmentTypeId = 'ivf';
-const MAP_CENTER: [number, number] = [52.5, -1.5];
-const MAP_ZOOM = 6;
+const MAP_CENTER: [number, number] = [52.8, -1.5];
+const MAP_ZOOM = 7;
+const MIN_ZOOM = 5;
+const MAX_BOUNDS: [[number, number], [number, number]] = [
+  [49.5, -8.5], // Southwest corner
+  [56.5, 2.5],  // Northeast corner
+];
 
 /** Forces Leaflet to recalculate container size after mount */
 function InvalidateSize() {
@@ -247,6 +252,11 @@ function MapPageContent() {
       <MapContainer
         center={MAP_CENTER}
         zoom={MAP_ZOOM}
+        minZoom={MIN_ZOOM}
+        maxBounds={MAX_BOUNDS}
+        maxBoundsViscosity={1.0}
+        zoomSnap={0.25}
+        zoomDelta={0.25}
         scrollWheelZoom={true}
         preferCanvas={true}
         style={{ height: '100%', width: '100%' }}
@@ -254,8 +264,8 @@ function MapPageContent() {
       >
         <InvalidateSize />
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
         />
         <IcbBoundaryLayer
           geoJsonFeatures={geoJsonFeatures}
