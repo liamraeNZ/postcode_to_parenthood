@@ -16,7 +16,7 @@ import { presimplify, simplify, quantile } from "topojson-simplify";
 
 const GEOJSON_URL =
   "https://nihr.opendatasoft.com/api/explore/v2.1/catalog/datasets/icb-boundaries/exports/geojson/";
-const OUTPUT_DIR = "static/data";
+const OUTPUT_DIR = "public/data";
 const OUTPUT_PATH = `${OUTPUT_DIR}/icb-boundaries.topojson`;
 const MAX_GZIPPED_BYTES = 300 * 1024; // 300KB
 

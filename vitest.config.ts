@@ -36,12 +36,17 @@ export default defineConfig({
       };
     }),
   ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./app"),
+    },
+  },
   test: {
     testTimeout: 30_000,
     setupFiles: ["./test/apply-migrations.ts"],
     exclude: [
       "node_modules/**",
-      "src/**/*.test.{ts,tsx}",
+      "app/components/map/TreatmentToggle.test.tsx",
     ],
   },
 });

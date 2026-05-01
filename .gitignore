@@ -14,3 +14,4 @@ documents/*
 .kiro/*
 .dev.vars
 scripts/output/*
+.react-router/*

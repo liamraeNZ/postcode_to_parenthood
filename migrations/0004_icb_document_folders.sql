@@ -38,3 +38,7 @@ UPDATE icbs SET document_folder_name = 'Suffolk and North East Essex' WHERE sub_
 UPDATE icbs SET document_folder_name = 'Surrey Heartlands' WHERE sub_icb_code = '92A'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'Sussex' WHERE sub_icb_code = '09D'; --> statement-breakpoint
 UPDATE icbs SET document_folder_name = 'West Yorkshire' WHERE id = 'QWO';
+
+CREATE INDEX IF NOT EXISTS icbs_document_folder_name_idx
+  ON icbs (document_folder_name)
+  WHERE document_folder_name IS NOT NULL;

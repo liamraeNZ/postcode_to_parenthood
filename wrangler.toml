@@ -6,9 +6,9 @@ workers_dev = true
 preview_urls = true
 
 [assets]
-directory = "./dist"
+directory = "./build/client"
 binding = "ASSETS"
-not_found_handling = "single-page-application"
+not_found_handling = "none"
 run_worker_first = true
 
 [[d1_databases]]

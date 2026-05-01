@@ -1,4 +1,4 @@
-import type { AdminIcb, AdminPolicy, CreateIcbInput, UpdateIcbInput, CreatePolicyInput } from '../../src/types/admin';
+import type { AdminIcb, AdminPolicy, CreateIcbInput, UpdateIcbInput, CreatePolicyInput } from '../../app/types/admin';
 import type { D1Database } from '../types';
 
 export type ConflictError = {

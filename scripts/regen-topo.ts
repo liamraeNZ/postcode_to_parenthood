@@ -25,7 +25,7 @@ async function main() {
   const gzipped = gzipSync(output);
   console.log(`Raw: ${(output.length / 1024).toFixed(1)}KB`);
   console.log(`Gzipped: ${(gzipped.length / 1024).toFixed(1)}KB`);
-  writeFileSync("static/data/icb-boundaries.topojson", output);
+  writeFileSync("public/data/icb-boundaries.topojson", output);
   console.log("Done!");
 }
 
