@@ -131,7 +131,7 @@ export default function LandingPage() {
                 NHS-funded fertility care isn't the same everywhere.
               </h1>
               <p className="text-base md:text-lg text-deep-slate/80 leading-relaxed mb-6 max-w-lg">
-                Where you live affects whether you qualify for support — a "postcode lottery" that leaves many people confused. We help you understand what you're entitled to.
+                Where you live affects whether you qualify for support; a "postcode lottery" that leaves many people confused. We help you understand what you're entitled to.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link
