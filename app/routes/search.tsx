@@ -4,7 +4,6 @@ import { PostcodeSearch } from "@/components/home/PostcodeSearch";
 import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveIcbIdFromPostcodesIo, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
-import { motion } from "motion/react";
 
 export function meta({}: Route.MetaArgs) {
   const title = "Search by Postcode | FertilityFund UK";
@@ -80,74 +79,62 @@ export default function SearchPage() {
   const actionData = useActionData<typeof action>();
 
   return (
-    <section className="flex-1 flex flex-col">
-      <div className="container mx-auto px-4 py-8 md:py-12 flex-1">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-2xl"
-        >
-          <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-2 text-deep-slate">
-            Search by postcode
-          </h1>
-          <p className="text-sm md:text-base text-deep-slate/70 leading-relaxed mb-6 max-w-lg">
-            Eligibility is determined by your GP practice's location, not your home address. Enter your postcode below to find nearby GP practices, then select yours to see your ICB's fertility funding policy.
-          </p>
+    <section className="flex-1 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md text-center">
+        <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-2 text-deep-slate">
+          Search by postcode
+        </h1>
+        <p className="text-sm md:text-base text-deep-slate/70 leading-relaxed mb-6">
+          Enter your postcode and we'll show you:
+        </p>
 
-          <div className="mb-4">
-            <p className="text-sm text-deep-slate/80 mb-3"><b>We'll show you:</b></p>
-            <ul className="space-y-1.5 md:space-y-2 max-w-md">
-              <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-2.5 py-1.5 md:px-3 md:py-2">
-                <span className="mt-0.5 flex-shrink-0 w-4 h-4 md:w-5 md:h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-[10px] md:text-xs font-bold" aria-hidden="true">✓</span>
-                <span className="text-deep-slate font-medium text-xs md:text-sm">Which ICB covers your GP</span>
-              </li>
-              <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-2.5 py-1.5 md:px-3 md:py-2">
-                <span className="mt-0.5 flex-shrink-0 w-4 h-4 md:w-5 md:h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-[10px] md:text-xs font-bold" aria-hidden="true">✓</span>
-                <span className="text-deep-slate font-medium text-xs md:text-sm">Whether NHS-funded care is available</span>
-              </li>
-              <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-2.5 py-1.5 md:px-3 md:py-2">
-                <span className="mt-0.5 flex-shrink-0 w-4 h-4 md:w-5 md:h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-[10px] md:text-xs font-bold" aria-hidden="true">✓</span>
-                <span className="text-deep-slate font-medium text-xs md:text-sm">The eligibility criteria you'll need to meet</span>
-              </li>
-            </ul>
-          </div>
+        <ul className="text-left space-y-1.5 mb-8">
+          <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
+            <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
+            <span className="text-deep-slate font-medium text-sm">Which ICB covers your GP</span>
+          </li>
+          <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
+            <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
+            <span className="text-deep-slate font-medium text-sm">Whether NHS-funded care is available</span>
+          </li>
+          <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
+            <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
+            <span className="text-deep-slate font-medium text-sm">The eligibility criteria you'll need to meet</span>
+          </li>
+        </ul>
 
-          <PostcodeSearch />
-        </motion.div>
+        <PostcodeSearch />
 
         {/* No-JS fallback */}
         <noscript>
-          <div className="mt-6 max-w-md">
-            <Form method="post" action="/search">
-              <label
-                htmlFor="postcode-noscript"
-                className="block text-sm font-medium text-deep-slate mb-2"
+          <Form method="post" action="/search" className="mt-6">
+            <label
+              htmlFor="postcode-noscript"
+              className="block text-sm font-medium text-deep-slate mb-2"
+            >
+              Enter your postcode
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                id="postcode-noscript"
+                name="postcode"
+                placeholder="e.g. SE26 5EN"
+                required
+                className="flex-1 px-4 py-3 border-2 border-warm-sand-dark rounded-xl text-base"
+              />
+              <button
+                type="submit"
+                className="px-6 py-3 bg-sage-dark text-white font-bold rounded-xl"
               >
-                Enter your postcode to find your ICB fertility policy
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  id="postcode-noscript"
-                  name="postcode"
-                  placeholder="e.g. SE26 5EN"
-                  required
-                  className="flex-1 px-4 py-3 border-2 border-warm-sand-dark rounded-xl text-base"
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-sage-dark text-white font-bold rounded-xl"
-                >
-                  Find your policy
-                </button>
-              </div>
-            </Form>
-          </div>
+                Search
+              </button>
+            </div>
+          </Form>
         </noscript>
 
         {actionData?.error && (
-          <div className="mt-4 max-w-md p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
             {actionData.error}
           </div>
         )}
