@@ -72,9 +72,9 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
 
   return (
     <section className="flex-1 flex flex-col">
-      <div className="container mx-auto px-4 py-6 md:py-10">
-        <header className="mb-6">
-          <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-deep-slate mb-2">
+      <div className="container mx-auto px-4 py-6 md:py-8">
+        <header className="mb-4">
+          <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-deep-slate mb-1">
             NHS IVF Funding Map
           </h1>
           <p className="text-sm md:text-base text-deep-slate/70 max-w-2xl">
@@ -84,7 +84,7 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
           </p>
         </header>
 
-        <div className="h-[500px] relative rounded-xl overflow-hidden border border-warm-sand-dark">
+        <div className="h-[calc(100vh-280px)] min-h-[500px] relative rounded-xl overflow-hidden border border-warm-sand-dark">
           <ClientOnly fallback={<MapPlaceholder />}>
             {() => (
               <Suspense fallback={<MapPlaceholder />}>

@@ -207,7 +207,7 @@ function MapPageContent() {
   // Loading state
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="h-full w-full flex items-center justify-center p-8">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-sage-green border-t-transparent" role="status">
             <span className="sr-only">Loading map…</span>
@@ -221,7 +221,7 @@ function MapPageContent() {
   // Error state
   if (error) {
     return (
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="h-full w-full flex items-center justify-center p-8">
         <div className="text-center">
           <p className="text-lg font-semibold text-deep-slate">Map temporarily unavailable</p>
           <p className="mt-2 text-sm text-deep-slate/60">{error}</p>
@@ -233,7 +233,7 @@ function MapPageContent() {
   // Empty state (no features)
   if (!geoJsonFeatures || geoJsonFeatures.features.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="h-full w-full flex items-center justify-center p-8">
         <div className="text-center">
           <p className="text-lg font-semibold text-deep-slate">No boundary data available</p>
           <p className="mt-2 text-sm text-deep-slate/60">
@@ -245,48 +245,47 @@ function MapPageContent() {
   }
 
   return (
-    <div className="flex-1 flex flex-col w-full min-w-[320px] max-w-[1920px] mx-auto">
-      {/* Treatment toggle - above map on mobile, overlaid on desktop */}
-      <div className="px-3 py-2 sm:px-4 md:absolute md:top-20 md:left-4 md:z-[1000] md:rounded-xl md:bg-white md:shadow-md md:px-3 md:py-2">
+    <div className="relative h-full w-full">
+      {/* Treatment toggle - overlaid on map */}
+      <div className="absolute top-3 right-3 z-[1000] rounded-xl bg-white shadow-md px-3 py-2">
+        <p className="text-xs font-semibold text-deep-slate/70 mb-1">Treatment type</p>
         <TreatmentToggle selected={selectedTreatment} onChange={handleTreatmentChange} />
       </div>
 
       {/* Map container */}
-      <div className="relative flex-1 h-[calc(100vh-120px)] min-h-[400px]">
-        <MapContainer
-          center={MAP_CENTER}
-          zoom={MAP_ZOOM}
-          scrollWheelZoom={true}
-          preferCanvas={true}
-          style={{ height: '100%', width: '100%', position: 'absolute', top: 0, left: 0 }}
-          className="z-0"
-        >
-          <InvalidateSize />
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <IcbBoundaryLayer
-            geoJsonFeatures={geoJsonFeatures}
-            policyMap={policyMap}
-            selectedTreatment={selectedTreatment}
-            onIcbHover={handleIcbHover}
-            onIcbClick={handleIcbClick}
-          />
-          <MapLegend />
-        </MapContainer>
+      <MapContainer
+        center={MAP_CENTER}
+        zoom={MAP_ZOOM}
+        scrollWheelZoom={true}
+        preferCanvas={true}
+        style={{ height: '100%', width: '100%' }}
+        className="z-0"
+      >
+        <InvalidateSize />
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <IcbBoundaryLayer
+          geoJsonFeatures={geoJsonFeatures}
+          policyMap={policyMap}
+          selectedTreatment={selectedTreatment}
+          onIcbHover={handleIcbHover}
+          onIcbClick={handleIcbClick}
+        />
+        <MapLegend />
+      </MapContainer>
 
-        {/* Info panel overlay */}
-        {selectedIcbInfo && (
-          <IcbInfoPanel
-            icbId={selectedIcbInfo.icbId}
-            icbName={selectedIcbInfo.icbName}
-            policy={selectedIcbInfo.policy}
-            onViewFullPolicy={handleViewFullPolicy}
-            onClose={handleClosePanel}
-          />
-        )}
-      </div>
+      {/* Info panel overlay */}
+      {selectedIcbInfo && (
+        <IcbInfoPanel
+          icbId={selectedIcbInfo.icbId}
+          icbName={selectedIcbInfo.icbName}
+          policy={selectedIcbInfo.policy}
+          onViewFullPolicy={handleViewFullPolicy}
+          onClose={handleClosePanel}
+        />
+      )}
     </div>
   );
 }
