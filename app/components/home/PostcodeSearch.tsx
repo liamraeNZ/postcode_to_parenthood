@@ -154,7 +154,8 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       const { slug } = resolved;
 
       if (slug) {
-        navigate(`/icb/${slug}`);
+        const gpPostcode = gp.postcode ?? postcode;
+        navigate(`/icb/${slug}?gpPostcode=${encodeURIComponent(gpPostcode)}`);
       } else {
         setError(
           "We found your ICB but don't have a dedicated policy page for it yet. Please try the map view for more information."
@@ -173,7 +174,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       <form onSubmit={handleSearch} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 max-w-md sm:relative group">
         <div className="relative flex-1">
           <Input 
-            placeholder="Enter your postcode (e.g. SE26 5EN)" 
+            placeholder="Enter your postcode (e.g. SW1A 1AA)" 
             aria-label="Enter your postcode"
             className="w-full px-4 sm:px-6 py-3 sm:py-4 h-12 sm:h-14 text-base sm:text-lg font-medium border-2 border-warm-sand-dark focus-visible:border-sage-green focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(143,168,139,0.3)] rounded-xl sm:rounded-2xl bg-white shadow-lg transition-all"
             value={postcode}

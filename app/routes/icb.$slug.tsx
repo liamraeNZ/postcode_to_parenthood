@@ -1,5 +1,5 @@
 import type { Route } from "./+types/icb.$slug";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { findIcbBySlug } from "../lib/slug";
 import { getCycleColorClasses } from "@/utils/cycleColors";
 import { CheckCircle2, XCircle, AlertCircle, Info, ArrowLeft, MapPin } from "lucide-react";
@@ -105,6 +105,8 @@ export function headers({}: Route.HeadersArgs) {
 export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
   const { icb, policies, slug } = loaderData;
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
+  const [searchParams] = useSearchParams();
+  const gpPostcode = searchParams.get("gpPostcode");
 
   return (
     <section className="flex-1 flex flex-col">
@@ -121,6 +123,15 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
             <li className="text-deep-slate font-medium truncate">{icb.name}</li>
           </ol>
         </nav>
+
+        {/* Postcode search context banner */}
+        {gpPostcode && (
+          <div className="mb-4 md:mb-6 px-4 py-3 bg-sage-light border border-sage-green/30 rounded-xl">
+            <p className="text-sm text-deep-slate">
+              Based on your GP's postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local ICB is: <span className="font-bold">{icb.name}</span>
+            </p>
+          </div>
+        )}
 
         {/* Page heading */}
         <header className="mb-6 md:mb-8">

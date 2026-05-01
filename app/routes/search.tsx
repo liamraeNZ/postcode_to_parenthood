@@ -72,7 +72,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 
   const slug = toSlug(documentFolder);
-  return redirect(`/icb/${slug}`);
+  return redirect(`/icb/${slug}?gpPostcode=${encodeURIComponent(postcode)}`);
 }
 
 export default function SearchPage() {
@@ -119,7 +119,7 @@ export default function SearchPage() {
                 type="text"
                 id="postcode-noscript"
                 name="postcode"
-                placeholder="e.g. SE26 5EN"
+                placeholder="e.g. SW1A 1AA"
                 required
                 className="flex-1 px-4 py-3 border-2 border-warm-sand-dark rounded-xl text-base"
               />
