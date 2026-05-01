@@ -15,6 +15,18 @@ export function Navbar() {
 
         <div className="flex items-center gap-4">
           <Link
+            to="/"
+            className="text-sm md:text-base font-medium text-deep-slate hover:text-sage-btn transition-colors"
+          >
+            Home
+          </Link>
+          <Link
+            to="/search"
+            className="text-sm md:text-base font-medium text-deep-slate hover:text-sage-btn transition-colors"
+          >
+            Search by Postcode
+          </Link>
+          <Link
             to="/map"
             className="text-sm md:text-base font-medium text-deep-slate hover:text-sage-btn transition-colors"
           >
