@@ -7,10 +7,10 @@ This project is informational only and is not medical, legal, or financial advic
 
 ## Pages
 
-- [Home](https://fertilityfund.co.uk/): Postcode search to find your ICB and its fertility funding policy.
-- [Map](https://fertilityfund.co.uk/map): Interactive map showing regional variation in NHS fertility funding across England.
-- [ICB Policy Pages](https://fertilityfund.co.uk/sitemap.xml): Individual pages for each ICB detailing cycles offered, age limits, BMI requirements, wait times, and notes.
-- [Search](https://fertilityfund.co.uk/search): Postcode lookup to identify your local ICB.
+- [Home](https://fertilityfund.uk/): Postcode search to find your ICB and its fertility funding policy.
+- [Map](https://fertilityfund.uk/map): Interactive map showing regional variation in NHS fertility funding across England.
+- [ICB Policy Pages](https://fertilityfund.uk/sitemap.xml): Individual pages for each ICB detailing cycles offered, age limits, BMI requirements, wait times, and notes.
+- [Search](https://fertilityfund.uk/search): Postcode lookup to identify your local ICB.
 
 ## Key Concepts
 

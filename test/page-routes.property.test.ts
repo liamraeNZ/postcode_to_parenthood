@@ -112,7 +112,7 @@ describe("Property 8: Page Routes Return Complete HTML", () => {
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: "FertilityFund UK",
-            url: "https://fertilityfund.co.uk",
+            url: "https://fertilityfund.uk",
           }),
         },
       })

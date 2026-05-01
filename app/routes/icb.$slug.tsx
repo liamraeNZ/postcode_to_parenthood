@@ -82,7 +82,7 @@ export function meta({ data }: Route.MetaArgs) {
     cycles > 0
       ? `${icb.name} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.`
       : `${icb.name} NHS fertility funding policy. Check eligibility criteria including age limits, BMI requirements, and treatment options.`;
-  const canonicalUrl = `https://fertilityfund.co.uk/icb/${slug}`;
+  const canonicalUrl = `https://fertilityfund.uk/icb/${slug}`;
 
   return [
     { title },
@@ -92,7 +92,7 @@ export function meta({ data }: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "article" },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "https://fertilityfund.co.uk/og-image.png" },
+    { property: "og:image", content: "https://fertilityfund.uk/og-image.png" },
   ];
 }
 
@@ -361,7 +361,7 @@ export function buildStructuredData(
   slug: string
 ) {
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
-  const canonicalUrl = `https://fertilityfund.co.uk/icb/${slug}`;
+  const canonicalUrl = `https://fertilityfund.uk/icb/${slug}`;
 
   // Build FAQ entries from policy data
   const faqEntries: Array<{ "@type": string; name: string; acceptedAnswer: { "@type": string; text: string } }> = [];

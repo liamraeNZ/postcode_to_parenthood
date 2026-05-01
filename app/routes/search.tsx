@@ -9,7 +9,7 @@ export function meta({}: Route.MetaArgs) {
   const title = "Search by Postcode | FertilityFund UK";
   const description =
     "Enter your postcode to find your ICB's NHS fertility funding policy, eligibility criteria, and cycles offered.";
-  const canonicalUrl = "https://fertilityfund.co.uk/search";
+  const canonicalUrl = "https://fertilityfund.uk/search";
 
   return [
     { title },

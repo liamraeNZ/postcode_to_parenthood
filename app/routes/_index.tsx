@@ -11,7 +11,7 @@ export function meta({}: Route.MetaArgs) {
   const title = "NHS IVF Funding Eligibility | FertilityFund UK";
   const description =
     "Check your NHS-funded IVF eligibility by postcode. Find your ICB's fertility policy, cycles offered, age limits, and criteria across England.";
-  const canonicalUrl = "https://fertilityfund.co.uk";
+  const canonicalUrl = "https://fertilityfund.uk";
 
   return [
     { title },
@@ -23,7 +23,7 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:url", content: canonicalUrl },
     {
       property: "og:image",
-      content: "https://fertilityfund.co.uk/og-image.png",
+      content: "https://fertilityfund.uk/og-image.png",
     },
   ];
 }
@@ -266,7 +266,7 @@ export default function LandingPage() {
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: "FertilityFund UK",
-            url: "https://fertilityfund.co.uk",
+            url: "https://fertilityfund.uk",
             description:
               "Check your NHS-funded IVF eligibility by postcode. Find your ICB's fertility policy across England.",
             potentialAction: {
@@ -274,7 +274,7 @@ export default function LandingPage() {
               target: {
                 "@type": "EntryPoint",
                 urlTemplate:
-                  "https://fertilityfund.co.uk/search?postcode={postcode}",
+                  "https://fertilityfund.uk/search?postcode={postcode}",
               },
               "query-input": "required name=postcode",
             },

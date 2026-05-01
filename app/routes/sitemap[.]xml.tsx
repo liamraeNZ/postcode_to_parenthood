@@ -3,7 +3,7 @@ import { toSlug } from "../lib/slug";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
-  const baseUrl = "https://fertilityfund.co.uk";
+  const baseUrl = "https://fertilityfund.uk";
 
   const { results: icbs } = await db
     .prepare(

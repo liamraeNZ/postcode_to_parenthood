@@ -6,7 +6,7 @@ Allow: /icb/
 Disallow: /admin
 Disallow: /api/
 
-Sitemap: https://fertilityfund.co.uk/sitemap.xml`;
+Sitemap: https://fertilityfund.uk/sitemap.xml`;
 
   return new Response(body, {
     headers: {

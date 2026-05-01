@@ -128,12 +128,12 @@ describe("Integration: Landing Page", () => {
               "@context": "https://schema.org",
               "@type": "WebSite",
               name: "FertilityFund UK",
-              url: "https://fertilityfund.co.uk",
+              url: "https://fertilityfund.uk",
               potentialAction: {
                 "@type": "SearchAction",
                 target: {
                   "@type": "EntryPoint",
-                  urlTemplate: "https://fertilityfund.co.uk/?postcode={postcode}",
+                  urlTemplate: "https://fertilityfund.uk/?postcode={postcode}",
                 },
                 "query-input": "required name=postcode",
               },
@@ -356,8 +356,8 @@ describe("Integration: Sitemap.xml", () => {
 
     const body = await response.text();
 
-    expect(body).toContain("https://fertilityfund.co.uk");
-    expect(body).toContain("https://fertilityfund.co.uk/map");
+    expect(body).toContain("https://fertilityfund.uk");
+    expect(body).toContain("https://fertilityfund.uk/map");
   });
 
   it("contains all active ICB URLs", async () => {
@@ -377,7 +377,7 @@ describe("Integration: Sitemap.xml", () => {
       expect(
         body,
         `Sitemap should contain URL for ICB: ${icb.name} (slug: ${slug})`
-      ).toContain(`https://fertilityfund.co.uk/icb/${slug}`);
+      ).toContain(`https://fertilityfund.uk/icb/${slug}`);
     }
   });
 

@@ -27,7 +27,7 @@ export function meta({}: Route.MetaArgs) {
   const title = "NHS IVF Funding Map | FertilityFund UK";
   const description =
     "Interactive map of NHS-funded IVF policies across England. Explore ICB boundaries, compare fertility funding criteria, and find your local area's eligibility rules.";
-  const canonicalUrl = "https://fertilityfund.co.uk/map";
+  const canonicalUrl = "https://fertilityfund.uk/map";
 
   return [
     { title },
@@ -37,7 +37,7 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "https://fertilityfund.co.uk/og-image.png" },
+    { property: "og:image", content: "https://fertilityfund.uk/og-image.png" },
   ];
 }
 

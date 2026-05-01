@@ -250,7 +250,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
         ) as { href: string } | undefined;
 
         expect(canonicalEntry).toBeDefined();
-        expect(canonicalEntry!.href).toBe(`https://fertilityfund.co.uk/icb/${data.slug}`);
+        expect(canonicalEntry!.href).toBe(`https://fertilityfund.uk/icb/${data.slug}`);
       }),
       { numRuns: 100 }
     );
@@ -280,7 +280,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
           (entry: any) => entry.property === "og:url"
         ) as { content: string } | undefined;
         expect(ogUrl).toBeDefined();
-        expect(ogUrl!.content).toBe(`https://fertilityfund.co.uk/icb/${data.slug}`);
+        expect(ogUrl!.content).toBe(`https://fertilityfund.uk/icb/${data.slug}`);
       }),
       { numRuns: 100 }
     );
@@ -840,7 +840,7 @@ describe("Property 6: ICB Page Has Valid Structured Data", () => {
       fc.property(icbDataArb, (data) => {
         const result = buildStructuredData(data.icb, data.policies, data.slug);
 
-        expect(result.url).toBe(`https://fertilityfund.co.uk/icb/${data.slug}`);
+        expect(result.url).toBe(`https://fertilityfund.uk/icb/${data.slug}`);
       }),
       { numRuns: 100 }
     );
