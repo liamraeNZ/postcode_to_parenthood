@@ -296,7 +296,7 @@ export async function handleApiRequest(request: Request, env: Env) {
           allObjects.push({ key: obj.key, size: obj.size });
         }
         truncated = listed.truncated;
-        cursor = listed.cursor;
+        cursor = listed.truncated ? listed.cursor : undefined;
       }
 
       // Group by year extracted from the key path: policies/{folder}/{year}/{filename}

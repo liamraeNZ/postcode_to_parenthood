@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState, useEffect } from "react";
+import type { ReactNode } from "react";
 import type { Route } from "./+types/map";
 import { toSlug } from "../lib/slug";
 
@@ -50,8 +51,8 @@ function ClientOnly({
   children,
   fallback,
 }: {
-  children: () => React.ReactNode;
-  fallback: React.ReactNode;
+  children: () => ReactNode;
+  fallback: ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);

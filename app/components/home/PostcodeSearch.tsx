@@ -16,28 +16,16 @@ import {
 } from '@/components/ui/dialog';
 import {
   getIcbFromGpPractice,
-  lookupICBPoliciesByIcbCode,
   PostcodeLookupError,
   searchGpPracticesByName,
   searchGpPracticesByPostcode
 } from '@/services/postcodeService';
-import { GpPracticeSummary, ICBPoliciesResponse } from '@/types';
+import type { GpPracticeSummary } from '@/types';
 import { motion, AnimatePresence } from 'motion/react';
-import { PolicyResults } from './PolicyResults';
 
 type PostcodeLookupAction = 'search' | 'lookup';
 
-export type PolicyPanelState = {
-  postcode: string;
-  selectedGP: GpPracticeSummary | null;
-  icbCode: string | null;
-  policiesResponse: ICBPoliciesResponse | null;
-  isLoading: boolean;
-  error: string | null;
-};
-
 type PostcodeSearchProps = {
-  onPolicyPanelChange?: (state: PolicyPanelState) => void;
   onSearchStarted?: () => void;
 };
 
@@ -61,7 +49,7 @@ function logDevError(message: string, err: unknown) {
   }
 }
 
-export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: PostcodeSearchProps) {
+export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
   const navigate = useNavigate();
   const [postcode, setPostcode] = useState('');
   const [loadingSearch, setLoadingSearch] = useState(false);
@@ -74,8 +62,6 @@ export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: Postcod
   const [nameSearchError, setNameSearchError] = useState('');
   const [nameSearchResults, setNameSearchResults] = useState<GpPracticeSummary[] | null>(null);
   const [selectedGP, setSelectedGP] = useState<GpPracticeSummary | null>(null);
-  const [icbCode, setIcbCode] = useState<string | null>(null);
-  const [result, setResult] = useState<ICBPoliciesResponse | null>(null);
   const [error, setError] = useState('');
 
   const sortedGpPractices = gpPractices
@@ -100,25 +86,9 @@ export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: Postcod
 
   const resetSearchState = () => {
     setError('');
-    setResult(null);
     setGpPractices(null);
     setGpPracticeQuery('');
     setSelectedGP(null);
-    setIcbCode(null);
-    onPolicyPanelChange?.({
-      postcode,
-      selectedGP: null,
-      icbCode: null,
-      policiesResponse: null,
-      isLoading: false,
-      error: null
-    });
-  };
-
-  const resetSelectionState = () => {
-    setError('');
-    setResult(null);
-    setIcbCode(null);
   };
 
   const handleSearch = async (e: FormEvent) => {
@@ -172,86 +142,27 @@ export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: Postcod
   const handleSelectGp = async (gp: GpPracticeSummary) => {
     setSelectedGP(gp);
     setLoadingSelect(true);
-    resetSelectionState();
-    onPolicyPanelChange?.({
-      postcode,
-      selectedGP: gp,
-      icbCode: null,
-      policiesResponse: null,
-      isLoading: true,
-      error: null
-    });
+    setError('');
 
     try {
       const resolved = await getIcbFromGpPractice(gp);
       if (!resolved) {
-        const message = "We couldn't determine an ICB for that GP practice.";
-        setError(message);
-        onPolicyPanelChange?.({
-          postcode,
-          selectedGP: gp,
-          icbCode: null,
-          policiesResponse: null,
-          isLoading: false,
-          error: message
-        });
+        setError("We couldn't determine an ICB for that GP practice.");
         return;
       }
 
-      const { icbCode: resolvedIcbCode, slug } = resolved;
+      const { slug } = resolved;
 
       if (slug) {
-        // Navigate to the dedicated ICB policy page
         navigate(`/icb/${slug}`);
-        return;
+      } else {
+        setError(
+          "We found your ICB but don't have a dedicated policy page for it yet. Please try the map view for more information."
+        );
       }
-
-      // Fallback: if no slug available, fetch policies inline
-      setIcbCode(resolvedIcbCode);
-      onPolicyPanelChange?.({
-        postcode,
-        selectedGP: gp,
-        icbCode: resolvedIcbCode,
-        policiesResponse: null,
-        isLoading: true,
-        error: null
-      });
-      const policiesResult = await lookupICBPoliciesByIcbCode(resolvedIcbCode);
-      if (!policiesResult) {
-        const message = "We couldn't find an ICB policy for that GP practice.";
-        setError(message);
-        onPolicyPanelChange?.({
-          postcode,
-          selectedGP: gp,
-          icbCode: resolvedIcbCode,
-          policiesResponse: null,
-          isLoading: false,
-          error: message
-        });
-        return;
-      }
-
-      setResult(policiesResult);
-      onPolicyPanelChange?.({
-        postcode,
-        selectedGP: gp,
-        icbCode: resolvedIcbCode,
-        policiesResponse: policiesResult,
-        isLoading: false,
-        error: null
-      });
     } catch (err) {
       logDevError('[PostcodeSearch] gp selection failed', err);
-      const message = getPostcodeLookupErrorMessage('lookup', err);
-      setError(message);
-      onPolicyPanelChange?.({
-        postcode,
-        selectedGP: gp,
-        icbCode: null,
-        policiesResponse: null,
-        isLoading: false,
-        error: message
-      });
+      setError(getPostcodeLookupErrorMessage('lookup', err));
     } finally {
       setLoadingSelect(false);
     }
@@ -348,7 +259,6 @@ export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: Postcod
                               {gp.odsCode}
                             </span>
                           </span>
-                          {isSelected && icbCode && result && <span className="text-xs opacity-90 truncate max-w-[120px]">{result.icb_name}</span>}
                         </Button>
                       );
                     })
@@ -432,16 +342,6 @@ export function PostcodeSearch({ onPolicyPanelChange, onSearchStarted }: Postcod
                 ) : null}
               </div>
             </Card>
-          </motion.div>
-        )}
-
-        {result && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="lg:hidden"
-          >
-            <PolicyResults panel={{ postcode, selectedGP, icbCode, policiesResponse: result, isLoading: loadingSelect, error: error || null }} />
           </motion.div>
         )}
       </AnimatePresence>

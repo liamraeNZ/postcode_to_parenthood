@@ -178,7 +178,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
   );
 }
 
-export function PolicyCard({ policy }: { policy: Policy }) {
+export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
   const cc = getCycleColorClasses(policy.cycles_offered);
 
   const bmiLabel =

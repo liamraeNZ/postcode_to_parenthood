@@ -1,15 +1,13 @@
 import { PostcodeSearch } from './PostcodeSearch';
-import type { PolicyPanelState } from './PostcodeSearch';
 import { motion } from 'motion/react';
 
 type HeroProps = {
-  onPolicyPanelChange?: (state: PolicyPanelState) => void;
   onSearchStarted?: () => void;
   hasResults?: boolean;
   hasSearched?: boolean;
 };
 
-export function Hero({ onPolicyPanelChange, onSearchStarted, hasResults, hasSearched }: HeroProps) {
+export function Hero({ onSearchStarted, hasResults, hasSearched }: HeroProps) {
   return (
     <section className="col-span-12 lg:col-span-7 flex flex-col py-2 md:py-6">
       {/* Headline */}
@@ -65,7 +63,7 @@ export function Hero({ onPolicyPanelChange, onSearchStarted, hasResults, hasSear
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <div id="postcode-search">
-          <PostcodeSearch onPolicyPanelChange={onPolicyPanelChange} onSearchStarted={onSearchStarted} />
+          <PostcodeSearch onSearchStarted={onSearchStarted} />
         </div>
       </motion.div>
 
