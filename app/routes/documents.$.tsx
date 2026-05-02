@@ -10,10 +10,19 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   }
 
   const filename = key.split("/").pop() || "document";
+
+  // Determine content type: prefer R2 metadata, fall back to extension-based detection
+  let contentType = object.httpMetadata?.contentType || "application/octet-stream";
+  if (contentType === "application/octet-stream") {
+    const ext = filename.split(".").pop()?.toLowerCase();
+    if (ext === "pdf") contentType = "application/pdf";
+    else if (ext === "doc") contentType = "application/msword";
+    else if (ext === "docx") contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  }
+
   return new Response(object.body as ReadableStream, {
     headers: {
-      "Content-Type":
-        object.httpMetadata?.contentType || "application/octet-stream",
+      "Content-Type": contentType,
       "Content-Disposition": `inline; filename="${filename}"`,
       "Content-Length": String(object.size),
       "Cache-Control": "public, max-age=86400, s-maxage=604800",

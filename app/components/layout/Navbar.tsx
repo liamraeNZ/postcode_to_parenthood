@@ -27,6 +27,12 @@ export function Navbar() {
             Search by Postcode
           </Link>
           <Link
+            to="/policies"
+            className="text-sm md:text-base font-medium text-deep-slate hover:text-sage-btn transition-colors"
+          >
+            Policy Documents
+          </Link>
+          <Link
             to="/map"
             className="text-sm md:text-base font-medium text-deep-slate hover:text-sage-btn transition-colors"
           >
