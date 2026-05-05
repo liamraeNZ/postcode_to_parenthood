@@ -18,7 +18,7 @@ export async function loader({ context }: Route.LoaderArgs) {
       `SELECT id, name, document_folder_name
        FROM icbs
        WHERE document_folder_name IS NOT NULL AND status = 'active'
-       ORDER BY name ASC`
+       ORDER BY document_folder_name ASC`
     )
     .bind()
     .all<IcbRow>();
@@ -56,7 +56,7 @@ export default function PoliciesPage({ loaderData }: Route.ComponentProps) {
   const filtered = useMemo(() => {
     if (!search.trim()) return icbs;
     const term = search.toLowerCase().trim();
-    return icbs.filter((icb) => icb.name.toLowerCase().includes(term));
+    return icbs.filter((icb) => icb.document_folder_name.toLowerCase().includes(term));
   }, [icbs, search]);
 
   return (
@@ -93,7 +93,7 @@ export default function PoliciesPage({ loaderData }: Route.ComponentProps) {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by ICB name..."
+            placeholder="Search by name..."
             aria-label="Search ICBs by name"
             className="w-full pl-10 pr-4 py-3 border-2 border-warm-sand-dark rounded-xl text-base bg-white focus:outline-none focus:border-sage-btn focus:ring-1 focus:ring-sage-btn transition-colors"
           />
@@ -117,7 +117,7 @@ export default function PoliciesPage({ loaderData }: Route.ComponentProps) {
                 >
                   <FileText className="w-5 h-5 text-sage-btn flex-shrink-0" />
                   <span className="text-deep-slate font-medium group-hover:text-sage-btn transition-colors">
-                    {icb.name}
+                    {icb.document_folder_name}
                   </span>
                 </Link>
               </li>

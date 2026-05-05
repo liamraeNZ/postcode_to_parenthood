@@ -1,8 +1,9 @@
 import type { Route } from "./+types/icb.$slug";
 import { Link, useSearchParams } from "react-router";
 import { findIcbBySlug } from "../lib/slug";
+import { formatIcbName } from "@/lib/utils";
 import { getCycleColorClasses } from "@/utils/cycleColors";
-import { CheckCircle2, XCircle, AlertCircle, Info, ArrowLeft, MapPin } from "lucide-react";
+import { CheckCircle2, XCircle, AlertCircle, Info, ArrowLeft, MapPin, FileText } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export interface Policy {
@@ -73,15 +74,16 @@ export function meta({ data }: Route.MetaArgs) {
   }
 
   const { icb, policies, slug } = data;
+  const displayName = formatIcbName(icb.name);
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
   const cycles = ivfPolicy?.cycles_offered ?? 0;
   const maxAge = ivfPolicy?.max_age ?? 0;
 
-  const title = `${icb.name} IVF Funding Policy | FertilityFund UK`;
+  const title = `${displayName} IVF Funding Policy | FertilityFund UK`;
   const description =
     cycles > 0
-      ? `${icb.name} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.`
-      : `${icb.name} NHS fertility funding policy. Check eligibility criteria including age limits, BMI requirements, and treatment options.`;
+      ? `${displayName} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.`
+      : `${displayName} NHS fertility funding policy. Check eligibility criteria including age limits, BMI requirements, and treatment options.`;
   const canonicalUrl = `https://fertilityfund.uk/icb/${slug}`;
 
   return [
@@ -104,6 +106,7 @@ export function headers({}: Route.HeadersArgs) {
 
 export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
   const { icb, policies, slug } = loaderData;
+  const displayName = formatIcbName(icb.name);
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
   const [searchParams] = useSearchParams();
   const gpPostcode = searchParams.get("gpPostcode");
@@ -120,7 +123,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
               </Link>
             </li>
             <li aria-hidden="true">/</li>
-            <li className="text-deep-slate font-medium truncate">{icb.name}</li>
+            <li className="text-deep-slate font-medium truncate">{displayName}</li>
           </ol>
         </nav>
 
@@ -128,7 +131,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         {gpPostcode && (
           <div className="mb-4 md:mb-6 px-4 py-3 bg-sage-light border border-sage-green/30 rounded-xl">
             <p className="text-sm text-deep-slate">
-              Based on your GP's postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local ICB is: <span className="font-bold">{icb.name}</span>
+              Based on your GP's postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local ICB is: <span className="font-bold">{displayName}</span>
             </p>
           </div>
         )}
@@ -136,7 +139,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         {/* Page heading */}
         <header className="mb-6 md:mb-8">
           <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-deep-slate mb-2">
-            {icb.name}
+            {displayName}
           </h1>
           <p className="text-sm md:text-base text-deep-slate/70">
             NHS-funded fertility treatment policy and eligibility criteria
@@ -174,6 +177,13 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         {/* Internal navigation links */}
         <nav aria-label="Related pages" className="mt-8 md:mt-10 pt-6 border-t border-warm-sand-dark">
           <div className="flex flex-col sm:flex-row gap-3">
+            <Link
+              to={`/policy/${slug}`}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-btn text-white font-medium text-sm rounded-xl hover:bg-sage-dark transition-colors"
+            >
+              <FileText className="w-4 h-4" />
+              View policy document
+            </Link>
             <Link
               to="/search"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-light text-deep-slate font-medium text-sm rounded-xl hover:bg-sage-light/80 transition-colors"
@@ -356,12 +366,13 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
 }
 
 export function buildStructuredData(
-  icb: { name: string },
+  icb: { name: string; document_folder_name: string },
   policies: Policy[],
   slug: string
 ) {
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
   const canonicalUrl = `https://fertilityfund.uk/icb/${slug}`;
+  const displayName = formatIcbName(icb.name);
 
   // Build FAQ entries from policy data
   const faqEntries: Array<{ "@type": string; name: string; acceptedAnswer: { "@type": string; text: string } }> = [];
@@ -369,25 +380,25 @@ export function buildStructuredData(
   if (ivfPolicy) {
     faqEntries.push({
       "@type": "Question",
-      name: `How many NHS-funded IVF cycles does ${icb.name} offer?`,
+      name: `How many NHS-funded IVF cycles does ${displayName} offer?`,
       acceptedAnswer: {
         "@type": "Answer",
         text:
           ivfPolicy.cycles_offered > 0
-            ? `${icb.name} offers ${ivfPolicy.cycles_offered} NHS-funded IVF cycle${ivfPolicy.cycles_offered !== 1 ? "s" : ""} to eligible patients.`
-            : `${icb.name} does not currently fund NHS IVF cycles.`,
+            ? `${displayName} offers ${ivfPolicy.cycles_offered} NHS-funded IVF cycle${ivfPolicy.cycles_offered !== 1 ? "s" : ""} to eligible patients.`
+            : `${displayName} does not currently fund NHS IVF cycles.`,
       },
     });
 
     faqEntries.push({
       "@type": "Question",
-      name: `What is the age limit for NHS IVF at ${icb.name}?`,
+      name: `What is the age limit for NHS IVF at ${displayName}?`,
       acceptedAnswer: {
         "@type": "Answer",
         text:
           ivfPolicy.max_age > 0
-            ? `Patients must be under ${ivfPolicy.max_age} years old to be eligible for NHS-funded IVF at ${icb.name}.`
-            : `Age limit information is not currently specified for ${icb.name}.`,
+            ? `Patients must be under ${ivfPolicy.max_age} years old to be eligible for NHS-funded IVF at ${displayName}.`
+            : `Age limit information is not currently specified for ${displayName}.`,
       },
     });
 
@@ -401,10 +412,10 @@ export function buildStructuredData(
 
       faqEntries.push({
         "@type": "Question",
-        name: `What are the BMI requirements for NHS IVF at ${icb.name}?`,
+        name: `What are the BMI requirements for NHS IVF at ${displayName}?`,
         acceptedAnswer: {
           "@type": "Answer",
-          text: `${bmiText} for NHS-funded IVF eligibility at ${icb.name}.`,
+          text: `${bmiText} for NHS-funded IVF eligibility at ${displayName}.`,
         },
       });
     }
@@ -413,7 +424,7 @@ export function buildStructuredData(
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    name: `${icb.name} IVF Funding Policy`,
+    name: `${displayName} IVF Funding Policy`,
     url: canonicalUrl,
     mainEntity: faqEntries,
   };

@@ -2,6 +2,7 @@ import type { Route } from "./+types/policy.$slug";
 import { Link } from "react-router";
 import { useState } from "react";
 import { findIcbBySlug } from "@/lib/slug";
+import { formatIcbName } from "@/lib/utils";
 import { FileText, Eye, Download, ChevronDown, ChevronRight } from "lucide-react";
 
 interface DocumentFile {
@@ -87,8 +88,8 @@ export function meta({ data }: Route.MetaArgs) {
   }
 
   const { icb, slug } = data;
-  const title = `${icb.name} Policy Documents | FertilityFund UK`;
-  const description = `View and download NHS fertility funding policy documents published by ${icb.name}.`;
+  const title = `${formatIcbName(icb.name)} Policy Documents | FertilityFund UK`;
+  const description = `View and download NHS fertility funding policy documents published by ${formatIcbName(icb.name)}.`;
   const canonicalUrl = `https://fertilityfund.uk/policy/${slug}`;
 
   return [
@@ -155,14 +156,14 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
               </Link>
             </li>
             <li aria-hidden="true">/</li>
-            <li className="text-deep-slate font-medium truncate">{icb.name}</li>
+            <li className="text-deep-slate font-medium truncate">{formatIcbName(icb.name)}</li>
           </ol>
         </nav>
 
         {/* Page heading */}
         <header className="mb-6 md:mb-8">
           <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-deep-slate mb-2">
-            {icb.name}
+            {formatIcbName(icb.name)}
           </h1>
           <p className="text-sm md:text-base text-deep-slate/70 leading-relaxed">
             Policy documents published by this ICB, grouped by year.
