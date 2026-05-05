@@ -29,6 +29,29 @@ export default {
       return handleApiRequest(request, env);
     }
 
+    // Document routes served directly from R2 (bypass React Router so browser renders PDFs inline)
+    if (url.pathname.startsWith("/documents/")) {
+      const path = url.pathname.slice("/documents/".length);
+      const key = `policies/${decodeURIComponent(path)}`;
+      const object = await env.r2bucket.get(key);
+      if (!object) {
+        return new Response("Document not found", { status: 404 });
+      }
+      const filename = key.split("/").pop() || "document";
+      const ext = filename.split(".").pop()?.toLowerCase();
+      let contentType = object.httpMetadata?.contentType || "application/octet-stream";
+      if (contentType === "application/octet-stream" && ext === "pdf") {
+        contentType = "application/pdf";
+      }
+      return new Response(object.body, {
+        headers: {
+          "Content-Type": contentType,
+          "Content-Length": String(object.size),
+          "Cache-Control": "public, max-age=86400, s-maxage=604800",
+        },
+      });
+    }
+
     // Static assets served directly from the ASSETS binding
     if (isStaticAssetPath(url.pathname)) {
       const assetResponse = await env.ASSETS.fetch(request);
