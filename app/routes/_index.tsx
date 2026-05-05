@@ -94,7 +94,7 @@ const features = [
     title: "ICB policies & criteria",
     description: "Browse eligibility criteria, age limits, and cycles offered by each ICB.",
     href: "/policies",
-    available: false,
+    available: true,
   },
   {
     icon: Map,
