@@ -101,7 +101,7 @@ describe("Postcode → ICB → Policy end-to-end matching", () => {
 
       expect(res.status).toBe(200);
       const body = (await res.json()) as {
-        icb_name: string;
+        board_name: string;
         policies: Array<{
           treatment_type_id: string;
           cycles_offered: number;
@@ -112,7 +112,7 @@ describe("Postcode → ICB → Policy end-to-end matching", () => {
         }>;
       };
 
-      expect(body.icb_name).toBeTruthy();
+      expect(body.board_name).toBeTruthy();
       expect(body.policies.length).toBeGreaterThan(0);
 
       // Compare each treatment type present in the golden file

@@ -2,7 +2,7 @@ export async function loader() {
   const body = `User-agent: *
 Allow: /
 Allow: /map
-Allow: /icb/
+Allow: /board/
 Disallow: /admin
 Disallow: /api/
 

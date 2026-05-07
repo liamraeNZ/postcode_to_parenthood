@@ -43,8 +43,8 @@ function toFormFields(icb: AdminIcb): FormFields {
     name: icb.name,
     region: icb.region ?? '',
     country: icb.country ?? '',
-    sub_icb_code: icb.sub_icb_code ?? '',
-    parent_icb_code: icb.parent_icb_code ?? '',
+    sub_icb_code: icb.sub_board_code ?? '',
+    parent_icb_code: icb.parent_board_code ?? '',
   };
 }
 

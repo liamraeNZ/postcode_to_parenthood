@@ -1,8 +1,8 @@
 export interface AdminIcb {
   id: string;
   name: string;
-  sub_icb_code: string | null;
-  parent_icb_code: string | null;
+  sub_board_code: string | null;
+  parent_board_code: string | null;
   region: string | null;
   country: string | null;
   status: 'active' | 'inactive';
@@ -13,7 +13,7 @@ export interface AdminIcb {
 
 export interface AdminPolicy {
   id: string;
-  icb_id: string;
+  board_id: string;
   treatment_type_id: string;
   effective_from: string;
   effective_to: string | null;

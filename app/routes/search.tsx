@@ -2,13 +2,13 @@ import type { Route } from "./+types/search";
 import { Form, redirect, useActionData } from "react-router";
 import { PostcodeSearch } from "@/components/home/PostcodeSearch";
 import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
-import { resolveIcbIdFromPostcodesIo, resolveDocumentFolder } from "../../worker/services/icbPolicy";
+import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
 
 export function meta({}: Route.MetaArgs) {
   const title = "Search by Postcode | FertilityFund UK";
   const description =
-    "Enter your postcode to find your ICB's NHS fertility funding policy, eligibility criteria, and cycles offered.";
+    "Enter your postcode to find your health board's NHS fertility funding policy, eligibility criteria, and cycles offered.";
   const canonicalUrl = "https://fertilityfund.uk/search";
 
   return [
@@ -45,34 +45,37 @@ export async function action({ request, context }: Route.ActionArgs) {
   if (!admin) {
     return {
       error:
-        "We couldn't find an ICB for that postcode. Please check and try again.",
+        "We couldn't find a health board for that postcode. Please check and try again.",
     };
   }
 
-  const resolved = await resolveIcbIdFromPostcodesIo(db, {
+  const resolved = await resolveBoardFromPostcode(db, {
+    country: admin.country,
     icb: admin.icb,
     ccg_id: admin.ccg_id,
     ccg: admin.ccg,
+    nhs_ha: admin.nhs_ha,
+    primary_care_trust: admin.primary_care_trust,
   });
 
   if (!resolved) {
     return {
       error:
-        "We couldn't find an ICB for that postcode. Please check and try again.",
+        "We couldn't find a health board for that postcode. Please check and try again.",
     };
   }
 
-  const documentFolder = await resolveDocumentFolder(db, resolved.icbId);
+  const documentFolder = await resolveDocumentFolder(db, resolved.boardId);
 
   if (!documentFolder) {
     return {
       error:
-        "We couldn't find an ICB for that postcode. Please check and try again.",
+        "We couldn't find a health board for that postcode. Please check and try again.",
     };
   }
 
   const slug = toSlug(documentFolder);
-  return redirect(`/icb/${slug}?gpPostcode=${encodeURIComponent(postcode)}`);
+  return redirect(`/board/${slug}?gpPostcode=${encodeURIComponent(postcode)}`);
 }
 
 export default function SearchPage() {
@@ -91,7 +94,7 @@ export default function SearchPage() {
         <ul className="text-left space-y-1.5 mb-8">
           <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
             <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
-            <span className="text-deep-slate font-medium text-sm">Which ICB covers your GP</span>
+            <span className="text-deep-slate font-medium text-sm">Which health board covers your GP</span>
           </li>
           <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
             <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>

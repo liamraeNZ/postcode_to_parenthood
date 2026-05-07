@@ -147,7 +147,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
     try {
       const resolved = await getIcbFromGpPractice(gp);
       if (!resolved) {
-        setError("We couldn't determine an ICB for that GP practice.");
+        setError("We couldn't determine a health board for that GP practice.");
         return;
       }
 
@@ -155,10 +155,10 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
 
       if (slug) {
         const gpPostcode = gp.postcode ?? postcode;
-        navigate(`/icb/${slug}?gpPostcode=${encodeURIComponent(gpPostcode)}`);
+        navigate(`/board/${slug}?gpPostcode=${encodeURIComponent(gpPostcode)}`);
       } else {
         setError(
-          "We found your ICB but don't have a dedicated policy page for it yet. Please try the map view for more information."
+          "We found your health board but don't have a dedicated policy page for it yet. Please try the map view for more information."
         );
       }
     } catch (err) {
@@ -278,7 +278,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
                     <DialogHeader>
                       <DialogTitle>Search for your GP by name</DialogTitle>
                       <DialogDescription>
-                        Search across England for active GP practices (useful for digital GP services or a workplace GP).
+                        Search across the UK for active GP practices (useful for digital GP services or a workplace GP).
                       </DialogDescription>
                     </DialogHeader>
 

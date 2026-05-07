@@ -1,17 +1,20 @@
 /**
- * ONS-to-ODS code lookup utility.
+ * ONS-to-board-code lookup utility.
  *
- * Maps ONS geography codes (e.g. "E54000064") from the ICB boundary
- * TopoJSON features to ODS codes (e.g. "09D") used as the primary key
- * in the icbs table.
+ * Maps ONS geography codes (e.g. "E54000064", "S08000015", "W11000025", "N09000003")
+ * from care board boundary TopoJSON features to board codes used as the primary key
+ * in the health_boards table.
+ *
+ * For England, the board code is an ODS code (e.g. "09D").
+ * For Scotland, Wales, and NI, the ONS code IS the board ID.
  */
-import onsToOds from '@/data/ons-to-ods.json';
+import onsToBoardCode from '@/data/ons-to-board-code.json';
 
-const mapping: Record<string, string> = onsToOds;
+const mapping: Record<string, string> = onsToBoardCode;
 
 /**
- * Returns the ODS code for a given ONS geography code, or null if not found.
+ * Returns the board code for a given ONS geography code, or null if not found.
  */
-export function getOdsCode(onsCode: string): string | null {
+export function getBoardCode(onsCode: string): string | null {
   return mapping[onsCode] ?? null;
 }

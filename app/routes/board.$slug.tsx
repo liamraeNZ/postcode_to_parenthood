@@ -1,4 +1,4 @@
-import type { Route } from "./+types/icb.$slug";
+import type { Route } from "./+types/board.$slug";
 import { Link, useSearchParams } from "react-router";
 import { findIcbBySlug } from "../lib/slug";
 import { formatIcbName } from "@/lib/utils";
@@ -26,32 +26,42 @@ export interface Policy {
   effective_to: string | null;
 }
 
+export function formatCountryName(country: string): string {
+  const map: Record<string, string> = {
+    ENGLAND: "England",
+    SCOTLAND: "Scotland",
+    WALES: "Wales",
+    NORTHERN_IRELAND: "Northern Ireland",
+  };
+  return map[country] ?? country;
+}
+
 export async function loader({ params, context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
   const { slug } = params;
 
-  // Fetch all ICBs with document_folder_name (small set ~40 rows)
-  const { results: icbs } = await db
+  // Fetch all health boards with document_folder_name (small set ~70 rows)
+  const { results: boards } = await db
     .prepare(
-      "SELECT id, name, document_folder_name FROM icbs WHERE document_folder_name IS NOT NULL AND status = 'active'"
+      "SELECT id, name, document_folder_name, country FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'"
     )
     .bind()
-    .all<{ id: string; name: string; document_folder_name: string }>();
+    .all<{ id: string; name: string; document_folder_name: string; country: string }>();
 
-  const matched = findIcbBySlug(icbs, slug) as
-    | { id: string; name: string; document_folder_name: string }
+  const matched = findIcbBySlug(boards, slug) as
+    | { id: string; name: string; document_folder_name: string; country: string }
     | undefined;
   if (!matched) {
-    throw new Response("ICB not found", { status: 404 });
+    throw new Response("Health board not found", { status: 404 });
   }
 
-  // Fetch policies for this ICB
+  // Fetch policies for this board
   const { results: policies } = await db
     .prepare(
       `SELECT p.*, t.name as treatment_type_name
-       FROM icb_policies p
+       FROM board_policies p
        JOIN treatment_types t ON t.id = p.treatment_type_id
-       WHERE p.icb_id = ?1
+       WHERE p.board_id = ?1
          AND (p.effective_to IS NULL OR p.effective_to >= date('now'))
        ORDER BY p.effective_from DESC`
     )
@@ -59,7 +69,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
     .all<Policy>();
 
   return {
-    icb: { id: matched.id, name: matched.name, document_folder_name: matched.document_folder_name },
+    icb: { id: matched.id, name: matched.name, document_folder_name: matched.document_folder_name, country: matched.country },
     policies,
     slug,
   };
@@ -68,23 +78,24 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 export function meta({ data }: Route.MetaArgs) {
   if (!data) {
     return [
-      { title: "ICB Not Found | FertilityFund UK" },
-      { name: "description", content: "The requested ICB policy page could not be found." },
+      { title: "Health Board Not Found | FertilityFund UK" },
+      { name: "description", content: "The requested health board policy page could not be found." },
     ];
   }
 
   const { icb, policies, slug } = data;
   const displayName = formatIcbName(icb.name);
+  const countryName = formatCountryName(icb.country);
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
   const cycles = ivfPolicy?.cycles_offered ?? 0;
   const maxAge = ivfPolicy?.max_age ?? 0;
 
-  const title = `${displayName} IVF Funding Policy | FertilityFund UK`;
+  const title = `${displayName} IVF Funding Policy | ${countryName} | FertilityFund UK`;
   const description =
     cycles > 0
-      ? `${displayName} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.`
-      : `${displayName} NHS fertility funding policy. Check eligibility criteria including age limits, BMI requirements, and treatment options.`;
-  const canonicalUrl = `https://fertilityfund.uk/icb/${slug}`;
+      ? `${displayName} in ${countryName} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.`
+      : `${displayName} in ${countryName} NHS fertility funding policy. Check eligibility criteria including age limits, BMI requirements, and treatment options.`;
+  const canonicalUrl = `https://fertilityfund.uk/board/${slug}`;
 
   return [
     { title },
@@ -107,6 +118,7 @@ export function headers({}: Route.HeadersArgs) {
 export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
   const { icb, policies, slug } = loaderData;
   const displayName = formatIcbName(icb.name);
+  const countryName = formatCountryName(icb.country);
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
   const [searchParams] = useSearchParams();
   const gpPostcode = searchParams.get("gpPostcode");
@@ -131,7 +143,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         {gpPostcode && (
           <div className="mb-4 md:mb-6 px-4 py-3 bg-sage-light border border-sage-green/30 rounded-xl">
             <p className="text-sm text-deep-slate">
-              Based on your GP's postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local ICB is: <span className="font-bold">{displayName}</span>
+              Based on your GP's postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is: <span className="font-bold">{displayName}</span>
             </p>
           </div>
         )}
@@ -142,6 +154,11 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
             {displayName}
           </h1>
           <p className="text-sm md:text-base text-deep-slate/70">
+            <span className="inline-flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
+              {countryName}
+            </span>
+            <span className="mx-2">·</span>
             NHS-funded fertility treatment policy and eligibility criteria
           </p>
         </header>
@@ -169,7 +186,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         ) : (
           <div className="p-6 bg-warm-sand rounded-xl text-center">
             <p className="text-deep-slate/70">
-              No current policy information is available for this ICB.
+              No current policy information is available for this health board.
             </p>
           </div>
         )}
@@ -196,7 +213,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-light text-deep-slate font-medium text-sm rounded-xl hover:bg-sage-light/80 transition-colors"
             >
               <MapPin className="w-4 h-4" />
-              View all ICBs on map
+              View all health boards on map
             </Link>
           </div>
         </nav>
@@ -371,7 +388,7 @@ export function buildStructuredData(
   slug: string
 ) {
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
-  const canonicalUrl = `https://fertilityfund.uk/icb/${slug}`;
+  const canonicalUrl = `https://fertilityfund.uk/board/${slug}`;
   const displayName = formatIcbName(icb.name);
 
   // Build FAQ entries from policy data

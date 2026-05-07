@@ -60,9 +60,12 @@ async function fetchPostcodesIoJson(url: string, ctx: { requestId: string; timeo
 
 export type PostcodesIoAdminLookup = {
   postcode: string;
+  country: string | null;
   icb: string | null;
   ccg: string | null;
   ccg_id: string | null;
+  nhs_ha: string | null;
+  primary_care_trust: string | null;
 };
 
 export async function lookupPostcodeGeo(
@@ -101,16 +104,22 @@ export async function lookupPostcodeAdminLookup(
     if (status !== 200) return null;
 
     const resolvedPostcode = getStringPath(json, ['result', 'postcode']) ?? normalized;
+    const country = getStringPath(json, ['result', 'country']);
     const icb = getStringPath(json, ['result', 'icb']);
     const ccg = getStringPath(json, ['result', 'ccg']);
     const ccg_id =
       getStringPath(json, ['result', 'codes', 'ccg_id']) ?? getStringPath(json, ['result', 'codes', 'ccg']);
+    const nhs_ha = getStringPath(json, ['result', 'nhs_ha']);
+    const primary_care_trust = getStringPath(json, ['result', 'primary_care_trust']);
 
     return {
       postcode: resolvedPostcode,
+      country: country?.trim() ? country : null,
       icb: icb?.trim() ? icb : null,
       ccg: ccg?.trim() ? ccg : null,
-      ccg_id: ccg_id?.trim() ? ccg_id : null
+      ccg_id: ccg_id?.trim() ? ccg_id : null,
+      nhs_ha: nhs_ha?.trim() ? nhs_ha : null,
+      primary_care_trust: primary_care_trust?.trim() ? primary_care_trust : null
     };
   } catch {
     return null;

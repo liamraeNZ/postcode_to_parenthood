@@ -5,13 +5,13 @@ import { renderToReadableStream } from "react-dom/server";
 import { createElement } from "react";
 import { StaticRouter } from "react-router";
 import MapPage from "../app/routes/map";
-import IcbPolicyPage from "../app/routes/icb.$slug";
+import IcbPolicyPage from "../app/routes/board.$slug";
 import { toSlug, findIcbBySlug } from "../app/lib/slug";
 
 /**
  * Feature: seo-optimized-pages, Property 8: Page routes return complete HTML
  *
- * For any valid page route (/, /map, or /icb/{valid_slug}), the response
+ * For any valid page route (/, /map, or /board/{valid_slug}), the response
  * should be a complete HTML document containing `<!DOCTYPE html>`, `<html>`,
  * `<head>`, and `<body>` tags with rendered content inside the body (not an
  * empty shell).
@@ -138,10 +138,10 @@ describe("Property 8: Page Routes Return Complete HTML", () => {
   // Fetch ICBs with document_folder_name from the seeded DB
   async function getActiveIcbs() {
     const { results } = await env.DB.prepare(
-      "SELECT id, name, document_folder_name FROM icbs WHERE document_folder_name IS NOT NULL AND status = 'active'"
+      "SELECT id, name, document_folder_name, country FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'"
     )
       .bind()
-      .all<{ id: string; name: string; document_folder_name: string }>();
+      .all<{ id: string; name: string; document_folder_name: string; country: string }>();
     return results;
   }
 
@@ -149,9 +149,9 @@ describe("Property 8: Page Routes Return Complete HTML", () => {
   async function getPoliciesForIcb(icbId: string) {
     const { results } = await env.DB.prepare(
       `SELECT p.*, t.name as treatment_type_name
-       FROM icb_policies p
+       FROM board_policies p
        JOIN treatment_types t ON t.id = p.treatment_type_id
-       WHERE p.icb_id = ?1
+       WHERE p.board_id = ?1
          AND (p.effective_to IS NULL OR p.effective_to >= date('now'))
        ORDER BY p.effective_from DESC`
     )
@@ -206,7 +206,7 @@ describe("Property 8: Page Routes Return Complete HTML", () => {
   const validPagePathArb = fc.oneof(
     fc.constant("/" as string),
     fc.constant("/map" as string),
-    fc.constantFrom(...knownIcbSlugs).map((slug) => `/icb/${slug}`)
+    fc.constantFrom(...knownIcbSlugs).map((slug) => `/board/${slug}`)
   );
 
   // Helper to create the appropriate page element based on path
@@ -226,8 +226,8 @@ describe("Property 8: Page Routes Return Complete HTML", () => {
       };
       return createElement(MapPage, { loaderData } as any);
     } else {
-      // /icb/{slug}
-      const slug = path.replace("/icb/", "");
+      // /board/{slug}
+      const slug = path.replace("/board/", "");
       const matched = findIcbBySlug(icbs, slug);
       if (!matched) return null;
 
@@ -237,6 +237,7 @@ describe("Property 8: Page Routes Return Complete HTML", () => {
           id: matched.id,
           name: matched.name,
           document_folder_name: matched.document_folder_name,
+          country: matched.country,
         },
         policies,
         slug,

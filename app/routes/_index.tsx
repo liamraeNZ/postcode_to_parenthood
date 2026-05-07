@@ -2,7 +2,7 @@ import type { Route } from "./+types/_index";
 import { Form, redirect, useActionData } from "react-router";
 import { Link } from "react-router";
 import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
-import { resolveIcbIdFromPostcodesIo, resolveDocumentFolder } from "../../worker/services/icbPolicy";
+import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
 import { motion } from "motion/react";
 import { MapPin, FileText, Map, Search } from "lucide-react";
@@ -10,7 +10,7 @@ import { MapPin, FileText, Map, Search } from "lucide-react";
 export function meta({}: Route.MetaArgs) {
   const title = "NHS IVF Funding Eligibility | FertilityFund UK";
   const description =
-    "Check your NHS-funded IVF eligibility by postcode. Find your ICB's fertility policy, cycles offered, age limits, and criteria across England.";
+    "Check your NHS-funded IVF eligibility by postcode. Find your health board's fertility policy, cycles offered, age limits, and criteria across England, Scotland, Wales, and Northern Ireland.";
   const canonicalUrl = "https://fertilityfund.uk";
 
   return [
@@ -51,55 +51,58 @@ export async function action({ request, context }: Route.ActionArgs) {
   if (!admin) {
     return {
       error:
-        "We couldn't find an ICB for that postcode. Please check and try again.",
+        "We couldn't find a health board for that postcode. Please check and try again.",
     };
   }
 
-  const resolved = await resolveIcbIdFromPostcodesIo(db, {
+  const resolved = await resolveBoardFromPostcode(db, {
+    country: admin.country,
     icb: admin.icb,
     ccg_id: admin.ccg_id,
     ccg: admin.ccg,
+    nhs_ha: admin.nhs_ha,
+    primary_care_trust: admin.primary_care_trust,
   });
 
   if (!resolved) {
     return {
       error:
-        "We couldn't find an ICB for that postcode. Please check and try again.",
+        "We couldn't find a health board for that postcode. Please check and try again.",
     };
   }
 
-  const documentFolder = await resolveDocumentFolder(db, resolved.icbId);
+  const documentFolder = await resolveDocumentFolder(db, resolved.boardId);
 
   if (!documentFolder) {
     return {
       error:
-        "We couldn't find an ICB for that postcode. Please check and try again.",
+        "We couldn't find a health board for that postcode. Please check and try again.",
     };
   }
 
   const slug = toSlug(documentFolder);
-  return redirect(`/icb/${slug}?gpPostcode=${encodeURIComponent(postcode)}`);
+  return redirect(`/board/${slug}?gpPostcode=${encodeURIComponent(postcode)}`);
 }
 
 const features = [
   {
     icon: MapPin,
     title: "Search by postcode",
-    description: "Find your ICB's fertility policy based on your GP practice location.",
+    description: "Find your health board's fertility policy based on your GP practice location.",
     href: "/search",
     available: true,
   },
   {
     icon: FileText,
-    title: "ICB policies & criteria",
-    description: "Browse eligibility criteria, age limits, and cycles offered by each ICB.",
+    title: "Health board policies & criteria",
+    description: "Browse eligibility criteria, age limits, and cycles offered by each health board.",
     href: "/policies",
     available: true,
   },
   {
     icon: Map,
     title: "Policy map",
-    description: "See how NHS fertility funding varies across England at a glance.",
+    description: "See how NHS fertility funding varies across the UK at a glance.",
     href: "/map",
     available: true,
   },
@@ -228,7 +231,7 @@ export default function LandingPage() {
               htmlFor="postcode-noscript"
               className="block text-sm font-medium text-deep-slate mb-2"
             >
-              Enter your postcode to find your ICB fertility policy
+              Enter your postcode to find your health board's fertility policy
             </label>
             <div className="flex gap-2">
               <input
@@ -268,7 +271,7 @@ export default function LandingPage() {
             name: "FertilityFund UK",
             url: "https://fertilityfund.uk",
             description:
-              "Check your NHS-funded IVF eligibility by postcode. Find your ICB's fertility policy across England.",
+              "Check your NHS-funded IVF eligibility by postcode. Find your health board's fertility policy across the UK.",
             potentialAction: {
               "@type": "SearchAction",
               target: {
