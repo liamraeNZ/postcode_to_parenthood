@@ -124,11 +124,11 @@ export function headers({}: Route.HeadersArgs) {
 
 export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
   const { icb, policies, slug, isNationalPolicy } = loaderData;
-  const displayName = isNationalPolicy ? formatCountryName(icb.country) : formatIcbName(icb.name);
   const countryName = formatCountryName(icb.country);
   const [searchParams] = useSearchParams();
   const gpPostcode = searchParams.get("gpPostcode");
   const boardNameParam = searchParams.get("boardName");
+  const displayName = (isNationalPolicy && boardNameParam) ? formatIcbName(boardNameParam) : formatIcbName(icb.name);
 
   return (
     <section className="flex-1 flex flex-col">
@@ -150,19 +150,13 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         {gpPostcode && (
           <div className="mb-4 md:mb-6 px-4 py-3 bg-sage-light border border-sage-green/30 rounded-xl">
             <p className="text-sm text-deep-slate">
-              {isNationalPolicy ? (
-                <>
-                  Based on your postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is <span className="font-bold">{boardNameParam ? formatIcbName(boardNameParam) : countryName}</span>. A national <span className="font-bold">{countryName}</span> policy currently applies.
-                </>
-              ) : (
-                <>Based on your GP's postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is: <span className="font-bold">{displayName}</span></>
-              )}
+              Based on your {isNationalPolicy ? 'postcode' : "GP's postcode"} <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is: <span className="font-bold">{displayName}</span>
             </p>
           </div>
         )}
 
         {/* Page heading */}
-        <header className="mb-6 md:mb-8">
+        <header className="mb-4 md:mb-4">
           <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-deep-slate mb-2">
             {displayName}
           </h1>
@@ -175,6 +169,16 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
             NHS-funded fertility treatment policy and eligibility criteria
           </p>
         </header>
+
+        {/* National policy notice */}
+        {isNationalPolicy && (
+          <div className="mb-3 px-3 py-2 bg-sky-50 border border-sky-200 rounded-xl">
+            <p className="text-sm text-sky-900 font-medium">
+              <Info className="w-4 h-4 inline-block mr-1.5 -mt-0.5" aria-hidden="true" />
+              A national <span className="font-bold">{countryName}</span> policy currently applies to all health boards.
+            </p>
+          </div>
+        )}
 
         {/* Policy details */}
         {policies.length > 0 ? (
