@@ -2,6 +2,7 @@ import type { Route } from "./+types/policies";
 import { Link, useSearchParams } from "react-router";
 import { useState, useMemo, useCallback } from "react";
 import { toSlug } from "@/lib/slug";
+import { formatIcbName } from "@/lib/utils";
 import { FileText, Search } from "lucide-react";
 import { CountryFilter } from "@/components/CountryFilter";
 
@@ -35,7 +36,7 @@ export async function loader({ context }: Route.LoaderArgs) {
       `SELECT id, name, document_folder_name, country
        FROM health_boards
        WHERE document_folder_name IS NOT NULL AND status = 'active'
-       ORDER BY document_folder_name ASC`
+       ORDER BY name ASC`
     )
     .bind()
     .all<BoardRow>();
@@ -120,6 +121,7 @@ export default function PoliciesPage({ loaderData }: Route.ComponentProps) {
     if (search.trim()) {
       const term = search.toLowerCase().trim();
       result = result.filter((board) =>
+        board.name.toLowerCase().includes(term) ||
         board.document_folder_name.toLowerCase().includes(term)
       );
     }
@@ -192,7 +194,7 @@ export default function PoliciesPage({ loaderData }: Route.ComponentProps) {
                 >
                   <FileText className="w-5 h-5 text-sage-btn flex-shrink-0" />
                   <span className="text-deep-slate font-medium group-hover:text-sage-btn transition-colors">
-                    {board.document_folder_name}
+                    {formatIcbName(board.name)}
                   </span>
                 </Link>
               </li>

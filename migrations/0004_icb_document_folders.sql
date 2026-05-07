@@ -43,37 +43,14 @@ UPDATE health_boards SET document_folder_name = 'Greater Manchester' WHERE id = 
 UPDATE health_boards SET document_folder_name = 'Humber and North Yorkshire' WHERE id = 'QOQ'; --> statement-breakpoint
 UPDATE health_boards SET document_folder_name = 'Leicester, Leicestershire and Rutland' WHERE id = 'QK1';
 
--- Scotland (14 Health Boards)
-UPDATE health_boards SET document_folder_name = 'Ayrshire and Arran' WHERE id = 'S08000015'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Borders' WHERE id = 'S08000016'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Dumfries and Galloway' WHERE id = 'S08000017'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Fife' WHERE id = 'S08000029'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Forth Valley' WHERE id = 'S08000019'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Grampian' WHERE id = 'S08000020'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Greater Glasgow and Clyde' WHERE id = 'S08000031'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Highland' WHERE id = 'S08000022'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Lanarkshire' WHERE id = 'S08000032'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Lothian' WHERE id = 'S08000024'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Orkney' WHERE id = 'S08000025'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Shetland' WHERE id = 'S08000026'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Tayside' WHERE id = 'S08000030'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Western Isles' WHERE id = 'S08000028';
+-- Scotland (14 Health Boards) — single national policy folder
+UPDATE health_boards SET document_folder_name = 'Scotland' WHERE country = 'SCOTLAND';
 
--- Wales (7 Local Health Boards) — official ONS LHB23CD codes
-UPDATE health_boards SET document_folder_name = 'Betsi Cadwaladr' WHERE id = 'W11000023'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Powys' WHERE id = 'W11000024'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Hywel Dda' WHERE id = 'W11000025'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Aneurin Bevan' WHERE id = 'W11000028'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Cardiff and Vale' WHERE id = 'W11000029'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Cwm Taf Morgannwg' WHERE id = 'W11000030'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Swansea Bay' WHERE id = 'W11000031';
+-- Wales (7 Local Health Boards) — single national policy folder
+UPDATE health_boards SET document_folder_name = 'Wales' WHERE country = 'WALES';
 
--- Northern Ireland (5 HSC Trusts)
-UPDATE health_boards SET document_folder_name = 'Belfast' WHERE id = 'N09000003'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Northern' WHERE id = 'N09000004'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'South Eastern' WHERE id = 'N09000005'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Southern' WHERE id = 'N09000006'; --> statement-breakpoint
-UPDATE health_boards SET document_folder_name = 'Western' WHERE id = 'N09000007';
+-- Northern Ireland (5 HSC Trusts) — single national policy folder
+UPDATE health_boards SET document_folder_name = 'Northern Ireland' WHERE country = 'NORTHERN_IRELAND';
 
 CREATE INDEX IF NOT EXISTS health_boards_document_folder_name_idx
   ON health_boards (document_folder_name)
