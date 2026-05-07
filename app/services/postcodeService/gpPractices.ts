@@ -1,13 +1,17 @@
-import type { GpPracticeSummary } from '@/types';
+import type { DirectBoardResolution, GpPracticeSummary } from '@/types';
 import { DEFAULT_TIMEOUT_MS, getApiBaseUrl } from './config';
 import { PostcodeLookupError, toPostcodeLookupError } from './errors';
 import { fetchJsonWithTimeout, buildRequestUrl } from './http';
 import { createClientRequestId, redactRequestUrlForLogs, sendClientLog } from './logging';
 import { normalizePostcode, redactPostcodeForLogs } from './normalize';
 
-export async function searchGpPracticesByPostcode(postcode: string): Promise<GpPracticeSummary[]> {
+export type GpSearchResult =
+  | { kind: 'practices'; practices: GpPracticeSummary[] }
+  | { kind: 'direct'; resolution: DirectBoardResolution };
+
+export async function searchGpPracticesByPostcode(postcode: string): Promise<GpSearchResult> {
   const normalized = normalizePostcode(postcode);
-  if (!normalized) return [];
+  if (!normalized) return { kind: 'practices', practices: [] };
 
   const apiBaseUrl = getApiBaseUrl();
   const requestUrl = buildRequestUrl(apiBaseUrl, '/api/gp-practices', { postcode: normalized });
@@ -34,7 +38,7 @@ export async function searchGpPracticesByPostcode(postcode: string): Promise<GpP
 
   const timeoutMs = DEFAULT_TIMEOUT_MS;
   try {
-    const response = await fetchJsonWithTimeout<GpPracticeSummary[]>(requestUrl, {
+    const response = await fetchJsonWithTimeout<GpPracticeSummary[] | DirectBoardResolution>(requestUrl, {
       clientRequestId,
       timeoutMs
     });
@@ -47,7 +51,7 @@ export async function searchGpPracticesByPostcode(postcode: string): Promise<GpP
       });
     }
 
-    if (response.status === 404) return [];
+    if (response.status === 404) return { kind: 'practices', practices: [] };
 
     if (!response.ok) {
       if (import.meta.env.DEV) {
@@ -65,7 +69,13 @@ export async function searchGpPracticesByPostcode(postcode: string): Promise<GpP
       );
     }
 
-    return response.json ?? [];
+    // Check if the API returned a direct board resolution (Scotland/Wales/NI)
+    const json = response.json;
+    if (json && !Array.isArray(json) && 'skipGp' in json && json.skipGp) {
+      return { kind: 'direct', resolution: json as DirectBoardResolution };
+    }
+
+    return { kind: 'practices', practices: (json as GpPracticeSummary[] | undefined) ?? [] };
   } catch (err) {
     const durationMs = Math.round(performance.now() - startedAt);
 

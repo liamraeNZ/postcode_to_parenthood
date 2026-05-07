@@ -55,6 +55,12 @@ export async function loader({ params, context }: Route.LoaderArgs) {
     throw new Response("Health board not found", { status: 404 });
   }
 
+  // Detect national policy pages (multiple boards share the same document_folder_name)
+  const boardsWithSameFolder = boards.filter(
+    (b) => b.document_folder_name === matched.document_folder_name
+  );
+  const isNationalPolicy = boardsWithSameFolder.length > 1;
+
   // Fetch policies for this board
   const { results: policies } = await db
     .prepare(
@@ -71,6 +77,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   return {
     icb: { id: matched.id, name: matched.name, document_folder_name: matched.document_folder_name, country: matched.country },
     policies,
+    isNationalPolicy,
     slug,
   };
 }
@@ -83,8 +90,8 @@ export function meta({ data }: Route.MetaArgs) {
     ];
   }
 
-  const { icb, policies, slug } = data;
-  const displayName = formatIcbName(icb.name);
+  const { icb, policies, slug, isNationalPolicy } = data;
+  const displayName = isNationalPolicy ? formatCountryName(icb.country) : formatIcbName(icb.name);
   const countryName = formatCountryName(icb.country);
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
   const cycles = ivfPolicy?.cycles_offered ?? 0;
@@ -116,12 +123,12 @@ export function headers({}: Route.HeadersArgs) {
 }
 
 export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
-  const { icb, policies, slug } = loaderData;
-  const displayName = formatIcbName(icb.name);
+  const { icb, policies, slug, isNationalPolicy } = loaderData;
+  const displayName = isNationalPolicy ? formatCountryName(icb.country) : formatIcbName(icb.name);
   const countryName = formatCountryName(icb.country);
-  const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
   const [searchParams] = useSearchParams();
   const gpPostcode = searchParams.get("gpPostcode");
+  const boardNameParam = searchParams.get("boardName");
 
   return (
     <section className="flex-1 flex flex-col">
@@ -143,7 +150,13 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         {gpPostcode && (
           <div className="mb-4 md:mb-6 px-4 py-3 bg-sage-light border border-sage-green/30 rounded-xl">
             <p className="text-sm text-deep-slate">
-              Based on your GP's postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is: <span className="font-bold">{displayName}</span>
+              {isNationalPolicy ? (
+                <>
+                  Based on your postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is <span className="font-bold">{boardNameParam ? formatIcbName(boardNameParam) : countryName}</span>. A national <span className="font-bold">{countryName}</span> policy currently applies.
+                </>
+              ) : (
+                <>Based on your GP's postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is: <span className="font-bold">{displayName}</span></>
+              )}
             </p>
           </div>
         )}

@@ -99,7 +99,24 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
     resetSearchState();
 
     try {
-      const gps = await searchGpPracticesByPostcode(postcode);
+      const result = await searchGpPracticesByPostcode(postcode);
+
+      if (result.kind === 'direct') {
+        // Scotland/Wales/NI — skip GP selection, navigate directly to board
+        const { resolution } = result;
+        if (resolution.redirectUrl) {
+          const params = new URLSearchParams({ gpPostcode: postcode });
+          if (resolution.boardName) params.set('boardName', resolution.boardName);
+          navigate(`${resolution.redirectUrl}?${params.toString()}`);
+        } else {
+          setError(
+            "We found your health board but don't have a dedicated policy page for it yet. Please try the map view for more information."
+          );
+        }
+        return;
+      }
+
+      const gps = result.practices;
       if (gps.length > 0) {
         setGpPractices(gps);
         onSearchStarted?.();

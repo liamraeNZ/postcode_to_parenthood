@@ -104,6 +104,52 @@ export async function handleApiRequest(request: Request, env: Env) {
 
       const fallbackOutcode = getFallbackOutcodeFromPostcode(postcode);
       const geo = await lookupPostcodeGeo(postcode, { requestId: reqId });
+
+      // Scotland, Wales, and NI have national policies — skip GP matching and resolve directly to board
+      if (geo && geo.country && geo.country !== 'England') {
+        const admin = await lookupPostcodeAdminLookup(postcode, { requestId: reqId });
+        if (!admin) {
+          response = jsonResponse({ error: 'We could not look up that postcode. Please check and try again.', request_id: reqId }, { status: 404 });
+          return response;
+        }
+
+        const resolved = await resolveBoardFromPostcode(env.DB, {
+          country: admin.country,
+          icb: admin.icb,
+          ccg_id: admin.ccg_id,
+          ccg: admin.ccg,
+          nhs_ha: admin.nhs_ha,
+          primary_care_trust: admin.primary_care_trust
+        });
+
+        if (!resolved) {
+          response = jsonResponse(
+            { error: "We couldn't find a health board for that postcode. Please check and try again.", request_id: reqId },
+            { status: 404 }
+          );
+          return response;
+        }
+
+        const documentFolder = await resolveDocumentFolder(env.DB, resolved.boardId);
+        const slug = documentFolder ? toSlug(documentFolder) : null;
+
+        // Fetch the matched board's name for display
+        const boardRow = await env.DB.prepare('SELECT name FROM health_boards WHERE id = ?1 LIMIT 1')
+          .bind(resolved.boardId)
+          .first<{ name: string }>();
+
+        response = jsonResponse({
+          skipGp: true,
+          country: geo.country,
+          boardId: resolved.boardId,
+          boardName: boardRow?.name ?? null,
+          matched_on: resolved.matched_on,
+          slug,
+          redirectUrl: slug ? `/board/${slug}` : null
+        });
+        return response;
+      }
+
       const seedOutcode = normalizeOdsCode(geo?.outcode ?? fallbackOutcode);
 
       const nearestOutcodes = await lookupNearestOutcodes(seedOutcode, {

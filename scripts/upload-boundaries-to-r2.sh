@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-FILE="build/client/data/uk-care-board-boundaries.topojson"
+FILE="uk-care-board-boundaries.topojson"
 R2_KEY="geodata/uk-care-board-boundaries.topojson"
 BUCKET="fertilityfund"
 
