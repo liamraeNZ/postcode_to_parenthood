@@ -29,7 +29,7 @@ export function IcbTable({ icbs, onSelect, onEdit, onToggleStatus }: IcbTablePro
       <div className="flex gap-2">
         <Input
           placeholder="Search by name..."
-          aria-label="Search ICBs by name"
+          aria-label="Search health boards by name"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="max-w-xs"
@@ -87,7 +87,7 @@ export function IcbTable({ icbs, onSelect, onEdit, onToggleStatus }: IcbTablePro
           {filtered.length === 0 && (
             <TableRow>
               <TableCell colSpan={5} className="text-center text-muted-foreground py-6">
-                No ICBs found
+                No health boards found
               </TableCell>
             </TableRow>
           )}

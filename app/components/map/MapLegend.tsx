@@ -12,7 +12,7 @@ const LEGEND_ITEMS = [
 
 /**
  * MapLegend renders a Leaflet control in the bottom-right corner of the map
- * showing the 4 colour categories used to code ICB polygons.
+ * showing the 4 colour categories used to code health board polygons.
  */
 export function MapLegend() {
   const map = useMap();

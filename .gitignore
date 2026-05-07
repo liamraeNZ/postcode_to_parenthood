@@ -16,3 +16,5 @@ documents/*
 scripts/output/*
 .react-router/*
 .wrangler-out/*
+geojson/*
+*.topojson

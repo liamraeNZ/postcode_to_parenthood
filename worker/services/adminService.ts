@@ -14,27 +14,27 @@ function isConflictError(err: unknown): boolean {
   );
 }
 
-type IcbRow = Omit<AdminIcb, 'has_active_policy'> & { has_active_policy: number | boolean };
+type BoardRow = Omit<AdminIcb, 'has_active_policy'> & { has_active_policy: number | boolean };
 type PolicyRow = Omit<AdminPolicy, 'endometriosis_priority_access' | 'smoking_restricted'> & {
   endometriosis_priority_access: number | boolean;
   smoking_restricted: number | boolean;
 };
 
-export async function listIcbs(db: D1Database): Promise<AdminIcb[]> {
+export async function listBoards(db: D1Database): Promise<AdminIcb[]> {
   const { results } = await db
     .prepare(
       `SELECT
         i.*,
         EXISTS (
-          SELECT 1 FROM icb_policies p
-          WHERE p.icb_id = i.id
+          SELECT 1 FROM board_policies p
+          WHERE p.board_id = i.id
             AND (p.effective_to IS NULL OR p.effective_to >= date('now'))
         ) AS has_active_policy
-      FROM icbs i
+      FROM health_boards i
       ORDER BY i.name ASC`
     )
     .bind()
-    .all<IcbRow>();
+    .all<BoardRow>();
 
   return results.map((row) => ({
     ...row,
@@ -42,11 +42,11 @@ export async function listIcbs(db: D1Database): Promise<AdminIcb[]> {
   }));
 }
 
-export async function createIcb(db: D1Database, data: CreateIcbInput): Promise<AdminIcb> {
+export async function createBoard(db: D1Database, data: CreateIcbInput): Promise<AdminIcb> {
   try {
     await db
       .prepare(
-        `INSERT INTO icbs (id, name, sub_icb_code, parent_icb_code, region, country)
+        `INSERT INTO health_boards (id, name, sub_board_code, parent_board_code, region, country)
          VALUES (?, ?, ?, ?, ?, ?)`
       )
       .bind(
@@ -61,8 +61,8 @@ export async function createIcb(db: D1Database, data: CreateIcbInput): Promise<A
   } catch (err) {
     if (isConflictError(err)) {
       const msg = (err as Error).message;
-      const field = msg.includes('icbs.name') ? 'name' : 'id';
-      throw { type: 'conflict', field, message: `ICB with this ${field} already exists` } satisfies ConflictError;
+      const field = msg.includes('health_boards.name') ? 'name' : 'id';
+      throw { type: 'conflict', field, message: `Health board with this ${field} already exists` } satisfies ConflictError;
     }
     throw err;
   }
@@ -72,22 +72,22 @@ export async function createIcb(db: D1Database, data: CreateIcbInput): Promise<A
       `SELECT
         i.*,
         EXISTS (
-          SELECT 1 FROM icb_policies p
-          WHERE p.icb_id = i.id
+          SELECT 1 FROM board_policies p
+          WHERE p.board_id = i.id
             AND (p.effective_to IS NULL OR p.effective_to >= date('now'))
         ) AS has_active_policy
-      FROM icbs i
+      FROM health_boards i
       WHERE i.id = ?`
     )
     .bind(data.id)
-    .first<IcbRow>();
+    .first<BoardRow>();
 
-  if (!row) throw new Error('Failed to retrieve created ICB');
+  if (!row) throw new Error('Failed to retrieve created health board');
 
   return { ...row, has_active_policy: Boolean(row.has_active_policy) };
 }
 
-export async function updateIcb(
+export async function updateBoard(
   db: D1Database,
   id: string,
   data: UpdateIcbInput
@@ -100,24 +100,30 @@ export async function updateIcb(
         `SELECT
           i.*,
           EXISTS (
-            SELECT 1 FROM icb_policies p
-            WHERE p.icb_id = i.id
+            SELECT 1 FROM board_policies p
+            WHERE p.board_id = i.id
               AND (p.effective_to IS NULL OR p.effective_to >= date('now'))
           ) AS has_active_policy
-        FROM icbs i
+        FROM health_boards i
         WHERE i.id = ?`
       )
       .bind(id)
-      .first<IcbRow>();
+      .first<BoardRow>();
     if (!existing) return null;
     return { ...existing, has_active_policy: Boolean(existing.has_active_policy) };
   }
 
-  const setClauses = fields.map(([k]) => `${k} = ?`).join(', ');
+  // Map input field names to DB column names
+  const columnMap: Record<string, string> = {
+    sub_icb_code: 'sub_board_code',
+    parent_icb_code: 'parent_board_code',
+  };
+
+  const setClauses = fields.map(([k]) => `${columnMap[k] ?? k} = ?`).join(', ');
   const values = fields.map(([, v]) => v ?? null);
 
   const result = await db
-    .prepare(`UPDATE icbs SET ${setClauses}, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE id = ?`)
+    .prepare(`UPDATE health_boards SET ${setClauses}, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE id = ?`)
     .bind(...values, id)
     .run();
 
@@ -128,25 +134,25 @@ export async function updateIcb(
       `SELECT
         i.*,
         EXISTS (
-          SELECT 1 FROM icb_policies p
-          WHERE p.icb_id = i.id
+          SELECT 1 FROM board_policies p
+          WHERE p.board_id = i.id
             AND (p.effective_to IS NULL OR p.effective_to >= date('now'))
         ) AS has_active_policy
-      FROM icbs i
+      FROM health_boards i
       WHERE i.id = ?`
     )
     .bind(id)
-    .first<IcbRow>();
+    .first<BoardRow>();
 
   if (!row) return null;
 
   return { ...row, has_active_policy: Boolean(row.has_active_policy) };
 }
 
-export async function listPoliciesForIcb(db: D1Database, icbId: string): Promise<AdminPolicy[]> {
+export async function listPoliciesForBoard(db: D1Database, boardId: string): Promise<AdminPolicy[]> {
   const { results } = await db
-    .prepare(`SELECT * FROM icb_policies WHERE icb_id = ? ORDER BY effective_from DESC`)
-    .bind(icbId)
+    .prepare(`SELECT * FROM board_policies WHERE board_id = ? ORDER BY effective_from DESC`)
+    .bind(boardId)
     .all<PolicyRow>();
 
   return results.map((row) => ({
@@ -158,7 +164,7 @@ export async function listPoliciesForIcb(db: D1Database, icbId: string): Promise
 
 export async function createPolicy(
   db: D1Database,
-  icbId: string,
+  boardId: string,
   data: CreatePolicyInput
 ): Promise<AdminPolicy> {
   const policyId = crypto.randomUUID();
@@ -167,8 +173,8 @@ export async function createPolicy(
   try {
     await db
       .prepare(
-        `INSERT INTO icb_policies (
-          id, icb_id, treatment_type_id, effective_from, effective_to,
+        `INSERT INTO board_policies (
+          id, board_id, treatment_type_id, effective_from, effective_to,
           cycles_offered, max_age, bmi_min, bmi_max,
           iui_rounds_required,
           endometriosis_priority_access, smoking_restricted,
@@ -177,7 +183,7 @@ export async function createPolicy(
       )
       .bind(
         policyId,
-        icbId,
+        boardId,
         data.treatment_type_id ?? 'ivf',
         effectiveFrom,
         data.effective_to ?? null,
@@ -197,14 +203,14 @@ export async function createPolicy(
       throw {
         type: 'conflict',
         field: 'effective_from',
-        message: 'A policy with this effective_from date already exists for this ICB',
+        message: 'A policy with this effective_from date already exists for this health board',
       } satisfies ConflictError;
     }
     throw err;
   }
 
   const row = await db
-    .prepare(`SELECT * FROM icb_policies WHERE id = ?`)
+    .prepare(`SELECT * FROM board_policies WHERE id = ?`)
     .bind(policyId)
     .first<PolicyRow>();
 

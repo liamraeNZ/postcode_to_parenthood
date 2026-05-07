@@ -6,7 +6,7 @@ import { findIcbBySlug, toSlug } from "../lib/slug";
  * Feature: seo-optimized-pages, Property 2: Invalid slug returns 404
  *
  * For any string that does not match the toSlug() output of any active ICB's
- * document_folder_name, requesting /icb/{that_string} should result in a 404 response.
+ * document_folder_name, requesting /board/{that_string} should result in a 404 response.
  *
  * We test this by verifying that findIcbBySlug returns undefined for any random
  * string that doesn't match a known slug. In the loader, undefined triggers:
@@ -132,7 +132,7 @@ describe("Property 2: Invalid Slug Returns 404", () => {
   });
 });
 
-import { meta } from "./icb.$slug";
+import { meta } from "./board.$slug";
 
 /**
  * Feature: seo-optimized-pages, Property 3: ICB page meta tags are complete
@@ -140,7 +140,7 @@ import { meta } from "./icb.$slug";
  * For any active ICB with a non-null document_folder_name and at least one policy,
  * the meta output for its policy page should include:
  * - A title containing the ICB name and "IVF Funding Policy"
- * - A canonical URL matching /icb/{slug}
+ * - A canonical URL matching /board/{slug}
  * - Open Graph tags (og:title, og:description, og:url) containing ICB-specific content
  *
  * Validates: Requirements 3.2, 3.6, 3.7
@@ -213,10 +213,11 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
       fc.string({ minLength: 3, maxLength: 5 }).map((s) => s.toUpperCase().replace(/[^A-Z0-9]/g, "X")),
       icbNameArb,
       documentFolderNameArb,
-      fc.array(policyArb, { minLength: 1, maxLength: 4 })
+      fc.array(policyArb, { minLength: 1, maxLength: 4 }),
+      fc.constantFrom("ENGLAND", "SCOTLAND", "WALES", "NORTHERN_IRELAND")
     )
-    .map(([id, name, document_folder_name, policies]) => ({
-      icb: { id, name, document_folder_name },
+    .map(([id, name, document_folder_name, policies, country]) => ({
+      icb: { id, name, document_folder_name, country },
       policies,
       slug: toSlug(document_folder_name),
     }));
@@ -239,7 +240,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
     );
   });
 
-  it("meta output contains canonical URL matching /icb/{slug}", () => {
+  it("meta output contains canonical URL matching /board/{slug}", () => {
     fc.assert(
       fc.property(icbDataArb, (data) => {
         const metaResult = meta({ data } as any);
@@ -250,7 +251,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
         ) as { href: string } | undefined;
 
         expect(canonicalEntry).toBeDefined();
-        expect(canonicalEntry!.href).toBe(`https://fertilityfund.uk/icb/${data.slug}`);
+        expect(canonicalEntry!.href).toBe(`https://fertilityfund.uk/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );
@@ -280,7 +281,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
           (entry: any) => entry.property === "og:url"
         ) as { content: string } | undefined;
         expect(ogUrl).toBeDefined();
-        expect(ogUrl!.content).toBe(`https://fertilityfund.uk/icb/${data.slug}`);
+        expect(ogUrl!.content).toBe(`https://fertilityfund.uk/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );
@@ -302,7 +303,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
           (entry: any) => entry.tagName === "link" && entry.rel === "canonical"
         ) as { href: string } | undefined;
         expect(canonicalEntry).toBeDefined();
-        expect(canonicalEntry!.href).toContain(`/icb/${data.slug}`);
+        expect(canonicalEntry!.href).toContain(`/board/${data.slug}`);
 
         // OG tags with ICB-specific content
         const ogTitle = metaResult.find((entry: any) => entry.property === "og:title") as { content: string } | undefined;
@@ -316,7 +317,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
         expect(ogDescription!.content).toContain(data.icb.name);
 
         expect(ogUrl).toBeDefined();
-        expect(ogUrl!.content).toContain(`/icb/${data.slug}`);
+        expect(ogUrl!.content).toContain(`/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );
@@ -398,10 +399,11 @@ describe("Property 4: ICB Page Meta Description Contains Policy Data", () => {
       fc.string({ minLength: 3, maxLength: 5 }).map((s) => s.toUpperCase().replace(/[^A-Z0-9]/g, "X")),
       icbNameArb,
       documentFolderNameArb,
-      ivfPolicyArb
+      ivfPolicyArb,
+      fc.constantFrom("ENGLAND", "SCOTLAND", "WALES", "NORTHERN_IRELAND")
     )
-    .map(([id, name, document_folder_name, ivfPolicy]) => ({
-      icb: { id, name, document_folder_name },
+    .map(([id, name, document_folder_name, ivfPolicy, country]) => ({
+      icb: { id, name, document_folder_name, country },
       policies: [ivfPolicy],
       slug: toSlug(document_folder_name),
     }));
@@ -472,7 +474,7 @@ describe("Property 4: ICB Page Meta Description Contains Policy Data", () => {
 
 import { renderToReadableStream } from "react-dom/server";
 import { createElement } from "react";
-import { PolicyCard, type Policy } from "./icb.$slug";
+import { PolicyCard, type Policy } from "./board.$slug";
 
 /**
  * Feature: seo-optimized-pages, Property 5: ICB page displays all required policy fields
@@ -697,7 +699,7 @@ describe("Property 5: ICB Page Displays All Required Policy Fields", () => {
 });
 
 
-import { buildStructuredData } from "./icb.$slug";
+import { buildStructuredData } from "./board.$slug";
 
 /**
  * Feature: seo-optimized-pages, Property 6: ICB page has valid structured data
@@ -775,7 +777,7 @@ describe("Property 6: ICB Page Has Valid Structured Data", () => {
       fc.array(policyArb, { minLength: 0, maxLength: 3 })
     )
     .map(([name, document_folder_name, otherPolicies]) => ({
-      icb: { name },
+      icb: { name, document_folder_name },
       policies: otherPolicies,
       slug: toSlug(document_folder_name),
     }));
@@ -793,7 +795,7 @@ describe("Property 6: ICB Page Has Valid Structured Data", () => {
       fc.array(policyArb, { minLength: 0, maxLength: 2 })
     )
     .map(([name, document_folder_name, ivfPolicy, otherPolicies]) => ({
-      icb: { name },
+      icb: { name, document_folder_name },
       policies: [ivfPolicy, ...otherPolicies],
       slug: toSlug(document_folder_name),
     }));
@@ -840,7 +842,7 @@ describe("Property 6: ICB Page Has Valid Structured Data", () => {
       fc.property(icbDataArb, (data) => {
         const result = buildStructuredData(data.icb, data.policies, data.slug);
 
-        expect(result.url).toBe(`https://fertilityfund.uk/icb/${data.slug}`);
+        expect(result.url).toBe(`https://fertilityfund.uk/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );

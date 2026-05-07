@@ -3,7 +3,7 @@ import { SELF, env } from "cloudflare:test";
 import { renderToReadableStream } from "react-dom/server";
 import { createElement } from "react";
 import { StaticRouter } from "react-router";
-import IcbPolicyPage from "../app/routes/icb.$slug";
+import IcbPolicyPage from "../app/routes/board.$slug";
 import { loader as sitemapLoader } from "../app/routes/sitemap[.]xml";
 import { loader as robotsLoader } from "../app/routes/robots[.]txt";
 import { toSlug, findIcbBySlug } from "../app/lib/slug";
@@ -65,19 +65,19 @@ async function renderToHtml(element: React.ReactElement, location: string): Prom
 
 async function getActiveIcbs() {
   const { results } = await env.DB.prepare(
-    "SELECT id, name, document_folder_name FROM icbs WHERE document_folder_name IS NOT NULL AND status = 'active'"
+    "SELECT id, name, document_folder_name, country FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'"
   )
     .bind()
-    .all<{ id: string; name: string; document_folder_name: string }>();
+    .all<{ id: string; name: string; document_folder_name: string; country: string }>();
   return results;
 }
 
 async function getPoliciesForIcb(icbId: string) {
   const { results } = await env.DB.prepare(
     `SELECT p.*, t.name as treatment_type_name
-     FROM icb_policies p
+     FROM board_policies p
      JOIN treatment_types t ON t.id = p.treatment_type_id
-     WHERE p.icb_id = ?1
+     WHERE p.board_id = ?1
        AND (p.effective_to IS NULL OR p.effective_to >= date('now'))
      ORDER BY p.effective_from DESC`
   )
@@ -183,13 +183,14 @@ describe("Integration: ICB Policy Page", () => {
         id: matched!.id,
         name: matched!.name,
         document_folder_name: matched!.document_folder_name,
+        country: matched!.country,
       },
       policies,
       slug: testSlug,
     };
 
     const element = createElement(IcbPolicyPage, { loaderData } as any);
-    const html = await renderToHtml(element, `/icb/${testSlug}`);
+    const html = await renderToHtml(element, `/board/${testSlug}`);
 
     // Contains the ICB name (case-insensitive since DB stores uppercase)
     expect(html.toLowerCase()).toContain("bath and north east somerset");
@@ -217,13 +218,14 @@ describe("Integration: ICB Policy Page", () => {
         id: matched!.id,
         name: matched!.name,
         document_folder_name: matched!.document_folder_name,
+        country: matched!.country,
       },
       policies,
       slug: testSlug,
     };
 
     const element = createElement(IcbPolicyPage, { loaderData } as any);
-    const html = await renderToHtml(element, `/icb/${testSlug}`);
+    const html = await renderToHtml(element, `/board/${testSlug}`);
 
     // Content-Type text/html verified by document structure
     expect(html.toLowerCase()).toContain("<!doctype html>");
@@ -245,13 +247,14 @@ describe("Integration: ICB Policy Page", () => {
         id: matched!.id,
         name: matched!.name,
         document_folder_name: matched!.document_folder_name,
+        country: matched!.country,
       },
       policies,
       slug: testSlug,
     };
 
     const element = createElement(IcbPolicyPage, { loaderData } as any);
-    const html = await renderToHtml(element, `/icb/${testSlug}`);
+    const html = await renderToHtml(element, `/board/${testSlug}`);
 
     expect(html).toContain('href="/"');
     expect(html).toContain('href="/map"');
@@ -296,8 +299,8 @@ describe("Integration: API Routes Return JSON", () => {
     const contentType = response.headers.get("content-type") || "";
     expect(contentType).toContain("application/json");
 
-    const body = (await response.json()) as { icb_name: string; policies: unknown[] };
-    expect(body.icb_name).toBeTruthy();
+    const body = (await response.json()) as { board_name: string; policies: unknown[] };
+    expect(body.board_name).toBeTruthy();
     expect(body.policies).toBeDefined();
     expect(Array.isArray(body.policies)).toBe(true);
   });
@@ -377,7 +380,7 @@ describe("Integration: Sitemap.xml", () => {
       expect(
         body,
         `Sitemap should contain URL for ICB: ${icb.name} (slug: ${slug})`
-      ).toContain(`https://fertilityfund.uk/icb/${slug}`);
+      ).toContain(`https://fertilityfund.uk/board/${slug}`);
     }
   });
 
@@ -439,7 +442,7 @@ describe("Integration: Robots.txt", () => {
 
     expect(body).toContain("Allow: /");
     expect(body).toContain("Allow: /map");
-    expect(body).toContain("Allow: /icb/");
+    expect(body).toContain("Allow: /board/");
   });
 
   it("contains Sitemap reference", async () => {

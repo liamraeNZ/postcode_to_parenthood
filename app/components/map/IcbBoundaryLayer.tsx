@@ -4,12 +4,12 @@ import type { Layer, PathOptions, LeafletEvent } from 'leaflet';
 import type { Feature, GeoJsonProperties } from 'geojson';
 import type { TreatmentTypeId } from './TreatmentToggle';
 import { getMapFillColor } from '@/utils/mapColors';
-import { getOdsCode } from '@/utils/codeLookup';
+import { getBoardCode } from '@/utils/codeLookup';
 import { getIcbAriaLabel } from '@/utils/ariaLabels';
 
 export interface MapPolicyEntry {
-  icb_id: string;
-  icb_name: string;
+  board_id: string;
+  board_name: string;
   document_folder_name: string | null;
   treatment_type_id: string;
   cycles_offered: number;
@@ -42,10 +42,10 @@ function getPolicyEntry(
   onsCode: string,
   selectedTreatment: TreatmentTypeId
 ): MapPolicyEntry | null {
-  const odsCode = getOdsCode(onsCode);
-  if (!odsCode) return null;
+  const boardCode = getBoardCode(onsCode);
+  if (!boardCode) return null;
 
-  const entries = policyMap.get(odsCode);
+  const entries = policyMap.get(boardCode);
   if (!entries) return null;
 
   return entries.find((e) => e.treatment_type_id === selectedTreatment) ?? null;
@@ -66,7 +66,7 @@ export function IcbBoundaryLayer({
         return { ...DEFAULT_BORDER, fillColor: getMapFillColor(null) };
       }
 
-      const onsCode: string = feature.properties.icb23cd ?? feature.properties.ICB23CD ?? '';
+      const onsCode: string = feature.properties.icb23cd ?? feature.properties.ICB23CD ?? feature.properties.board_cd ?? '';
       const entry = getPolicyEntry(policyMap, onsCode, selectedTreatment);
       const cycles = entry ? entry.cycles_offered : null;
 
@@ -83,9 +83,9 @@ export function IcbBoundaryLayer({
       const props = feature.properties;
       if (!props) return;
 
-      const onsCode: string = props.icb23cd ?? props.ICB23CD ?? '';
-      const icbName: string = props.icb23nm ?? props.ICB23NM ?? 'Unknown ICB';
-      const odsCode = getOdsCode(onsCode);
+      const onsCode: string = props.icb23cd ?? props.ICB23CD ?? props.board_cd ?? '';
+      const icbName: string = props.icb23nm ?? props.ICB23NM ?? props.board_nm ?? 'Unknown health board';
+      const boardCode = getBoardCode(onsCode);
       const entry = getPolicyEntry(policyMap, onsCode, selectedTreatment);
       const cycles = entry ? entry.cycles_offered : null;
 
@@ -101,7 +101,7 @@ export function IcbBoundaryLayer({
         el.addEventListener('keydown', (e: KeyboardEvent) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            if (odsCode) onIcbClick(odsCode);
+            if (boardCode) onIcbClick(boardCode);
           }
         });
 
@@ -130,7 +130,7 @@ export function IcbBoundaryLayer({
           const target = e.target as Layer & { setStyle: (s: PathOptions) => void };
           target.setStyle(HOVER_BORDER);
           hoveredLayerRef.current = target;
-          if (odsCode) onIcbHover(odsCode);
+          if (boardCode) onIcbHover(boardCode);
         },
         mouseout: (e: LeafletEvent) => {
           const target = e.target as Layer & { setStyle: (s: PathOptions) => void };
@@ -143,11 +143,11 @@ export function IcbBoundaryLayer({
           onIcbHover(null);
         },
         click: () => {
-          if (odsCode) onIcbClick(odsCode);
+          if (boardCode) onIcbClick(boardCode);
         },
       });
 
-      // Bind tooltip with ICB name and cycles info
+      // Bind tooltip with health board name and cycles info
       const tooltipContent = cycles !== null
         ? `${icbName}: ${cycles} cycle${cycles !== 1 ? 's' : ''} offered`
         : `${icbName}: No data`;

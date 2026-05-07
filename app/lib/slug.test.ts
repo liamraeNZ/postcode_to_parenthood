@@ -27,6 +27,38 @@ describe("toSlug", () => {
       "north-east-north-cumbria"
     );
   });
+
+  it("handles Welsh circumflex characters", () => {
+    expect(toSlug("Tŷ Gwyn")).toBe("ty-gwyn");
+  });
+
+  it("handles Gaelic grave accent characters", () => {
+    expect(toSlug("Àrd-sgoil")).toBe("ard-sgoil");
+  });
+
+  it("removes apostrophes from board names", () => {
+    expect(toSlug("St Mary's Hospital")).toBe("st-marys-hospital");
+  });
+
+  it("removes curly apostrophes from board names", () => {
+    expect(toSlug("St Mary\u2019s Hospital")).toBe("st-marys-hospital");
+  });
+
+  it("handles Scottish health board names", () => {
+    expect(toSlug("NHS Greater Glasgow and Clyde")).toBe(
+      "nhs-greater-glasgow-and-clyde"
+    );
+  });
+
+  it("handles Welsh health board names", () => {
+    expect(toSlug("Betsi Cadwaladr University Health Board")).toBe(
+      "betsi-cadwaladr-university-health-board"
+    );
+  });
+
+  it("handles Northern Ireland trust names", () => {
+    expect(toSlug("Belfast HSC Trust")).toBe("belfast-hsc-trust");
+  });
 });
 
 describe("findIcbBySlug", () => {

@@ -10,9 +10,9 @@ export interface IcbInfoPanelProps {
 }
 
 /**
- * IcbInfoPanel displays expanded policy details for a selected ICB region.
- * Shows ICB name, cycles offered, and age range.
- * Includes a "View full policy" link to navigate to the ICB policy page.
+ * IcbInfoPanel displays expanded policy details for a selected health board region.
+ * Shows health board name, cycles offered, and age range.
+ * Includes a "View full policy" link to navigate to the health board policy page.
  */
 export function IcbInfoPanel({
   icbName,
@@ -70,7 +70,7 @@ export function IcbInfoPanel({
         {/* View full policy link */}
         {policy !== null && slug && (
           <Link
-            to={`/icb/${slug}`}
+            to={`/board/${slug}`}
             className="mt-3 block w-full rounded-lg bg-sage-dark px-3 py-2 text-xs font-bold text-white text-center transition-colors hover:bg-sage-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-green focus-visible:ring-offset-1"
           >
             View full policy

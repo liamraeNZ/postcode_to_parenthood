@@ -5,9 +5,9 @@ export async function loader({ context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
   const baseUrl = "https://fertilityfund.uk";
 
-  const { results: icbs } = await db
+  const { results: boards } = await db
     .prepare(
-      `SELECT document_folder_name, updated_at FROM icbs WHERE document_folder_name IS NOT NULL AND status = 'active'`
+      `SELECT document_folder_name, updated_at FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'`
     )
     .bind()
     .all<{ document_folder_name: string; updated_at: string }>();
@@ -17,9 +17,9 @@ export async function loader({ context }: Route.LoaderArgs) {
   const urls = [
     { loc: baseUrl, lastmod: today, priority: "1.0" },
     { loc: `${baseUrl}/map`, lastmod: today, priority: "0.8" },
-    ...icbs.map((icb) => ({
-      loc: `${baseUrl}/icb/${toSlug(icb.document_folder_name)}`,
-      lastmod: icb.updated_at.slice(0, 10),
+    ...boards.map((board) => ({
+      loc: `${baseUrl}/board/${toSlug(board.document_folder_name)}`,
+      lastmod: board.updated_at.slice(0, 10),
       priority: "0.7",
     })),
   ];

@@ -1,10 +1,10 @@
 pragma foreign_keys = on; --> statement-breakpoint
 
-create table if not exists icbs (
+create table if not exists health_boards (
   id text primary key,
   name text not null collate nocase unique,
-  sub_icb_code text,
-  parent_icb_code text,
+  sub_board_code text,
+  parent_board_code text,
   region text,
   country text,
   status text not null default 'active' check (status in ('active', 'inactive')),
@@ -13,21 +13,21 @@ create table if not exists icbs (
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 ); --> statement-breakpoint
 
-create unique index if not exists icbs_sub_icb_code_unique_idx on icbs (sub_icb_code) where sub_icb_code is not null; --> statement-breakpoint
-create unique index if not exists icbs_parent_icb_code_unique_idx on icbs (parent_icb_code) where sub_icb_code is null and parent_icb_code is not null; --> statement-breakpoint
-create index if not exists icbs_parent_icb_code_idx on icbs (parent_icb_code); --> statement-breakpoint
+create unique index if not exists health_boards_sub_board_code_unique_idx on health_boards (sub_board_code) where sub_board_code is not null; --> statement-breakpoint
+create unique index if not exists health_boards_parent_board_code_unique_idx on health_boards (parent_board_code) where sub_board_code is null and parent_board_code is not null; --> statement-breakpoint
+create index if not exists health_boards_parent_board_code_idx on health_boards (parent_board_code); --> statement-breakpoint
 
-create table if not exists icb_aliases (
+create table if not exists board_aliases (
   id text primary key,
-  icb_id text not null references icbs(id) on delete cascade,
+  board_id text not null references health_boards(id) on delete cascade,
   alias_kind text not null default 'name',
   alias text not null collate nocase unique,
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
-  constraint icb_aliases_kind check (alias_kind in ('name', 'code'))
+  constraint board_aliases_kind check (alias_kind in ('name', 'code'))
 ); --> statement-breakpoint
 
-create index if not exists icb_aliases_icb_id_idx on icb_aliases (icb_id); --> statement-breakpoint
+create index if not exists board_aliases_board_id_idx on board_aliases (board_id); --> statement-breakpoint
 
 create table if not exists treatment_types (
   id text primary key,
@@ -43,9 +43,9 @@ insert or ignore into treatment_types (id, name, description) values
   ('di', 'DI', 'Donor insemination'),
   ('fet', 'FET', 'Frozen embryo transfer'); --> statement-breakpoint
 
-create table if not exists icb_policies (
+create table if not exists board_policies (
   id text primary key,
-  icb_id text not null references icbs(id) on delete cascade,
+  board_id text not null references health_boards(id) on delete cascade,
   treatment_type_id text not null default 'ivf' references treatment_types(id),
   effective_from text not null default (date('now')),
   effective_to text,
@@ -64,15 +64,25 @@ create table if not exists icb_policies (
   source_url text,
   created_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   updated_at text not null default (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
-  constraint icb_policies_effective_range check (effective_to is null or effective_to >= effective_from),
-  constraint icb_policies_unique_treatment unique (icb_id, treatment_type_id, effective_from)
+  constraint board_policies_effective_range check (effective_to is null or effective_to >= effective_from),
+  constraint board_policies_unique_treatment unique (board_id, treatment_type_id, effective_from)
 ); --> statement-breakpoint
 
-create index if not exists icb_policies_icb_id_idx on icb_policies (icb_id); --> statement-breakpoint
+create index if not exists board_policies_board_id_idx on board_policies (board_id); --> statement-breakpoint
 
-create index if not exists icb_policies_effective_from_idx on icb_policies (effective_from); --> statement-breakpoint
+create index if not exists board_policies_effective_from_idx on board_policies (effective_from); --> statement-breakpoint
 
-create index if not exists icb_policies_treatment_type_idx on icb_policies (treatment_type_id); --> statement-breakpoint
+create index if not exists board_policies_treatment_type_idx on board_policies (treatment_type_id); --> statement-breakpoint
+
+create table if not exists postcode_area_to_board (
+  id text primary key,
+  lookup_value text not null,
+  lookup_field text not null,
+  board_id text not null references health_boards(id) on delete cascade,
+  country text not null
+); --> statement-breakpoint
+
+create unique index if not exists postcode_area_to_board_lookup_unique_idx on postcode_area_to_board (lookup_value, lookup_field); --> statement-breakpoint
 
 create table if not exists grants (
   id text primary key,

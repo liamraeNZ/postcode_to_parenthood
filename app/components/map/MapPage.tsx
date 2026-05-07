@@ -12,12 +12,12 @@ import 'leaflet/dist/leaflet.css';
 
 const VALID_TREATMENTS: TreatmentTypeId[] = ['ivf', 'icsi', 'iui', 'di', 'fet'];
 const DEFAULT_TREATMENT: TreatmentTypeId = 'ivf';
-const MAP_CENTER: [number, number] = [52.8, -1.5];
-const MAP_ZOOM = 7;
+const MAP_CENTER: [number, number] = [55.5, -3.5];
+const MAP_ZOOM = 6;
 const MIN_ZOOM = 5;
 const MAX_BOUNDS: [[number, number], [number, number]] = [
-  [49.5, -8.5], // Southwest corner
-  [56.5, 2.5],  // Northeast corner
+  [49.5, -11.0], // Southwest corner (extended west for NI/Scotland west coast)
+  [61.0, 2.5],   // Northeast corner (extended north for Shetland)
 ];
 
 /** Forces Leaflet to recalculate container size after mount */
@@ -112,7 +112,7 @@ function MapPageContent() {
       try {
         const [mapDataRes, topoRes] = await Promise.all([
           fetch('/api/map-data'),
-          fetch('/data/icb-boundaries.topojson'),
+          fetch('/api/geodata/boundaries'),
         ]);
 
         if (!mapDataRes.ok) {
@@ -127,14 +127,14 @@ function MapPageContent() {
 
         if (cancelled) return;
 
-        // Build policy map keyed by icb_id
+        // Build policy map keyed by board_id
         const pMap = new Map<string, MapPolicyEntry[]>();
         for (const entry of mapData.data) {
-          const existing = pMap.get(entry.icb_id);
+          const existing = pMap.get(entry.board_id);
           if (existing) {
             existing.push(entry);
           } else {
-            pMap.set(entry.icb_id, [entry]);
+            pMap.set(entry.board_id, [entry]);
           }
         }
         setPolicyMap(pMap);
@@ -195,7 +195,7 @@ function MapPageContent() {
     const policyForTreatment = entries.find((e) => e.treatment_type_id === selectedTreatment) ?? null;
     return {
       icbId: selectedIcbId,
-      icbName: entries[0].icb_name,
+      icbName: entries[0].board_name,
       policy: policyForTreatment,
     };
   }, [selectedIcbId, policyMap, selectedTreatment]);

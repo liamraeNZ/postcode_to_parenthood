@@ -149,7 +149,7 @@ describe("Property 11: Server Render of Map Does Not Execute Window-Dependent Co
  * Feature: seo-optimized-pages, Property 9: Map page contains links to all active ICB pages
  *
  * For any set of active ICBs with non-null document_folder_name values, the server-rendered
- * HTML of the map page should contain an <a> element with href="/icb/{slug}" for each ICB.
+ * HTML of the map page should contain an <a> element with href="/board/{slug}" for each ICB.
  *
  * We generate random sets of active ICBs (name + slug pairs), render the MapPage component
  * using renderToReadableStream, and verify the HTML contains a link for each ICB.
@@ -236,13 +236,13 @@ describe("Property 9: Map Page Contains Links to All Active ICB Pages", () => {
     })
     .filter((icbs) => icbs.length > 0);
 
-  it("rendered HTML contains an <a> with href=\"/icb/{slug}\" for each ICB", async () => {
+  it("rendered HTML contains an <a> with href=\"/board/{slug}\" for each health board", async () => {
     await fc.assert(
       fc.asyncProperty(icbSetArb, async (icbs) => {
         const html = await renderMapPage(icbs);
 
         for (const icb of icbs) {
-          expect(html).toContain(`href="/icb/${icb.slug}"`);
+          expect(html).toContain(`href="/board/${icb.slug}"`);
         }
       }),
       { numRuns: 100 }
@@ -265,12 +265,12 @@ describe("Property 9: Map Page Contains Links to All Active ICB Pages", () => {
     );
   });
 
-  it("rendered HTML contains a nav element with aria-label for ICB links", async () => {
+  it("rendered HTML contains a nav element with aria-label for health board links", async () => {
     await fc.assert(
       fc.asyncProperty(icbSetArb, async (icbs) => {
         const html = await renderMapPage(icbs);
 
-        expect(html).toContain('aria-label="ICB Policy Pages"');
+        expect(html).toContain('aria-label="Health Board Policy Pages"');
       }),
       { numRuns: 100 }
     );

@@ -1,7 +1,7 @@
 /**
- * Generates an accessible ARIA label for an ICB polygon on the choropleth map.
+ * Generates an accessible ARIA label for a health board polygon on the choropleth map.
  *
- * The label conveys both the ICB name and the number of cycles offered,
+ * The label conveys both the health board name and the number of cycles offered,
  * or "no data available" when the value is null.
  *
  * Examples:
@@ -9,9 +9,14 @@
  *   ("NHS Devon", 0)          → "NHS Devon, 0 cycles offered"
  *   ("NHS Cornwall", null)    → "NHS Cornwall, no data available"
  */
-export function getIcbAriaLabel(icbName: string, cyclesOffered: number | null): string {
+export function getBoardAriaLabel(boardName: string, cyclesOffered: number | null): string {
   if (cyclesOffered === null) {
-    return `${icbName}, no data available`;
+    return `${boardName}, no data available`;
   }
-  return `${icbName}, ${cyclesOffered} cycles offered`;
+  return `${boardName}, ${cyclesOffered} cycles offered`;
 }
+
+/**
+ * @deprecated Use getBoardAriaLabel instead
+ */
+export const getIcbAriaLabel = getBoardAriaLabel;

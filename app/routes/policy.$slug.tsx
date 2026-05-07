@@ -27,17 +27,17 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   const r2 = context.cloudflare.env.r2bucket;
   const { slug } = params;
 
-  // Resolve ICB from slug
-  const { results: icbs } = await db
+  // Resolve board from slug
+  const { results: boards } = await db
     .prepare(
-      "SELECT id, name, document_folder_name FROM icbs WHERE document_folder_name IS NOT NULL AND status = 'active'"
+      "SELECT id, name, document_folder_name FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'"
     )
     .bind()
     .all<IcbData>();
 
-  const matched = findIcbBySlug(icbs, slug) as IcbData | undefined;
+  const matched = findIcbBySlug(boards, slug) as IcbData | undefined;
   if (!matched) {
-    throw new Response("ICB not found", { status: 404 });
+    throw new Response("Health board not found", { status: 404 });
   }
 
   // List all documents from R2 for this ICB
@@ -82,8 +82,8 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 export function meta({ data }: Route.MetaArgs) {
   if (!data) {
     return [
-      { title: "ICB Not Found | FertilityFund UK" },
-      { name: "description", content: "The requested ICB could not be found." },
+      { title: "Health Board Not Found | FertilityFund UK" },
+      { name: "description", content: "The requested health board could not be found." },
     ];
   }
 
@@ -166,7 +166,7 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
             {formatIcbName(icb.name)}
           </h1>
           <p className="text-sm md:text-base text-deep-slate/70 leading-relaxed">
-            Policy documents published by this ICB, grouped by year.
+            Policy documents published by this health board, grouped by year.
           </p>
         </header>
 
@@ -246,7 +246,7 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
         ) : (
           <div className="p-6 bg-warm-sand rounded-xl text-center">
             <p className="text-deep-slate/70">
-              No policy documents have been uploaded for this ICB yet.
+              No policy documents have been uploaded for this health board yet.
             </p>
           </div>
         )}
@@ -258,10 +258,10 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
               to="/policies"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-light text-deep-slate font-medium text-sm rounded-xl hover:bg-sage-light/80 transition-colors"
             >
-              ← All ICBs
+              ← All health boards
             </Link>
             <Link
-              to={`/icb/${slug}`}
+              to={`/board/${slug}`}
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-light text-deep-slate font-medium text-sm rounded-xl hover:bg-sage-light/80 transition-colors"
             >
               <FileText className="w-4 h-4" />

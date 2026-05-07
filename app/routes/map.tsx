@@ -8,17 +8,17 @@ const LazyMapContent = lazy(() => import("../components/map/MapContent"));
 export async function loader({ context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
 
-  const { results: icbs } = await db
+  const { results: boards } = await db
     .prepare(
-      "SELECT id, name, document_folder_name FROM icbs WHERE document_folder_name IS NOT NULL AND status = 'active'"
+      "SELECT id, name, document_folder_name FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'"
     )
     .bind()
     .all<{ id: string; name: string; document_folder_name: string }>();
 
   return {
-    icbs: icbs.map((icb) => ({
-      name: icb.name,
-      slug: toSlug(icb.document_folder_name),
+    icbs: boards.map((board) => ({
+      name: board.name,
+      slug: toSlug(board.document_folder_name),
     })),
   };
 }
@@ -26,7 +26,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 export function meta({}: Route.MetaArgs) {
   const title = "NHS IVF Funding Map | FertilityFund UK";
   const description =
-    "Interactive map of NHS-funded IVF policies across England. Explore ICB boundaries, compare fertility funding criteria, and find your local area's eligibility rules.";
+    "Interactive map of NHS-funded IVF policies across the UK. Explore health board boundaries, compare fertility funding criteria, and find your local area's eligibility rules.";
   const canonicalUrl = "https://fertilityfund.uk/map";
 
   return [
@@ -79,7 +79,7 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
               NHS IVF Funding Map
             </h1>
             <p className="text-sm md:text-base text-deep-slate/70 max-w-2xl">
-              Click on an ICB area to view its funding criteria, including cycles offered, age limits, and eligibility requirements.
+              Click on a health board area to view its funding criteria, including cycles offered, age limits, and eligibility requirements.
             </p>
           </div>
           <a
@@ -104,13 +104,13 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
         </div>
       </div>
 
-      {/* Hidden navigation for crawlers to discover all ICB policy pages */}
-      <nav aria-label="ICB Policy Pages" className="sr-only">
-        <h2>All ICB Fertility Policies</h2>
+      {/* Hidden navigation for crawlers to discover all health board policy pages */}
+      <nav aria-label="Health Board Policy Pages" className="sr-only">
+        <h2>All Health Board Fertility Policies</h2>
         <ul>
           {icbs.map((icb) => (
             <li key={icb.slug}>
-              <a href={`/icb/${icb.slug}`}>{icb.name} IVF Funding Policy</a>
+              <a href={`/board/${icb.slug}`}>{icb.name} IVF Funding Policy</a>
             </li>
           ))}
         </ul>

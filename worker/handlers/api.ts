@@ -13,7 +13,7 @@ import {
   sanitizeSearchParams
 } from '../lib';
 import { checkBasicAuth } from '../auth';
-import { lookupAllIcbPoliciesByIcbCode, resolveIcbIdFromPostcodesIo, resolveDocumentFolder } from '../services/icbPolicy';
+import { lookupAllBoardPoliciesByBoardCode, resolveBoardFromPostcode, resolveDocumentFolder } from '../services/icbPolicy';
 import { toSlug } from '../../app/lib/slug';
 import {
   fetchGpPracticesForOutcode,
@@ -28,10 +28,10 @@ import {
   lookupPostcodeGeo
 } from '../services/postcodesIo';
 import {
-  listIcbs,
-  createIcb,
-  updateIcb,
-  listPoliciesForIcb,
+  listBoards,
+  createBoard,
+  updateBoard,
+  listPoliciesForBoard,
   createPolicy,
   type ConflictError
 } from '../services/adminService';
@@ -189,32 +189,36 @@ export async function handleApiRequest(request: Request, env: Env) {
           return response;
         }
 
-        const resolved = await resolveIcbIdFromPostcodesIo(env.DB, {
+        const resolved = await resolveBoardFromPostcode(env.DB, {
+          country: admin.country,
           icb: admin.icb,
           ccg_id: admin.ccg_id,
-          ccg: admin.ccg
+          ccg: admin.ccg,
+          nhs_ha: admin.nhs_ha,
+          primary_care_trust: admin.primary_care_trust
         });
 
         if (!resolved) {
           response = jsonResponse(
             {
-              error: 'Not found',
+              error: "We couldn't find a health board for that postcode. Please check and try again.",
               request_id: reqId,
-              upstream: { icb: admin.icb, ccg_id: admin.ccg_id, ccg: admin.ccg }
+              upstream: { country: admin.country, icb: admin.icb, ccg_id: admin.ccg_id, ccg: admin.ccg, nhs_ha: admin.nhs_ha, primary_care_trust: admin.primary_care_trust }
             },
             { status: 404 }
           );
           return response;
         }
 
-        const documentFolder = await resolveDocumentFolder(env.DB, resolved.icbId);
+        const documentFolder = await resolveDocumentFolder(env.DB, resolved.boardId);
         const slug = documentFolder ? toSlug(documentFolder) : null;
 
         response = jsonResponse({
-          icbCode: resolved.icbId,
+          icbCode: resolved.boardId,
           matched_on: resolved.matched_on,
           slug,
-          upstream: { icb: admin.icb, ccg_id: admin.ccg_id, ccg: admin.ccg }
+          redirectUrl: slug ? `/board/${slug}` : null,
+          upstream: { country: admin.country, icb: admin.icb, ccg_id: admin.ccg_id, ccg: admin.ccg, nhs_ha: admin.nhs_ha, primary_care_trust: admin.primary_care_trust }
         });
         return response;
       }
@@ -232,7 +236,7 @@ export async function handleApiRequest(request: Request, env: Env) {
 
       let preferredIcbCode = resolved.icbCode;
       if (resolved.subIcbCode) {
-        const exists = await env.DB.prepare('select 1 as ok from icbs where id = ?1 limit 1')
+        const exists = await env.DB.prepare('select 1 as ok from health_boards where id = ?1 limit 1')
           .bind(resolved.subIcbCode)
           .first<{ ok: number }>();
         if (exists?.ok) preferredIcbCode = resolved.subIcbCode;
@@ -261,7 +265,7 @@ export async function handleApiRequest(request: Request, env: Env) {
         return response;
       }
 
-      const result = await lookupAllIcbPoliciesByIcbCode(env.DB, icbCode);
+      const result = await lookupAllBoardPoliciesByBoardCode(env.DB, icbCode);
       if (!result) {
         response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
         return response;
@@ -348,8 +352,8 @@ export async function handleApiRequest(request: Request, env: Env) {
       const authErr = checkBasicAuth(request, env);
       if (authErr) { response = authErr; return response; }
 
-      const icbs = await listIcbs(env.DB);
-      response = jsonResponse({ icbs, request_id: reqId });
+      const boards = await listBoards(env.DB);
+      response = jsonResponse({ icbs: boards, request_id: reqId });
       return response;
     }
 
@@ -378,7 +382,7 @@ export async function handleApiRequest(request: Request, env: Env) {
       }
 
       try {
-        const icb = await createIcb(env.DB, {
+        const icb = await createBoard(env.DB, {
           id: id.trim(),
           name: name.trim(),
           sub_icb_code: typeof body.value.sub_icb_code === 'string' ? body.value.sub_icb_code : null,
@@ -422,7 +426,7 @@ export async function handleApiRequest(request: Request, env: Env) {
       if ('parent_icb_code' in body.value) data.parent_icb_code = typeof body.value.parent_icb_code === 'string' ? body.value.parent_icb_code : null;
       if (body.value.status === 'active' || body.value.status === 'inactive') data.status = body.value.status;
 
-      const icb = await updateIcb(env.DB, id, data);
+      const icb = await updateBoard(env.DB, id, data);
       if (!icb) {
         response = jsonResponse({ error: 'Not found', request_id: reqId }, { status: 404 });
         return response;
@@ -438,7 +442,7 @@ export async function handleApiRequest(request: Request, env: Env) {
         if (authErr) { response = authErr; return response; }
 
         const icbId = policiesMatch[1];
-        const policies = await listPoliciesForIcb(env.DB, icbId);
+        const policies = await listPoliciesForBoard(env.DB, icbId);
         response = jsonResponse({ policies, request_id: reqId });
         return response;
       }
@@ -504,25 +508,44 @@ export async function handleApiRequest(request: Request, env: Env) {
       }
     }
 
+    if (url.pathname === '/api/geodata/boundaries' && request.method === 'GET') {
+      const R2_KEY = 'geodata/uk-care-board-boundaries.topojson';
+      const object = await env.r2bucket.get(R2_KEY);
+      if (!object) {
+        response = jsonResponse({ error: 'Boundary data not found', request_id: reqId }, { status: 404 });
+        return response;
+      }
+
+      response = new Response(object.body, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': String(object.size),
+          'Cache-Control': 'public, max-age=86400, s-maxage=604800',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+      return response;
+    }
+
     if (url.pathname === '/api/map-data' && request.method === 'GET') {
       const { results } = await env.DB.prepare(`
         select
-          i.id as icb_id,
-          i.name as icb_name,
+          i.id as board_id,
+          i.name as board_name,
           i.document_folder_name,
           p.treatment_type_id,
           p.cycles_offered,
           p.min_age,
           p.max_age
-        from icb_policies p
-        join icbs i on i.id = p.icb_id
+        from board_policies p
+        join health_boards i on i.id = p.board_id
         join treatment_types t on t.id = p.treatment_type_id
         where i.status = 'active'
           and p.effective_from <= date('now')
           and (p.effective_to is null or p.effective_to >= date('now'))
       `).bind().all<{
-        icb_id: string;
-        icb_name: string;
+        board_id: string;
+        board_name: string;
         document_folder_name: string | null;
         treatment_type_id: string;
         cycles_offered: number;
