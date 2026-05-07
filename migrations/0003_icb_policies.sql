@@ -741,128 +741,131 @@ FROM health_boards WHERE id = 'QK1' AND sub_board_code IS NULL LIMIT 1;
 -- DEVOLVED NATIONS — National Policies
 -- ============================================================
 
--- Scotland National Policy (3 Cycles IVF, max age 42, BMI 29.9, 6 IUI rounds — NHS funded)
+-- Scotland National Policy (3 Cycles IVF for under 40, 1 cycle for 40-42, BMI 18.5-30, 6-8 DI cycles for same-sex)
 -- Applied to all 14 NHS Scotland territorial Health Boards
+-- Source: https://fertilitynetworkuk.org/access-support/nhs-funding/scotland/
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-ivf-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'ivf', '2025-09-11', 3, NULL, 42, NULL, 29.9, NULL, NULL, 6, 0, 1,
-  'One partner must have no biological children',
-  'National Scottish policy: 3 full cycles for those under 40. Limited access 40-42. 6 rounds of DI/IUI required for social infertility pathway — NHS Scotland typically funds these rounds for same-sex couples and single women.'
+  id, 'ivf', '2025-09-11', 3, NULL, 42, 18.5, 30, NULL, NULL, 6, 0, 1,
+  'One partner must have no biological child.',
+  'National Scottish policy (from 1 April 2017): Up to 3 cycles for women under 40; 1 cycle for women 40-42 (if no previous IVF NHS or private, no poor ovarian reserve). Fresh cycles must start before 40th birthday; frozen transfers before 41st. Both partners must be non-smoking. Neither partner sterilised. Couples must cohabit 2+ years. Same-sex couples require 6-8 cycles of donor insemination to demonstrate subfertility. Previous private IVF may be permitted if clinician deems further treatment warranted. 6-11 month gap between cycles.'
 FROM health_boards WHERE country = 'SCOTLAND'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-icsi-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'icsi', '2025-09-11', 3, NULL, 42, NULL, 29.9, NULL, NULL, 6, 0, 1,
-  'One partner must have no biological children',
-  'National Scottish policy: 3 full cycles for those under 40. Limited access 40-42. 6 rounds of DI/IUI required for social infertility pathway — NHS Scotland typically funds these rounds for same-sex couples and single women.'
+  id, 'icsi', '2025-09-11', 3, NULL, 42, 18.5, 30, NULL, NULL, 6, 0, 1,
+  'One partner must have no biological child.',
+  'National Scottish policy (from 1 April 2017): Up to 3 cycles for women under 40; 1 cycle for women 40-42 (if no previous IVF NHS or private, no poor ovarian reserve). Fresh cycles must start before 40th birthday; frozen transfers before 41st. Both partners must be non-smoking. Neither partner sterilised. Couples must cohabit 2+ years. Same-sex couples require 6-8 cycles of donor insemination to demonstrate subfertility. Previous private IVF may be permitted if clinician deems further treatment warranted. 6-11 month gap between cycles.'
 FROM health_boards WHERE country = 'SCOTLAND'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-iui-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'iui', '2025-09-11', 6, NULL, 42, NULL, 29.9, NULL, NULL, 0, 0, 0,
-  'One partner must have no biological children',
-  'National Scottish policy: 6 rounds of DI/IUI funded by NHS Scotland for same-sex couples and single women on the social infertility pathway.'
+  id, 'iui', '2025-09-11', 6, NULL, 42, 18.5, 30, NULL, NULL, 0, 0, 1,
+  'One partner must have no biological child.',
+  'National Scottish policy: 6-8 rounds of donor insemination funded by NHS Scotland for same-sex couples to demonstrate subfertility before IVF eligibility. Both partners must be non-smoking. Neither partner sterilised. Couples must cohabit 2+ years.'
 FROM health_boards WHERE country = 'SCOTLAND'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-di-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'di', '2025-09-11', 6, NULL, 42, NULL, 29.9, NULL, NULL, 0, 0, 0,
-  'One partner must have no biological children',
-  'National Scottish policy: 6 rounds of donor insemination funded by NHS Scotland for same-sex couples and single women.'
+  id, 'di', '2025-09-11', 6, NULL, 42, 18.5, 30, NULL, NULL, 0, 0, 1,
+  'One partner must have no biological child.',
+  'National Scottish policy: 6-8 rounds of donor insemination funded by NHS Scotland for same-sex couples to demonstrate subfertility. Both partners must be non-smoking. Neither partner sterilised. Couples must cohabit 2+ years.'
 FROM health_boards WHERE country = 'SCOTLAND'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-fet-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'fet', '2025-09-11', 3, NULL, 42, NULL, 29.9, NULL, NULL, 0, 0, 1,
-  'One partner must have no biological children',
-  'National Scottish policy: Frozen embryo transfers included as part of the 3 funded IVF/ICSI cycles.'
+  id, 'fet', '2025-09-11', 3, NULL, 42, 18.5, 30, NULL, NULL, 0, 0, 1,
+  'One partner must have no biological child.',
+  'National Scottish policy: Frozen embryo transfers included as part of the 3 funded IVF/ICSI cycles. All frozen transfers must be complete before the woman''s 41st birthday. Any remaining frozen embryos from private cycles must be used before NHS treatment commences.'
 FROM health_boards WHERE country = 'SCOTLAND'; --> statement-breakpoint
 
--- Wales National Policy (2 Cycles IVF, max age 40, BMI 30.0, 6 IUI rounds — self-funded)
+-- Wales National Policy (2 Cycles IVF for under 40, 1 cycle for 40-42, BMI 19-30, 6 IUI rounds for same-sex/single — self-funded)
 -- Applied to all 7 NHS Wales Local Health Boards
+-- Source: https://fertilitynetworkuk.org/access-support/nhs-funding/wales/
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-ivf-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'ivf', '2025-09-11', 2, NULL, 40, NULL, 30.0, NULL, NULL, 6, 0, 1,
-  'Neither partner should have a biological child',
-  'Welsh national policy managed by WHSSC. 2 full cycles of IVF. 6 rounds of self-funded IUI/DI required to demonstrate infertility before NHS IVF eligibility.'
+  id, 'ivf', '2025-09-11', 2, 20, 42, 19, 30.0, NULL, NULL, 6, 0, 1,
+  'One partner must have no living children (biological or adopted). Single women/men must have no living children.',
+  'Welsh national policy managed by WHSSC. 2 full cycles for women under 40; 1 cycle for women 40-42 (if no previous IVF, no low ovarian reserve). A cycle includes 1 fresh and 1 frozen embryo transfer. Male partner must be 55 or under. Couples must cohabit 2+ years. 3+ previous IVF cycles (NHS or private) excludes further treatment. Same-sex/single people require 6 non-stimulated insemination cycles to demonstrate subfertility. No sterilisation (either partner).'
 FROM health_boards WHERE country = 'WALES'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-icsi-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'icsi', '2025-09-11', 2, NULL, 40, NULL, 30.0, NULL, NULL, 6, 0, 1,
-  'Neither partner should have a biological child',
-  'Welsh national policy managed by WHSSC. 2 full cycles of ICSI. 6 rounds of self-funded IUI/DI required to demonstrate infertility before NHS IVF eligibility.'
+  id, 'icsi', '2025-09-11', 2, 20, 42, 19, 30.0, NULL, NULL, 6, 0, 1,
+  'One partner must have no living children (biological or adopted). Single women/men must have no living children.',
+  'Welsh national policy managed by WHSSC. 2 full cycles for women under 40; 1 cycle for women 40-42 (if no previous IVF, no low ovarian reserve). A cycle includes 1 fresh and 1 frozen embryo transfer. Male partner must be 55 or under. Couples must cohabit 2+ years. 3+ previous IVF cycles (NHS or private) excludes further treatment. Same-sex/single people require 6 non-stimulated insemination cycles to demonstrate subfertility. No sterilisation (either partner).'
 FROM health_boards WHERE country = 'WALES'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-iui-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'iui', '2025-09-11', 6, NULL, 40, NULL, 30.0, NULL, NULL, 0, 0, 0,
-  'Neither partner should have a biological child',
-  'Welsh national policy: 6 rounds of self-funded IUI/DI required before NHS IVF eligibility. IUI is not directly NHS-funded in Wales.'
+  id, 'iui', '2025-09-11', 0, 20, 42, 19, 30.0, NULL, NULL, 0, 0, 1,
+  'One partner must have no living children (biological or adopted). Single women/men must have no living children.',
+  'Welsh national policy: IUI is NOT funded by WHSSC. Funding for IUI is the responsibility of individual Health Boards. Where donor sperm is needed for IUI, the donated sperm is funded by WHSSC but not the IUI procedure itself.'
 FROM health_boards WHERE country = 'WALES'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-di-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'di', '2025-09-11', 6, NULL, 40, NULL, 30.0, NULL, NULL, 0, 0, 0,
-  'Neither partner should have a biological child',
-  'Welsh national policy: 6 rounds of self-funded donor insemination required before NHS IVF eligibility.'
+  id, 'di', '2025-09-11', 6, 20, 42, 19, 30.0, NULL, NULL, 0, 0, 1,
+  'One partner must have no living children (biological or adopted). Single women/men must have no living children.',
+  'Welsh national policy: Donor insemination is funded by WHSSC. 6 non-stimulated cycles required for same-sex couples/single women/men to demonstrate subfertility before IVF eligibility.'
 FROM health_boards WHERE country = 'WALES'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-fet-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'fet', '2025-09-11', 2, NULL, 40, NULL, 30.0, NULL, NULL, 0, 0, 1,
-  'Neither partner should have a biological child',
-  'Welsh national policy: Frozen embryo transfers included as part of the 2 funded IVF/ICSI cycles.'
+  id, 'fet', '2025-09-11', 2, 20, 42, 19, 30.0, NULL, NULL, 0, 0, 1,
+  'One partner must have no living children (biological or adopted). Single women/men must have no living children.',
+  'Welsh national policy: A cycle includes 1 fresh and 1 frozen embryo transfer. FET is included as part of each funded IVF/ICSI cycle.'
 FROM health_boards WHERE country = 'WALES'; --> statement-breakpoint
 
--- Northern Ireland National Policy (1 Cycle IVF, max age 40, BMI 29.9, 12 IUI rounds — rarely funded)
+-- Northern Ireland National Policy (1 Cycle IVF, max age 42, BMI 19-30)
 -- Applied to all 5 Health and Social Care Trusts
+-- Source: https://fertilitynetworkuk.org/access-support/nhs-funding/northern-ireland/
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-ivf-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'ivf', '2025-09-11', 1, NULL, 40, NULL, 29.9, NULL, NULL, 12, 0, 1,
-  'Couples must not have any living children',
-  'NI policy: 1 full cycle of IVF. 12 rounds of IUI/DI typically required for social infertility pathway (those without known clinical cause). IUI rarely NHS-funded; usually requires private attempts.'
+  id, 'ivf', '2025-09-11', 1, NULL, 42, 19, 30.0, NULL, NULL, 0, 0, 1,
+  'Treatment subject to HFEA welfare of the child assessment.',
+  'NI policy (revised June 2019): 1 fresh and 1 frozen embryo transfer funded. Women under 40 eligible; women 40-42 eligible if no previous IVF, no low ovarian reserve. Neither partner can have had 3+ previous IVF cycles (NHS or private). No voluntary sterilisation (either partner). Embryo storage funded for 2 years from treatment date.'
 FROM health_boards WHERE country = 'NORTHERN_IRELAND'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-icsi-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'icsi', '2025-09-11', 1, NULL, 40, NULL, 29.9, NULL, NULL, 12, 0, 1,
-  'Couples must not have any living children',
-  'NI policy: 1 full cycle of ICSI. 12 rounds of IUI/DI typically required for social infertility pathway (those without known clinical cause). IUI rarely NHS-funded; usually requires private attempts.'
+  id, 'icsi', '2025-09-11', 1, NULL, 42, 19, 30.0, NULL, NULL, 0, 0, 1,
+  'Treatment subject to HFEA welfare of the child assessment.',
+  'NI policy (revised June 2019): 1 fresh and 1 frozen embryo transfer funded. Women under 40 eligible; women 40-42 eligible if no previous IVF, no low ovarian reserve. Neither partner can have had 3+ previous IVF cycles (NHS or private). No voluntary sterilisation (either partner). Embryo storage funded for 2 years from treatment date.'
 FROM health_boards WHERE country = 'NORTHERN_IRELAND'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-iui-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'iui', '2025-09-11', 12, NULL, 40, NULL, 29.9, NULL, NULL, 0, 0, 0,
-  'Couples must not have any living children',
-  'NI policy: 12 rounds of IUI/DI typically required for social infertility pathway. IUI is rarely NHS-funded in Northern Ireland; usually requires private attempts.'
+  id, 'iui', '2025-09-11', 0, NULL, 42, 19, 30.0, NULL, NULL, 0, 0, 1,
+  'Treatment subject to HFEA welfare of the child assessment.',
+  'NI policy: IUI provision is subject to the same eligibility criteria as IVF/ICSI. Specific cycle numbers not defined in the published criteria.'
 FROM health_boards WHERE country = 'NORTHERN_IRELAND'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-di-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'di', '2025-09-11', 12, NULL, 40, NULL, 29.9, NULL, NULL, 0, 0, 0,
-  'Couples must not have any living children',
-  'NI policy: 12 rounds of donor insemination typically required for social infertility pathway. Rarely NHS-funded; usually requires private attempts.'
+  id, 'di', '2025-09-11', 0, NULL, 42, 19, 30.0, NULL, NULL, 0, 0, 1,
+  'Treatment subject to HFEA welfare of the child assessment.',
+  'NI policy: Donor insemination provision not explicitly detailed in published criteria. Subject to same general eligibility as IVF/ICSI.'
 FROM health_boards WHERE country = 'NORTHERN_IRELAND'; --> statement-breakpoint
 
 INSERT OR IGNORE INTO board_policies (id, board_id, treatment_type_id, effective_from, cycles_offered, min_age, max_age, bmi_min, bmi_max, amh_min_pmol, fsh_max_iu, iui_rounds_required, endometriosis_priority_access, smoking_restricted, living_children_rule, additional_notes)
 SELECT
   'pol-fet-' || REPLACE(REPLACE(REPLACE(REPLACE(LOWER(name), ' ', '-'), '''', ''), ',', ''), '.', ''),
-  id, 'fet', '2025-09-11', 1, NULL, 40, NULL, 29.9, NULL, NULL, 0, 0, 1,
-  'Couples must not have any living children',
-  'NI policy: Frozen embryo transfer included as part of the 1 funded IVF/ICSI cycle.'
+  id, 'fet', '2025-09-11', 1, NULL, 42, 19, 30.0, NULL, NULL, 0, 0, 1,
+  'Treatment subject to HFEA welfare of the child assessment.',
+  'NI policy: 1 frozen embryo transfer included as part of the funded cycle. Embryo storage funded for 2 years from treatment date; self-funding required beyond that.'
 FROM health_boards WHERE country = 'NORTHERN_IRELAND';
