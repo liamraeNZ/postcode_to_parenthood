@@ -71,7 +71,7 @@ export type PostcodesIoAdminLookup = {
 export async function lookupPostcodeGeo(
   postcode: string,
   ctx: { requestId: string }
-): Promise<{ outcode: string; latitude: number; longitude: number } | null> {
+): Promise<{ outcode: string; latitude: number; longitude: number; country: string | null } | null> {
   const normalized = normalizePostcode(postcode);
   if (!normalized) return null;
 
@@ -83,8 +83,9 @@ export async function lookupPostcodeGeo(
     const outcode = getStringPath(json, ['result', 'outcode']);
     const latitude = getNumberPath(json, ['result', 'latitude']);
     const longitude = getNumberPath(json, ['result', 'longitude']);
+    const country = getStringPath(json, ['result', 'country']);
     if (!outcode || latitude == null || longitude == null) return null;
-    return { outcode, latitude, longitude };
+    return { outcode, latitude, longitude, country: country?.trim() ? country : null };
   } catch {
     return null;
   }

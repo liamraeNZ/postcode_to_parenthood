@@ -7,6 +7,8 @@
     "dev": "vite dev",
     "build": "react-router build",
     "deploy": "npx wrangler deploy",
+    "deploy:full": "npm run build && npx wrangler deploy && ./scripts/upload-boundaries-to-r2.sh",
+    "upload-boundaries": "./scripts/upload-boundaries-to-r2.sh",
     "preview": "wrangler dev",
     "clean": "rm -rf build",
     "lint": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.worker.json --noEmit",
