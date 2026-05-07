@@ -508,6 +508,25 @@ export async function handleApiRequest(request: Request, env: Env) {
       }
     }
 
+    if (url.pathname === '/api/geodata/boundaries' && request.method === 'GET') {
+      const R2_KEY = 'geodata/uk-care-board-boundaries.topojson';
+      const object = await env.r2bucket.get(R2_KEY);
+      if (!object) {
+        response = jsonResponse({ error: 'Boundary data not found', request_id: reqId }, { status: 404 });
+        return response;
+      }
+
+      response = new Response(object.body, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': String(object.size),
+          'Cache-Control': 'public, max-age=86400, s-maxage=604800',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+      return response;
+    }
+
     if (url.pathname === '/api/map-data' && request.method === 'GET') {
       const { results } = await env.DB.prepare(`
         select

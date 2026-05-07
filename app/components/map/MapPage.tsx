@@ -112,9 +112,7 @@ function MapPageContent() {
       try {
         const [mapDataRes, topoRes] = await Promise.all([
           fetch('/api/map-data'),
-          // TODO: Replace with '/data/uk-care-board-boundaries.topojson' when full UK boundary data is sourced.
-          // Currently uses England-only ICB boundaries. Scotland, Wales, and NI boundaries need to be added.
-          fetch('/data/uk-care-board-boundaries.topojson'),
+          fetch('/api/geodata/boundaries'),
         ]);
 
         if (!mapDataRes.ok) {
