@@ -124,11 +124,11 @@ export function headers({}: Route.HeadersArgs) {
 
 export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
   const { icb, policies, slug, isNationalPolicy } = loaderData;
-  const displayName = isNationalPolicy ? formatCountryName(icb.country) : formatIcbName(icb.name);
   const countryName = formatCountryName(icb.country);
   const [searchParams] = useSearchParams();
   const gpPostcode = searchParams.get("gpPostcode");
   const boardNameParam = searchParams.get("boardName");
+  const displayName = (isNationalPolicy && boardNameParam) ? formatIcbName(boardNameParam) : formatIcbName(icb.name);
 
   return (
     <section className="flex-1 flex flex-col">
@@ -152,7 +152,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
             <p className="text-sm text-deep-slate">
               {isNationalPolicy ? (
                 <>
-                  Based on your postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is <span className="font-bold">{boardNameParam ? formatIcbName(boardNameParam) : countryName}</span>. A national <span className="font-bold">{countryName}</span> policy currently applies.
+                  Based on your postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is <span className="font-bold">{displayName}</span>. A national <span className="font-bold">{countryName}</span> policy currently applies.
                 </>
               ) : (
                 <>Based on your GP's postcode <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is: <span className="font-bold">{displayName}</span></>
