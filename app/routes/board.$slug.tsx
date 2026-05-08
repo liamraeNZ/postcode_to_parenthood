@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import type { Route } from "./+types/board.$slug";
 import { Link, useSearchParams } from "react-router";
 import { findIcbBySlug } from "../lib/slug";
@@ -5,6 +6,10 @@ import { formatIcbName } from "@/lib/utils";
 import { getCycleColorClasses } from "@/utils/cycleColors";
 import { CheckCircle2, XCircle, AlertCircle, Info, ArrowLeft, MapPin, FileText } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
+const LocalMiniMap = React.lazy(() =>
+  import("@/components/map/LocalMiniMap").then((mod) => ({ default: mod.LocalMiniMap }))
+);
 
 export interface Policy {
   treatment_type_id: string;
@@ -205,6 +210,19 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
             <p className="text-deep-slate/70">
               No current policy information is available for this health board.
             </p>
+          </div>
+        )}
+
+        {/* Local mini-map showing GP location relative to nearby board boundaries */}
+        {gpPostcode && (
+          <div className="mt-6 md:mt-8">
+          <Suspense fallback={null}>
+            <LocalMiniMap
+              gpPostcode={gpPostcode}
+              currentBoardId={icb.id}
+              currentBoardName={displayName}
+            />
+          </Suspense>
           </div>
         )}
 

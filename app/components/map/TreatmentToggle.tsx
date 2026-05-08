@@ -1,4 +1,4 @@
-export type TreatmentTypeId = 'ivf' | 'icsi' | 'iui' | 'di' | 'fet';
+export type TreatmentTypeId = 'ivf' | 'iui' | 'di' | 'fet';
 
 export interface TreatmentToggleProps {
   selected: TreatmentTypeId;
@@ -6,8 +6,7 @@ export interface TreatmentToggleProps {
 }
 
 const TREATMENT_OPTIONS: { id: TreatmentTypeId; label: string }[] = [
-  { id: 'ivf', label: 'IVF' },
-  { id: 'icsi', label: 'ICSI' },
+  { id: 'ivf', label: 'IVF/ICSI' },
   { id: 'iui', label: 'IUI' },
   { id: 'di', label: 'DI' },
   { id: 'fet', label: 'FET' },

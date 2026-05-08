@@ -27,7 +27,7 @@ const MODEL = 'gemini-3.1-pro-preview';
 // ── Types ──────────────────────────────────────────────────────────────────
 
 interface ExtractedPolicy {
-  treatment_type: string; // e.g. "IVF", "ICSI", "IUI", "IVF/ICSI"
+  treatment_type: string; // e.g. "IVF", "IUI", "DI", "FET"
   cycles_offered: number | null;
   max_age: number | null;
   min_age: number | null;
@@ -74,12 +74,12 @@ Your task is to extract unstructured policy text for each of the assister fertil
 
 Task Objectives:
 1. Deduplicate & Version Control: Process multiple documents. If documents conflict, the newest version takes precedence. If an older document contains a treatment type (e.g., IUI) not mentioned in the newer one, retain the older policy. Never output more than one entry per treatment_type.
-2. Inheritance Logic: Most ICBs list "General Criteria" (Age, BMI, Smoking, Living Children) in a shared section. You MUST carry these rules forward to every specific treatment (IVF, ICSI, IUI, etc.) unless a specific section explicitly overrides them. Do not leave these as null in the specific treatment entries.
-3. Treatment Splitting: Each entry must have exactly one treatment_type. If a policy covers "IVF/ICSI," you MUST create two separate entries: one for "IVF" and one for "ICSI," even if the criteria are identical.
+2. Inheritance Logic: Most ICBs list "General Criteria" (Age, BMI, Smoking, Living Children) in a shared section. You MUST carry these rules forward to every specific treatment (IVF, IUI, etc.) unless a specific section explicitly overrides them. Do not leave these as null in the specific treatment entries.
+3. Treatment Merging: ICSI is treated as part of IVF. If a policy covers "IVF/ICSI," create a single "IVF" entry. If there are ICSI-specific notes (e.g. indications like severe male factor), include them in the IVF additional_notes.
 
 Data Extraction Schema:
 For every treatment found, extract:
-- treatment_type: Use exactly "IVF", "ICSI", "IUI", "DI", or "FET". No combined types like "IVF/ICSI".
+- treatment_type: Use exactly "IVF", "IUI", "DI", or "FET". ICSI should be merged into the IVF entry. No combined types.
   IMPORTANT guidance on DI (Donor Insemination) vs IUI:
   - Only extract DI as a SEPARATE entry if the document explicitly defines distinct eligibility criteria or cycle counts for donor insemination that differ from IUI.
   - If the document describes IUI as available with either partner sperm or donor sperm (same criteria, same cycle count), do NOT create a separate DI entry — it's just IUI.

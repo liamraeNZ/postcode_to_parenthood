@@ -175,8 +175,8 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
 
   // Arbitrary for generating a single policy
   const policyArb = fc.record({
-    treatment_type_id: fc.constantFrom("ivf", "icsi", "iui", "fet"),
-    treatment_type_name: fc.constantFrom("IVF", "ICSI", "IUI", "Frozen Embryo Transfer"),
+    treatment_type_id: fc.constantFrom("ivf", "iui", "fet"),
+    treatment_type_name: fc.constantFrom("IVF/ICSI", "IUI", "Frozen Embryo Transfer"),
     cycles_offered: fc.integer({ min: 0, max: 5 }),
     min_age: fc.option(fc.integer({ min: 18, max: 30 }), { nil: null }),
     max_age: fc.integer({ min: 35, max: 45 }),
@@ -506,8 +506,8 @@ describe("Property 5: ICB Page Displays All Required Policy Fields", () => {
 
   // Arbitrary for generating a policy with all required fields populated
   const policyArb = fc.record({
-    treatment_type_id: fc.constantFrom("ivf", "icsi", "iui", "fet"),
-    treatment_type_name: fc.constantFrom("IVF", "ICSI", "IUI", "Frozen Embryo Transfer"),
+    treatment_type_id: fc.constantFrom("ivf", "iui", "fet"),
+    treatment_type_name: fc.constantFrom("IVF/ICSI", "IUI", "Frozen Embryo Transfer"),
     cycles_offered: fc.integer({ min: 0, max: 5 }),
     min_age: fc.option(fc.integer({ min: 18, max: 30 }), { nil: null }),
     max_age: fc.integer({ min: 35, max: 50 }),
@@ -743,8 +743,8 @@ describe("Property 6: ICB Page Has Valid Structured Data", () => {
 
   // Arbitrary for generating a policy
   const policyArb: fc.Arbitrary<Policy> = fc.record({
-    treatment_type_id: fc.constantFrom("ivf", "icsi", "iui", "fet"),
-    treatment_type_name: fc.constantFrom("IVF", "ICSI", "IUI", "Frozen Embryo Transfer"),
+    treatment_type_id: fc.constantFrom("ivf", "iui", "fet"),
+    treatment_type_name: fc.constantFrom("IVF/ICSI", "IUI", "Frozen Embryo Transfer"),
     cycles_offered: fc.integer({ min: 0, max: 5 }),
     min_age: fc.option(fc.integer({ min: 18, max: 30 }), { nil: null }),
     max_age: fc.integer({ min: 35, max: 50 }),

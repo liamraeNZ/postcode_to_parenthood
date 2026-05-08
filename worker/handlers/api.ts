@@ -603,6 +603,34 @@ export async function handleApiRequest(request: Request, env: Env) {
       return response;
     }
 
+    if (url.pathname === '/api/geocode-postcode' && request.method === 'GET') {
+      const postcode = url.searchParams.get('postcode');
+      if (!postcode || !isReasonablePostcodeInput(postcode)) {
+        response = jsonResponse(
+          { error: 'Missing or invalid postcode', request_id: reqId },
+          { status: 400 }
+        );
+        return response;
+      }
+
+      const geo = await lookupPostcodeGeo(postcode, { requestId: reqId });
+      if (!geo) {
+        response = jsonResponse(
+          { error: 'Could not resolve postcode', request_id: reqId },
+          { status: 404 }
+        );
+        return response;
+      }
+
+      response = jsonResponse({
+        latitude: geo.latitude,
+        longitude: geo.longitude,
+        country: geo.country,
+        outcode: geo.outcode
+      });
+      return response;
+    }
+
     if (url.pathname === '/api/client-log' && request.method === 'POST') {
       const body = await readJsonBody(request, { maxBytes: 10_000 });
       if (!body.ok) {

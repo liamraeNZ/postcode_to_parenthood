@@ -10,7 +10,7 @@ import { MapLegend } from './MapLegend';
 import { IcbInfoPanel } from './IcbInfoPanel';
 import 'leaflet/dist/leaflet.css';
 
-const VALID_TREATMENTS: TreatmentTypeId[] = ['ivf', 'icsi', 'iui', 'di', 'fet'];
+const VALID_TREATMENTS: TreatmentTypeId[] = ['ivf', 'iui', 'di', 'fet'];
 const DEFAULT_TREATMENT: TreatmentTypeId = 'ivf';
 const MAP_CENTER: [number, number] = [55.5, -3.5];
 const MAP_ZOOM = 6;

@@ -358,11 +358,10 @@ export async function lookupAllBoardPoliciesByBoardCode(db: D1Database, boardCod
         order by
           case p.treatment_type_id
             when 'ivf' then 1
-            when 'icsi' then 2
-            when 'iui' then 3
-            when 'di' then 4
-            when 'fet' then 5
-            else 6
+            when 'iui' then 2
+            when 'di' then 3
+            when 'fet' then 4
+            else 5
           end,
           p.effective_from desc
       `

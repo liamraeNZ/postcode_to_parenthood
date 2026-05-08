@@ -88,7 +88,6 @@ const FOLDER_TO_ICB: Record<string, { where: string }> = {
 
 const TREATMENT_TYPE_MAP: Record<string, string> = {
   'IVF': 'ivf',
-  'ICSI': 'icsi',
   'IUI': 'iui',
   'DI': 'di',
   'FET': 'fet',

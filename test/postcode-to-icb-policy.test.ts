@@ -116,8 +116,10 @@ describe("Postcode → ICB → Policy end-to-end matching", () => {
       expect(body.policies.length).toBeGreaterThan(0);
 
       // Compare each treatment type present in the golden file
+      // ICSI has been merged into IVF (migration 0005), so skip golden ICSI entries
       for (const goldenPolicy of golden!.policies) {
         const treatmentId = (goldenPolicy.treatment_type as string).toLowerCase();
+        if (treatmentId === "icsi") continue;
         const actual = body.policies.find((p) => p.treatment_type_id === treatmentId);
 
         expect(
