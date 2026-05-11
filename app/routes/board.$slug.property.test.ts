@@ -222,7 +222,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
       slug: toSlug(document_folder_name),
     }));
 
-  it("meta output contains title with ICB name and 'IVF Funding Policy'", () => {
+  it("meta output contains title with ICB name and 'IVF Funding Guidance'", () => {
     fc.assert(
       fc.property(icbDataArb, (data) => {
         const metaResult = meta({ data } as any);
@@ -234,7 +234,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
 
         expect(titleEntry).toBeDefined();
         expect(titleEntry!.title).toContain(data.icb.name);
-        expect(titleEntry!.title).toContain("IVF Funding Policy");
+        expect(titleEntry!.title).toContain("IVF Funding Guidance");
       }),
       { numRuns: 100 }
     );
@@ -296,7 +296,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
         const titleEntry = metaResult.find((entry: any) => "title" in entry) as { title: string } | undefined;
         expect(titleEntry).toBeDefined();
         expect(titleEntry!.title).toContain(data.icb.name);
-        expect(titleEntry!.title).toContain("IVF Funding Policy");
+        expect(titleEntry!.title).toContain("IVF Funding Guidance");
 
         // Canonical URL
         const canonicalEntry = metaResult.find(

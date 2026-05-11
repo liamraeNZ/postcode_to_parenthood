@@ -196,7 +196,7 @@ describe("Integration: ICB Policy Page", () => {
     expect(html.toLowerCase()).toContain("bath and north east somerset");
 
     // Contains policy data labels
-    expect(html).toContain("Cycles Offered");
+    expect(html).toContain("Funded Cycles");
     expect(html).toContain("Age Range");
     expect(html).toContain("BMI Range");
     expect(html).toContain("IUI Rounds Required");

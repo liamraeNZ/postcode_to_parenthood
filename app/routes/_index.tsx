@@ -5,12 +5,12 @@ import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
 import { motion } from "motion/react";
-import { MapPin, FileText, Map, Search } from "lucide-react";
+import { Compass, FileText, Map, MapPin, Search } from "lucide-react";
 
 export function meta({}: Route.MetaArgs) {
-  const title = "NHS IVF Funding Eligibility | FertilityFund UK";
+  const title = "Pathways to Parenthood | NHS IVF Funding Guidance";
   const description =
-    "Check your NHS-funded IVF eligibility by postcode. Find your health board's fertility policy, cycles offered, age limits, and criteria across England, Scotland, Wales, and Northern Ireland.";
+    "A clearer route through the IVF postcode lottery. Check local NHS fertility funding guidance, eligibility criteria, and health board policies by postcode.";
   const canonicalUrl = "https://fertilityfund.uk";
 
   return [
@@ -87,29 +87,29 @@ export async function action({ request, context }: Route.ActionArgs) {
 const features = [
   {
     icon: MapPin,
-    title: "Search by postcode",
-    description: "Find your health board's fertility policy based on your GP practice location.",
+    title: "Start with your postcode",
+    description: "Find the NHS fertility funding rules that may apply in your area and the local policy behind them.",
     href: "/search",
     available: true,
   },
   {
-    icon: FileText,
-    title: "Health board policies & criteria",
-    description: "Browse eligibility criteria, age limits, and cycles offered by each health board.",
-    href: "/policies",
-    available: true,
-  },
-  {
     icon: Map,
-    title: "Policy map",
-    description: "See how NHS fertility funding varies across the UK at a glance.",
+    title: "Explore the funding map",
+    description: "See how NHS IVF access varies across the UK and where policy boundaries shape the postcode lottery.",
     href: "/map",
     available: true,
   },
   {
+    icon: FileText,
+    title: "Understand local policies",
+    description: "Read plain-English summaries of age limits, cycle availability, and eligibility criteria.",
+    href: "/policies",
+    available: true,
+  },
+  {
     icon: Search,
-    title: "Search for funding",
-    description: "Explore NHS and charitable funding options available to you.",
+    title: "Prepare your next step",
+    description: "Use the guidance to ask clearer questions of your GP, clinic, or local NHS body.",
     href: "/funding",
     available: false,
   },
@@ -131,18 +131,18 @@ export default function LandingPage() {
               transition={{ duration: 0.6 }}
             >
               <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4 text-deep-slate">
-                NHS-funded fertility care isn't the same everywhere.
+                Find your pathway to NHS-funded IVF.
               </h1>
               <p className="text-base md:text-lg text-deep-slate/80 leading-relaxed mb-6 max-w-lg">
-                Where you live affects whether you qualify for support; a "postcode lottery" that leaves many people confused. We help you understand what you're entitled to.
+                The IVF postcode lottery is confusing. Pathways to Parenthood helps you check local NHS funding guidance, eligibility criteria, and policy details in one clear place.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link
                   to="/search"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-sage-dark hover:bg-sage-hover text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-sage-btn hover:bg-route-teal-dark text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
                 >
-                  <MapPin className="w-4 h-4" />
-                  Check your eligibility
+                  <Compass className="w-4 h-4" />
+                  Check my local pathway
                 </Link>
                 <Link
                   to="/map"
@@ -181,7 +181,7 @@ export default function LandingPage() {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <h2 className="font-heading text-xl md:text-2xl font-bold text-deep-slate mb-6">
-            What we offer
+            Your guide through the postcode lottery
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((feature) => {
@@ -191,13 +191,13 @@ export default function LandingPage() {
                   key={feature.title}
                   className={`relative p-5 rounded-xl border transition-all ${
                     feature.available
-                      ? "bg-white border-warm-sand-dark hover:border-sage-green hover:shadow-md cursor-pointer"
+                      ? "bg-white border-warm-sand-dark hover:border-route-teal hover:shadow-md cursor-pointer"
                       : "bg-warm-sand/50 border-warm-sand-dark opacity-75"
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-9 h-9 rounded-lg bg-sage-light flex items-center justify-center">
-                      <Icon className="w-4 h-4 text-sage-dark" />
+                      <Icon className="w-4 h-4 text-route-teal-dark" />
                     </div>
                     {!feature.available && (
                       <span className="text-[10px] font-bold uppercase tracking-wider text-deep-slate/50 bg-warm-sand-dark px-2 py-0.5 rounded-full">
@@ -246,7 +246,7 @@ export default function LandingPage() {
                 type="submit"
                 className="px-6 py-3 bg-sage-dark text-white font-bold rounded-xl"
               >
-                Find your policy
+                Check my local pathway
               </button>
             </div>
           </Form>
@@ -268,10 +268,10 @@ export default function LandingPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "FertilityFund UK",
+            name: "Pathways to Parenthood",
             url: "https://fertilityfund.uk",
             description:
-              "Check your NHS-funded IVF eligibility by postcode. Find your health board's fertility policy across the UK.",
+              "A clearer route through NHS IVF funding. Check local eligibility guidance and health board policies by postcode.",
             potentialAction: {
               "@type": "SearchAction",
               target: {

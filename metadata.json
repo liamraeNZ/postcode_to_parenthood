@@ -1,6 +1,6 @@
 {
-  "name": "FertilityFund UK",
-  "description": "A niche utility app for UK residents to find IVF grants, NHS funding (ICBs), and European financing.",
+  "name": "Pathways to Parenthood",
+  "description": "A navigation guide for UK residents to understand local NHS IVF funding guidance and eligibility by postcode.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }

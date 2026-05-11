@@ -90,7 +90,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 export function meta({ data }: Route.MetaArgs) {
   if (!data) {
     return [
-      { title: "Health Board Not Found | FertilityFund UK" },
+      { title: "Health Board Not Found | Pathways to Parenthood" },
       { name: "description", content: "The requested health board policy page could not be found." },
     ];
   }
@@ -102,7 +102,7 @@ export function meta({ data }: Route.MetaArgs) {
   const cycles = ivfPolicy?.cycles_offered ?? 0;
   const maxAge = ivfPolicy?.max_age ?? 0;
 
-  const title = `${displayName} IVF Funding Policy | ${countryName} | FertilityFund UK`;
+  const title = `${displayName} IVF Funding Guidance | ${countryName} | Pathways to Parenthood`;
   const description =
     cycles > 0
       ? `${displayName} in ${countryName} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.`
@@ -143,7 +143,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
           <ol className="flex items-center gap-2 text-sm text-deep-slate/60">
             <li>
               <Link to="/" className="hover:text-sage-btn transition-colors">
-                Home
+                Start
               </Link>
             </li>
             <li aria-hidden="true">/</li>
@@ -155,7 +155,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         {gpPostcode && (
           <div className="mb-4 md:mb-6 px-4 py-3 bg-sage-light border border-sage-green/30 rounded-xl">
             <p className="text-sm text-deep-slate">
-              Based on your {isNationalPolicy ? 'postcode' : "GP's postcode"} <span className="font-bold">{gpPostcode.toUpperCase()}</span>, your local health board is: <span className="font-bold">{displayName}</span>
+              Based on your {isNationalPolicy ? 'postcode' : "GP's postcode"} <span className="font-bold">{gpPostcode.toUpperCase()}</span>, this is the local pathway we found: <span className="font-bold">{displayName}</span>
             </p>
           </div>
         )}
@@ -171,7 +171,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
               {countryName}
             </span>
             <span className="mx-2">·</span>
-            NHS-funded fertility treatment policy and eligibility criteria
+            NHS-funded fertility treatment guidance and eligibility criteria
           </p>
         </header>
 
@@ -234,21 +234,21 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-btn text-white font-medium text-sm rounded-xl hover:bg-sage-dark transition-colors"
             >
               <FileText className="w-4 h-4" />
-              View policy document
+              View source documents
             </Link>
             <Link
               to="/search"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-light text-deep-slate font-medium text-sm rounded-xl hover:bg-sage-light/80 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Check your postcode
+              Check another postcode
             </Link>
             <Link
               to="/map"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-light text-deep-slate font-medium text-sm rounded-xl hover:bg-sage-light/80 transition-colors"
             >
               <MapPin className="w-4 h-4" />
-              View all health boards on map
+              Explore the funding map
             </Link>
           </div>
         </nav>
@@ -286,7 +286,7 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
           {/* Cycles Offered */}
           <div className={`rounded-lg border overflow-hidden ${cc.bg} border-warm-sand-dark`}>
             <div className={`px-3 py-1.5 ${cc.bg} border-b border-warm-sand-dark`}>
-              <span className={`text-[10px] uppercase font-bold opacity-70 ${cc.label}`}>Cycles Offered</span>
+          <span className={`text-[10px] uppercase font-bold opacity-70 ${cc.label}`}>Funded Cycles</span>
             </div>
             <div className="px-3 py-2 bg-white">
               <div className={`text-lg font-black leading-tight ${cc.text}`}>
@@ -476,7 +476,7 @@ export function buildStructuredData(
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    name: `${displayName} IVF Funding Policy`,
+    name: `${displayName} IVF Funding Guidance`,
     url: canonicalUrl,
     mainEntity: faqEntries,
   };

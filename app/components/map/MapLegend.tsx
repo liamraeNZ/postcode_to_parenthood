@@ -36,7 +36,7 @@ export function MapLegend() {
         title.style.fontWeight = '600';
         title.style.marginBottom = '6px';
         title.style.fontSize = '13px';
-        title.textContent = 'Cycles offered';
+        title.textContent = 'Funded cycles';
 
         for (const item of LEGEND_ITEMS) {
           const row = L.DomUtil.create('div', '', container);

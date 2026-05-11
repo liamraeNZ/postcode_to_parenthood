@@ -59,9 +59,9 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Health Board Policy Documents | FertilityFund UK";
+  const title = "Local NHS Fertility Policies | Pathways to Parenthood";
   const description =
-    "Browse NHS fertility funding policy documents by health board across England, Scotland, Wales, and Northern Ireland. Search by name or pick from the full list.";
+    "Browse local NHS fertility funding rules by health board across England, Scotland, Wales, and Northern Ireland.";
   const canonicalUrl = "https://fertilityfund.uk/policies";
 
   return [
@@ -137,22 +137,21 @@ export default function PoliciesPage({ loaderData }: Route.ComponentProps) {
           <ol className="flex items-center gap-2 text-sm text-deep-slate/60">
             <li>
               <Link to="/" className="hover:text-sage-btn transition-colors">
-                Home
+                Start
               </Link>
             </li>
             <li aria-hidden="true">/</li>
-            <li className="text-deep-slate font-medium">Policy Documents</li>
+            <li className="text-deep-slate font-medium">Local Policies</li>
           </ol>
         </nav>
 
         {/* Page heading */}
         <header className="mb-6 md:mb-8">
           <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-deep-slate mb-2">
-            Health Board Policy Documents
+            Local NHS Fertility Policies
           </h1>
           <p className="text-sm md:text-base text-deep-slate/70 leading-relaxed">
-            Browse the original fertility funding policy documents published by each health board.
-            Search by name or pick from the list below.
+            Browse the local policies behind NHS fertility funding decisions. Search by health board or choose from the list below.
           </p>
         </header>
 
@@ -170,7 +169,7 @@ export default function PoliciesPage({ loaderData }: Route.ComponentProps) {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name..."
+            placeholder="Search by health board name..."
             aria-label="Search health boards by name"
             className="w-full pl-10 pr-4 py-3 border-2 border-warm-sand-dark rounded-xl text-base bg-white focus:outline-none focus:border-sage-btn focus:ring-1 focus:ring-sage-btn transition-colors"
           />
@@ -179,7 +178,7 @@ export default function PoliciesPage({ loaderData }: Route.ComponentProps) {
         {/* Results count */}
         <p className="text-sm text-deep-slate/60 mb-4">
           {filtered.length === boards.length
-            ? `${boards.length} health boards with policy documents`
+            ? `${boards.length} health boards with local policies`
             : `${filtered.length} of ${boards.length} health boards`}
         </p>
 

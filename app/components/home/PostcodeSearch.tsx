@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router';
-import { Loader2 } from 'lucide-react';
+import { Compass, Loader2, MapPin } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardTitle } from '@/components/ui/card';
@@ -190,10 +190,11 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
     <div className="w-full space-y-4 md:space-y-6">
       <form onSubmit={handleSearch} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 max-w-md sm:relative group">
         <div className="relative flex-1">
+          <MapPin className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-route-teal" aria-hidden="true" />
           <Input 
-            placeholder="Enter your postcode (e.g. SW1A 1AA)" 
+            placeholder="Enter your postcode" 
             aria-label="Enter your postcode"
-            className="w-full px-4 sm:px-6 py-3 sm:py-4 h-12 sm:h-14 text-base sm:text-lg font-medium border-2 border-warm-sand-dark focus-visible:border-sage-green focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(143,168,139,0.3)] rounded-xl sm:rounded-2xl bg-white shadow-lg transition-all"
+            className="w-full pl-10 pr-4 sm:pl-11 sm:pr-6 py-3 sm:py-4 h-12 sm:h-14 text-base sm:text-lg font-medium border-2 border-warm-sand-dark focus-visible:border-route-teal focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(45,156,154,0.22)] rounded-xl sm:rounded-2xl bg-white shadow-lg transition-all"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />
@@ -201,9 +202,19 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
         <Button 
           type="submit" 
           disabled={loadingSearch || loadingSelect}
-          className="sm:absolute sm:right-2 w-full sm:w-auto px-6 h-11 bg-sage-dark hover:bg-sage-hover text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
+          className="sm:absolute sm:right-2 w-full sm:w-auto px-6 h-11 bg-sage-btn hover:bg-route-teal-dark text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
         >
-          {loadingSearch ? <Loader2 className="w-5 h-5 animate-spin" /> : "Find your GP"}
+          {loadingSearch ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span className="sr-only">Finding your local pathway</span>
+            </>
+          ) : (
+            <>
+              <Compass className="w-4 h-4" />
+              Check my local pathway
+            </>
+          )}
         </Button>
       </form>
 
@@ -229,13 +240,16 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
             <Card className="border-none shadow-md overflow-hidden rounded-xl bg-cream p-5">
               <div className="flex justify-between items-start mb-3">
                 <div>
-                  <CardTitle className="text-deep-slate font-bold">Select your GP practice</CardTitle>
+                  <CardTitle className="text-deep-slate font-bold">Choose your GP practice</CardTitle>
+                  <p className="mt-1 text-xs text-deep-slate/60">
+                    This helps us point you to the NHS fertility policy for your area.
+                  </p>
                 </div>
                 {loadingSelect && (
                   <Badge className="bg-sage-light text-deep-slate hover:bg-sage-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none">
                     <span className="inline-flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Loading
+                      Finding route
                     </span>
                   </Badge>
                 )}
@@ -288,7 +302,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
 
               <div className="mt-3 flex items-center justify-between gap-2">
                 <Dialog open={nameSearchOpen} onOpenChange={setNameSearchOpen}>
-                  <DialogTrigger render={<Button type="button" variant="outline" className="border-warm-sand-dark text-sage-dark hover:bg-sage-light hover:border-sage-green" />}>
+                  <DialogTrigger render={<Button type="button" variant="outline" className="border-warm-sand-dark text-sage-dark hover:bg-sage-light hover:border-route-teal" />}>
                     Can't find your GP? Search by name
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-lg">

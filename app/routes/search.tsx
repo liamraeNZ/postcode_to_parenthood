@@ -6,9 +6,9 @@ import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/se
 import { toSlug } from "@/lib/slug";
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Search by Postcode | FertilityFund UK";
+  const title = "Check Postcode | Pathways to Parenthood";
   const description =
-    "Enter your postcode to find your health board's NHS fertility funding policy, eligibility criteria, and cycles offered.";
+    "Enter your postcode to find local NHS fertility funding guidance, eligibility criteria, and the health board policy that may apply.";
   const canonicalUrl = "https://fertilityfund.uk/search";
 
   return [
@@ -85,10 +85,10 @@ export default function SearchPage() {
     <section className="flex-1 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md text-center">
         <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-2 text-deep-slate">
-          Search by postcode
+          Start with your postcode
         </h1>
         <p className="text-sm md:text-base text-deep-slate/70 leading-relaxed mb-6">
-          Enter your postcode and we'll show you:
+          We’ll help you trace the local NHS fertility guidance that may apply where you live.
         </p>
 
         <ul className="text-left space-y-1.5 mb-8">
@@ -98,11 +98,11 @@ export default function SearchPage() {
           </li>
           <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
             <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
-            <span className="text-deep-slate font-medium text-sm">Whether NHS-funded care is available</span>
+            <span className="text-deep-slate font-medium text-sm">What NHS-funded IVF support may be available</span>
           </li>
           <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
             <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
-            <span className="text-deep-slate font-medium text-sm">The eligibility criteria you'll need to meet</span>
+            <span className="text-deep-slate font-medium text-sm">The local eligibility criteria to check next</span>
           </li>
         </ul>
 
@@ -115,7 +115,7 @@ export default function SearchPage() {
               htmlFor="postcode-noscript"
               className="block text-sm font-medium text-deep-slate mb-2"
             >
-              Enter your postcode
+              Enter your postcode to find your local pathway
             </label>
             <div className="flex gap-2">
               <input
@@ -130,7 +130,7 @@ export default function SearchPage() {
                 type="submit"
                 className="px-6 py-3 bg-sage-dark text-white font-bold rounded-xl"
               >
-                Search
+                Check pathway
               </button>
             </div>
           </Form>
