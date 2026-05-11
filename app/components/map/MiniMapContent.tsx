@@ -137,14 +137,11 @@ export default function MiniMapContent({
     };
   }, []);
 
-  // Handle board click — navigate to that board's policy page
-  const handleBoardClick = useCallback((boardId: string, _boardName: string) => {
-    // Find the document_folder_name from policyMap for navigation
-    const entries = policyMap.get(boardId);
-    if (entries && entries[0]?.document_folder_name) {
-      window.location.href = `/board/${toSlug(entries[0].document_folder_name)}`;
-    }
-  }, [policyMap]);
+  // Handle board click — no-op; the Leaflet popup (with "View policy" link) handles navigation
+  const handleBoardClick = useCallback((_boardId: string, _boardName: string) => {
+    // Intentionally empty: clicking an ICB opens the bound popup which contains
+    // the board info and a "View policy" link for navigation.
+  }, []);
 
   // Handle visible boards change from the boundary layer
   const handleVisibleBoardsChange = useCallback(
