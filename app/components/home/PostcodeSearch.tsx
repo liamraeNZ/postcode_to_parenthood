@@ -103,7 +103,7 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
       const result = await searchGpPracticesByPostcode(postcode);
 
       if (result.kind === 'direct') {
-        // Scotland/Wales/NI — skip GP selection, navigate directly to board
+        // Scotland/Wales/NI: skip GP selection, navigate directly to board
         const { resolution } = result;
         if (resolution.redirectUrl) {
           const params = new URLSearchParams({ gpPostcode: postcode });
@@ -346,21 +346,27 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
 
   return (
     <div className="w-full space-y-4 md:space-y-6">
-      <form onSubmit={handleSearch} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 max-w-md sm:relative group">
-        <div className="relative flex-1">
-          <MapPin className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-route-teal" aria-hidden="true" />
-          <Input 
-            placeholder="Enter your postcode" 
+      <form
+        onSubmit={handleSearch}
+        className="group flex max-w-xl flex-col overflow-hidden rounded-xl border border-warm-sand-dark/80 bg-white shadow-sm transition-[box-shadow] focus-within:border-route-teal/50 focus-within:shadow-[0_0_0_3px_rgba(45,156,154,0.18)] sm:flex-row sm:items-stretch"
+      >
+        <div className="relative flex min-h-[3rem] flex-1 items-center border-b border-warm-sand-dark/70 sm:border-b-0 sm:border-r sm:border-warm-sand-dark/70">
+          <MapPin
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-route-teal"
+            aria-hidden="true"
+          />
+          <Input
+            placeholder="e.g. SW1A 1AA"
             aria-label="Enter your postcode"
-            className="w-full pl-10 pr-4 sm:pl-11 sm:pr-6 py-3 sm:py-4 h-12 sm:h-14 text-base sm:text-lg font-medium border-2 border-warm-sand-dark focus-visible:border-route-teal focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(45,156,154,0.22)] rounded-lg bg-white shadow-lg transition-all"
+            className="h-12 w-full rounded-none border-0 bg-transparent py-3 pl-10 pr-3 text-base font-medium shadow-none ring-0 placeholder:text-deep-slate/45 focus-visible:ring-0 sm:h-14 sm:py-4 sm:pl-11 sm:pr-4 sm:text-lg"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />
         </div>
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           disabled={loadingSearch || loadingSelect}
-          className="sm:absolute sm:right-2 w-full sm:w-auto px-6 h-11 bg-sage-btn hover:bg-route-teal-dark text-white font-bold rounded-lg shadow-md transition-all active:scale-95"
+          className="h-12 shrink-0 rounded-none border-0 bg-sage-btn px-5 font-semibold text-white shadow-none hover:bg-route-teal-dark disabled:opacity-60 sm:h-auto sm:min-w-[10.5rem]"
         >
           {loadingSearch ? (
             <>

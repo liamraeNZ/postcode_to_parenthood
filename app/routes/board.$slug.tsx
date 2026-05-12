@@ -6,6 +6,7 @@ import { formatIcbName } from "@/lib/utils";
 import { getCycleColorClasses } from "@/utils/cycleColors";
 import { CheckCircle2, XCircle, AlertCircle, Info, ArrowLeft, MapPin, FileText } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { PageHeader } from "@/components/layout/PageHeader";
 
 const LocalMiniMap = React.lazy(() =>
   import("@/components/map/LocalMiniMap").then((mod) => ({ default: mod.LocalMiniMap }))
@@ -136,44 +137,24 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
   const displayName = (isNationalPolicy && boardNameParam) ? formatIcbName(boardNameParam) : formatIcbName(icb.name);
 
   return (
-    <section className="flex-1 flex flex-col">
-      <div className="container mx-auto px-4 py-6 md:py-10 max-w-3xl">
-        {/* Breadcrumb navigation */}
-        <nav aria-label="Breadcrumb" className="mb-4 md:mb-6">
-          <ol className="flex items-center gap-2 text-sm text-deep-slate/60">
-            <li>
-              <Link to="/" className="hover:text-sage-btn transition-colors">
-                Start
-              </Link>
-            </li>
-            <li aria-hidden="true">/</li>
-            <li className="text-deep-slate font-medium truncate">{displayName}</li>
-          </ol>
-        </nav>
-
+    <section className="flex flex-1 flex-col">
+      <PageHeader
+        title={displayName}
+        description={`${countryName}. NHS-funded fertility treatment guidance and eligibility criteria.`}
+        breadcrumbCurrent={displayName}
+        compact
+      />
+      <div className="container mx-auto max-w-3xl px-4 pt-4 pb-6 md:pt-6 md:pb-10">
         {/* Postcode search context banner */}
         {gpPostcode && (
-          <div className="mb-4 md:mb-6 px-4 py-3 bg-sage-light border border-sage-green/30 rounded-xl">
+          <div className="mb-4 rounded-xl border border-sage-green/30 bg-sage-light px-4 py-3 md:mb-6">
             <p className="text-sm text-deep-slate">
-              Based on your {isNationalPolicy ? 'postcode' : "GP's postcode"} <span className="font-bold">{gpPostcode.toUpperCase()}</span>, this is the local pathway we found: <span className="font-bold">{displayName}</span>
+              Based on your {isNationalPolicy ? "postcode" : "GP's postcode"}{" "}
+              <span className="font-bold">{gpPostcode.toUpperCase()}</span>, this is the local pathway we
+              found: <span className="font-bold">{displayName}</span>
             </p>
           </div>
         )}
-
-        {/* Page heading */}
-        <header className="mb-4 md:mb-4">
-          <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-deep-slate mb-2">
-            {displayName}
-          </h1>
-          <p className="text-sm md:text-base text-deep-slate/70">
-            <span className="inline-flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
-              {countryName}
-            </span>
-            <span className="mx-2">·</span>
-            NHS-funded fertility treatment guidance and eligibility criteria
-          </p>
-        </header>
 
         {/* National policy notice */}
         {isNationalPolicy && (

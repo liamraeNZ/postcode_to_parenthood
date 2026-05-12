@@ -22,8 +22,9 @@ import { PolicyList } from "../components/admin/PolicyList";
 import { PolicyForm } from "../components/admin/PolicyForm";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { PageHeader } from "@/components/layout/PageHeader";
 
-// Client-only route — no loader, no meta/SEO tags (excluded from robots.txt)
+// Client-only route: no loader, no meta/SEO tags (excluded from robots.txt)
 export async function clientLoader(_args: Route.ClientLoaderArgs) {
   // All data is fetched client-side via the admin API service
   return {};
@@ -33,10 +34,10 @@ export async function clientLoader(_args: Route.ClientLoaderArgs) {
 clientLoader.hydrate = true as const;
 
 function getErrorMessage(err: unknown): string {
-  if (err instanceof ConnectionError) return "Connection error — please try again";
+  if (err instanceof ConnectionError) return "Connection error. Please try again.";
   if (err instanceof ApiError) {
-    if (err.status === 401) return "Authentication failed — check your credentials";
-    if (err.status >= 500) return "Server error — please try again";
+    if (err.status === 401) return "Authentication failed. Check your credentials.";
+    if (err.status >= 500) return "Server error. Please try again.";
     const body = err.body as Record<string, unknown> | null;
     if (body && typeof body.error === "string") return body.error;
     return `Request failed (${err.status})`;
@@ -164,9 +165,13 @@ function AdminPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
-      <h1 className="text-xl font-semibold">Admin</h1>
-
+    <section className="flex flex-1 flex-col">
+      <PageHeader
+        title="Administration"
+        description="Manage ICB records and funding policies."
+        breadcrumbCurrent="Admin"
+      />
+      <div className="container mx-auto max-w-5xl space-y-6 px-4 py-8">
       <Tabs defaultValue="icb-management">
         <TabsList>
           <TabsTrigger value="icb-management">ICB Management</TabsTrigger>
@@ -262,6 +267,7 @@ function AdminPage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </section>
   );
 }
