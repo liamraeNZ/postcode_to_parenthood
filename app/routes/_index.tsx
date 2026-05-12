@@ -17,7 +17,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import { PostcodeSearch } from "@/components/home/PostcodeSearch";
-import { TrustDisclaimer } from "@/components/shared/TrustDisclaimer";
 
 export function meta({}: Route.MetaArgs) {
   const title = "Pathway to Parenthood | Unlock Your IVF Funding";
@@ -203,9 +202,7 @@ export default function LandingPage() {
                 <PostcodeSearch onGpListChange={setGpListContent} />
               </div>
 
-              <p className="mt-6 max-w-xl text-xs leading-relaxed text-deep-slate/60">
-                <TrustDisclaimer />
-              </p>
+
             </motion.div>
 
             <div className="hidden lg:flex lg:justify-end lg:pt-4">

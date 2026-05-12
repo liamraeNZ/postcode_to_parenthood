@@ -356,7 +356,7 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
             aria-hidden="true"
           />
           <Input
-            placeholder="Enter your postcode"
+            placeholder="e.g. SW1A 1AA"
             aria-label="Enter your postcode"
             className="h-12 w-full rounded-none border-0 bg-transparent py-3 pl-10 pr-3 text-base font-medium shadow-none ring-0 placeholder:text-deep-slate/45 focus-visible:ring-0 sm:h-14 sm:py-4 sm:pl-11 sm:pr-4 sm:text-lg"
             value={postcode}
