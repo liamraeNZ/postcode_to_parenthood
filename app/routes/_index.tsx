@@ -9,7 +9,6 @@ import { toSlug } from "@/lib/slug";
 import { motion, AnimatePresence } from "motion/react";
 import { FileText, Map, MapPin, ShieldCheck } from "lucide-react";
 import { PostcodeSearch } from "@/components/home/PostcodeSearch";
-import { MiniRouteModule } from "@/components/home/MiniRouteModule";
 
 export function meta({}: Route.MetaArgs) {
   const title = "Pathway to Parenthood | Unlock Your IVF Funding";
@@ -142,8 +141,6 @@ export default function LandingPage() {
                 <ShieldCheck className="w-4 h-4 text-route-teal" />
                 <span>Updated for 2026. Based on current ICB policy documents.</span>
               </div>
-
-              <MiniRouteModule className="mb-6 lg:hidden" />
 
               {/* Search + Map row */}
               <div className="flex flex-wrap items-start gap-3">
