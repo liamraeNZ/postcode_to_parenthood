@@ -5,6 +5,7 @@ import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { TrustDisclaimer } from "@/components/shared/TrustDisclaimer";
 
 export function meta({}: Route.MetaArgs) {
   const title = "Check Postcode | Pathway to Parenthood";
@@ -86,7 +87,7 @@ export default function SearchPage() {
     <section className="flex flex-1 flex-col">
       <PageHeader
         title="Start with your postcode"
-        description="We’ll trace the NHS fertility guidance that may apply where you live, including your health board and key eligibility signals."
+        description="We’ll map your postcode to your GP catchment and the health board whose published guidance may apply. Use your practice postcode when you can—it matters more than your home address."
         breadcrumbCurrent="Postcode check"
       />
       <div className="flex flex-1 justify-center px-4 py-12 md:py-16">
@@ -128,6 +129,10 @@ export default function SearchPage() {
           </ul>
 
           <PostcodeSearch />
+
+          <div className="mt-8 text-left">
+            <TrustDisclaimer />
+          </div>
 
           <noscript>
             <Form method="post" action="/search" className="mt-8 text-left">

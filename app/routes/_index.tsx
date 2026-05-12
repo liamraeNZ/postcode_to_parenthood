@@ -127,7 +127,7 @@ const howItWorks = [
   {
     step: "01",
     title: "Share your postcode",
-    body: "We use your GP catchment to identify the health board whose published guidance may apply.",
+    body: "We use your GP catchment to identify the health board whose published policy may apply.",
   },
   {
     step: "02",
@@ -137,7 +137,7 @@ const howItWorks = [
   {
     step: "03",
     title: "Confirm with your team",
-    body: "Use linked source documents and speak to your GP or clinic to confirm what applies in your situation.",
+    body: "Use linked source documents and speak to your GP or clinic to confirm what you might be eligible for.",
   },
 ];
 
@@ -174,14 +174,11 @@ export default function LandingPage() {
                 NHS fertility funding
               </p>
               <h1 className="font-heading text-[2rem] font-semibold leading-[1.12] tracking-tight text-deep-slate sm:text-4xl md:text-5xl lg:text-[3.25rem]">
-                Clarity for your
-                <span className="block bg-gradient-to-r from-route-teal-dark via-moss to-route-teal-dark bg-clip-text text-transparent">
-                  local IVF pathway.
-                </span>
+                Unlock your local <span className="bg-gradient-to-r from-route-teal-dark via-moss to-route-teal-dark bg-clip-text text-transparent">IVF pathway.</span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-deep-slate/80 md:text-lg">
-                Funding rules change by area. Pathway to Parenthood turns published ICB policy into a clear,
-                readable overview, so your postcode is a starting point rather than a dead end.
+                <span className="font-semibold text-deep-slate">Funding rules change by area. Sometimes by the mile.</span> <br /> Pathway to Parenthood turns complex local policies into clear,
+                readable overviews, helping you navigate the IVF 'postcode lottery'.
               </p>
 
               <ul className="mt-8 flex flex-wrap gap-3 text-sm text-deep-slate/75">
