@@ -11,6 +11,8 @@ interface BoardRow {
   name: string;
   document_folder_name: string;
   country: string;
+  is_national: number | null;
+  last_updated: string | null;
 }
 
 interface CountryCount {
@@ -28,12 +30,21 @@ const COUNTRY_LABELS: Record<string, string> = {
 
 const COUNTRY_ORDER = ["ENGLAND", "SCOTLAND", "WALES", "NORTHERN_IRELAND"];
 
+function formatDate(isoDate: string): string {
+  const date = new Date(isoDate);
+  const day = date.getUTCDate().toString().padStart(2, "0");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = months[date.getUTCMonth()];
+  const year = date.getUTCFullYear();
+  return `${day} ${month} ${year}`;
+}
+
 export async function loader({ context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
 
   const { results: boards } = await db
     .prepare(
-      `SELECT id, name, document_folder_name, country
+      `SELECT id, name, document_folder_name, country, is_national, last_updated
        FROM health_boards
        WHERE document_folder_name IS NOT NULL AND status = 'active'
        ORDER BY name ASC`
@@ -59,10 +70,10 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Local NHS Fertility Policies | Pathways to Parenthood";
+  const title = "Local NHS Fertility Policies | Pathway to Parenthood";
   const description =
     "Browse local NHS fertility funding rules by health board across England, Scotland, Wales, and Northern Ireland.";
-  const canonicalUrl = "https://fertilityfund.uk/policies";
+  const canonicalUrl = "https://pathwaytoparenthood.uk/policies";
 
   return [
     { title },
@@ -189,12 +200,23 @@ export default function PoliciesPage({ loaderData }: Route.ComponentProps) {
               <li key={board.id}>
                 <Link
                   to={`/policy/${toSlug(board.document_folder_name)}`}
-                  className="flex items-center gap-3 px-4 py-3 bg-white border border-warm-sand-dark rounded-xl hover:border-sage-btn hover:shadow-sm transition-all group"
+                  className="flex items-start gap-3 px-4 py-3 bg-white border border-warm-sand-dark rounded-xl hover:border-sage-btn hover:shadow-sm transition-all group"
                 >
-                  <FileText className="w-5 h-5 text-sage-btn flex-shrink-0" />
-                  <span className="text-deep-slate font-medium group-hover:text-sage-btn transition-colors">
-                    {formatIcbName(board.name)}
-                  </span>
+                  <FileText className="w-5 h-5 text-sage-btn flex-shrink-0 mt-0.5" />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-deep-slate font-medium group-hover:text-sage-btn transition-colors">
+                      {formatIcbName(board.name)}
+                    </span>
+                    <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-deep-slate/70 mt-0.5">
+                      <span>{COUNTRY_LABELS[board.country] || board.country}</span>
+                      {board.is_national === 1 && (
+                        <span>· National policy</span>
+                      )}
+                      {board.last_updated && (
+                        <span>· {formatDate(board.last_updated)}</span>
+                      )}
+                    </span>
+                  </div>
                 </Link>
               </li>
             ))}

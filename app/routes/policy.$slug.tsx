@@ -82,15 +82,14 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 export function meta({ data }: Route.MetaArgs) {
   if (!data) {
     return [
-      { title: "Health Board Not Found | Pathways to Parenthood" },
-      { name: "description", content: "The requested health board could not be found." },
+      { title: "Health Board Not Found | Pathway to Parenthood" },
     ];
   }
 
   const { icb, slug } = data;
-  const title = `${formatIcbName(icb.name)} Source Documents | Pathways to Parenthood`;
+  const title = `${formatIcbName(icb.name)} Source Documents | Pathway to Parenthood`;
   const description = `View and download NHS fertility policy source documents published by ${formatIcbName(icb.name)}.`;
-  const canonicalUrl = `https://fertilityfund.uk/policy/${slug}`;
+  const canonicalUrl = `https://pathwaytoparenthood.uk/policy/${slug}`;
 
   return [
     { title },

@@ -2,9 +2,9 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Pathways to Parenthood
+# Pathway to Parenthood
 
-Pathways to Parenthood is a small web app that helps UK residents navigate the IVF postcode lottery by mapping a postcode to local NHS Integrated Care Board (ICB) policy and explaining the eligibility guidance that may apply.
+Pathway to Parenthood is a small web app that helps UK residents navigate the IVF postcode lottery by mapping a postcode to local NHS Integrated Care Board (ICB) policy and explaining the eligibility guidance that may apply.
 
 ## What it does
 

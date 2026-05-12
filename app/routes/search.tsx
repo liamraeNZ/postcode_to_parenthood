@@ -6,10 +6,10 @@ import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/se
 import { toSlug } from "@/lib/slug";
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Check Postcode | Pathways to Parenthood";
+  const title = "Check Postcode | Pathway to Parenthood";
   const description =
     "Enter your postcode to find local NHS fertility funding guidance, eligibility criteria, and the health board policy that may apply.";
-  const canonicalUrl = "https://fertilityfund.uk/search";
+  const canonicalUrl = "https://pathwaytoparenthood.uk/search";
 
   return [
     { title },

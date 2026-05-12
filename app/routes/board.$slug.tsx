@@ -90,7 +90,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 export function meta({ data }: Route.MetaArgs) {
   if (!data) {
     return [
-      { title: "Health Board Not Found | Pathways to Parenthood" },
+      { title: "Health Board Not Found | Pathway to Parenthood" },
       { name: "description", content: "The requested health board policy page could not be found." },
     ];
   }
@@ -102,12 +102,12 @@ export function meta({ data }: Route.MetaArgs) {
   const cycles = ivfPolicy?.cycles_offered ?? 0;
   const maxAge = ivfPolicy?.max_age ?? 0;
 
-  const title = `${displayName} IVF Funding Guidance | ${countryName} | Pathways to Parenthood`;
+  const title = `${displayName} IVF Funding Guidance | ${countryName} | Pathway to Parenthood`;
   const description =
     cycles > 0
       ? `${displayName} in ${countryName} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.`
       : `${displayName} in ${countryName} NHS fertility funding policy. Check eligibility criteria including age limits, BMI requirements, and treatment options.`;
-  const canonicalUrl = `https://fertilityfund.uk/board/${slug}`;
+  const canonicalUrl = `https://pathwaytoparenthood.uk/board/${slug}`;
 
   return [
     { title },
@@ -117,7 +117,7 @@ export function meta({ data }: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "article" },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "https://fertilityfund.uk/og-image.png" },
+    { property: "og:image", content: "https://pathwaytoparenthood.uk/og-image.png" },
   ];
 }
 
@@ -423,7 +423,7 @@ export function buildStructuredData(
   slug: string
 ) {
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
-  const canonicalUrl = `https://fertilityfund.uk/board/${slug}`;
+  const canonicalUrl = `https://pathwaytoparenthood.uk/board/${slug}`;
   const displayName = formatIcbName(icb.name);
 
   // Build FAQ entries from policy data

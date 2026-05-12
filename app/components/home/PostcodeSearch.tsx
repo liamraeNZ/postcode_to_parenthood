@@ -22,6 +22,7 @@ import {
 } from '@/services/postcodeService';
 import type { GpPracticeSummary } from '@/types';
 import { motion, AnimatePresence } from 'motion/react';
+import { TrustDisclaimer } from '@/components/shared/TrustDisclaimer';
 
 type PostcodeLookupAction = 'search' | 'lookup';
 
@@ -242,7 +243,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
                 <div>
                   <CardTitle className="text-deep-slate font-bold">Choose your GP practice</CardTitle>
                   <p className="mt-1 text-xs text-deep-slate/60">
-                    This helps us point you to the NHS fertility policy for your area.
+                    NHS funding is usually linked to your GP practice, so we use this to find the right local policy.
                   </p>
                 </div>
                 {loadingSelect && (
@@ -374,6 +375,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
                 ) : null}
               </div>
             </Card>
+            <TrustDisclaimer className="mt-3" />
           </motion.div>
         )}
       </AnimatePresence>

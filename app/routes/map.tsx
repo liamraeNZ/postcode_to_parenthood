@@ -2,6 +2,7 @@ import { lazy, Suspense, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Route } from "./+types/map";
 import { toSlug } from "../lib/slug";
+import { MapControlStrip } from "../components/map/MapControlStrip";
 
 const LazyMapContent = lazy(() => import("../components/map/MapContent"));
 
@@ -24,10 +25,10 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export function meta({}: Route.MetaArgs) {
-  const title = "NHS IVF Funding Map | Pathways to Parenthood";
+  const title = "NHS IVF Funding Map | Pathway to Parenthood";
   const description =
     "Explore the UK IVF postcode lottery with an interactive NHS fertility funding map. Compare health board boundaries and local eligibility rules.";
-  const canonicalUrl = "https://fertilityfund.uk/map";
+  const canonicalUrl = "https://pathwaytoparenthood.uk/map";
 
   return [
     { title },
@@ -37,7 +38,7 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "https://fertilityfund.uk/og-image.png" },
+    { property: "og:image", content: "https://pathwaytoparenthood.uk/og-image.png" },
   ];
 }
 
@@ -92,6 +93,8 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
             Check my local pathway
           </a>
         </header>
+
+        <MapControlStrip className="mb-4" />
 
         <div className="h-[calc(100vh-280px)] min-h-[500px] relative rounded-xl overflow-hidden border border-warm-sand-dark">
           <ClientOnly fallback={<MapPlaceholder />}>

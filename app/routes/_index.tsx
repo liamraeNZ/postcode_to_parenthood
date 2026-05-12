@@ -5,13 +5,15 @@ import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
 import { motion } from "motion/react";
-import { Compass, FileText, Map, MapPin, Search } from "lucide-react";
+import { FileText, Map, MapPin } from "lucide-react";
+import { PostcodeSearch } from "@/components/home/PostcodeSearch";
+import { MiniRouteModule } from "@/components/home/MiniRouteModule";
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Pathways to Parenthood | NHS IVF Funding Guidance";
+  const title = "Pathway to Parenthood | NHS IVF Funding Guidance";
   const description =
     "A clearer route through the IVF postcode lottery. Check local NHS fertility funding guidance, eligibility criteria, and health board policies by postcode.";
-  const canonicalUrl = "https://fertilityfund.uk";
+  const canonicalUrl = "https://pathwaytoparenthood.uk";
 
   return [
     { title },
@@ -23,7 +25,7 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:url", content: canonicalUrl },
     {
       property: "og:image",
-      content: "https://fertilityfund.uk/og-image.png",
+      content: "https://pathwaytoparenthood.uk/og-image.png",
     },
   ];
 }
@@ -106,13 +108,6 @@ const features = [
     href: "/policies",
     available: true,
   },
-  {
-    icon: Search,
-    title: "Prepare your next step",
-    description: "Use the guidance to ask clearer questions of your GP, clinic, or local NHS body.",
-    href: "/funding",
-    available: false,
-  },
 ];
 
 export default function LandingPage() {
@@ -131,19 +126,16 @@ export default function LandingPage() {
               transition={{ duration: 0.6 }}
             >
               <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4 text-deep-slate">
-                Find your pathway to NHS-funded IVF.
+                NHS-funded fertility care isn't the same everywhere.
+                <br />
+                <span className="text-route-teal-dark">Find out what applies to you.</span>
               </h1>
               <p className="text-base md:text-lg text-deep-slate/80 leading-relaxed mb-6 max-w-lg">
-                The IVF postcode lottery is confusing. Pathways to Parenthood helps you check local NHS funding guidance, eligibility criteria, and policy details in one clear place.
+                Pathway to Parenthood helps you check local NHS funding guidance, eligibility criteria, and policy details in one clear place.
               </p>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  to="/search"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-sage-btn hover:bg-route-teal-dark text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
-                >
-                  <Compass className="w-4 h-4" />
-                  Check my local pathway
-                </Link>
+              <MiniRouteModule className="mb-6 lg:hidden" />
+              <div className="flex flex-wrap gap-3 mb-6">
+                <PostcodeSearch />
                 <Link
                   to="/map"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-warm-sand-dark hover:border-sage-green text-deep-slate font-bold rounded-xl shadow-sm transition-all"
@@ -152,6 +144,7 @@ export default function LandingPage() {
                   View the map
                 </Link>
               </div>
+              
             </motion.div>
 
             {/* Right: image */}
@@ -181,9 +174,9 @@ export default function LandingPage() {
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <h2 className="font-heading text-xl md:text-2xl font-bold text-deep-slate mb-6">
-            Your guide through the postcode lottery
+            Your guide to IVF funding in your area
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((feature) => {
               const Icon = feature.icon;
               const content = (
@@ -268,8 +261,8 @@ export default function LandingPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "Pathways to Parenthood",
-            url: "https://fertilityfund.uk",
+            name: "Pathway to Parenthood",
+            url: "https://pathwaytoparenthood.uk",
             description:
               "A clearer route through NHS IVF funding. Check local eligibility guidance and health board policies by postcode.",
             potentialAction: {
@@ -277,7 +270,7 @@ export default function LandingPage() {
               target: {
                 "@type": "EntryPoint",
                 urlTemplate:
-                  "https://fertilityfund.uk/search?postcode={postcode}",
+                  "https://pathwaytoparenthood.uk/search?postcode={postcode}",
               },
               "query-input": "required name=postcode",
             },
