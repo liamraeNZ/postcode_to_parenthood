@@ -1,39 +1,38 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
+import { cn } from "@/lib/utils";
 
 interface CountryFilterProps {
   countries: Array<{ code: string; label: string; count: number }>;
   selected: string[]; // country codes currently selected
   onChange: (selected: string[]) => void;
+  /** Extra classes for the fieldset (e.g. margin overrides) */
+  className?: string;
 }
 
-export function CountryFilter({ countries, selected, onChange }: CountryFilterProps) {
-  const allSelected = selected.length === countries.length;
+export function CountryFilter({ countries, selected, onChange, className }: CountryFilterProps) {
+  const allCodes = useMemo(() => countries.map((c) => c.code), [countries]);
+  const allSelected =
+    selected.length === countries.length && allCodes.every((c) => selected.includes(c));
 
-  const handleToggle = useCallback(
+  /** One country only: filter to that nation. Same country again: back to all UK. */
+  const handleCountryClick = useCallback(
     (code: string) => {
-      if (selected.includes(code)) {
-        // Deselect this country
-        const next = selected.filter((c) => c !== code);
-        onChange(next);
+      const onlyThisCountry = selected.length === 1 && selected[0] === code;
+      if (onlyThisCountry) {
+        onChange(allCodes);
       } else {
-        // Select this country
-        onChange([...selected, code]);
+        onChange([code]);
       }
     },
-    [selected, onChange]
+    [selected, onChange, allCodes]
   );
 
   const handleSelectAll = useCallback(() => {
-    if (allSelected) {
-      // If all are selected, deselect all (will show empty state)
-      onChange([]);
-    } else {
-      onChange(countries.map((c) => c.code));
-    }
-  }, [allSelected, countries, onChange]);
+    onChange(allCodes);
+  }, [allCodes, onChange]);
 
   return (
-    <fieldset className="mb-6" aria-label="Filter by country">
+    <fieldset className={cn("mb-6", className)} aria-label="Filter by country">
       <legend className="text-sm font-medium text-deep-slate mb-2">
         Filter by country
       </legend>
@@ -56,7 +55,7 @@ export function CountryFilter({ countries, selected, onChange }: CountryFilterPr
             <button
               key={country.code}
               type="button"
-              onClick={() => handleToggle(country.code)}
+              onClick={() => handleCountryClick(country.code)}
               aria-pressed={isSelected}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
                 isSelected

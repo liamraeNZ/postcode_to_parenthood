@@ -143,20 +143,22 @@ export default function BoardsPage({ loaderData }: Route.ComponentProps) {
   return (
     <section className="flex flex-1 flex-col">
       <PageHeader
+        compact
         title="NHS health boards"
         description="Browse summarised fertility funding policies by board. Each page breaks down eligibility, age limits, and cycle availability in plain English."
         breadcrumbCurrent="Health boards"
       />
-      <div className="container mx-auto max-w-3xl px-4 py-8 md:py-10">
+      <div className="container mx-auto max-w-3xl px-4 pt-3 pb-6 md:pt-4 md:pb-8">
         {/* Country filter */}
         <CountryFilter
+          className="mb-4"
           countries={countryCounts}
           selected={selectedCountries}
           onChange={handleCountryChange}
         />
 
         {/* Search input */}
-        <div className="relative mb-6">
+        <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-deep-slate/40" />
           <input
             type="text"
