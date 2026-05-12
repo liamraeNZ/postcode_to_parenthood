@@ -82,15 +82,14 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 export function meta({ data }: Route.MetaArgs) {
   if (!data) {
     return [
-      { title: "Health Board Not Found | FertilityFund UK" },
-      { name: "description", content: "The requested health board could not be found." },
+      { title: "Health Board Not Found | Pathway to Parenthood" },
     ];
   }
 
   const { icb, slug } = data;
-  const title = `${formatIcbName(icb.name)} Policy Documents | FertilityFund UK`;
-  const description = `View and download NHS fertility funding policy documents published by ${formatIcbName(icb.name)}.`;
-  const canonicalUrl = `https://fertilityfund.uk/policy/${slug}`;
+  const title = `${formatIcbName(icb.name)} Source Documents | Pathway to Parenthood`;
+  const description = `View and download NHS fertility policy source documents published by ${formatIcbName(icb.name)}.`;
+  const canonicalUrl = `https://pathwaytoparenthood.uk/policy/${slug}`;
 
   return [
     { title },
@@ -146,13 +145,13 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
           <ol className="flex items-center gap-2 text-sm text-deep-slate/60">
             <li>
               <Link to="/" className="hover:text-sage-btn transition-colors">
-                Home
+                Start
               </Link>
             </li>
             <li aria-hidden="true">/</li>
             <li>
               <Link to="/policies" className="hover:text-sage-btn transition-colors">
-                Policy Documents
+                Local Policies
               </Link>
             </li>
             <li aria-hidden="true">/</li>
@@ -166,7 +165,7 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
             {formatIcbName(icb.name)}
           </h1>
           <p className="text-sm md:text-base text-deep-slate/70 leading-relaxed">
-            Policy documents published by this health board, grouped by year.
+            Source documents published by this health board, grouped by year.
           </p>
         </header>
 

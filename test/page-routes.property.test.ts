@@ -46,7 +46,7 @@ describe("Property 8: Page Routes Return Complete HTML", () => {
           name: "viewport",
           content: "width=device-width, initial-scale=1",
         }),
-        createElement("title", null, "FertilityFund UK")
+        createElement("title", null, "Pathway to Parenthood")
       ),
       createElement(
         "body",
@@ -111,8 +111,8 @@ describe("Property 8: Page Routes Return Complete HTML", () => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "FertilityFund UK",
-            url: "https://fertilityfund.uk",
+            name: "Pathway to Parenthood",
+            url: "https://pathwaytoparenthood.uk",
           }),
         },
       })

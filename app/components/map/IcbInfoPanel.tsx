@@ -12,7 +12,7 @@ export interface IcbInfoPanelProps {
 /**
  * IcbInfoPanel displays expanded policy details for a selected health board region.
  * Shows health board name, cycles offered, and age range.
- * Includes a "View full policy" link to navigate to the health board policy page.
+ * Includes a "View local guidance" link to navigate to the health board policy page.
  */
 export function IcbInfoPanel({
   icbName,
@@ -55,7 +55,7 @@ export function IcbInfoPanel({
         ) : (
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-deep-slate/60">Cycles offered</dt>
+              <dt className="text-deep-slate/60">Funded cycles</dt>
               <dd className="font-medium text-deep-slate">{policy.cycles_offered}</dd>
             </div>
             <div className="flex justify-between">
@@ -71,9 +71,9 @@ export function IcbInfoPanel({
         {policy !== null && slug && (
           <Link
             to={`/board/${slug}`}
-            className="mt-3 block w-full rounded-lg bg-sage-dark px-3 py-2 text-xs font-bold text-white text-center transition-colors hover:bg-sage-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-green focus-visible:ring-offset-1"
+            className="mt-3 block w-full rounded-lg bg-sage-btn px-3 py-2 text-xs font-bold text-white text-center transition-colors hover:bg-route-teal-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-route-teal focus-visible:ring-offset-1"
           >
-            View full policy
+            View local guidance
           </Link>
         )}
       </div>

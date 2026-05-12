@@ -141,7 +141,7 @@ describe("Property 10: Sitemap Contains All Active ICB URLs With Lastmod", () =>
 
         for (const icb of icbs) {
           const expectedSlug = toSlug(icb.document_folder_name);
-          const expectedLoc = `https://fertilityfund.uk/board/${expectedSlug}`;
+          const expectedLoc = `https://pathwaytoparenthood.uk/board/${expectedSlug}`;
           expect(xml).toContain(`<loc>${expectedLoc}</loc>`);
         }
       }),
@@ -157,7 +157,7 @@ describe("Property 10: Sitemap Contains All Active ICB URLs With Lastmod", () =>
 
         for (const icb of icbs) {
           const expectedSlug = toSlug(icb.document_folder_name);
-          const expectedLoc = `https://fertilityfund.uk/board/${expectedSlug}`;
+          const expectedLoc = `https://pathwaytoparenthood.uk/board/${expectedSlug}`;
 
           // Extract the <url> block containing this ICB's loc
           const urlBlockRegex = new RegExp(
@@ -186,7 +186,7 @@ describe("Property 10: Sitemap Contains All Active ICB URLs With Lastmod", () =>
 
         for (const icb of icbs) {
           const expectedSlug = toSlug(icb.document_folder_name);
-          const expectedLoc = `https://fertilityfund.uk/board/${expectedSlug}`;
+          const expectedLoc = `https://pathwaytoparenthood.uk/board/${expectedSlug}`;
           const expectedLastmod = icb.updated_at.slice(0, 10);
 
           // Verify the lastmod in the XML matches the expected date from updated_at

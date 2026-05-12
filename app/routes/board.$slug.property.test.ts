@@ -222,7 +222,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
       slug: toSlug(document_folder_name),
     }));
 
-  it("meta output contains title with ICB name and 'IVF Funding Policy'", () => {
+  it("meta output contains title with ICB name and 'IVF Funding Guidance'", () => {
     fc.assert(
       fc.property(icbDataArb, (data) => {
         const metaResult = meta({ data } as any);
@@ -234,7 +234,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
 
         expect(titleEntry).toBeDefined();
         expect(titleEntry!.title).toContain(data.icb.name);
-        expect(titleEntry!.title).toContain("IVF Funding Policy");
+        expect(titleEntry!.title).toContain("IVF Funding Guidance");
       }),
       { numRuns: 100 }
     );
@@ -251,7 +251,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
         ) as { href: string } | undefined;
 
         expect(canonicalEntry).toBeDefined();
-        expect(canonicalEntry!.href).toBe(`https://fertilityfund.uk/board/${data.slug}`);
+        expect(canonicalEntry!.href).toBe(`https://pathwaytoparenthood.uk/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );
@@ -281,7 +281,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
           (entry: any) => entry.property === "og:url"
         ) as { content: string } | undefined;
         expect(ogUrl).toBeDefined();
-        expect(ogUrl!.content).toBe(`https://fertilityfund.uk/board/${data.slug}`);
+        expect(ogUrl!.content).toBe(`https://pathwaytoparenthood.uk/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );
@@ -296,7 +296,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
         const titleEntry = metaResult.find((entry: any) => "title" in entry) as { title: string } | undefined;
         expect(titleEntry).toBeDefined();
         expect(titleEntry!.title).toContain(data.icb.name);
-        expect(titleEntry!.title).toContain("IVF Funding Policy");
+        expect(titleEntry!.title).toContain("IVF Funding Guidance");
 
         // Canonical URL
         const canonicalEntry = metaResult.find(
@@ -842,7 +842,7 @@ describe("Property 6: ICB Page Has Valid Structured Data", () => {
       fc.property(icbDataArb, (data) => {
         const result = buildStructuredData(data.icb, data.policies, data.slug);
 
-        expect(result.url).toBe(`https://fertilityfund.uk/board/${data.slug}`);
+        expect(result.url).toBe(`https://pathwaytoparenthood.uk/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );

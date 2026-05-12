@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import * as fc from "fast-check";
 import { renderToReadableStream } from "react-dom/server";
 import { createElement } from "react";
+import { StaticRouter } from "react-router";
 import MapPage from "./map";
 
 /**
@@ -27,7 +28,9 @@ describe("Property 11: Server Render of Map Does Not Execute Window-Dependent Co
   async function renderMapPageToHtml(icbs: Array<{ name: string; slug: string }>): Promise<string> {
     const loaderData = { icbs };
     const element = createElement(MapPage, { loaderData } as any);
-    const stream = await renderToReadableStream(element);
+    // Wrap in StaticRouter to provide navigation context for <Link> components
+    const routerWrapped = createElement(StaticRouter, { location: "/map" }, element);
+    const stream = await renderToReadableStream(routerWrapped);
     const reader = stream.getReader();
     let html = "";
     while (true) {
@@ -165,7 +168,9 @@ describe("Property 9: Map Page Contains Links to All Active ICB Pages", () => {
   async function renderMapPage(icbs: Array<{ name: string; slug: string }>): Promise<string> {
     const loaderData = { icbs };
     const element = createElement(MapPage, { loaderData } as any);
-    const stream = await renderToReadableStream(element);
+    // Wrap in StaticRouter to provide navigation context for <Link> components
+    const routerWrapped = createElement(StaticRouter, { location: "/map" }, element);
+    const stream = await renderToReadableStream(routerWrapped);
     const reader = stream.getReader();
     let html = "";
     while (true) {

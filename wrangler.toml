@@ -1,9 +1,17 @@
-name = "fertility-fund"
+name = "pathwaytoparenthood"
 main = "worker.ts"
 compatibility_date = "2026-04-21"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 preview_urls = true
+
+[[routes]]
+pattern = "pathwaytoparenthood.uk"
+custom_domain = true
+
+[[routes]]
+pattern = "www.pathwaytoparenthood.uk"
+custom_domain = true
 
 [build]
 command = "npm run build"

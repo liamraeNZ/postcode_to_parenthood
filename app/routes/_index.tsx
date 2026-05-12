@@ -5,13 +5,15 @@ import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
 import { motion } from "motion/react";
-import { MapPin, FileText, Map, Search } from "lucide-react";
+import { FileText, Map, MapPin, ShieldCheck } from "lucide-react";
+import { PostcodeSearch } from "@/components/home/PostcodeSearch";
+import { MiniRouteModule } from "@/components/home/MiniRouteModule";
 
 export function meta({}: Route.MetaArgs) {
-  const title = "NHS IVF Funding Eligibility | FertilityFund UK";
+  const title = "Pathway to Parenthood | Unlock Your NHS IVF Funding";
   const description =
-    "Check your NHS-funded IVF eligibility by postcode. Find your health board's fertility policy, cycles offered, age limits, and criteria across England, Scotland, Wales, and Northern Ireland.";
-  const canonicalUrl = "https://fertilityfund.uk";
+    "Don't let your postcode dictate your future. Get an instant breakdown of NHS fertility funding eligibility, cycle availability, and local ICB policy.";
+  const canonicalUrl = "https://pathwaytoparenthood.uk";
 
   return [
     { title },
@@ -23,7 +25,7 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:url", content: canonicalUrl },
     {
       property: "og:image",
-      content: "https://fertilityfund.uk/og-image.png",
+      content: "https://pathwaytoparenthood.uk/og-image.png",
     },
   ];
 }
@@ -87,31 +89,24 @@ export async function action({ request, context }: Route.ActionArgs) {
 const features = [
   {
     icon: MapPin,
-    title: "Search by postcode",
-    description: "Find your health board's fertility policy based on your GP practice location.",
+    title: "Your postcode, your policy",
+    description: "Enter your postcode and instantly see which NHS fertility funding rules apply to you; and the ICB policy behind them.",
     href: "/search",
     available: true,
   },
   {
-    icon: FileText,
-    title: "Health board policies & criteria",
-    description: "Browse eligibility criteria, age limits, and cycles offered by each health board.",
-    href: "/policies",
-    available: true,
-  },
-  {
     icon: Map,
-    title: "Policy map",
-    description: "See how NHS fertility funding varies across the UK at a glance.",
+    title: "See the full funding map",
+    description: "Visualise how IVF access varies across the UK. Understand where policy boundaries fall and what that means for you.",
     href: "/map",
     available: true,
   },
   {
-    icon: Search,
-    title: "Search for funding",
-    description: "Explore NHS and charitable funding options available to you.",
-    href: "/funding",
-    available: false,
+    icon: FileText,
+    title: "Read the policy, plainly",
+    description: "Age limits, cycle availability, eligibility criteria summarised in plain English so you know exactly where you stand.",
+    href: "/policies",
+    available: true,
   },
 ];
 
@@ -122,35 +117,36 @@ export default function LandingPage() {
     <section className="flex-1 flex flex-col">
       {/* Hero */}
       <div className="relative overflow-hidden">
-        <div className="container mx-auto px-4 py-10 md:py-16 lg:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="container mx-auto px-4 py-12 md:py-16 lg:py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
             {/* Left: text */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4 text-deep-slate">
-                NHS-funded fertility care isn't the same everywhere.
+              <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.15] tracking-tight mb-4 text-deep-slate">
+                Unlock your local NHS
+                <br />
+                <span className="text-route-teal-dark">fertility funding.</span>
               </h1>
-              <p className="text-base md:text-lg text-deep-slate/80 leading-relaxed mb-6 max-w-lg">
-                Where you live affects whether you qualify for support; a "postcode lottery" that leaves many people confused. We help you understand what you're entitled to.
+              <p className="text-base md:text-lg text-deep-slate leading-relaxed mb-6 max-w-xl">
+                Don't let your postcode dictate your future. Get an instant, clear breakdown of the IVF eligibility rules in your area.
               </p>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  to="/search"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-sage-dark hover:bg-sage-hover text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
-                >
-                  <MapPin className="w-4 h-4" />
-                  Check your eligibility
-                </Link>
-                <Link
-                  to="/map"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-warm-sand-dark hover:border-sage-green text-deep-slate font-bold rounded-xl shadow-sm transition-all"
-                >
-                  <Map className="w-4 h-4" />
-                  View the map
-                </Link>
+
+              {/* Trust microcopy */}
+              <div className="flex items-center gap-2 mb-6 text-sm text-deep-slate/70">
+                <ShieldCheck className="w-4 h-4 text-route-teal" />
+                <span>Updated for 2026. Based on current ICB policy documents.</span>
+              </div>
+
+              <MiniRouteModule className="mb-6 lg:hidden" />
+
+              {/* Search + Map row */}
+              <div className="flex flex-wrap items-start gap-3">
+                <div className="flex-1 min-w-0 max-w-lg">
+                  <PostcodeSearch />
+                </div>
               </div>
             </motion.div>
 
@@ -159,45 +155,44 @@ export default function LandingPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="hidden lg:flex justify-center"
+              className="hidden lg:flex justify-end"
             >
               <img
                 src="/assets/hand-hold.webp"
-                alt="Two people holding hands in support"
-                className="rounded-2xl shadow-xl max-h-[520px] w-full object-cover"
+                alt="A supportive moment between two people on their fertility journey"
+                className="rounded-xl shadow-xl w-96 h-[28rem] object-cover"
               />
             </motion.div>
           </div>
         </div>
       </div>
 
-
-
       {/* Features grid */}
-      <div className="container mx-auto px-4 py-12 md:py-16">
+      <div className="container mx-auto px-4 py-10 md:py-14">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <h2 className="font-heading text-xl md:text-2xl font-bold text-deep-slate mb-6">
-            What we offer
+          <h2 className="font-heading text-xl md:text-2xl font-bold text-deep-slate mb-2 tracking-tight">
+            Three ways to understand your funding
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <p className="text-sm text-deep-slate/70 mb-6">Each path leads to the same answer — what your local NHS policy means for you.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((feature) => {
               const Icon = feature.icon;
               const content = (
                 <div
                   key={feature.title}
-                  className={`relative p-5 rounded-xl border transition-all ${
+                  className={`relative p-5 rounded-lg border transition-all ${
                     feature.available
-                      ? "bg-white border-warm-sand-dark hover:border-sage-green hover:shadow-md cursor-pointer"
+                      ? "bg-white border-warm-sand-dark hover:border-route-teal hover:shadow-md cursor-pointer"
                       : "bg-warm-sand/50 border-warm-sand-dark opacity-75"
                   }`}
                 >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-sage-light flex items-center justify-center">
-                      <Icon className="w-4 h-4 text-sage-dark" />
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-9 h-9 rounded-md bg-sage-light flex items-center justify-center">
+                      <Icon className="w-4 h-4 text-route-teal-dark" />
                     </div>
                     {!feature.available && (
                       <span className="text-[10px] font-bold uppercase tracking-wider text-deep-slate/50 bg-warm-sand-dark px-2 py-0.5 rounded-full">
@@ -206,7 +201,7 @@ export default function LandingPage() {
                     )}
                   </div>
                   <h3 className="font-bold text-deep-slate text-sm mb-1">{feature.title}</h3>
-                  <p className="text-xs text-deep-slate/70 leading-relaxed">{feature.description}</p>
+                  <p className="text-sm text-deep-slate/80 leading-relaxed">{feature.description}</p>
                 </div>
               );
 
@@ -240,13 +235,13 @@ export default function LandingPage() {
                 name="postcode"
                 placeholder="e.g. SW1A 1AA"
                 required
-                className="flex-1 px-4 py-3 border-2 border-warm-sand-dark rounded-xl text-base"
+                className="flex-1 px-4 py-3 border-2 border-warm-sand-dark rounded-lg text-base"
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-sage-dark text-white font-bold rounded-xl"
+                className="px-6 py-3 bg-sage-dark text-white font-bold rounded-lg"
               >
-                Find your policy
+                Find My Funding
               </button>
             </div>
           </Form>
@@ -268,16 +263,16 @@ export default function LandingPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "FertilityFund UK",
-            url: "https://fertilityfund.uk",
+            name: "Pathway to Parenthood",
+            url: "https://pathwaytoparenthood.uk",
             description:
-              "Check your NHS-funded IVF eligibility by postcode. Find your health board's fertility policy across the UK.",
+              "A clearer route through NHS IVF funding. Check local eligibility guidance and health board policies by postcode.",
             potentialAction: {
               "@type": "SearchAction",
               target: {
                 "@type": "EntryPoint",
                 urlTemplate:
-                  "https://fertilityfund.uk/search?postcode={postcode}",
+                  "https://pathwaytoparenthood.uk/search?postcode={postcode}",
               },
               "query-input": "required name=postcode",
             },

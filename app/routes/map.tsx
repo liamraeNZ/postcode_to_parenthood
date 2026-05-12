@@ -2,6 +2,7 @@ import { lazy, Suspense, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Route } from "./+types/map";
 import { toSlug } from "../lib/slug";
+import { MapControlStrip } from "../components/map/MapControlStrip";
 
 const LazyMapContent = lazy(() => import("../components/map/MapContent"));
 
@@ -24,10 +25,10 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export function meta({}: Route.MetaArgs) {
-  const title = "NHS IVF Funding Map | FertilityFund UK";
+  const title = "NHS IVF Funding Map | Pathway to Parenthood";
   const description =
-    "Interactive map of NHS-funded IVF policies across the UK. Explore health board boundaries, compare fertility funding criteria, and find your local area's eligibility rules.";
-  const canonicalUrl = "https://fertilityfund.uk/map";
+    "Explore the UK IVF postcode lottery with an interactive NHS fertility funding map. Compare health board boundaries and local eligibility rules.";
+  const canonicalUrl = "https://pathwaytoparenthood.uk/map";
 
   return [
     { title },
@@ -37,7 +38,7 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "https://fertilityfund.uk/og-image.png" },
+    { property: "og:image", content: "https://pathwaytoparenthood.uk/og-image.png" },
   ];
 }
 
@@ -79,19 +80,21 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
               NHS IVF Funding Map
             </h1>
             <p className="text-sm md:text-base text-deep-slate/70 max-w-2xl">
-              Click on a health board area to view its funding criteria, including cycles offered, age limits, and eligibility requirements.
+              Click a health board area to view its local IVF funding guidance, including cycles offered, age limits, and eligibility requirements.
             </p>
           </div>
           <a
             href="/search"
-            className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-sage-dark px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-sage-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-green focus-visible:ring-offset-2"
+            className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-sage-btn px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-route-teal-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-route-teal focus-visible:ring-offset-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4">
               <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clipRule="evenodd" />
             </svg>
-            Search by Postcode
+            Check my local pathway
           </a>
         </header>
+
+        <MapControlStrip className="mb-4" />
 
         <div className="h-[calc(100vh-280px)] min-h-[500px] relative rounded-xl overflow-hidden border border-warm-sand-dark">
           <ClientOnly fallback={<MapPlaceholder />}>
@@ -106,7 +109,7 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
 
       {/* Hidden navigation for crawlers to discover all health board policy pages */}
       <nav aria-label="Health Board Policy Pages" className="sr-only">
-        <h2>All Health Board Fertility Policies</h2>
+        <h2>All Health Board Fertility Policy Pages</h2>
         <ul>
           {icbs.map((icb) => (
             <li key={icb.slug}>

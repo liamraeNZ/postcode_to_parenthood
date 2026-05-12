@@ -6,7 +6,7 @@ Allow: /board/
 Disallow: /admin
 Disallow: /api/
 
-Sitemap: https://fertilityfund.uk/sitemap.xml`;
+Sitemap: https://pathwaytoparenthood.uk/sitemap.xml`;
 
   return new Response(body, {
     headers: {
