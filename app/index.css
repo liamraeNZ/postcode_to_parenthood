@@ -48,6 +48,12 @@
     --color-route-teal-dark: #197D7C;
     --color-signal-amber: #D99A3D;
     --color-warm-bg: #F3EEE5;
+    --color-paper: #FFFCF8;
+    --color-blush: #F4E8E6;
+    --color-blush-deep: #E8D4CF;
+    --color-rose-accent: #C4756A;
+    --color-moss: #5B7F6A;
+    --color-ink-muted: rgba(36, 52, 58, 0.72);
     --color-focus-glow: rgba(45,156,154,0.22);
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
@@ -137,12 +143,35 @@
     @apply border-border outline-ring/50;
     }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     line-height: 1.75;
     }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
     }
+}
+
+/* Editorial hero backgrounds — soft clinic-inspired mesh */
+.mesh-hero {
+  background-color: var(--color-warm-bg);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 100% 0%, rgba(232, 212, 207, 0.55) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 70% at 0% 100%, rgba(220, 232, 224, 0.65) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(255, 252, 248, 0.9) 0%, transparent 70%);
+}
+
+.section-muted {
+  background: linear-gradient(180deg, #fffcf8 0%, #f3eee5 100%);
+}
+
+.cta-band {
+  background: linear-gradient(
+    135deg,
+    rgba(244, 232, 230, 0.85) 0%,
+    rgba(220, 232, 224, 0.45) 50%,
+    rgba(243, 238, 229, 0.95) 100%
+  );
 }
 
 /* Leaflet overrides — Tailwind's preflight breaks tile rendering */

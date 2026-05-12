@@ -4,6 +4,7 @@ import { useState } from "react";
 import { findIcbBySlug } from "@/lib/slug";
 import { formatIcbName } from "@/lib/utils";
 import { FileText, Eye, Download, ChevronDown, ChevronRight } from "lucide-react";
+import { PageHeader } from "@/components/layout/PageHeader";
 
 interface DocumentFile {
   name: string;
@@ -137,38 +138,17 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
     });
   }
 
+  const boardTitle = formatIcbName(icb.name);
+
   return (
-    <section className="flex-1 flex flex-col">
-      <div className="container mx-auto px-4 py-6 md:py-10 max-w-4xl">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mb-4 md:mb-6">
-          <ol className="flex items-center gap-2 text-sm text-deep-slate/60">
-            <li>
-              <Link to="/" className="hover:text-sage-btn transition-colors">
-                Start
-              </Link>
-            </li>
-            <li aria-hidden="true">/</li>
-            <li>
-              <Link to="/policies" className="hover:text-sage-btn transition-colors">
-                Local Policies
-              </Link>
-            </li>
-            <li aria-hidden="true">/</li>
-            <li className="text-deep-slate font-medium truncate">{formatIcbName(icb.name)}</li>
-          </ol>
-        </nav>
-
-        {/* Page heading */}
-        <header className="mb-6 md:mb-8">
-          <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-deep-slate mb-2">
-            {formatIcbName(icb.name)}
-          </h1>
-          <p className="text-sm md:text-base text-deep-slate/70 leading-relaxed">
-            Source documents published by this health board, grouped by year.
-          </p>
-        </header>
-
+    <section className="flex flex-1 flex-col">
+      <PageHeader
+        title={boardTitle}
+        description="Source documents published by this health board, grouped by year."
+        breadcrumbParents={[{ label: "Local policies", to: "/policies" }]}
+        breadcrumbCurrent={boardTitle}
+      />
+      <div className="container mx-auto max-w-4xl px-4 py-6 md:py-10">
         {/* Documents by year */}
         {documents.length > 0 ? (
           <div className="space-y-3">

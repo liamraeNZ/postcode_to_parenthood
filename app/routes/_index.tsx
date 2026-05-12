@@ -7,8 +7,17 @@ import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
 import { motion, AnimatePresence } from "motion/react";
-import { FileText, Map, MapPin, ShieldCheck } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  FileText,
+  Map,
+  MapPin,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import { PostcodeSearch } from "@/components/home/PostcodeSearch";
+import { TrustDisclaimer } from "@/components/shared/TrustDisclaimer";
 
 export function meta({}: Route.MetaArgs) {
   const title = "Pathway to Parenthood | Unlock Your IVF Funding";
@@ -91,23 +100,44 @@ const features = [
   {
     icon: MapPin,
     title: "Your postcode, your policy",
-    description: "Enter your postcode and instantly see which NHS fertility funding rules apply to you; and the ICB policy behind them.",
+    description:
+      "See which NHS fertility funding rules apply to you, including the ICB policy documents behind them.",
     href: "/search",
     available: true,
   },
   {
     icon: Map,
-    title: "See the full funding map",
-    description: "Visualise how IVF access varies across the UK. Understand where policy boundaries fall and what that means for you.",
+    title: "The funding map",
+    description:
+      "Explore how IVF access varies across the UK and where policy boundaries fall on the ground.",
     href: "/map",
     available: true,
   },
   {
     icon: FileText,
-    title: "Read the policy, plainly",
-    description: "Age limits, cycle availability, eligibility criteria summarised in plain English so you know exactly where you stand.",
+    title: "Policy in plain English",
+    description:
+      "Age limits, cycles, and eligibility criteria summarised clearly so you know what to verify next.",
     href: "/boards",
     available: true,
+  },
+];
+
+const howItWorks = [
+  {
+    step: "01",
+    title: "Share your postcode",
+    body: "We use your GP catchment to identify the health board whose published guidance may apply.",
+  },
+  {
+    step: "02",
+    title: "Review your pathway",
+    body: "See funded cycles, age ranges, and key criteria side by side, written for patients rather than commissioners.",
+  },
+  {
+    step: "03",
+    title: "Confirm with your team",
+    body: "Use linked source documents and speak to your GP or clinic to confirm what applies in your situation.",
   },
 ];
 
@@ -116,66 +146,97 @@ export default function LandingPage() {
   const [gpListContent, setGpListContent] = useState<ReactNode | null>(null);
 
   return (
-    <section className="flex-1 flex flex-col">
+    <section className="flex flex-1 flex-col">
       {/* Hero */}
-      <div className="relative overflow-hidden">
-        <div className="container mx-auto px-4 pt-12 pb-6 md:pt-16 md:pb-8 lg:pt-20 lg:pb-10">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-start">
-            {/* Left: text */}
+      <div className="relative mesh-hero overflow-hidden">
+        <div
+          className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-blush-deep/35 blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-sage-light/70 blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute left-1/2 top-24 h-64 w-64 -translate-x-1/2 rounded-full bg-cream/80 blur-3xl"
+          aria-hidden
+        />
+
+        <div className="relative z-10 container mx-auto px-4 pb-16 pt-12 md:pb-20 md:pt-16 lg:pt-20">
+          <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-16">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.55 }}
             >
-              <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.15] tracking-tight mb-4 text-deep-slate">
-                Unlock your local
-                <br />
-                <span className="text-route-teal-dark">fertility funding.</span>
+              <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-warm-sand-dark/60 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-route-teal-dark shadow-sm backdrop-blur-sm">
+                <Sparkles className="h-3.5 w-3.5" aria-hidden />
+                NHS fertility funding
+              </p>
+              <h1 className="font-heading text-[2rem] font-semibold leading-[1.12] tracking-tight text-deep-slate sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+                Clarity for your
+                <span className="block bg-gradient-to-r from-route-teal-dark via-moss to-route-teal-dark bg-clip-text text-transparent">
+                  local IVF pathway.
+                </span>
               </h1>
-              <p className="text-base md:text-lg text-deep-slate leading-relaxed mb-6 max-w-xl">
-                Don't let your postcode dictate your future. Get an instant breakdown of the IVF eligibility rules in your area.
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-deep-slate/80 md:text-lg">
+                Funding rules change by area. Pathway to Parenthood turns published ICB policy into a clear,
+                readable overview, so your postcode is a starting point rather than a dead end.
               </p>
 
-              {/* Trust microcopy */}
-              <div className="flex items-center gap-2 mb-6 text-sm text-deep-slate/70">
-                <ShieldCheck className="w-4 h-4 text-route-teal" />
-                <span>Updated for 2026. Based on current ICB policy documents.</span>
+              <ul className="mt-8 flex flex-wrap gap-3 text-sm text-deep-slate/75">
+                <li className="inline-flex items-center gap-2 rounded-full bg-white/75 px-3 py-1.5 shadow-sm ring-1 ring-warm-sand-dark/40 backdrop-blur-sm">
+                  <ShieldCheck className="h-4 w-4 shrink-0 text-route-teal" aria-hidden />
+                  Updated for 2026
+                </li>
+                <li className="inline-flex items-center gap-2 rounded-full bg-white/75 px-3 py-1.5 shadow-sm ring-1 ring-warm-sand-dark/40 backdrop-blur-sm">
+                  <Calendar className="h-4 w-4 shrink-0 text-moss" aria-hidden />
+                  Grounded in ICB documents
+                </li>
+                <li className="inline-flex items-center gap-2 rounded-full bg-white/75 px-3 py-1.5 shadow-sm ring-1 ring-warm-sand-dark/40 backdrop-blur-sm">
+                  <FileText className="h-4 w-4 shrink-0 text-rose-accent" aria-hidden />
+                  Patient-first summaries
+                </li>
+              </ul>
+
+              <div className="mt-10 max-w-xl space-y-4">
+                <p className="text-sm font-medium text-deep-slate">
+                  Begin with your home or GP postcode
+                </p>
+                <PostcodeSearch onGpListChange={setGpListContent} />
               </div>
 
-              {/* Search + Map row */}
-              <div className="flex flex-wrap items-start gap-3">
-                <div className="flex-1 min-w-0 max-w-lg">
-                  <PostcodeSearch onGpListChange={setGpListContent} />
-                </div>
-              </div>
+              <p className="mt-6 max-w-xl text-xs leading-relaxed text-deep-slate/60">
+                <TrustDisclaimer />
+              </p>
             </motion.div>
 
-            {/* Right: image or GP list */}
-            <div className="hidden lg:flex justify-end">
+            <div className="hidden lg:flex lg:justify-end lg:pt-4">
               <AnimatePresence mode="wait">
                 {gpListContent ? (
                   <motion.div
                     key="gp-list"
-                    initial={{ opacity: 0, x: 20 }}
+                    initial={{ opacity: 0, x: 16 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.3 }}
-                    className="w-[28rem]"
+                    exit={{ opacity: 0, x: 16 }}
+                    transition={{ duration: 0.32 }}
+                    className="w-full max-w-md"
                   >
                     {gpListContent}
                   </motion.div>
                 ) : (
                   <motion.div
                     key="hero-image"
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.97 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.3 }}
+                    exit={{ opacity: 0, scale: 0.97 }}
+                    transition={{ duration: 0.35 }}
+                    className="overflow-hidden rounded-2xl ring-1 ring-warm-sand-dark/35 shadow-md"
                   >
                     <img
                       src="/assets/hand-hold.webp"
                       alt="A supportive moment between two people on their fertility journey"
-                      className="rounded-xl shadow-xl w-96 h-[28rem] object-cover"
+                      className="block h-[28rem] w-96 max-w-full object-cover"
                     />
                   </motion.div>
                 )}
@@ -185,66 +246,122 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* Features grid */}
-      <div className="container mx-auto px-4 pt-4 pb-10 md:pt-6 md:pb-14">
+      {/* How it works */}
+      <div className="section-muted border-y border-warm-sand-dark/45">
+        <div className="container mx-auto px-4 py-16 md:py-20">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="font-heading text-2xl font-semibold tracking-tight text-deep-slate md:text-3xl">
+              How Pathway to Parenthood works
+            </h2>
+            <p className="mt-3 text-base text-deep-slate/75">
+              Three calm steps from postcode to policy, without drowning in PDFs.
+            </p>
+          </div>
+          <ol className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3 md:gap-6">
+            {howItWorks.map((item, i) => (
+              <li key={item.step}>
+                <div className="flex h-full flex-col rounded-2xl border border-warm-sand-dark/55 bg-white/90 p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                  <span className="font-heading text-sm font-semibold text-rose-accent">
+                    {item.step}
+                  </span>
+                  <h3 className="mt-3 font-heading text-lg font-semibold text-deep-slate">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-deep-slate/78">{item.body}</p>
+                  {i < howItWorks.length - 1 ? (
+                    <span className="mt-4 hidden text-route-teal/40 md:block" aria-hidden>
+                      ···
+                    </span>
+                  ) : null}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      {/* Features */}
+      <div className="container mx-auto px-4 py-16 md:py-20">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.45 }}
         >
-          <h2 className="font-heading text-xl md:text-2xl font-bold text-deep-slate mb-2 tracking-tight">
-            Three ways to understand your funding
+          <h2 className="font-heading text-2xl font-semibold tracking-tight text-deep-slate md:text-3xl">
+            Three ways to explore funding
           </h2>
-          <p className="text-sm text-deep-slate/70 mb-6">Each path leads to the same answer — what your local NHS policy means for you.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <p className="mt-3 max-w-2xl text-base text-deep-slate/75">
+            Pick the route that fits. Each one connects back to the same trusted policy summaries.
+          </p>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => {
               const Icon = feature.icon;
-              const content = (
-                <div
-                  key={feature.title}
-                  className={`relative p-5 rounded-lg border transition-all ${
-                    feature.available
-                      ? "bg-white border-warm-sand-dark hover:border-route-teal hover:shadow-md cursor-pointer"
-                      : "bg-warm-sand/50 border-warm-sand-dark opacity-75"
-                  }`}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-9 h-9 rounded-md bg-sage-light flex items-center justify-center">
-                      <Icon className="w-4 h-4 text-route-teal-dark" />
-                    </div>
-                    {!feature.available && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-deep-slate/50 bg-warm-sand-dark px-2 py-0.5 rounded-full">
-                        Coming soon
-                      </span>
-                    )}
+              const cardInner = (
+                <>
+                  <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-sage-light to-white shadow-inner ring-1 ring-warm-sand-dark/35">
+                    <Icon className="h-5 w-5 text-route-teal-dark" aria-hidden />
                   </div>
-                  <h3 className="font-bold text-deep-slate text-sm mb-1">{feature.title}</h3>
-                  <p className="text-sm text-deep-slate/80 leading-relaxed">{feature.description}</p>
-                </div>
+                  <h3 className="font-heading text-lg font-semibold text-deep-slate">{feature.title}</h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-deep-slate/78">{feature.description}</p>
+                  <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-route-teal-dark">
+                    Open
+                    <ArrowRight className="h-4 w-4" aria-hidden />
+                  </span>
+                </>
               );
 
               if (feature.available) {
                 return (
-                  <Link key={feature.title} to={feature.href} className="block">
-                    {content}
+                  <Link
+                    key={feature.title}
+                    to={feature.href}
+                    className="group flex flex-col rounded-2xl border border-warm-sand-dark/60 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-route-teal/35 hover:shadow-lg"
+                  >
+                    {cardInner}
                   </Link>
                 );
               }
-              return <div key={feature.title}>{content}</div>;
+              return (
+                <div
+                  key={feature.title}
+                  className="flex flex-col rounded-2xl border border-warm-sand-dark/40 bg-warm-bg/80 p-7 opacity-75"
+                >
+                  {cardInner}
+                </div>
+              );
             })}
           </div>
         </motion.div>
       </div>
 
-      {/* No-JS fallback form for postcode search */}
+      {/* Closing CTA */}
+      <div className="cta-band border-t border-warm-sand-dark/50">
+        <div className="container mx-auto flex flex-col items-start gap-6 px-4 py-14 md:flex-row md:items-center md:justify-between md:py-16">
+          <div className="max-w-xl">
+            <h2 className="font-heading text-xl font-semibold text-deep-slate md:text-2xl">
+              Prefer to explore visually?
+            </h2>
+            <p className="mt-2 text-base text-deep-slate/75">
+              Open the interactive map to compare regions and jump into a health board when you are ready.
+            </p>
+          </div>
+          <Link
+            to="/map"
+            className="inline-flex items-center gap-2 rounded-full bg-deep-slate px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-deep-slate/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-route-teal focus-visible:ring-offset-2"
+          >
+            View the funding map
+            <Map className="h-4 w-4" aria-hidden />
+          </Link>
+        </div>
+      </div>
+
+      {/* No-JS fallback */}
       <noscript>
-        <div className="container mx-auto px-4 py-6 max-w-md">
+        <div className="container mx-auto max-w-md px-4 py-8">
           <Form method="post" action="/">
-            <label
-              htmlFor="postcode-noscript"
-              className="block text-sm font-medium text-deep-slate mb-2"
-            >
-              Enter your postcode to find your health board's fertility policy
+            <label htmlFor="postcode-noscript" className="mb-2 block text-sm font-medium text-deep-slate">
+              Enter your postcode to find your health board&apos;s fertility policy
             </label>
             <div className="flex gap-2">
               <input
@@ -253,11 +370,11 @@ export default function LandingPage() {
                 name="postcode"
                 placeholder="e.g. SW1A 1AA"
                 required
-                className="flex-1 px-4 py-3 border-2 border-warm-sand-dark rounded-lg text-base"
+                className="flex-1 rounded-xl border-2 border-warm-sand-dark px-4 py-3 text-base"
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-sage-dark text-white font-bold rounded-lg"
+                className="rounded-xl bg-sage-dark px-6 py-3 font-bold text-white"
               >
                 Find My Funding
               </button>
@@ -266,15 +383,14 @@ export default function LandingPage() {
         </div>
       </noscript>
 
-      {actionData?.error && (
-        <div className="container mx-auto px-4 pb-6">
-          <div className="max-w-md p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+      {actionData?.error ? (
+        <div className="container mx-auto px-4 pb-8">
+          <div className="max-w-md rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
             {actionData.error}
           </div>
         </div>
-      )}
+      ) : null}
 
-      {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -289,8 +405,7 @@ export default function LandingPage() {
               "@type": "SearchAction",
               target: {
                 "@type": "EntryPoint",
-                urlTemplate:
-                  "https://pathwaytoparenthood.uk/search?postcode={postcode}",
+                urlTemplate: "https://pathwaytoparenthood.uk/search?postcode={postcode}",
               },
               "query-input": "required name=postcode",
             },

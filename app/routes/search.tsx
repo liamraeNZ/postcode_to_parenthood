@@ -4,6 +4,7 @@ import { PostcodeSearch } from "@/components/home/PostcodeSearch";
 import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
+import { PageHeader } from "@/components/layout/PageHeader";
 
 export function meta({}: Route.MetaArgs) {
   const title = "Check Postcode | Pathway to Parenthood";
@@ -82,65 +83,79 @@ export default function SearchPage() {
   const actionData = useActionData<typeof action>();
 
   return (
-    <section className="flex-1 flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md text-center">
-        <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-2 text-deep-slate">
-          Start with your postcode
-        </h1>
-        <p className="text-sm md:text-base text-deep-slate/70 leading-relaxed mb-6">
-          We’ll help you trace the local NHS fertility guidance that may apply where you live.
-        </p>
-
-        <ul className="text-left space-y-1.5 mb-8">
-          <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
-            <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
-            <span className="text-deep-slate font-medium text-sm">Which health board covers your GP</span>
-          </li>
-          <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
-            <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
-            <span className="text-deep-slate font-medium text-sm">What NHS-funded IVF support may be available</span>
-          </li>
-          <li className="flex items-start gap-2 rounded-lg bg-sage-light/40 border border-sage-green/20 px-3 py-2">
-            <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-sage-green/20 flex items-center justify-center text-sage-dark text-xs font-bold" aria-hidden="true">✓</span>
-            <span className="text-deep-slate font-medium text-sm">The local eligibility criteria to check next</span>
-          </li>
-        </ul>
-
-        <PostcodeSearch />
-
-        {/* No-JS fallback */}
-        <noscript>
-          <Form method="post" action="/search" className="mt-6">
-            <label
-              htmlFor="postcode-noscript"
-              className="block text-sm font-medium text-deep-slate mb-2"
-            >
-              Enter your postcode to find your local pathway
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                id="postcode-noscript"
-                name="postcode"
-                placeholder="e.g. SW1A 1AA"
-                required
-                className="flex-1 px-4 py-3 border-2 border-warm-sand-dark rounded-xl text-base"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 bg-sage-dark text-white font-bold rounded-xl"
+    <section className="flex flex-1 flex-col">
+      <PageHeader
+        title="Start with your postcode"
+        description="We’ll trace the NHS fertility guidance that may apply where you live, including your health board and key eligibility signals."
+        breadcrumbCurrent="Postcode check"
+      />
+      <div className="flex flex-1 justify-center px-4 py-12 md:py-16">
+        <div className="w-full max-w-md text-center">
+          <ul className="mb-10 space-y-2.5 text-left">
+            <li className="flex items-start gap-3 rounded-2xl border border-warm-sand-dark/55 bg-white/90 px-4 py-3 shadow-sm">
+              <span
+                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-light text-xs font-bold text-route-teal-dark"
+                aria-hidden
               >
-                Check pathway
-              </button>
-            </div>
-          </Form>
-        </noscript>
+                ✓
+              </span>
+              <span className="text-sm font-medium leading-snug text-deep-slate">
+                Which health board covers your GP
+              </span>
+            </li>
+            <li className="flex items-start gap-3 rounded-2xl border border-warm-sand-dark/55 bg-white/90 px-4 py-3 shadow-sm">
+              <span
+                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-light text-xs font-bold text-route-teal-dark"
+                aria-hidden
+              >
+                ✓
+              </span>
+              <span className="text-sm font-medium leading-snug text-deep-slate">
+                What NHS-funded IVF support may be available on paper
+              </span>
+            </li>
+            <li className="flex items-start gap-3 rounded-2xl border border-warm-sand-dark/55 bg-white/90 px-4 py-3 shadow-sm">
+              <span
+                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-light text-xs font-bold text-route-teal-dark"
+                aria-hidden
+              >
+                ✓
+              </span>
+              <span className="text-sm font-medium leading-snug text-deep-slate">
+                The criteria your clinic team will still need to confirm
+              </span>
+            </li>
+          </ul>
 
-        {actionData?.error && (
-          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-            {actionData.error}
-          </div>
-        )}
+          <PostcodeSearch />
+
+          <noscript>
+            <Form method="post" action="/search" className="mt-8 text-left">
+              <label htmlFor="postcode-noscript" className="mb-2 block text-sm font-medium text-deep-slate">
+                Enter your postcode to find your local pathway
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  id="postcode-noscript"
+                  name="postcode"
+                  placeholder="e.g. SW1A 1AA"
+                  required
+                  className="flex-1 rounded-xl border-2 border-warm-sand-dark px-4 py-3 text-base"
+                />
+                <button type="submit" className="rounded-xl bg-sage-dark px-6 py-3 font-bold text-white">
+                  Check pathway
+                </button>
+              </div>
+            </Form>
+          </noscript>
+
+          {actionData?.error ? (
+            <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              {actionData.error}
+            </div>
+          ) : null}
+        </div>
       </div>
     </section>
   );

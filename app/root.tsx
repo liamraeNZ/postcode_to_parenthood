@@ -2,6 +2,7 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import type { LinksFunction } from "react-router";
 import type { ReactNode } from "react";
 import { Navbar } from "./components/layout/Navbar";
+import { SiteFooter } from "./components/layout/SiteFooter";
 import "./index.css";
 
 export const links: LinksFunction = () => [
@@ -18,11 +19,10 @@ export function Layout({ children }: { children: ReactNode }) {
         <Links />
       </head>
       <body>
-        <div className="min-h-screen bg-warm-bg font-sans selection:bg-sage-light selection:text-deep-slate flex flex-col">
+        <div className="min-h-screen bg-warm-bg font-sans selection:bg-blush selection:text-deep-slate flex flex-col">
           <Navbar />
-          <main className="flex-1 flex flex-col">
-            {children}
-          </main>
+          <main className="flex flex-1 flex-col">{children}</main>
+          <SiteFooter />
         </div>
         <ScrollRestoration />
         <Scripts />

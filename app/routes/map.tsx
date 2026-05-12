@@ -1,8 +1,11 @@
 import { lazy, Suspense, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Route } from "./+types/map";
+import { Link } from "react-router";
+import { Search } from "lucide-react";
 import { toSlug } from "../lib/slug";
 import { MapControlStrip } from "../components/map/MapControlStrip";
+import { PageHeader } from "@/components/layout/PageHeader";
 
 const LazyMapContent = lazy(() => import("../components/map/MapContent"));
 
@@ -62,8 +65,8 @@ function ClientOnly({
 
 function MapPlaceholder() {
   return (
-    <div className="h-full w-full flex items-center justify-center bg-sage-light/30 rounded-xl">
-      <p className="text-deep-slate/50 text-sm">Loading map…</p>
+    <div className="flex h-full w-full items-center justify-center rounded-2xl bg-sage-light/35">
+      <p className="text-sm text-deep-slate/50">Loading map…</p>
     </div>
   );
 }
@@ -72,31 +75,26 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
   const { icbs } = loaderData;
 
   return (
-    <section className="flex-1 flex flex-col">
-      <div className="container mx-auto px-4 py-6 md:py-8">
-        <header className="mb-4 flex items-end justify-between gap-4">
-          <div>
-            <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-deep-slate mb-1">
-              NHS IVF Funding Map
-            </h1>
-            <p className="text-sm md:text-base text-deep-slate/70 max-w-2xl">
-              Click a health board area to view its local IVF funding guidance, including cycles offered, age limits, and eligibility requirements.
-            </p>
-          </div>
-          <a
-            href="/search"
-            className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-sage-btn px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-route-teal-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-route-teal focus-visible:ring-offset-2"
+    <section className="flex flex-1 flex-col">
+      <PageHeader
+        title="NHS IVF funding map"
+        description="Click a health board area to open its local IVF funding guidance: cycles offered, age limits, and eligibility requirements."
+        breadcrumbCurrent="Funding map"
+        actions={
+          <Link
+            to="/search"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-route-teal px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-route-teal-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-route-teal focus-visible:ring-offset-2"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4">
-              <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clipRule="evenodd" />
-            </svg>
-            Check my local pathway
-          </a>
-        </header>
+            <Search className="size-4" aria-hidden />
+            Check my pathway
+          </Link>
+        }
+      />
 
-        <MapControlStrip className="mb-4" />
+      <div className="container mx-auto px-4 py-6 md:py-8">
+        <MapControlStrip className="mb-5" />
 
-        <div className="h-[calc(100vh-280px)] min-h-[500px] relative rounded-xl overflow-hidden border border-warm-sand-dark">
+        <div className="relative h-[calc(100vh-280px)] min-h-[500px] overflow-hidden rounded-2xl border border-warm-sand-dark/70 shadow-sm ring-1 ring-black/[0.03]">
           <ClientOnly fallback={<MapPlaceholder />}>
             {() => (
               <Suspense fallback={<MapPlaceholder />}>
@@ -107,7 +105,6 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
         </div>
       </div>
 
-      {/* Hidden navigation for crawlers to discover all health board policy pages */}
       <nav aria-label="Health Board Policy Pages" className="sr-only">
         <h2>All Health Board Fertility Policy Pages</h2>
         <ul>

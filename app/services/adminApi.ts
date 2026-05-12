@@ -8,7 +8,7 @@ import type {
 
 export class ConnectionError extends Error {
   constructor(cause?: unknown) {
-    super('Connection error — please try again');
+    super('Connection error. Please try again.');
     this.name = 'ConnectionError';
     if (cause instanceof Error) this.cause = cause;
   }
