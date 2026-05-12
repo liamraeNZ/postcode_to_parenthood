@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Fragment } from "react";
 import { Link } from "react-router";
+import { cn } from "@/lib/utils";
 
 export type BreadcrumbParent = { label: string; to: string };
 
@@ -12,6 +13,8 @@ type PageHeaderProps = {
   /** Optional middle crumbs between Home and the current page */
   breadcrumbParents?: BreadcrumbParent[];
   actions?: ReactNode;
+  /** Tighter vertical spacing when the page has large content directly below (e.g. map) */
+  compact?: boolean;
 };
 
 export function PageHeader({
@@ -20,11 +23,20 @@ export function PageHeader({
   breadcrumbCurrent,
   breadcrumbParents,
   actions,
+  compact,
 }: PageHeaderProps) {
   return (
     <header className="border-b border-warm-sand-dark/50 bg-gradient-to-b from-paper to-warm-bg/40">
-      <div className="container mx-auto px-4 py-8 md:py-10">
-        <nav aria-label="Breadcrumb" className="mb-5">
+      <div
+        className={cn(
+          "container mx-auto px-4",
+          compact ? "py-5 md:py-6" : "py-8 md:py-10"
+        )}
+      >
+        <nav
+          aria-label="Breadcrumb"
+          className={cn(compact ? "mb-3" : "mb-5")}
+        >
           <ol className="flex flex-wrap items-center gap-2 text-sm text-deep-slate/55">
             <li>
               <Link
@@ -55,13 +67,23 @@ export function PageHeader({
             <li className="font-medium text-deep-slate">{breadcrumbCurrent}</li>
           </ol>
         </nav>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div
+          className={cn(
+            "flex flex-col lg:flex-row lg:items-end lg:justify-between",
+            compact ? "gap-4" : "gap-6"
+          )}
+        >
           <div className="max-w-3xl">
             <h1 className="font-heading text-3xl font-semibold tracking-tight text-deep-slate sm:text-4xl md:text-[2.5rem] md:leading-[1.15]">
               {title}
             </h1>
             {description ? (
-              <p className="mt-3 max-w-2xl text-base leading-relaxed text-deep-slate/75 md:text-[1.05rem]">
+              <p
+                className={cn(
+                  "max-w-2xl text-base leading-relaxed text-deep-slate/75 md:text-[1.05rem]",
+                  compact ? "mt-2" : "mt-3"
+                )}
+              >
                 {description}
               </p>
             ) : null}

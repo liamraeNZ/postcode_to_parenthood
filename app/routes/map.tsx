@@ -77,22 +77,14 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
   return (
     <section className="flex flex-1 flex-col">
       <PageHeader
+        compact
         title="NHS IVF funding map"
         description="Click a health board area to open its local IVF funding guidance: cycles offered, age limits, and eligibility requirements."
         breadcrumbCurrent="Funding map"
-        actions={
-          <Link
-            to="/search"
-            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-route-teal px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-route-teal-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-route-teal focus-visible:ring-offset-2"
-          >
-            <Search className="size-4" aria-hidden />
-            Check my pathway
-          </Link>
-        }
       />
 
-      <div className="container mx-auto px-4 py-6 md:py-8">
-        <MapControlStrip className="mb-5" />
+      <div className="container mx-auto px-4 pt-3 pb-6 md:pt-4 md:pb-8">
+        <MapControlStrip className="mb-3" />
 
         <div className="relative h-[calc(100vh-280px)] min-h-[500px] overflow-hidden rounded-2xl border border-warm-sand-dark/70 shadow-sm ring-1 ring-black/[0.03]">
           <ClientOnly fallback={<MapPlaceholder />}>
