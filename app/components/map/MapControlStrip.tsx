@@ -36,9 +36,6 @@ export function MapControlStrip({ className }: MapControlStripProps) {
       <Link to="/search" className={linkClasses}>
         Find my area
       </Link>
-      <a href="#compare" onClick={handleCompareClick} className={linkClasses}>
-        Compare nearby areas
-      </a>
       <Link to="/policies" className={linkClasses}>
         View policy list
       </Link>

@@ -4,10 +4,15 @@ import { Link } from "react-router";
 import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { FileText, Map, MapPin, ShieldCheck } from "lucide-react";
 import { PostcodeSearch } from "@/components/home/PostcodeSearch";
 import { MiniRouteModule } from "@/components/home/MiniRouteModule";
+import { useState, Suspense } from "react";
+import React from "react";
+import { useGeocodePostcode } from "@/hooks/useGeocodePostcode";
+
+const LazyHeroMap = React.lazy(() => import("@/components/map/HeroMap"));
 
 export function meta({}: Route.MetaArgs) {
   const title = "Pathway to Parenthood | Unlock Your NHS IVF Funding";
@@ -112,6 +117,8 @@ const features = [
 
 export default function LandingPage() {
   const actionData = useActionData<typeof action>();
+  const [searchedPostcode, setSearchedPostcode] = useState<string | null>(null);
+  const { data: geocodeData } = useGeocodePostcode(searchedPostcode);
 
   return (
     <section className="flex-1 flex flex-col">
@@ -145,24 +152,55 @@ export default function LandingPage() {
               {/* Search + Map row */}
               <div className="flex flex-wrap items-start gap-3">
                 <div className="flex-1 min-w-0 max-w-lg">
-                  <PostcodeSearch />
+                  <PostcodeSearch onPostcodeSearched={setSearchedPostcode} />
                 </div>
               </div>
             </motion.div>
 
-            {/* Right: image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="hidden lg:flex justify-end"
-            >
-              <img
-                src="/assets/hand-hold.webp"
-                alt="A supportive moment between two people on their fertility journey"
-                className="rounded-xl shadow-xl w-96 h-[28rem] object-cover"
-              />
-            </motion.div>
+            {/* Right: map or image */}
+            <AnimatePresence mode="wait">
+              {geocodeData ? (
+                <motion.div
+                  key="hero-map"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
+                  className="hidden lg:flex justify-end"
+                >
+                  <Suspense
+                    fallback={
+                      <div className="w-[28rem] h-[32rem] rounded-xl bg-warm-sand animate-pulse shadow-xl flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="inline-block h-6 w-6 animate-spin rounded-full border-3 border-sage-green border-t-transparent" />
+                          <p className="mt-2 text-xs text-deep-slate/60">Loading map…</p>
+                        </div>
+                      </div>
+                    }
+                  >
+                    <LazyHeroMap
+                      position={[geocodeData.latitude, geocodeData.longitude]}
+                      postcode={searchedPostcode!}
+                    />
+                  </Suspense>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="hero-image"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.7, delay: 0.2 }}
+                  className="hidden lg:flex justify-end"
+                >
+                  <img
+                    src="/assets/hand-hold.webp"
+                    alt="A supportive moment between two people on their fertility journey"
+                    className="rounded-xl shadow-xl w-96 h-[28rem] object-cover"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>

@@ -28,6 +28,7 @@ type PostcodeLookupAction = 'search' | 'lookup';
 
 type PostcodeSearchProps = {
   onSearchStarted?: () => void;
+  onPostcodeSearched?: (postcode: string) => void;
 };
 
 function getPostcodeLookupErrorMessage(action: PostcodeLookupAction, err: unknown) {
@@ -50,7 +51,7 @@ function logDevError(message: string, err: unknown) {
   }
 }
 
-export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
+export function PostcodeSearch({ onSearchStarted, onPostcodeSearched }: PostcodeSearchProps) {
   const navigate = useNavigate();
   const [postcode, setPostcode] = useState('');
   const [loadingSearch, setLoadingSearch] = useState(false);
@@ -105,6 +106,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       if (result.kind === 'direct') {
         // Scotland/Wales/NI — skip GP selection, navigate directly to board
         const { resolution } = result;
+        onPostcodeSearched?.(postcode);
         if (resolution.redirectUrl) {
           const params = new URLSearchParams({ gpPostcode: postcode });
           if (resolution.boardName) params.set('boardName', resolution.boardName);
@@ -121,6 +123,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       if (gps.length > 0) {
         setGpPractices(gps);
         onSearchStarted?.();
+        onPostcodeSearched?.(postcode);
       } else {
         setGpPractices([]);
         setError("We couldn't find any active GP practices for that postcode.");
