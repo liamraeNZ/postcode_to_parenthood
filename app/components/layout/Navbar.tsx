@@ -10,8 +10,9 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { to: "/search", label: "Check Postcode", shortLabel: "Postcode", matchPaths: ["/search"] },
-  { to: "/policies", label: "Local Policies", shortLabel: "Policies", matchPaths: ["/policies", "/policy/"] },
   { to: "/map", label: "Funding Map", shortLabel: "Map", matchPaths: ["/map"] },
+  { to: "/policies", label: "Policy Documents", shortLabel: "Policies", matchPaths: ["/policies", "/policy/"] },
+
 ];
 
 export function Navbar() {
