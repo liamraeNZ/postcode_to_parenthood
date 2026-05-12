@@ -1,7 +1,12 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import type { LinksFunction } from "react-router";
 import type { ReactNode } from "react";
 import { Navbar } from "./components/layout/Navbar";
 import "./index.css";
+
+export const links: LinksFunction = () => [
+  { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+];
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
