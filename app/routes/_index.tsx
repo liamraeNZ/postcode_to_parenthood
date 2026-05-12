@@ -191,7 +191,7 @@ export default function LandingPage() {
                 </li>
                 <li className="inline-flex items-center gap-2 rounded-full bg-white/75 px-3 py-1.5 shadow-sm ring-1 ring-warm-sand-dark/40 backdrop-blur-sm">
                   <Calendar className="h-4 w-4 shrink-0 text-moss" aria-hidden />
-                  Grounded in ICB documents
+                  Real health-board policies
                 </li>
                 <li className="inline-flex items-center gap-2 rounded-full bg-white/75 px-3 py-1.5 shadow-sm ring-1 ring-warm-sand-dark/40 backdrop-blur-sm">
                   <FileText className="h-4 w-4 shrink-0 text-rose-accent" aria-hidden />
@@ -254,25 +254,20 @@ export default function LandingPage() {
               How Pathway to Parenthood works
             </h2>
             <p className="mt-3 text-base text-deep-slate/75">
-              Three calm steps from postcode to policy, without drowning in PDFs.
+              Three steps from postcode to eligibility, without drowning in policies.
             </p>
           </div>
-          <ol className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3 md:gap-6">
-            {howItWorks.map((item, i) => (
+          <ol className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3 md:gap-6 md:items-start">
+            {howItWorks.map((item) => (
               <li key={item.step}>
-                <div className="flex h-full flex-col rounded-2xl border border-warm-sand-dark/55 bg-white/90 p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <div className="flex flex-col rounded-2xl border border-warm-sand-dark/55 bg-white/90 p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
                   <span className="font-heading text-sm font-semibold text-rose-accent">
                     {item.step}
                   </span>
                   <h3 className="mt-3 font-heading text-lg font-semibold text-deep-slate">
                     {item.title}
                   </h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-deep-slate/78">{item.body}</p>
-                  {i < howItWorks.length - 1 ? (
-                    <span className="mt-4 hidden text-route-teal/40 md:block" aria-hidden>
-                      ···
-                    </span>
-                  ) : null}
+                  <p className="mt-2 text-sm leading-relaxed text-deep-slate/78">{item.body}</p>
                 </div>
               </li>
             ))}
