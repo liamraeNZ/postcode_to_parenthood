@@ -4,8 +4,8 @@ import { PostcodeSearch } from "@/components/home/PostcodeSearch";
 import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
-import { PageHeader } from "@/components/layout/PageHeader";
 import { TrustDisclaimer } from "@/components/shared/TrustDisclaimer";
+import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   const title = "Check Postcode | Pathway to Parenthood";
@@ -85,57 +85,102 @@ export default function SearchPage() {
 
   return (
     <section className="flex flex-1 flex-col">
-      <PageHeader
-        title="Start with your postcode"
-        description="We’ll map your postcode to your GP catchment and the health board whose published guidance may apply. Use your practice postcode when you can—it matters more than your home address."
-        breadcrumbCurrent="Postcode check"
-      />
-      <div className="flex flex-1 justify-center px-4 py-12 md:py-16">
-        <div className="w-full max-w-md text-center">
-          <ul className="mb-10 space-y-2.5 text-left">
-            <li className="flex items-start gap-3 rounded-2xl border border-warm-sand-dark/55 bg-white/90 px-4 py-3 shadow-sm">
-              <span
-                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-light text-xs font-bold text-route-teal-dark"
-                aria-hidden
-              >
-                ✓
-              </span>
-              <span className="text-sm font-medium leading-snug text-deep-slate">
-                Which health board covers your GP
-              </span>
-            </li>
-            <li className="flex items-start gap-3 rounded-2xl border border-warm-sand-dark/55 bg-white/90 px-4 py-3 shadow-sm">
-              <span
-                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-light text-xs font-bold text-route-teal-dark"
-                aria-hidden
-              >
-                ✓
-              </span>
-              <span className="text-sm font-medium leading-snug text-deep-slate">
-                What NHS-funded IVF support may be available on paper
-              </span>
-            </li>
-            <li className="flex items-start gap-3 rounded-2xl border border-warm-sand-dark/55 bg-white/90 px-4 py-3 shadow-sm">
-              <span
-                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-light text-xs font-bold text-route-teal-dark"
-                aria-hidden
-              >
-                ✓
-              </span>
-              <span className="text-sm font-medium leading-snug text-deep-slate">
-                The criteria your clinic team will still need to confirm
-              </span>
-            </li>
-          </ul>
+      <div className="relative mesh-hero flex flex-1 flex-col items-center justify-center overflow-hidden px-4 py-16 md:py-24">
+        {/* Decorative blurs matching landing page */}
+        <div
+          className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-blush-deep/35 blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-sage-light/70 blur-3xl"
+          aria-hidden
+        />
 
-          <PostcodeSearch />
+        <div className="relative z-10 w-full max-w-lg">
+          {/* Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="mb-8 text-center">
+            <ol className="inline-flex items-center gap-2 text-sm text-deep-slate/55">
+              <li>
+                <Link
+                  to="/"
+                  className="font-medium transition-colors hover:text-route-teal-dark"
+                >
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden="true" className="text-deep-slate/35">/</li>
+              <li className="font-medium text-deep-slate">Postcode check</li>
+            </ol>
+          </nav>
 
-          <div className="mt-8 text-left">
-            <TrustDisclaimer />
+          {/* Heading */}
+          <h1 className="text-center font-heading text-3xl font-semibold tracking-tight text-deep-slate sm:text-4xl">
+            Find your local funding policy
+          </h1>
+          <p className="mx-auto mt-3 max-w-md text-center text-base leading-relaxed text-deep-slate/75 md:text-lg">
+            Enter your postcode and we'll match you to the health board whose guidance applies.
+          </p>
+
+          {/* Search input — the focal point */}
+          <div className="mt-8">
+            <PostcodeSearch />
+          </div>
+
+          {actionData?.error ? (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-center text-sm text-red-700">
+              {actionData.error}
+            </div>
+          ) : null}
+
+          {/* What you'll get */}
+          <div className="mt-10">
+            <p className="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-deep-slate/50">
+              We'll show you
+            </p>
+            <ul className="space-y-2">
+              <li className="flex items-center gap-3 rounded-xl border border-warm-sand-dark/40 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
+                <span
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-route-teal-dark"
+                  aria-hidden
+                >
+                  ✓
+                </span>
+                <span className="text-sm text-deep-slate/85">
+                  Which health board covers your GP
+                </span>
+              </li>
+              <li className="flex items-center gap-3 rounded-xl border border-warm-sand-dark/40 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
+                <span
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-route-teal-dark"
+                  aria-hidden
+                >
+                  ✓
+                </span>
+                <span className="text-sm text-deep-slate/85">
+                  What NHS-funded IVF support may be available
+                </span>
+              </li>
+              <li className="flex items-center gap-3 rounded-xl border border-warm-sand-dark/40 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
+                <span
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-route-teal-dark"
+                  aria-hidden
+                >
+                  ✓
+                </span>
+                <span className="text-sm text-deep-slate/85">
+                  The eligibility criteria your clinic will assess
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Trust disclaimer */}
+          <div className="mt-8 text-center">
+            <TrustDisclaimer className="mx-auto max-w-sm" />
           </div>
 
           <noscript>
-            <Form method="post" action="/search" className="mt-8 text-left">
+            <Form method="post" action="/search" className="mt-8">
               <label htmlFor="postcode-noscript" className="mb-2 block text-sm font-medium text-deep-slate">
                 Enter your postcode to find your local pathway
               </label>
@@ -154,12 +199,6 @@ export default function SearchPage() {
               </div>
             </Form>
           </noscript>
-
-          {actionData?.error ? (
-            <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-              {actionData.error}
-            </div>
-          ) : null}
         </div>
       </div>
     </section>

@@ -177,7 +177,7 @@ export default function LandingPage() {
               </h1>
               <div className="mt-5 max-w-xl space-y-2 text-base leading-relaxed text-deep-slate/80 md:text-lg">
                 <p className="font-semibold text-deep-slate">Funding rules change by area. <span className="bg-gradient-to-r from-route-teal-dark via-moss to-route-teal-dark bg-clip-text text-transparent">Sometimes by the mile.</span></p>
-                <p>We turn complex local policies into clear, readable overviews, <br /> so you can navigate your IVF journey with confidence.</p>
+                <p>We turn complex local policies into clear, readable criteria, <br /> so you can navigate your IVF journey with confidence.</p>
               </div>
 
               <ul className="mt-8 flex flex-wrap gap-3 text-sm text-deep-slate/75">

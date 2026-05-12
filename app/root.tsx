@@ -21,7 +21,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <body>
         <div className="min-h-screen bg-warm-bg font-sans selection:bg-blush selection:text-deep-slate flex flex-col">
           <Navbar />
-          <main className="flex flex-1 flex-col">{children}</main>
+          <main className="relative mesh-hero flex flex-1 flex-col">{children}</main>
           <SiteFooter />
         </div>
         <ScrollRestoration />
