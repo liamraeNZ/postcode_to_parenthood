@@ -10,7 +10,7 @@ import { PostcodeSearch } from "@/components/home/PostcodeSearch";
 import { MiniRouteModule } from "@/components/home/MiniRouteModule";
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Pathway to Parenthood | Unlock Your NHS IVF Funding";
+  const title = "Pathway to Parenthood | Unlock Your IVF Funding";
   const description =
     "Don't let your postcode dictate your future. Get an instant breakdown of NHS fertility funding eligibility, cycle availability, and local ICB policy.";
   const canonicalUrl = "https://pathwaytoparenthood.uk";
@@ -126,12 +126,12 @@ export default function LandingPage() {
               transition={{ duration: 0.6 }}
             >
               <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.15] tracking-tight mb-4 text-deep-slate">
-                Unlock your local NHS
+                Unlock your local
                 <br />
                 <span className="text-route-teal-dark">fertility funding.</span>
               </h1>
               <p className="text-base md:text-lg text-deep-slate leading-relaxed mb-6 max-w-xl">
-                Don't let your postcode dictate your future. Get an instant, clear breakdown of the IVF eligibility rules in your area.
+                Don't let your postcode dictate your future. Get an instant breakdown of the IVF eligibility rules in your area.
               </p>
 
               {/* Trust microcopy */}
