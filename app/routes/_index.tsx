@@ -1,10 +1,12 @@
 import type { Route } from "./+types/_index";
 import { Form, redirect, useActionData } from "react-router";
 import { Link } from "react-router";
+import { useState } from "react";
+import type { ReactNode } from "react";
 import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { FileText, Map, MapPin, ShieldCheck } from "lucide-react";
 import { PostcodeSearch } from "@/components/home/PostcodeSearch";
 import { MiniRouteModule } from "@/components/home/MiniRouteModule";
@@ -112,13 +114,14 @@ const features = [
 
 export default function LandingPage() {
   const actionData = useActionData<typeof action>();
+  const [gpListContent, setGpListContent] = useState<ReactNode | null>(null);
 
   return (
     <section className="flex-1 flex flex-col">
       {/* Hero */}
       <div className="relative overflow-hidden">
-        <div className="container mx-auto px-4 py-12 md:py-16 lg:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
+        <div className="container mx-auto px-4 pt-12 pb-6 md:pt-16 md:pb-8 lg:pt-20 lg:pb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-start">
             {/* Left: text */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -145,30 +148,48 @@ export default function LandingPage() {
               {/* Search + Map row */}
               <div className="flex flex-wrap items-start gap-3">
                 <div className="flex-1 min-w-0 max-w-lg">
-                  <PostcodeSearch />
+                  <PostcodeSearch onGpListChange={setGpListContent} />
                 </div>
               </div>
             </motion.div>
 
-            {/* Right: image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="hidden lg:flex justify-end"
-            >
-              <img
-                src="/assets/hand-hold.webp"
-                alt="A supportive moment between two people on their fertility journey"
-                className="rounded-xl shadow-xl w-96 h-[28rem] object-cover"
-              />
-            </motion.div>
+            {/* Right: image or GP list */}
+            <div className="hidden lg:flex justify-end">
+              <AnimatePresence mode="wait">
+                {gpListContent ? (
+                  <motion.div
+                    key="gp-list"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                    className="w-[28rem]"
+                  >
+                    {gpListContent}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="hero-image"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <img
+                      src="/assets/hand-hold.webp"
+                      alt="A supportive moment between two people on their fertility journey"
+                      className="rounded-xl shadow-xl w-96 h-[28rem] object-cover"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Features grid */}
-      <div className="container mx-auto px-4 py-10 md:py-14">
+      <div className="container mx-auto px-4 pt-4 pb-10 md:pt-6 md:pb-14">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
