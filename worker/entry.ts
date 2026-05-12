@@ -16,7 +16,8 @@ function isStaticAssetPath(pathname: string): boolean {
   return (
     pathname.startsWith("/data/") ||
     pathname.startsWith("/assets/") ||
-    pathname === "/favicon.ico"
+    pathname === "/favicon.ico" ||
+    pathname === "/favicon.svg"
   );
 }
 
