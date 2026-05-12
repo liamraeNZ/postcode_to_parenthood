@@ -195,7 +195,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
           <Input 
             placeholder="Enter your postcode" 
             aria-label="Enter your postcode"
-            className="w-full pl-10 pr-4 sm:pl-11 sm:pr-6 py-3 sm:py-4 h-12 sm:h-14 text-base sm:text-lg font-medium border-2 border-warm-sand-dark focus-visible:border-route-teal focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(45,156,154,0.22)] rounded-xl sm:rounded-2xl bg-white shadow-lg transition-all"
+            className="w-full pl-10 pr-4 sm:pl-11 sm:pr-6 py-3 sm:py-4 h-12 sm:h-14 text-base sm:text-lg font-medium border-2 border-warm-sand-dark focus-visible:border-route-teal focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(45,156,154,0.22)] rounded-lg bg-white shadow-lg transition-all"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />
@@ -203,17 +203,17 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
         <Button 
           type="submit" 
           disabled={loadingSearch || loadingSelect}
-          className="sm:absolute sm:right-2 w-full sm:w-auto px-6 h-11 bg-sage-btn hover:bg-route-teal-dark text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
+          className="sm:absolute sm:right-2 w-full sm:w-auto px-6 h-11 bg-sage-btn hover:bg-route-teal-dark text-white font-bold rounded-lg shadow-md transition-all active:scale-95"
         >
           {loadingSearch ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              <span className="sr-only">Finding your local pathway</span>
+              <span className="sr-only">Finding your funding details</span>
             </>
           ) : (
             <>
               <Compass className="w-4 h-4" />
-              Check my local pathway
+              Find My Funding
             </>
           )}
         </Button>
@@ -225,7 +225,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-red-50 text-red-600 p-4 rounded-xl text-sm border border-red-100"
+            className="bg-red-50 text-red-600 p-4 rounded-lg text-sm border border-red-100"
           >
             {error}
           </motion.div>
@@ -238,7 +238,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
             exit={{ opacity: 0, y: 10 }}
             className="space-y-3"
           >
-            <Card className="border-none shadow-md overflow-hidden rounded-xl bg-cream p-5">
+            <Card className="border-none shadow-md overflow-hidden rounded-lg bg-cream p-5">
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <CardTitle className="text-deep-slate font-bold">Choose your GP practice</CardTitle>
