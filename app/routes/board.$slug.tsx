@@ -142,8 +142,9 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         title={displayName}
         description={`${countryName}. NHS-funded fertility treatment guidance and eligibility criteria.`}
         breadcrumbCurrent={displayName}
+        compact
       />
-      <div className="container mx-auto max-w-3xl px-4 py-6 md:py-10">
+      <div className="container mx-auto max-w-3xl px-4 pt-4 pb-6 md:pt-6 md:pb-10">
         {/* Postcode search context banner */}
         {gpPostcode && (
           <div className="mb-4 rounded-xl border border-sage-green/30 bg-sage-light px-4 py-3 md:mb-6">
