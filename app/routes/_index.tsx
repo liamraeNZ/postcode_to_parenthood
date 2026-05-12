@@ -106,7 +106,7 @@ const features = [
     icon: FileText,
     title: "Read the policy, plainly",
     description: "Age limits, cycle availability, eligibility criteria summarised in plain English so you know exactly where you stand.",
-    href: "/policies",
+    href: "/boards",
     available: true,
   },
 ];
