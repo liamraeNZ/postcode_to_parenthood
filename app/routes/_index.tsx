@@ -118,7 +118,7 @@ export default function LandingPage() {
       {/* Hero */}
       <div className="relative overflow-hidden">
         <div className="container mx-auto px-4 py-10 md:py-16 lg:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-10 items-center">
             {/* Left: text */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -130,21 +130,22 @@ export default function LandingPage() {
                 <br />
                 <span className="text-route-teal-dark">Find out what applies to you.</span>
               </h1>
-              <p className="text-base md:text-lg text-deep-slate/80 leading-relaxed mb-6 max-w-lg">
+              <p className="text-base md:text-lg text-deep-slate/80 leading-relaxed mb-6">
                 Pathway to Parenthood helps you check local NHS funding guidance, eligibility criteria, and policy details in one clear place.
               </p>
               <MiniRouteModule className="mb-6 lg:hidden" />
-              <div className="flex flex-wrap gap-3 mb-6">
-                <PostcodeSearch />
+              <div className="flex flex-wrap items-start gap-3">
+                <div className="flex-1 min-w-0 max-w-md">
+                  <PostcodeSearch />
+                </div>
                 <Link
                   to="/map"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-warm-sand-dark hover:border-sage-green text-deep-slate font-bold rounded-xl shadow-sm transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 h-12 sm:h-14 bg-white border-2 border-warm-sand-dark hover:border-sage-green text-deep-slate font-bold rounded-xl shadow-sm transition-all shrink-0"
                 >
                   <Map className="w-4 h-4" />
                   View the map
                 </Link>
               </div>
-              
             </motion.div>
 
             {/* Right: image */}
@@ -152,19 +153,17 @@ export default function LandingPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="hidden lg:flex justify-center"
+              className="hidden lg:flex justify-end"
             >
               <img
                 src="/assets/hand-hold.webp"
                 alt="Two people holding hands in support"
-                className="rounded-2xl shadow-xl max-h-[520px] w-full object-cover"
+                className="rounded-2xl shadow-xl w-96 h-[28rem] object-cover"
               />
             </motion.div>
           </div>
         </div>
       </div>
-
-
 
       {/* Features grid */}
       <div className="container mx-auto px-4 py-12 md:py-16">
