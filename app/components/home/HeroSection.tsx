@@ -1,14 +1,9 @@
-import type { ReactNode, RefObject } from 'react';
+import type { RefObject } from 'react';
 import { PostcodeSearch } from '@/components/home/PostcodeSearch';
 import { useReveal } from '@/hooks/useReveal';
 import { CheckCircle } from 'lucide-react';
 
-interface HeroSectionProps {
-  /** Callback when GP list content changes (for desktop side panel) */
-  onGpListChange?: (content: ReactNode | null) => void;
-}
-
-export function HeroSection({ onGpListChange }: HeroSectionProps) {
+export function HeroSection() {
   const revealRef = useReveal(0.15);
 
   return (
@@ -62,7 +57,7 @@ export function HeroSection({ onGpListChange }: HeroSectionProps) {
 
         {/* PostcodeSearch */}
         <div className="reveal stagger-4 mx-auto mt-10 max-w-xl">
-          <PostcodeSearch onGpListChange={onGpListChange} />
+          <PostcodeSearch />
         </div>
 
         {/* Trust note */}

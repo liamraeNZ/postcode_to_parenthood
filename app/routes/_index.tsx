@@ -1,7 +1,5 @@
 import type { Route } from "./+types/_index";
 import { Form, redirect, useActionData } from "react-router";
-import { useState } from "react";
-import type { ReactNode } from "react";
 import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
@@ -93,11 +91,10 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 export default function LandingPage() {
   const actionData = useActionData<typeof action>();
-  const [gpListContent, setGpListContent] = useState<ReactNode | null>(null);
 
   return (
     <section className="flex flex-1 flex-col">
-      <HeroSection onGpListChange={setGpListContent} />
+      <HeroSection />
       <StatsTicker />
       <HowItWorks />
       <TrustBar />
