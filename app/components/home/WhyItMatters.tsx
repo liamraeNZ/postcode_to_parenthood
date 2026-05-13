@@ -22,16 +22,21 @@ export default function WhyItMatters() {
       ref={sectionRef as RefObject<HTMLElement>}
       className="relative bg-forest overflow-hidden"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[600px]">
-        {/* Left panel — gradient */}
-        <div className="relative lg:col-span-5 min-h-[300px] lg:min-h-full">
-          <div className="absolute inset-0 bg-gradient-to-br from-forest-dark via-forest to-forest-light" />
-          {/* Subtle overlay for depth */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-forest/80" />
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] min-h-[600px]">
+        {/* Left panel — image */}
+        <div className="relative min-h-[300px] lg:min-h-full">
+          <img
+            src="/assets/fields.webp"
+            alt="Patchwork fields divided by hedgerows, illustrating how boundaries determine access"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          {/* Teal overlay to blend with section */}
+          <div className="absolute inset-0 bg-forest/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-forest/40" />
         </div>
 
         {/* Right panel — text content */}
-        <div className="lg:col-span-7 flex flex-col justify-center px-8 py-16 md:px-12 lg:px-16 lg:py-24">
+        <div className="flex flex-col justify-center px-8 py-16 md:px-12 lg:px-16 lg:py-24">
           {/* Heading */}
           <h2 className="reveal font-heading text-white text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
             Funding rules{' '}
