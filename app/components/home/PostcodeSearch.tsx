@@ -159,7 +159,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
     <div className="w-full space-y-4 md:space-y-6">
       <form
         onSubmit={handleSearch}
-        className="group flex max-w-xl flex-col overflow-hidden rounded-full border border-sage/30 bg-white shadow-sm transition-[box-shadow] focus-within:border-sage/50 focus-within:shadow-[0_0_0_3px_rgba(122,158,142,0.4)] sm:flex-row sm:items-stretch"
+        className="group flex max-w-xl flex-col overflow-hidden rounded-full border border-sage/30 bg-white shadow-sm transition-[box-shadow] focus-within:border-sage/50 focus-within:shadow-[0_0_0_3px_var(--color-focus-ring)] sm:flex-row sm:items-stretch"
       >
         <div className="relative flex min-h-[3rem] flex-1 items-center border-b border-sage/20 sm:border-b-0">
           <MapPin

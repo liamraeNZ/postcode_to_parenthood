@@ -6,6 +6,7 @@ import type { TreatmentTypeId } from './TreatmentToggle';
 import { getMapFillColor } from '@/utils/mapColors';
 import { getBoardCode } from '@/utils/codeLookup';
 import { getIcbAriaLabel } from '@/utils/ariaLabels';
+import { MAP_UI } from '@/utils/theme';
 
 export interface MapPolicyEntry {
   board_id: string;
@@ -27,14 +28,14 @@ export interface IcbBoundaryLayerProps {
 
 const DEFAULT_BORDER: PathOptions = {
   weight: 1,
-  color: '#6B7280',
+  color: MAP_UI.border,
   opacity: 0.7,
   fillOpacity: 0.7,
 };
 
 const HOVER_BORDER: PathOptions = {
   weight: 3,
-  color: '#1F2937',
+  color: MAP_UI.borderHover,
 };
 
 function getPolicyEntry(

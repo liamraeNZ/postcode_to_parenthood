@@ -1,4 +1,5 @@
 import { CircleMarker, Tooltip } from 'react-leaflet';
+import { MAP_UI } from '@/utils/theme';
 
 export interface UserLocationMarkerProps {
   position: [number, number]; // [lat, lng]
@@ -7,7 +8,7 @@ export interface UserLocationMarkerProps {
 
 /**
  * Renders a distinct circular marker at the user's GP postcode location.
- * Styled as a solid blue dot with a white border to stand out from
+ * Styled as a solid dot with a white border to stand out from
  * the color-coded boundary polygons.
  */
 export function UserLocationMarker({ position, postcodeLabel }: UserLocationMarkerProps) {
@@ -16,9 +17,9 @@ export function UserLocationMarker({ position, postcodeLabel }: UserLocationMark
       center={position}
       radius={8}
       pathOptions={{
-        fillColor: '#2563EB',
+        fillColor: MAP_UI.userMarkerFill,
         fillOpacity: 1,
-        color: '#FFFFFF',
+        color: MAP_UI.userMarkerStroke,
         weight: 3,
         opacity: 1,
       }}

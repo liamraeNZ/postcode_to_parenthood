@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
+import { MAP_COLORS, MAP_UI } from '@/utils/theme';
 
 const LEGEND_ITEMS = [
-  { color: '#34D399', label: '3+ cycles' },
-  { color: '#FBBF24', label: '2 cycles' },
-  { color: '#FB923C', label: '1 cycle' },
-  { color: '#F87171', label: '0 cycles' },
-  { color: '#D1D5DB', label: 'No data' },
+  { color: MAP_COLORS.excellent, label: '3+ cycles' },
+  { color: MAP_COLORS.good, label: '2 cycles' },
+  { color: MAP_COLORS.fair, label: '1 cycle' },
+  { color: MAP_COLORS.poor, label: '0 cycles' },
+  { color: MAP_COLORS.noData, label: 'No data' },
 ] as const;
 
 /**
@@ -30,7 +31,7 @@ export function MapLegend() {
         container.style.padding = '12px 14px';
         container.style.lineHeight = '1.6';
         container.style.fontSize = '13px';
-        container.style.color = '#374151';
+        container.style.color = MAP_UI.legendText;
 
         const title = L.DomUtil.create('div', '', container);
         title.style.fontWeight = '600';

@@ -23,6 +23,48 @@
     --color-sand: #f5efe7;
     --color-sand-dark: #ebe3d8;
 
+    /* Map choropleth scale */
+    --color-map-excellent: #34D399;
+    --color-map-good: #FBBF24;
+    --color-map-fair: #FB923C;
+    --color-map-poor: #F87171;
+    --color-map-no-data: #D1D5DB;
+
+    /* Map UI */
+    --color-map-border: #6B7280;
+    --color-map-border-hover: #1F2937;
+    --color-map-legend-text: #374151;
+    --color-map-user-marker: #2563EB;
+    --color-map-user-marker-border: #FFFFFF;
+
+    /* Cycle badge — 0 cycles (poor) */
+    --color-cycle-0-bg: #FDE8E8;
+    --color-cycle-0-text: #9B1C1C;
+
+    /* Cycle badge — 1 cycle (fair) */
+    --color-cycle-1-bg: #FEF3C7;
+    --color-cycle-1-text: #78350F;
+    --color-cycle-1-label: #92400E;
+
+    /* Cycle badge — 2 cycles (good) */
+    --color-cycle-2-bg: #CCFBF1;
+    --color-cycle-2-text: #134E4A;
+    --color-cycle-2-label: #115E59;
+
+    /* Cycle badge — 3+ cycles (excellent) */
+    --color-cycle-3-bg: #D1FAE5;
+    --color-cycle-3-text: #065F46;
+    --color-cycle-3-label: #047857;
+
+    /* Status badges */
+    --color-status-improved-bg: #D1FAE5;
+    --color-status-improved-text: #065F46;
+    --color-status-worse-bg: #FEE2E2;
+    --color-status-worse-text: #991B1B;
+
+    /* Focus ring */
+    --color-focus-ring: rgba(122, 158, 142, 0.4);
+
     /* Custom easing */
     --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
 
@@ -182,7 +224,7 @@
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px -8px rgba(42, 157, 143, 0.18);
+  box-shadow: 0 12px 32px -8px color-mix(in srgb, var(--color-forest) 18%, transparent);
 }
 
 /* ─── Button press effect ─── */
@@ -244,7 +286,7 @@
 
 .postcode-input:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(122, 158, 142, 0.4);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
 /* ─── Reduced motion ─── */

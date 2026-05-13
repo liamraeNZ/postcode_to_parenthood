@@ -6,6 +6,7 @@ import type { Feature, GeoJsonProperties } from 'geojson';
 import { getMapFillColor } from '@/utils/mapColors';
 import { getBoardCode } from '@/utils/codeLookup';
 import { toSlug } from '@/lib/slug';
+import { MAP_UI } from '@/utils/theme';
 import type { MapPolicyEntry } from './IcbBoundaryLayer';
 
 export interface VisibleBoard {
@@ -24,7 +25,7 @@ export interface MiniMapBoundaryLayerProps {
 
 const DEFAULT_STYLE: PathOptions = {
   weight: 1,
-  color: '#6B7280',
+  color: MAP_UI.border,
   opacity: 0.7,
   fillOpacity: 0.7,
 };

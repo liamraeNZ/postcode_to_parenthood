@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { toSlug } from '../../lib/slug';
+import { STATUS_BADGE } from '@/utils/theme';
 
 export interface BorderContextPanelProps {
   currentBoard: { id: string; name: string; cyclesOffered: number | null };
@@ -107,10 +108,10 @@ export function BorderContextPanel({ currentBoard, neighbours, loading }: Border
                   <span
                     className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
                       improved
-                        ? 'bg-[#D1FAE5] text-[#065F46]'
+                        ? STATUS_BADGE.improved
                         : worse
-                          ? 'bg-[#FEE2E2] text-[#991B1B]'
-                          : 'bg-cream text-charcoal'
+                          ? STATUS_BADGE.worse
+                          : STATUS_BADGE.neutral
                     }`}
                   >
                     {improved && (
