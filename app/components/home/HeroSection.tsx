@@ -15,6 +15,20 @@ export function HeroSection({ onGpListChange }: HeroSectionProps) {
     <section
       className="grain relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-off-white via-sand to-sand-dark"
     >
+      {/* Background image — transparent, blending behind text */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+      >
+        <img
+          src="/assets/hand-hold.webp"
+          alt=""
+          className="h-full w-full object-cover opacity-65"
+        />
+        {/* Overlay to blend image into sandy background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-off-white/50 via-sand/40 to-sand-dark/50" />
+      </div>
+
       {/* Subtle warm overlay for depth */}
       <div
         className="pointer-events-none absolute inset-0 bg-gradient-to-r from-off-white/50 to-transparent"
@@ -30,14 +44,6 @@ export function HeroSection({ onGpListChange }: HeroSectionProps) {
         ref={revealRef as RefObject<HTMLDivElement>}
         className="relative z-10 mx-auto w-full max-w-4xl px-6 py-24 text-center md:py-32"
       >
-        {/* Eyebrow badge */}
-        <div className="reveal stagger-1 mb-6 inline-flex items-center gap-2 rounded-full border border-forest/20 bg-forest/5 px-4 py-1.5 text-sm text-forest backdrop-blur-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-forest opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-forest" />
-          </span>
-          Updated for 2026
-        </div>
 
         {/* Headline */}
         <h1 className="reveal stagger-2 font-heading text-5xl font-bold leading-tight tracking-tight text-charcoal md:text-6xl lg:text-7xl">
