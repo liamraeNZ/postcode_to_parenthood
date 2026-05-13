@@ -40,9 +40,11 @@ export default function WhyItMatters() {
         <div className="lg:col-span-7 flex flex-col justify-center px-8 py-16 md:px-12 lg:px-16 lg:py-24">
           {/* Heading */}
           <h2 className="reveal font-heading text-off-white text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
-            Why it{' '}
-            <em className="text-sage-light not-italic font-heading italic">
-              matters
+            Funding rules change by area.{' '}
+            <br className="hidden md:inline" />
+            Sometimes{' '}
+            <em className="text-sage-light font-heading italic" style={{ fontStyle: 'italic' }}>
+              by the mile.
             </em>
           </h2>
 
