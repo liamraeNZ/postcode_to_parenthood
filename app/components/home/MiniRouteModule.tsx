@@ -29,7 +29,7 @@ export function MiniRouteModule({ className }: MiniRouteModuleProps) {
             {step}
           </span>
           {index < STEPS.length - 1 && (
-            <span className="text-sage-green font-bold text-sm" aria-hidden="true">
+            <span className="text-tint font-bold text-sm" aria-hidden="true">
               →
             </span>
           )}

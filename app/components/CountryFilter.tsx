@@ -33,7 +33,7 @@ export function CountryFilter({ countries, selected, onChange, className }: Coun
 
   return (
     <fieldset className={cn("mb-6", className)} aria-label="Filter by country">
-      <legend className="font-mono text-xs font-medium text-charcoal/60 uppercase tracking-wide mb-2">
+      <legend className="font-mono text-xs font-medium text-ink/60 uppercase tracking-wide mb-2">
         Filter by country
       </legend>
       <div className="flex flex-wrap gap-2">
@@ -43,8 +43,8 @@ export function CountryFilter({ countries, selected, onChange, className }: Coun
           aria-pressed={allSelected}
           className={`btn-press inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
             allSelected
-              ? "bg-forest text-white border-forest"
-              : "bg-white text-charcoal/70 border-sage/25 hover:border-forest/50"
+              ? "bg-brand text-white border-brand"
+              : "bg-white text-ink/70 border-tint/25 hover:border-brand/50"
           }`}
         >
           All UK
@@ -59,14 +59,14 @@ export function CountryFilter({ countries, selected, onChange, className }: Coun
               aria-pressed={isSelected}
               className={`btn-press inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                 isSelected
-                  ? "bg-forest text-white border-forest"
-                  : "bg-white text-charcoal/70 border-sage/25 hover:border-forest/50"
+                  ? "bg-brand text-white border-brand"
+                  : "bg-white text-ink/70 border-tint/25 hover:border-brand/50"
               }`}
             >
               {country.label}
               <span
                 className={`text-xs ${
-                  isSelected ? "text-white/80" : "text-charcoal/50"
+                  isSelected ? "text-white/80" : "text-ink/50"
                 }`}
               >
                 ({country.count})

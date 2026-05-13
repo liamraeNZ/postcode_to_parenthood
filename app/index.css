@@ -9,19 +9,19 @@
     --font-sans: 'DM Sans', system-ui, sans-serif;
     --font-mono: 'DM Mono', monospace;
 
-    /* Brand palette */
-    --color-forest: #2a9d8f;
-    --color-forest-light: #3db0a2;
-    --color-forest-dark: #1f7a6f;
-    --color-sage: #6ec4b8;
-    --color-sage-light: #a8d8d0;
-    --color-cream: #f5f0e8;
-    --color-cream-dark: #ede7da;
-    --color-blush: #e8c4b8;
-    --color-charcoal: #2a2a2a;
-    --color-off-white: #f0ede6;
-    --color-sand: #f5efe7;
-    --color-sand-dark: #ebe3d8;
+    /* Brand palette — semantic names */
+    --color-brand: #2a9d8f;
+    --color-brand-light: #3db0a2;
+    --color-brand-dark: #1f7a6f;
+    --color-tint: #6ec4b8;
+    --color-tint-light: #a8d8d0;
+    --color-surface: #f5f0e8;
+    --color-surface-dark: #ede7da;
+    --color-warm: #e8c4b8;
+    --color-ink: #2a2a2a;
+    --color-base: #f0ede6;
+    --color-canvas: #f5efe7;
+    --color-canvas-dark: #ebe3d8;
 
     /* Map choropleth scale */
     --color-map-excellent: #34D399;
@@ -224,7 +224,7 @@
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px -8px color-mix(in srgb, var(--color-forest) 18%, transparent);
+  box-shadow: 0 12px 32px -8px color-mix(in srgb, var(--color-brand) 18%, transparent);
 }
 
 /* ─── Button press effect ─── */
@@ -274,7 +274,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: var(--color-forest);
+  background-color: var(--color-brand);
   transition: width 300ms var(--ease-out-expo);
 }
 

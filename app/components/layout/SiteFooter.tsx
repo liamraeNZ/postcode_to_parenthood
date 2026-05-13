@@ -16,7 +16,7 @@ const LEGAL_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto bg-forest-dark text-off-white">
+    <footer className="mt-auto bg-brand-dark text-base">
       <div className="container mx-auto px-4 py-12 md:py-16">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr] md:gap-16">
           {/* Brand column */}

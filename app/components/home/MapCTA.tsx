@@ -8,10 +8,10 @@ export default function MapCTA() {
   return (
     <section
       ref={sectionRef as RefObject<HTMLElement>}
-      className="bg-cream-dark py-20 px-6 md:px-12 lg:px-20"
+      className="bg-surface-dark py-20 px-6 md:px-12 lg:px-20"
     >
       <div className="mx-auto max-w-5xl">
-        <div className="reveal rounded-3xl bg-forest overflow-hidden shadow-lg">
+        <div className="reveal rounded-3xl bg-brand overflow-hidden shadow-lg">
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
             {/* Left — text content */}
             <div className="px-8 py-12 md:px-12 lg:py-16">
@@ -32,7 +32,7 @@ export default function MapCTA() {
               </p>
               <Link
                 to="/map"
-                className="reveal stagger-4 inline-flex items-center gap-2 rounded-full bg-sage px-6 py-3 font-semibold text-white shadow-sm transition-all hover:bg-sage/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-light focus-visible:ring-offset-2 focus-visible:ring-offset-forest btn-press"
+                className="reveal stagger-4 inline-flex items-center gap-2 rounded-full bg-tint px-6 py-3 font-semibold text-white shadow-sm transition-all hover:bg-tint/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tint-light focus-visible:ring-offset-2 focus-visible:ring-offset-brand btn-press"
               >
                 <svg
                   className="h-5 w-5"
@@ -58,7 +58,7 @@ export default function MapCTA() {
                 alt="Preview of the interactive UK fertility funding map"
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-forest/20" />
+              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-brand/20" />
             </div>
           </div>
         </div>

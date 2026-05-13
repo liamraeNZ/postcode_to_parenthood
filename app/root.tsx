@@ -25,7 +25,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <Links />
       </head>
       <body>
-        <div className="min-h-screen bg-off-white font-sans selection:bg-blush selection:text-charcoal flex flex-col">
+        <div className="min-h-screen bg-base font-sans selection:bg-warm selection:text-ink flex flex-col">
           <Navbar />
           <main className="relative flex flex-1 flex-col pt-16 md:pt-20">{children}</main>
           <SiteFooter />

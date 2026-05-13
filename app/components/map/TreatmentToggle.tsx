@@ -25,10 +25,10 @@ export function TreatmentToggle({ selected, onChange }: TreatmentToggleProps) {
           role="radio"
           aria-checked={option.id === selected}
           onClick={() => onChange(option.id)}
-          className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-1 ${
+          className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tint focus-visible:ring-offset-1 ${
             option.id === selected
-              ? 'bg-forest text-white'
-              : 'bg-cream text-charcoal/70 hover:bg-cream-dark'
+              ? 'bg-brand text-white'
+              : 'bg-surface text-ink/70 hover:bg-surface-dark'
           }`}
         >
           {option.label}

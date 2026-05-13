@@ -9,11 +9,11 @@ const stats = [
 
 export default function StatsTicker() {
   return (
-    <section className="relative overflow-hidden bg-forest py-5">
+    <section className="relative overflow-hidden bg-brand py-5">
       {/* Left fade gradient overlay */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-forest to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-brand to-transparent" />
       {/* Right fade gradient overlay */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-forest to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-brand to-transparent" />
 
       {/* Ticker track — duplicated array for seamless infinite loop */}
       <div className="ticker-track flex w-max items-center gap-12 px-6">

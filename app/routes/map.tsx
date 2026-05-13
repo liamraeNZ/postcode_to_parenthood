@@ -65,8 +65,8 @@ function ClientOnly({
 
 function MapPlaceholder() {
   return (
-    <div className="flex h-full w-full items-center justify-center rounded-2xl bg-cream">
-      <p className="font-sans text-sm text-charcoal/50">Loading map…</p>
+    <div className="flex h-full w-full items-center justify-center rounded-2xl bg-surface">
+      <p className="font-sans text-sm text-ink/50">Loading map…</p>
     </div>
   );
 }
@@ -86,7 +86,7 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
       <div className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-10">
         <MapControlStrip className="mb-4" />
 
-        <div className="relative h-[calc(100vh-280px)] min-h-[500px] overflow-hidden rounded-2xl border border-sage/20 shadow-sm">
+        <div className="relative h-[calc(100vh-280px)] min-h-[500px] overflow-hidden rounded-2xl border border-tint/20 shadow-sm">
           <ClientOnly fallback={<MapPlaceholder />}>
             {() => (
               <Suspense fallback={<MapPlaceholder />}>

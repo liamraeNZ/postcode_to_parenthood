@@ -20,7 +20,7 @@ export default function WhyItMatters() {
   return (
     <section
       ref={sectionRef as RefObject<HTMLElement>}
-      className="relative bg-forest overflow-hidden"
+      className="relative bg-brand overflow-hidden"
     >
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] min-h-[600px]">
         {/* Left panel — image */}
@@ -31,8 +31,8 @@ export default function WhyItMatters() {
             className="absolute inset-0 h-full w-full object-cover"
           />
           {/* Teal overlay to blend with section */}
-          <div className="absolute inset-0 bg-forest/20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-forest/40" />
+          <div className="absolute inset-0 bg-brand/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-brand/40" />
         </div>
 
         {/* Right panel — text content */}
@@ -40,12 +40,12 @@ export default function WhyItMatters() {
           {/* Heading */}
           <h2 className="reveal font-heading text-white text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
             Funding rules{' '}
-            <em className="not-italic font-heading italic underline decoration-sand/60 underline-offset-4">
+            <em className="not-italic font-heading italic underline decoration-canvas/60 underline-offset-4">
               change by area.
             </em>{' '}
             <br className="hidden md:inline" />
             Sometimes{' '}
-            <em className="font-heading italic underline decoration-sand/60 underline-offset-4">
+            <em className="font-heading italic underline decoration-canvas/60 underline-offset-4">
               by the mile.
             </em>
           </h2>

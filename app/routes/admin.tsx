@@ -33,7 +33,7 @@ export async function clientLoader(_args: Route.ClientLoaderArgs) {
 // Prevent any server-side data loading
 clientLoader.hydrate = true as const;
 
-function getErrorMessage(err: unknown): string {
+function getErrorMestint(err: unknown): string {
   if (err instanceof ConnectionError) return "Connection error. Please try again.";
   if (err instanceof ApiError) {
     if (err.status === 401) return "Authentication failed. Check your credentials.";
@@ -82,7 +82,7 @@ function AdminPage() {
     try {
       setIcbs(await listIcbs());
     } catch (err) {
-      setError(getErrorMessage(err));
+      setError(getErrorMestint(err));
     } finally {
       setLoading(false);
     }
@@ -97,7 +97,7 @@ function AdminPage() {
     setError(null);
     listPoliciesForIcb(icb.id)
       .then(setPolicies)
-      .catch((err) => setError(getErrorMessage(err)));
+      .catch((err) => setError(getErrorMestint(err)));
   }
 
   function handleEditIcb(icb: AdminIcb) {
@@ -124,7 +124,7 @@ function AdminPage() {
       }
       setTimeout(() => setSuccessMsg(null), 3000);
     } catch (err) {
-      setError(getErrorMessage(err));
+      setError(getErrorMestint(err));
       throw err;
     }
   }
@@ -144,7 +144,7 @@ function AdminPage() {
       setSuccessMsg(`ICB marked as ${newStatus}`);
       setTimeout(() => setSuccessMsg(null), 3000);
     } catch (err) {
-      setError(getErrorMessage(err));
+      setError(getErrorMestint(err));
     } finally {
       setConfirmToggle(null);
     }
@@ -159,7 +159,7 @@ function AdminPage() {
       setSuccessMsg("Policy created successfully");
       setTimeout(() => setSuccessMsg(null), 3000);
     } catch (err) {
-      setError(getErrorMessage(err));
+      setError(getErrorMestint(err));
       throw err;
     }
   }

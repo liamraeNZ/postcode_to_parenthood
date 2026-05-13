@@ -1,6 +1,6 @@
 /*
  * DESIGN: Tender Modernism — Trust Bar
- * Warm cream section with trust signals in a responsive grid
+ * Warm surface section with trust signals in a responsive grid
  * Positioned between HowItWorks and WhyItMatters
  */
 import type React from 'react';
@@ -63,7 +63,7 @@ export default function TrustBar() {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className="py-14 bg-cream border-y border-sage/20"
+      className="py-14 bg-surface border-y border-tint/20"
     >
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
@@ -72,10 +72,10 @@ export default function TrustBar() {
               key={item.label}
               className={`reveal stagger-${i + 1} flex items-start gap-3`}
             >
-              <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-forest/8 flex items-center justify-center text-forest">
+              <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-brand/8 flex items-center justify-center text-brand">
                 {item.icon}
               </div>
-              <p className="text-sm text-charcoal/65 leading-snug font-light">
+              <p className="text-sm text-ink/65 leading-snug font-light">
                 {item.label}
               </p>
             </div>

@@ -107,7 +107,7 @@ export default function LandingPage() {
       <noscript>
         <div className="container mx-auto max-w-md px-4 py-8">
           <Form method="post" action="/">
-            <label htmlFor="postcode-noscript" className="mb-2 block text-sm font-medium text-charcoal">
+            <label htmlFor="postcode-noscript" className="mb-2 block text-sm font-medium text-ink">
               Enter your postcode to find your health board&apos;s fertility policy
             </label>
             <div className="flex gap-2">
@@ -117,11 +117,11 @@ export default function LandingPage() {
                 name="postcode"
                 placeholder="e.g. SW1A 1AA"
                 required
-                className="flex-1 rounded-full border border-sage/30 px-4 py-3 text-base font-mono"
+                className="flex-1 rounded-full border border-tint/30 px-4 py-3 text-base font-mono"
               />
               <button
                 type="submit"
-                className="rounded-full bg-forest px-6 py-3 font-semibold text-white"
+                className="rounded-full bg-brand px-6 py-3 font-semibold text-white"
               >
                 Find My Funding
               </button>
