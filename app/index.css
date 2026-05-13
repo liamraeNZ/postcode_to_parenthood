@@ -202,10 +202,6 @@
   animation: ticker-scroll 35s linear infinite;
 }
 
-.ticker-track:hover {
-  animation-play-state: paused;
-}
-
 /* ─── Grain texture overlay ─── */
 
 .grain {
