@@ -348,7 +348,7 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
     <div className="w-full space-y-4 md:space-y-6">
       <form
         onSubmit={handleSearch}
-        className="group flex max-w-xl flex-col overflow-hidden rounded-xl border border-warm-sand-dark/80 bg-white shadow-sm transition-[box-shadow] focus-within:border-route-teal/50 focus-within:shadow-[0_0_0_3px_rgba(45,156,154,0.18)] sm:flex-row sm:items-stretch"
+        className="group flex max-w-xl flex-col overflow-hidden rounded-full border border-warm-sand-dark/80 bg-white shadow-sm transition-[box-shadow] focus-within:border-sage/50 focus-within:shadow-[0_0_0_3px_rgba(122,158,142,0.4)] sm:flex-row sm:items-stretch"
       >
         <div className="relative flex min-h-[3rem] flex-1 items-center border-b border-warm-sand-dark/70 sm:border-b-0 sm:border-r sm:border-warm-sand-dark/70">
           <MapPin
@@ -358,7 +358,7 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
           <Input
             placeholder="e.g. SW1A 1AA"
             aria-label="Enter your postcode"
-            className="h-12 w-full rounded-none border-0 bg-transparent py-3 pl-10 pr-3 text-base font-medium shadow-none ring-0 placeholder:text-deep-slate/45 focus-visible:ring-0 sm:h-14 sm:py-4 sm:pl-11 sm:pr-4 sm:text-lg"
+            className="postcode-input h-12 w-full rounded-none border-0 bg-transparent py-3 pl-10 pr-3 font-mono text-base font-medium tracking-wider shadow-none ring-0 placeholder:text-deep-slate/45 focus-visible:ring-0 sm:h-14 sm:py-4 sm:pl-11 sm:pr-4 sm:text-lg"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />
@@ -366,7 +366,7 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
         <Button
           type="submit"
           disabled={loadingSearch || loadingSelect}
-          className="h-12 shrink-0 rounded-none border-0 bg-sage-btn px-5 font-semibold text-white shadow-none hover:bg-route-teal-dark disabled:opacity-60 sm:h-auto sm:min-w-[10.5rem]"
+          className="h-12 shrink-0 rounded-full border-0 bg-sage px-5 font-semibold text-white shadow-none hover:bg-sage/90 disabled:opacity-60 sm:h-auto sm:min-w-[10.5rem]"
         >
           {loadingSearch ? (
             <>
