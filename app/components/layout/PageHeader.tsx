@@ -26,7 +26,7 @@ export function PageHeader({
   compact,
 }: PageHeaderProps) {
   return (
-    <header className="border-b border-cream-dark/50 bg-gradient-to-b from-cream to-cream-dark/40">
+    <header className="border-b border-sage/15 bg-gradient-to-b from-cream to-cream-dark/40">
       <div
         className={cn(
           "container mx-auto px-4",

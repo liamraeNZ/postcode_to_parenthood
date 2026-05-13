@@ -159,9 +159,9 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
     <div className="w-full space-y-4 md:space-y-6">
       <form
         onSubmit={handleSearch}
-        className="group flex max-w-xl flex-col overflow-hidden rounded-full border border-warm-sand-dark/80 bg-white shadow-sm transition-[box-shadow] focus-within:border-sage/50 focus-within:shadow-[0_0_0_3px_rgba(122,158,142,0.4)] sm:flex-row sm:items-stretch"
+        className="group flex max-w-xl flex-col overflow-hidden rounded-full border border-sage/30 bg-white shadow-sm transition-[box-shadow] focus-within:border-sage/50 focus-within:shadow-[0_0_0_3px_rgba(122,158,142,0.4)] sm:flex-row sm:items-stretch"
       >
-        <div className="relative flex min-h-[3rem] flex-1 items-center border-b border-warm-sand-dark/70 sm:border-b-0 sm:border-r sm:border-warm-sand-dark/70">
+        <div className="relative flex min-h-[3rem] flex-1 items-center border-b border-sage/20 sm:border-b-0">
           <MapPin
             className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-route-teal"
             aria-hidden="true"
@@ -169,7 +169,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
           <Input
             placeholder="e.g. SW1A 1AA"
             aria-label="Enter your postcode"
-            className="postcode-input h-12 w-full rounded-none border-0 bg-transparent py-3 pl-10 pr-3 font-mono text-base font-medium tracking-wider shadow-none ring-0 placeholder:text-deep-slate/45 focus-visible:ring-0 sm:h-14 sm:py-4 sm:pl-11 sm:pr-4 sm:text-lg"
+            className="postcode-input h-12 w-full rounded-none border-0 bg-transparent py-3 pl-10 pr-3 font-mono text-base font-medium tracking-wider shadow-none ring-0 placeholder:text-charcoal/40 focus-visible:ring-0 sm:h-14 sm:py-4 sm:pl-11 sm:pr-4 sm:text-lg"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />

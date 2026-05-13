@@ -148,7 +148,7 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
         breadcrumbParents={[{ label: "Local policies", to: "/policies" }]}
         breadcrumbCurrent={boardTitle}
       />
-      <div className="container mx-auto max-w-4xl px-4 py-6 md:py-10">
+      <div className="container mx-auto max-w-4xl px-4 py-8 md:py-10">
         {/* Documents by year */}
         {documents.length > 0 ? (
           <div className="space-y-3">
@@ -157,37 +157,37 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
               return (
                 <div
                   key={year}
-                  className="border border-warm-sand-dark rounded-xl bg-white overflow-hidden"
+                  className="border border-sage/20 rounded-2xl bg-white overflow-hidden"
                 >
                   <button
                     onClick={() => toggleYear(year)}
-                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-warm-sand/50 transition-colors text-left"
+                    className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-cream/60 transition-colors text-left"
                     aria-expanded={isExpanded}
                   >
                     {isExpanded ? (
-                      <ChevronDown className="w-5 h-5 text-sage-btn flex-shrink-0" />
+                      <ChevronDown className="w-5 h-5 text-forest flex-shrink-0" />
                     ) : (
-                      <ChevronRight className="w-5 h-5 text-deep-slate/40 flex-shrink-0" />
+                      <ChevronRight className="w-5 h-5 text-charcoal/40 flex-shrink-0" />
                     )}
-                    <span className="font-bold text-deep-slate text-lg">{year}</span>
-                    <span className="text-sm text-deep-slate/50 ml-auto">
+                    <span className="font-heading text-charcoal text-lg font-semibold">{year}</span>
+                    <span className="font-mono text-xs text-charcoal/50 ml-auto">
                       {files.length} {files.length === 1 ? "document" : "documents"}
                     </span>
                   </button>
 
                   {isExpanded && (
-                    <ul className="border-t border-warm-sand-dark divide-y divide-warm-sand">
+                    <ul className="border-t border-sage/15 divide-y divide-sage/10">
                       {files.map((file) => (
                         <li
                           key={file.key}
-                          className="flex items-center gap-3 px-4 py-3"
+                          className="flex items-center gap-3 px-5 py-3.5"
                         >
-                          <FileText className="w-4 h-4 text-deep-slate/40 flex-shrink-0" />
+                          <FileText className="w-4 h-4 text-charcoal/40 flex-shrink-0" />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-deep-slate truncate">
+                            <p className="font-sans text-sm font-medium text-charcoal truncate">
                               {file.name}
                             </p>
-                            <p className="text-xs text-deep-slate/50">
+                            <p className="font-mono text-xs text-charcoal/50">
                               {formatFileSize(file.size)}
                             </p>
                           </div>
@@ -197,7 +197,7 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
                                 href={`/documents/${file.key.replace(/^policies\//, "")}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-sage-btn bg-sage-light rounded-lg hover:bg-sage-light/80 transition-colors"
+                                className="btn-press inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-forest bg-cream rounded-full hover:bg-cream-dark transition-colors"
                                 title="View PDF in browser"
                               >
                                 <Eye className="w-3.5 h-3.5" />
@@ -207,7 +207,7 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
                             <a
                               href={`/documents/${file.key.replace(/^policies\//, "")}`}
                               download
-                              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-deep-slate bg-warm-sand rounded-lg hover:bg-warm-sand-dark transition-colors"
+                              className="btn-press inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-charcoal bg-cream rounded-full hover:bg-cream-dark transition-colors"
                               title="Download file"
                             >
                               <Download className="w-3.5 h-3.5" />
@@ -223,25 +223,25 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
             })}
           </div>
         ) : (
-          <div className="p-6 bg-warm-sand rounded-xl text-center">
-            <p className="text-deep-slate/70">
+          <div className="p-6 bg-cream rounded-2xl text-center">
+            <p className="font-sans text-charcoal/60 font-light">
               No policy documents have been uploaded for this health board yet.
             </p>
           </div>
         )}
 
         {/* Navigation links */}
-        <nav aria-label="Related pages" className="mt-8 md:mt-10 pt-6 border-t border-warm-sand-dark">
+        <nav aria-label="Related pages" className="mt-10 md:mt-12 pt-6 border-t border-sage/20">
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               to="/policies"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-light text-deep-slate font-medium text-sm rounded-xl hover:bg-sage-light/80 transition-colors"
+              className="btn-press inline-flex items-center gap-2 px-5 py-2.5 bg-cream text-charcoal font-medium text-sm rounded-full hover:bg-cream-dark transition-colors"
             >
               ← All health boards
             </Link>
             <Link
               to={`/board/${slug}`}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-sage-light text-deep-slate font-medium text-sm rounded-xl hover:bg-sage-light/80 transition-colors"
+              className="btn-press inline-flex items-center gap-2 px-5 py-2.5 bg-forest text-white font-semibold text-sm rounded-full hover:bg-forest-light transition-colors"
             >
               <FileText className="w-4 h-4" />
               View eligibility criteria

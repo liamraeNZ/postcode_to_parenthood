@@ -99,25 +99,25 @@ export default function SearchPage() {
         <div className="relative z-10 w-full max-w-lg">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb" className="mb-8 text-center">
-            <ol className="inline-flex items-center gap-2 text-sm text-deep-slate/55">
+            <ol className="inline-flex items-center gap-2 text-sm text-charcoal/55">
               <li>
                 <Link
                   to="/"
-                  className="font-medium transition-colors hover:text-route-teal-dark"
+                  className="font-medium transition-colors hover:text-forest"
                 >
                   Home
                 </Link>
               </li>
-              <li aria-hidden="true" className="text-deep-slate/35">/</li>
-              <li className="font-medium text-deep-slate">Postcode check</li>
+              <li aria-hidden="true" className="text-charcoal/35">/</li>
+              <li className="font-medium text-charcoal">Postcode check</li>
             </ol>
           </nav>
 
           {/* Heading */}
-          <h1 className="text-center font-heading text-3xl font-semibold tracking-tight text-deep-slate sm:text-4xl">
+          <h1 className="text-center font-heading text-3xl font-semibold tracking-tight text-charcoal sm:text-4xl">
             Find your local funding policy
           </h1>
-          <p className="mx-auto mt-3 max-w-md text-center text-base leading-relaxed text-deep-slate/75 md:text-lg">
+          <p className="mx-auto mt-3 max-w-md text-center font-sans text-base leading-relaxed text-charcoal/70 font-light md:text-lg">
             Enter your postcode and we'll match you to the health board whose guidance applies.
           </p>
 
@@ -134,40 +134,40 @@ export default function SearchPage() {
 
           {/* What you'll get */}
           <div className="mt-10">
-            <p className="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-deep-slate/50">
+            <p className="mb-3 text-center font-mono text-xs font-semibold uppercase tracking-widest text-charcoal/50">
               We'll show you
             </p>
             <ul className="space-y-2">
-              <li className="flex items-center gap-3 rounded-xl border border-warm-sand-dark/40 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
+              <li className="flex items-center gap-3 rounded-2xl border border-sage/20 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
                 <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-route-teal-dark"
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-forest"
                   aria-hidden
                 >
                   ✓
                 </span>
-                <span className="text-sm text-deep-slate/85">
+                <span className="font-sans text-sm text-charcoal/80">
                   Which health board covers your GP
                 </span>
               </li>
-              <li className="flex items-center gap-3 rounded-xl border border-warm-sand-dark/40 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
+              <li className="flex items-center gap-3 rounded-2xl border border-sage/20 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
                 <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-route-teal-dark"
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-forest"
                   aria-hidden
                 >
                   ✓
                 </span>
-                <span className="text-sm text-deep-slate/85">
+                <span className="font-sans text-sm text-charcoal/80">
                   What NHS-funded IVF support may be available
                 </span>
               </li>
-              <li className="flex items-center gap-3 rounded-xl border border-warm-sand-dark/40 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
+              <li className="flex items-center gap-3 rounded-2xl border border-sage/20 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
                 <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-route-teal-dark"
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-forest"
                   aria-hidden
                 >
                   ✓
                 </span>
-                <span className="text-sm text-deep-slate/85">
+                <span className="font-sans text-sm text-charcoal/80">
                   The eligibility criteria your clinic will assess
                 </span>
               </li>
@@ -181,7 +181,7 @@ export default function SearchPage() {
 
           <noscript>
             <Form method="post" action="/search" className="mt-8">
-              <label htmlFor="postcode-noscript" className="mb-2 block text-sm font-medium text-deep-slate">
+              <label htmlFor="postcode-noscript" className="mb-2 block text-sm font-medium text-charcoal">
                 Enter your postcode to find your local pathway
               </label>
               <div className="flex gap-2">
@@ -191,9 +191,9 @@ export default function SearchPage() {
                   name="postcode"
                   placeholder="e.g. SW1A 1AA"
                   required
-                  className="flex-1 rounded-xl border-2 border-warm-sand-dark px-4 py-3 text-base"
+                  className="flex-1 rounded-full border border-sage/30 px-4 py-3 text-base font-mono"
                 />
-                <button type="submit" className="rounded-xl bg-sage-dark px-6 py-3 font-bold text-white">
+                <button type="submit" className="rounded-full bg-forest px-6 py-3 font-semibold text-white">
                   Check pathway
                 </button>
               </div>

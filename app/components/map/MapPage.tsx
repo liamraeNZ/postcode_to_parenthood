@@ -67,8 +67,8 @@ class MapErrorBoundary extends (React.Component as any)<ErrorBoundaryProps, Erro
       return (
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="text-center">
-            <p className="text-lg font-semibold text-deep-slate">Something went wrong</p>
-            <p className="mt-2 text-sm text-deep-slate/60">
+            <p className="font-heading text-lg font-semibold text-charcoal">Something went wrong</p>
+            <p className="mt-2 font-sans text-sm text-charcoal/55">
               The map encountered an unexpected error. Please refresh the page.
             </p>
           </div>
@@ -205,10 +205,10 @@ function MapPageContent() {
     return (
       <div className="h-full w-full flex items-center justify-center p-8">
         <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-sage-green border-t-transparent" role="status">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-sage border-t-transparent" role="status">
             <span className="sr-only">Loading map…</span>
           </div>
-          <p className="mt-3 text-sm text-deep-slate/60">Loading map data…</p>
+          <p className="mt-3 font-sans text-sm text-charcoal/55">Loading map data…</p>
         </div>
       </div>
     );
@@ -219,8 +219,8 @@ function MapPageContent() {
     return (
       <div className="h-full w-full flex items-center justify-center p-8">
         <div className="text-center">
-          <p className="text-lg font-semibold text-deep-slate">Map temporarily unavailable</p>
-          <p className="mt-2 text-sm text-deep-slate/60">{error}</p>
+          <p className="font-heading text-lg font-semibold text-charcoal">Map temporarily unavailable</p>
+          <p className="mt-2 font-sans text-sm text-charcoal/55">{error}</p>
         </div>
       </div>
     );
@@ -231,8 +231,8 @@ function MapPageContent() {
     return (
       <div className="h-full w-full flex items-center justify-center p-8">
         <div className="text-center">
-          <p className="text-lg font-semibold text-deep-slate">No boundary data available</p>
-          <p className="mt-2 text-sm text-deep-slate/60">
+          <p className="font-heading text-lg font-semibold text-charcoal">No boundary data available</p>
+          <p className="mt-2 font-sans text-sm text-charcoal/55">
             The map boundary data could not be loaded.
           </p>
         </div>
@@ -243,8 +243,8 @@ function MapPageContent() {
   return (
     <div className="relative h-full w-full">
       {/* Treatment toggle - overlaid on map */}
-      <div className="absolute top-3 right-3 z-[1000] rounded-xl bg-white shadow-md px-3 py-2">
-        <p className="text-xs font-semibold text-deep-slate/70 mb-1">Treatment type</p>
+      <div className="absolute top-3 right-3 z-[1000] rounded-2xl bg-white shadow-md px-3 py-2">
+        <p className="font-mono text-xs font-semibold text-charcoal/60 mb-1">Treatment type</p>
         <TreatmentToggle selected={selectedTreatment} onChange={handleTreatmentChange} />
       </div>
 

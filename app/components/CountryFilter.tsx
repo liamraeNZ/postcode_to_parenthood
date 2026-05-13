@@ -33,7 +33,7 @@ export function CountryFilter({ countries, selected, onChange, className }: Coun
 
   return (
     <fieldset className={cn("mb-6", className)} aria-label="Filter by country">
-      <legend className="text-sm font-medium text-deep-slate mb-2">
+      <legend className="font-mono text-xs font-medium text-charcoal/60 uppercase tracking-wide mb-2">
         Filter by country
       </legend>
       <div className="flex flex-wrap gap-2">
@@ -41,10 +41,10 @@ export function CountryFilter({ countries, selected, onChange, className }: Coun
           type="button"
           onClick={handleSelectAll}
           aria-pressed={allSelected}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+          className={`btn-press inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
             allSelected
-              ? "bg-sage-btn text-white border-sage-btn"
-              : "bg-white text-deep-slate/70 border-warm-sand-dark hover:border-sage-btn"
+              ? "bg-forest text-white border-forest"
+              : "bg-white text-charcoal/70 border-sage/25 hover:border-forest/50"
           }`}
         >
           All UK
@@ -57,16 +57,16 @@ export function CountryFilter({ countries, selected, onChange, className }: Coun
               type="button"
               onClick={() => handleCountryClick(country.code)}
               aria-pressed={isSelected}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+              className={`btn-press inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                 isSelected
-                  ? "bg-sage-btn text-white border-sage-btn"
-                  : "bg-white text-deep-slate/70 border-warm-sand-dark hover:border-sage-btn"
+                  ? "bg-forest text-white border-forest"
+                  : "bg-white text-charcoal/70 border-sage/25 hover:border-forest/50"
               }`}
             >
               {country.label}
               <span
                 className={`text-xs ${
-                  isSelected ? "text-white/80" : "text-deep-slate/50"
+                  isSelected ? "text-white/80" : "text-charcoal/50"
                 }`}
               >
                 ({country.count})

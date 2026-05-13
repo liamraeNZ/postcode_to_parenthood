@@ -105,7 +105,7 @@ export function GpPracticeList({
           <Input
             placeholder="Filter by name, postcode, or ODS…"
             aria-label="Filter GP practices"
-            className="h-9 pl-9 pr-9 text-sm border-warm-sand-dark/60 focus-visible:ring-sage/40"
+            className="h-9 pl-9 pr-9 text-sm border-sage/20 focus-visible:ring-sage/40"
             value={filterQuery}
             onChange={(e) => setFilterQuery(e.target.value)}
           />
@@ -124,7 +124,7 @@ export function GpPracticeList({
         {/* Practice list */}
         <div className="relative">
           <div className="max-h-[240px] overflow-y-auto pr-1 -mr-1">
-            <div className="divide-y divide-warm-sand-dark/40">
+            <div className="divide-y divide-sage/15">
               {filtered.length > 0 ? (
                 filtered.map((gp) => {
                   const isSelected = selectedGP?.odsCode === gp.odsCode;
@@ -165,14 +165,14 @@ export function GpPracticeList({
         </div>
 
         {/* Footer */}
-        <div className="mt-4 flex items-center justify-between gap-3 pt-3 border-t border-warm-sand-dark/30">
+        <div className="mt-4 flex items-center justify-between gap-3 pt-3 border-t border-sage/15">
           <Dialog open={nameSearchOpen} onOpenChange={onNameSearchOpenChange}>
             <DialogTrigger
               render={
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 text-xs border-warm-sand-dark/60 text-charcoal/70 hover:bg-cream hover:border-sage/40"
+                  className="h-8 text-xs border-sage/25 text-charcoal/70 hover:bg-cream hover:border-sage/40"
                 />
               }
             >

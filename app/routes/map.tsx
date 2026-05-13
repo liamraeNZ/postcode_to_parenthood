@@ -65,8 +65,8 @@ function ClientOnly({
 
 function MapPlaceholder() {
   return (
-    <div className="flex h-full w-full items-center justify-center rounded-2xl bg-sage-light/35">
-      <p className="text-sm text-deep-slate/50">Loading map…</p>
+    <div className="flex h-full w-full items-center justify-center rounded-2xl bg-cream">
+      <p className="font-sans text-sm text-charcoal/50">Loading map…</p>
     </div>
   );
 }
@@ -83,10 +83,10 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
         breadcrumbCurrent="Funding map"
       />
 
-      <div className="container mx-auto px-4 pt-3 pb-6 md:pt-4 md:pb-8">
-        <MapControlStrip className="mb-3" />
+      <div className="container mx-auto px-4 pt-4 pb-8 md:pt-6 md:pb-10">
+        <MapControlStrip className="mb-4" />
 
-        <div className="relative h-[calc(100vh-280px)] min-h-[500px] overflow-hidden rounded-2xl border border-warm-sand-dark/70 shadow-sm ring-1 ring-black/[0.03]">
+        <div className="relative h-[calc(100vh-280px)] min-h-[500px] overflow-hidden rounded-2xl border border-sage/20 shadow-sm">
           <ClientOnly fallback={<MapPlaceholder />}>
             {() => (
               <Suspense fallback={<MapPlaceholder />}>
