@@ -7,11 +7,11 @@ export default function CTASection() {
 
   return (
     <section
-      className="grain relative overflow-hidden bg-forest py-24 md:py-32"
+      className="grain relative overflow-hidden bg-brand py-24 md:py-32"
     >
       {/* Dark overlay for depth */}
       <div
-        className="pointer-events-none absolute inset-0 bg-forest-dark/30"
+        className="pointer-events-none absolute inset-0 bg-brand-dark/30"
         aria-hidden="true"
       />
 

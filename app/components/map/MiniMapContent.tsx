@@ -5,7 +5,7 @@
  * code (react-leaflet, leaflet CSS, topojson-client) is imported here so that none
  * of it is pulled into the server bundle or evaluated during SSR.
  *
- * Usage:
+ * Utint:
  *   const LazyMiniMapContent = lazy(() => import("../components/map/MiniMapContent"));
  */
 import { useEffect, useState, useCallback, useMemo } from 'react';
@@ -181,12 +181,12 @@ export default function MiniMapContent({
   if (loading) {
     return (
       <div
-        className="h-[200px] sm:h-[300px] w-full rounded-lg bg-warm-sand animate-pulse flex items-center justify-center"
+        className="h-[200px] sm:h-[300px] w-full rounded-lg bg-warm-canvas animate-pulse flex items-center justify-center"
         role="status"
         aria-label="Loading map"
       >
         <div className="text-center">
-          <div className="inline-block h-6 w-6 animate-spin rounded-full border-3 border-sage-green border-t-transparent" />
+          <div className="inline-block h-6 w-6 animate-spin rounded-full border-3 border-tint border-t-transparent" />
           <p className="mt-2 text-xs text-deep-slate/60">Loading map…</p>
         </div>
       </div>
@@ -197,7 +197,7 @@ export default function MiniMapContent({
   if (error) {
     return (
       <div
-        className="h-[200px] sm:h-[300px] w-full rounded-lg bg-warm-sand/50 flex items-center justify-center"
+        className="h-[200px] sm:h-[300px] w-full rounded-lg bg-warm-canvas/50 flex items-center justify-center"
         role="alert"
       >
         <div className="text-center px-4">
@@ -218,7 +218,7 @@ export default function MiniMapContent({
   return (
     <div className="space-y-3">
       {/* Map container */}
-      <div className="h-[200px] sm:h-[300px] w-full rounded-lg overflow-hidden ring-1 ring-warm-sand-dark">
+      <div className="h-[200px] sm:h-[300px] w-full rounded-lg overflow-hidden ring-1 ring-canvas-dark">
         <MapContainer
           center={position}
           zoom={10}

@@ -88,36 +88,36 @@ export default function SearchPage() {
       <div className="relative mesh-hero flex flex-1 flex-col items-center justify-center overflow-hidden px-4 py-16 md:py-24">
         {/* Decorative blurs matching landing page */}
         <div
-          className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-blush-deep/35 blur-3xl"
+          className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-warm-deep/35 blur-3xl"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-sage-light/70 blur-3xl"
+          className="pointer-events-none absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-tint-light/70 blur-3xl"
           aria-hidden
         />
 
         <div className="relative z-10 w-full max-w-lg">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb" className="mb-8 text-center">
-            <ol className="inline-flex items-center gap-2 text-sm text-charcoal/55">
+            <ol className="inline-flex items-center gap-2 text-sm text-ink/55">
               <li>
                 <Link
                   to="/"
-                  className="font-medium transition-colors hover:text-forest"
+                  className="font-medium transition-colors hover:text-brand"
                 >
                   Home
                 </Link>
               </li>
-              <li aria-hidden="true" className="text-charcoal/35">/</li>
-              <li className="font-medium text-charcoal">Postcode check</li>
+              <li aria-hidden="true" className="text-ink/35">/</li>
+              <li className="font-medium text-ink">Postcode check</li>
             </ol>
           </nav>
 
           {/* Heading */}
-          <h1 className="text-center font-heading text-3xl font-semibold tracking-tight text-charcoal sm:text-4xl">
+          <h1 className="text-center font-heading text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Find your local funding policy
           </h1>
-          <p className="mx-auto mt-3 max-w-md text-center font-sans text-base leading-relaxed text-charcoal/70 font-light md:text-lg">
+          <p className="mx-auto mt-3 max-w-md text-center font-sans text-base leading-relaxed text-ink/70 font-light md:text-lg">
             Enter your postcode and we'll match you to the health board whose guidance applies.
           </p>
 
@@ -134,40 +134,40 @@ export default function SearchPage() {
 
           {/* What you'll get */}
           <div className="mt-10">
-            <p className="mb-3 text-center font-mono text-xs font-semibold uppercase tracking-widest text-charcoal/50">
+            <p className="mb-3 text-center font-mono text-xs font-semibold uppercase tracking-widest text-ink/50">
               We'll show you
             </p>
             <ul className="space-y-2">
-              <li className="flex items-center gap-3 rounded-2xl border border-sage/20 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
+              <li className="flex items-center gap-3 rounded-2xl border border-tint/20 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
                 <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-forest"
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-tint-light text-[0.65rem] font-bold text-brand"
                   aria-hidden
                 >
                   ✓
                 </span>
-                <span className="font-sans text-sm text-charcoal/80">
+                <span className="font-sans text-sm text-ink/80">
                   Which health board covers your GP
                 </span>
               </li>
-              <li className="flex items-center gap-3 rounded-2xl border border-sage/20 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
+              <li className="flex items-center gap-3 rounded-2xl border border-tint/20 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
                 <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-forest"
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-tint-light text-[0.65rem] font-bold text-brand"
                   aria-hidden
                 >
                   ✓
                 </span>
-                <span className="font-sans text-sm text-charcoal/80">
+                <span className="font-sans text-sm text-ink/80">
                   What NHS-funded IVF support may be available
                 </span>
               </li>
-              <li className="flex items-center gap-3 rounded-2xl border border-sage/20 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
+              <li className="flex items-center gap-3 rounded-2xl border border-tint/20 bg-white/80 px-4 py-2.5 shadow-sm backdrop-blur-sm">
                 <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sage-light text-[0.65rem] font-bold text-forest"
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-tint-light text-[0.65rem] font-bold text-brand"
                   aria-hidden
                 >
                   ✓
                 </span>
-                <span className="font-sans text-sm text-charcoal/80">
+                <span className="font-sans text-sm text-ink/80">
                   The eligibility criteria your clinic will assess
                 </span>
               </li>
@@ -181,7 +181,7 @@ export default function SearchPage() {
 
           <noscript>
             <Form method="post" action="/search" className="mt-8">
-              <label htmlFor="postcode-noscript" className="mb-2 block text-sm font-medium text-charcoal">
+              <label htmlFor="postcode-noscript" className="mb-2 block text-sm font-medium text-ink">
                 Enter your postcode to find your local pathway
               </label>
               <div className="flex gap-2">
@@ -191,9 +191,9 @@ export default function SearchPage() {
                   name="postcode"
                   placeholder="e.g. SW1A 1AA"
                   required
-                  className="flex-1 rounded-full border border-sage/30 px-4 py-3 text-base font-mono"
+                  className="flex-1 rounded-full border border-tint/30 px-4 py-3 text-base font-mono"
                 />
-                <button type="submit" className="rounded-full bg-forest px-6 py-3 font-semibold text-white">
+                <button type="submit" className="rounded-full bg-brand px-6 py-3 font-semibold text-white">
                   Check pathway
                 </button>
               </div>

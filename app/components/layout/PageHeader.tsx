@@ -26,7 +26,7 @@ export function PageHeader({
   compact,
 }: PageHeaderProps) {
   return (
-    <header className="border-b border-sage/15 bg-gradient-to-b from-cream to-cream-dark/40">
+    <header className="border-b border-tint/15 bg-gradient-to-b from-surface to-surface-dark/40">
       <div
         className={cn(
           "container mx-auto px-4",
@@ -37,34 +37,34 @@ export function PageHeader({
           aria-label="Breadcrumb"
           className={cn(compact ? "mb-3" : "mb-5")}
         >
-          <ol className="flex flex-wrap items-center gap-2 font-sans text-sm text-charcoal/55">
+          <ol className="flex flex-wrap items-center gap-2 font-sans text-sm text-ink/55">
             <li>
               <Link
                 to="/"
-                className="font-medium transition-colors hover:text-sage"
+                className="font-medium transition-colors hover:text-tint"
               >
                 Home
               </Link>
             </li>
             {breadcrumbParents?.map((p) => (
               <Fragment key={`${p.to}-${p.label}`}>
-                <li aria-hidden="true" className="text-charcoal/35">
+                <li aria-hidden="true" className="text-ink/35">
                   /
                 </li>
                 <li>
                   <Link
                     to={p.to}
-                    className="font-medium transition-colors hover:text-sage"
+                    className="font-medium transition-colors hover:text-tint"
                   >
                     {p.label}
                   </Link>
                 </li>
               </Fragment>
             ))}
-            <li aria-hidden="true" className="text-charcoal/35">
+            <li aria-hidden="true" className="text-ink/35">
               /
             </li>
-            <li className="font-medium text-charcoal">{breadcrumbCurrent}</li>
+            <li className="font-medium text-ink">{breadcrumbCurrent}</li>
           </ol>
         </nav>
         <div
@@ -74,13 +74,13 @@ export function PageHeader({
           )}
         >
           <div className="max-w-3xl">
-            <h1 className="font-heading text-3xl font-semibold tracking-tight text-forest sm:text-4xl md:text-[2.5rem] md:leading-[1.15]">
+            <h1 className="font-heading text-3xl font-semibold tracking-tight text-brand sm:text-4xl md:text-[2.5rem] md:leading-[1.15]">
               {title}
             </h1>
             {description ? (
               <p
                 className={cn(
-                  "max-w-2xl font-sans text-base leading-relaxed text-charcoal/75 md:text-[1.05rem]",
+                  "max-w-2xl font-sans text-base leading-relaxed text-ink/75 md:text-[1.05rem]",
                   compact ? "mt-2" : "mt-3"
                 )}
               >

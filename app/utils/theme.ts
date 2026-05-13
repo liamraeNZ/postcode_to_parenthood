@@ -45,7 +45,7 @@ export const CYCLE_BADGE = {
 export const STATUS_BADGE = {
   improved: 'bg-[var(--color-status-improved-bg)] text-[var(--color-status-improved-text)]',
   worse: 'bg-[var(--color-status-worse-bg)] text-[var(--color-status-worse-text)]',
-  neutral: 'bg-cream text-charcoal',
+  neutral: 'bg-surface text-ink',
 } as const;
 
 // ─── Focus ring ─────────────────────────────────────────────────────────────

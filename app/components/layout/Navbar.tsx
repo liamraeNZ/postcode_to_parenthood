@@ -44,7 +44,7 @@ export function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
         scrolled
-          ? "bg-cream/90 backdrop-blur-md border-b border-sage/20"
+          ? "bg-surface/90 backdrop-blur-md border-b border-tint/20"
           : "bg-transparent"
       }`}
     >
@@ -53,12 +53,12 @@ export function Navbar() {
         <Link
           to="/"
           aria-label="Pathway to Parenthood home"
-          className="group flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2"
+          className="group flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tint focus-visible:ring-offset-2"
         >
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-forest text-cream font-mono text-sm font-medium">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand text-surface font-mono text-sm font-medium">
             P2P
           </div>
-          <span className="hidden font-heading text-lg font-semibold tracking-tight text-charcoal sm:inline">
+          <span className="hidden font-heading text-lg font-semibold tracking-tight text-ink sm:inline">
             Pathway to Parenthood
           </span>
         </Link>
@@ -74,8 +74,8 @@ export function Navbar() {
                 aria-current={active ? "page" : undefined}
                 className={`nav-link relative px-4 py-2 text-sm font-medium transition-colors ${
                   active
-                    ? "text-forest"
-                    : "text-charcoal/70 hover:text-charcoal"
+                    ? "text-brand"
+                    : "text-ink/70 hover:text-ink"
                 }`}
               >
                 {link.label}
@@ -85,7 +85,7 @@ export function Navbar() {
           <Link
             to="/search"
             aria-current={pathname === "/search" ? "page" : undefined}
-            className="ml-3 inline-flex items-center rounded-full bg-forest px-5 py-2.5 text-sm font-semibold text-cream shadow-sm transition-all hover:bg-forest-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 btn-press"
+            className="ml-3 inline-flex items-center rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-surface shadow-sm transition-all hover:bg-brand-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tint focus-visible:ring-offset-2 btn-press"
           >
             Check eligibility
           </Link>
@@ -97,22 +97,22 @@ export function Navbar() {
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
-          className="relative flex h-10 w-10 items-center justify-center rounded-lg md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2"
+          className="relative flex h-10 w-10 items-center justify-center rounded-lg md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tint focus-visible:ring-offset-2"
         >
           <span className="sr-only">{mobileOpen ? "Close menu" : "Open menu"}</span>
           <div className="flex h-5 w-6 flex-col items-center justify-center">
             <span
-              className={`block h-0.5 w-6 rounded-full bg-charcoal transition-all duration-300 ease-out ${
+              className={`block h-0.5 w-6 rounded-full bg-ink transition-all duration-300 ease-out ${
                 mobileOpen ? "translate-y-[4px] rotate-45" : ""
               }`}
             />
             <span
-              className={`block h-0.5 w-6 rounded-full bg-charcoal transition-all duration-300 ease-out mt-1.5 ${
+              className={`block h-0.5 w-6 rounded-full bg-ink transition-all duration-300 ease-out mt-1.5 ${
                 mobileOpen ? "opacity-0" : ""
               }`}
             />
             <span
-              className={`block h-0.5 w-6 rounded-full bg-charcoal transition-all duration-300 ease-out mt-1.5 ${
+              className={`block h-0.5 w-6 rounded-full bg-ink transition-all duration-300 ease-out mt-1.5 ${
                 mobileOpen ? "-translate-y-[10px] -rotate-45" : ""
               }`}
             />
@@ -126,7 +126,7 @@ export function Navbar() {
           mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="border-t border-sage/20 bg-cream/95 backdrop-blur-md px-4 pb-6 pt-4">
+        <div className="border-t border-tint/20 bg-surface/95 backdrop-blur-md px-4 pb-6 pt-4">
           <div className="flex flex-col gap-1">
             {NAV_LINKS.map((link) => {
               const active = isActive(link.matchPaths);
@@ -135,10 +135,10 @@ export function Navbar() {
                   key={link.to}
                   to={link.to}
                   aria-current={active ? "page" : undefined}
-                  className={`border-t border-sage/10 px-2 py-3 text-base font-medium transition-colors first:border-t-0 ${
+                  className={`border-t border-tint/10 px-2 py-3 text-base font-medium transition-colors first:border-t-0 ${
                     active
-                      ? "text-forest"
-                      : "text-charcoal/70 hover:text-charcoal"
+                      ? "text-brand"
+                      : "text-ink/70 hover:text-ink"
                   }`}
                 >
                   {link.label}
@@ -148,7 +148,7 @@ export function Navbar() {
             <Link
               to="/search"
               aria-current={pathname === "/search" ? "page" : undefined}
-              className="mt-3 inline-flex items-center justify-center rounded-full bg-forest px-5 py-3 text-base font-semibold text-cream shadow-sm transition-all hover:bg-forest-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 btn-press"
+              className="mt-3 inline-flex items-center justify-center rounded-full bg-brand px-5 py-3 text-base font-semibold text-surface shadow-sm transition-all hover:bg-brand-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tint focus-visible:ring-offset-2 btn-press"
             >
               Check eligibility
             </Link>

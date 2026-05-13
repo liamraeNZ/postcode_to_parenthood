@@ -1,6 +1,6 @@
 /*
  * DESIGN: Tender Modernism — GP Practice Selector
- * Warm white card with sage accents, matching the rounded-2xl
+ * Warm white card with tint accents, matching the rounded-2xl
  * card style used across HowItWorks and other home sections.
  */
 import { useState } from 'react';
@@ -77,19 +77,19 @@ export function GpPracticeList({
       exit={{ opacity: 0, y: 12 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
-      <div className="rounded-2xl bg-white p-6 shadow-sm border border-sage/20">
+      <div className="rounded-2xl bg-white p-6 shadow-sm border border-tint/20">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
-            <h3 className="font-heading text-charcoal text-lg">
+            <h3 className="font-heading text-ink text-lg">
               Select your GP practice
             </h3>
-            <p className="font-sans text-charcoal/60 text-sm font-light mt-1">
+            <p className="font-sans text-ink/60 text-sm font-light mt-1">
               We'll show you the funding policy that applies to your practice.
             </p>
           </div>
           {loadingSelect && (
-            <span className="inline-flex items-center gap-2 rounded-full bg-sage/10 px-3 py-1 text-xs font-medium text-sage">
+            <span className="inline-flex items-center gap-2 rounded-full bg-tint/10 px-3 py-1 text-xs font-medium text-tint">
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
               Finding route
             </span>
@@ -99,13 +99,13 @@ export function GpPracticeList({
         {/* Filter input */}
         <div className="relative mb-3">
           <Search
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-charcoal/40"
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/40"
             aria-hidden="true"
           />
           <Input
             placeholder="Filter by name, postcode, or ODS…"
             aria-label="Filter GP practices"
-            className="h-9 pl-9 pr-9 text-sm border-sage/20 focus-visible:ring-sage/40"
+            className="h-9 pl-9 pr-9 text-sm border-tint/20 focus-visible:ring-tint/40"
             value={filterQuery}
             onChange={(e) => setFilterQuery(e.target.value)}
           />
@@ -113,7 +113,7 @@ export function GpPracticeList({
             <button
               type="button"
               onClick={() => setFilterQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal/40 hover:text-charcoal transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-ink transition-colors"
               aria-label="Clear filter"
             >
               <X className="h-4 w-4" />
@@ -124,7 +124,7 @@ export function GpPracticeList({
         {/* Practice list */}
         <div className="relative">
           <div className="max-h-[240px] overflow-y-auto pr-1 -mr-1">
-            <div className="divide-y divide-sage/15">
+            <div className="divide-y divide-tint/15">
               {filtered.length > 0 ? (
                 filtered.map((gp) => {
                   const isSelected = selectedGP?.odsCode === gp.odsCode;
@@ -135,15 +135,15 @@ export function GpPracticeList({
                       disabled={loadingSelect}
                       className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 text-left text-sm rounded-lg transition-colors ${
                         isSelected
-                          ? 'bg-sage/10 font-medium'
-                          : 'hover:bg-cream'
+                          ? 'bg-tint/10 font-medium'
+                          : 'hover:bg-surface'
                       } ${loadingSelect ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                       onClick={() => onSelectGp(gp)}
                     >
-                      <span className="font-sans text-charcoal truncate">
+                      <span className="font-sans text-ink truncate">
                         {gp.name}
                       </span>
-                      <span className="font-mono text-xs text-charcoal/50 whitespace-nowrap shrink-0">
+                      <span className="font-mono text-xs text-ink/50 whitespace-nowrap shrink-0">
                         {gp.postcode ? `${gp.postcode} · ` : ''}
                         {gp.odsCode}
                       </span>
@@ -151,7 +151,7 @@ export function GpPracticeList({
                   );
                 })
               ) : (
-                <p className="font-sans text-sm text-charcoal/50 px-3 py-3">
+                <p className="font-sans text-sm text-ink/50 px-3 py-3">
                   No GP practices match that filter.
                 </p>
               )}
@@ -165,14 +165,14 @@ export function GpPracticeList({
         </div>
 
         {/* Footer */}
-        <div className="mt-4 flex items-center justify-between gap-3 pt-3 border-t border-sage/15">
+        <div className="mt-4 flex items-center justify-between gap-3 pt-3 border-t border-tint/15">
           <Dialog open={nameSearchOpen} onOpenChange={onNameSearchOpenChange}>
             <DialogTrigger
               render={
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 text-xs border-sage/25 text-charcoal/70 hover:bg-cream hover:border-sage/40"
+                  className="h-8 text-xs border-tint/25 text-ink/70 hover:bg-surface hover:border-tint/40"
                 />
               }
             >
@@ -197,7 +197,7 @@ export function GpPracticeList({
                 />
                 <Button
                   type="button"
-                  className="h-10 bg-sage hover:bg-sage/90"
+                  className="h-10 bg-tint hover:bg-tint/90"
                   disabled={nameSearchLoading || nameSearchQuery.trim().length < 3}
                   onClick={onSearchByName}
                 >
@@ -229,10 +229,10 @@ export function GpPracticeList({
                         }}
                       >
                         <span className="text-left">
-                          <span className="block font-medium text-charcoal">
+                          <span className="block font-medium text-ink">
                             {gp.name}
                           </span>
-                          <span className="block font-mono text-xs text-charcoal/50">
+                          <span className="block font-mono text-xs text-ink/50">
                             {gp.postcode ? `${gp.postcode} · ` : null}
                             {gp.odsCode}
                           </span>
@@ -240,11 +240,11 @@ export function GpPracticeList({
                       </Button>
                     ))
                   ) : nameSearchResults && nameSearchResults.length === 0 ? (
-                    <p className="font-sans text-sm text-charcoal/50 px-1 py-2">
+                    <p className="font-sans text-sm text-ink/50 px-1 py-2">
                       No GP practices found.
                     </p>
                   ) : (
-                    <p className="font-sans text-sm text-charcoal/50 px-1 py-2">
+                    <p className="font-sans text-sm text-ink/50 px-1 py-2">
                       Type a name (3+ characters) and search.
                     </p>
                   )}
@@ -253,7 +253,7 @@ export function GpPracticeList({
             </DialogContent>
           </Dialog>
 
-          <span className="font-mono text-xs text-charcoal/40">
+          <span className="font-mono text-xs text-ink/40">
             {filtered.length} practice{filtered.length !== 1 ? 's' : ''}
           </span>
         </div>

@@ -77,16 +77,16 @@ export default function HowItWorks() {
   return (
     <section
       ref={sectionRef as RefObject<HTMLElement>}
-      className="bg-cream py-24 px-6 md:px-12 lg:px-20"
+      className="bg-surface py-24 px-6 md:px-12 lg:px-20"
     >
       <div className="mx-auto max-w-6xl">
         {/* Eyebrow */}
-        <p className="reveal text-sage text-sm font-mono uppercase tracking-[0.2em] mb-4">
+        <p className="reveal text-tint text-sm font-mono uppercase tracking-[0.2em] mb-4">
           How it works
         </p>
 
         {/* Heading */}
-        <h2 className="reveal stagger-1 font-heading text-charcoal text-3xl md:text-4xl lg:text-5xl mb-16">
+        <h2 className="reveal stagger-1 font-heading text-ink text-3xl md:text-4xl lg:text-5xl mb-16">
           Three simple steps to{' '}
           <em className="not-italic font-heading italic">
             find your funding
@@ -101,20 +101,20 @@ export default function HowItWorks() {
               className={`reveal stagger-${index + 2} card-hover rounded-2xl bg-white p-8 shadow-sm`}
             >
               {/* Icon */}
-              <div className="text-sage mb-6">{step.icon}</div>
+              <div className="text-tint mb-6">{step.icon}</div>
 
               {/* Step number */}
-              <span className="font-mono text-sage text-sm tracking-[0.15em] mb-3 block">
+              <span className="font-mono text-tint text-sm tracking-[0.15em] mb-3 block">
                 Step {step.number}
               </span>
 
               {/* Title */}
-              <h3 className="font-heading text-charcoal text-xl mb-3">
+              <h3 className="font-heading text-ink text-xl mb-3">
                 {step.title}
               </h3>
 
               {/* Description */}
-              <p className="font-sans text-charcoal/70 text-base font-light leading-relaxed">
+              <p className="font-sans text-ink/70 text-base font-light leading-relaxed">
                 {step.description}
               </p>
             </div>

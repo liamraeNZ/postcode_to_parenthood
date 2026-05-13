@@ -147,8 +147,8 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
       <div className="container mx-auto max-w-3xl px-4 pt-6 pb-8 md:pt-8 md:pb-12">
         {/* Postcode search context banner */}
         {gpPostcode && (
-          <div className="mb-5 rounded-2xl border border-sage/30 bg-sage-light/40 px-5 py-3.5 md:mb-6">
-            <p className="font-sans text-sm text-charcoal">
+          <div className="mb-5 rounded-2xl border border-tint/30 bg-tint-light/40 px-5 py-3.5 md:mb-6">
+            <p className="font-sans text-sm text-ink">
               Based on your {isNationalPolicy ? "postcode" : "GP's postcode"}{" "}
               <span className="font-semibold">{gpPostcode.toUpperCase()}</span>, this is the local pathway we
               found: <span className="font-semibold">{displayName}</span>
@@ -158,9 +158,9 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
 
         {/* National policy notice */}
         {isNationalPolicy && (
-          <div className="mb-4 px-4 py-3 bg-cream border border-sage/20 rounded-2xl">
-            <p className="font-sans text-sm text-charcoal/80 font-medium">
-              <Info className="w-4 h-4 inline-block mr-1.5 -mt-0.5 text-forest" aria-hidden="true" />
+          <div className="mb-4 px-4 py-3 bg-surface border border-tint/20 rounded-2xl">
+            <p className="font-sans text-sm text-ink/80 font-medium">
+              <Info className="w-4 h-4 inline-block mr-1.5 -mt-0.5 text-brand" aria-hidden="true" />
               A national <span className="font-semibold">{countryName}</span> policy currently applies to all health boards.
             </p>
           </div>
@@ -169,12 +169,12 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         {/* Policy details */}
         {policies.length > 0 ? (
           <Tabs defaultValue={policies[0].treatment_type_id}>
-            <TabsList className="w-full bg-white border border-sage/20 rounded-2xl p-1 mb-5">
+            <TabsList className="w-full bg-white border border-tint/20 rounded-2xl p-1 mb-5">
               {policies.map((policy) => (
                 <TabsTrigger
                   key={policy.treatment_type_id}
                   value={policy.treatment_type_id}
-                  className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-charcoal/50 data-active:bg-forest data-active:text-white data-active:shadow-sm transition-all"
+                  className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-ink/50 data-active:bg-brand data-active:text-white data-active:shadow-sm transition-all"
                 >
                   {policy.treatment_type_name}
                 </TabsTrigger>
@@ -187,8 +187,8 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
             ))}
           </Tabs>
         ) : (
-          <div className="p-6 bg-cream rounded-2xl text-center">
-            <p className="font-sans text-charcoal/60 font-light">
+          <div className="p-6 bg-surface rounded-2xl text-center">
+            <p className="font-sans text-ink/60 font-light">
               No current policy information is available for this health board.
             </p>
           </div>
@@ -208,25 +208,25 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         )}
 
         {/* Internal navigation links */}
-        <nav aria-label="Related pages" className="mt-10 md:mt-12 pt-6 border-t border-sage/20">
+        <nav aria-label="Related pages" className="mt-10 md:mt-12 pt-6 border-t border-tint/20">
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               to={`/policy/${slug}`}
-              className="btn-press inline-flex items-center gap-2 px-5 py-2.5 bg-forest text-white font-semibold text-sm rounded-full hover:bg-forest-light transition-colors"
+              className="btn-press inline-flex items-center gap-2 px-5 py-2.5 bg-brand text-white font-semibold text-sm rounded-full hover:bg-brand-light transition-colors"
             >
               <FileText className="w-4 h-4" />
               View source documents
             </Link>
             <Link
               to="/search"
-              className="btn-press inline-flex items-center gap-2 px-5 py-2.5 bg-cream text-charcoal font-medium text-sm rounded-full hover:bg-cream-dark transition-colors"
+              className="btn-press inline-flex items-center gap-2 px-5 py-2.5 bg-surface text-ink font-medium text-sm rounded-full hover:bg-surface-dark transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Check another postcode
             </Link>
             <Link
               to="/map"
-              className="btn-press inline-flex items-center gap-2 px-5 py-2.5 bg-cream text-charcoal font-medium text-sm rounded-full hover:bg-cream-dark transition-colors"
+              className="btn-press inline-flex items-center gap-2 px-5 py-2.5 bg-surface text-ink font-medium text-sm rounded-full hover:bg-surface-dark transition-colors"
             >
               <MapPin className="w-4 h-4" />
               Explore the funding map
@@ -255,9 +255,9 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
       : "Not specified";
 
   return (
-    <article className="bg-white rounded-2xl border border-sage/20 overflow-hidden shadow-sm">
-      <div className="px-5 py-3.5 border-b border-sage/15">
-        <h2 className="font-heading text-charcoal text-lg font-semibold">
+    <article className="bg-white rounded-2xl border border-tint/20 overflow-hidden shadow-sm">
+      <div className="px-5 py-3.5 border-b border-tint/15">
+        <h2 className="font-heading text-ink text-lg font-semibold">
           {policy.treatment_type_name}
         </h2>
       </div>
@@ -265,8 +265,8 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
       <div className="p-5">
         <div className="grid grid-cols-2 gap-3">
           {/* Cycles Offered */}
-          <div className={`rounded-xl border overflow-hidden ${cc.bg} border-sage/15`}>
-            <div className={`px-3 py-1.5 ${cc.bg} border-b border-sage/15`}>
+          <div className={`rounded-xl border overflow-hidden ${cc.bg} border-tint/15`}>
+            <div className={`px-3 py-1.5 ${cc.bg} border-b border-tint/15`}>
               <span className={`font-mono text-[10px] uppercase font-semibold tracking-wide ${cc.label}`}>Funded Cycles</span>
             </div>
             <div className="px-3 py-2.5 bg-white">
@@ -283,12 +283,12 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
           </div>
 
           {/* Max Age */}
-          <div className="rounded-xl border border-sage/15 overflow-hidden">
-            <div className="px-3 py-1.5 bg-cream border-b border-sage/15">
-              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-forest">Age Range</span>
+          <div className="rounded-xl border border-tint/15 overflow-hidden">
+            <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
+              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">Age Range</span>
             </div>
             <div className="px-3 py-2.5">
-              <div className="text-lg font-bold text-charcoal leading-tight">
+              <div className="text-lg font-bold text-ink leading-tight">
                 {policy.min_age != null && policy.max_age > 0
                   ? `${policy.min_age} – ${policy.max_age}`
                   : policy.max_age > 0
@@ -301,43 +301,43 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
           </div>
 
           {/* BMI */}
-          <div className="rounded-xl border border-sage/15 overflow-hidden">
-            <div className="px-3 py-1.5 bg-cream border-b border-sage/15">
-              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-forest">BMI Range</span>
+          <div className="rounded-xl border border-tint/15 overflow-hidden">
+            <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
+              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">BMI Range</span>
             </div>
             <div className="px-3 py-2.5">
-              <div className="text-lg font-bold text-charcoal leading-tight">{bmiLabel}</div>
+              <div className="text-lg font-bold text-ink leading-tight">{bmiLabel}</div>
             </div>
           </div>
 
           {/* IUI Rounds */}
-          <div className="rounded-xl border border-sage/15 overflow-hidden">
-            <div className="px-3 py-1.5 bg-cream border-b border-sage/15">
-              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-forest">IUI Rounds Required</span>
+          <div className="rounded-xl border border-tint/15 overflow-hidden">
+            <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
+              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">IUI Rounds Required</span>
             </div>
             <div className="px-3 py-2.5">
-              <div className="text-lg font-bold text-charcoal leading-tight">
+              <div className="text-lg font-bold text-ink leading-tight">
                 {policy.iui_rounds_required > 0 ? policy.iui_rounds_required : "None"}
               </div>
             </div>
           </div>
 
           {/* Smoking */}
-          <div className="rounded-xl border border-sage/15 overflow-hidden">
-            <div className="px-3 py-1.5 bg-cream border-b border-sage/15">
-              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-forest">Smoking</span>
+          <div className="rounded-xl border border-tint/15 overflow-hidden">
+            <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
+              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">Smoking</span>
             </div>
             <div className="px-3 py-2.5">
               <div className="flex items-center gap-1.5">
                 {policy.smoking_restricted ? (
                   <>
                     <XCircle className="w-4 h-4 text-red-600 shrink-0" aria-hidden="true" />
-                    <span className="text-sm font-semibold text-charcoal">Non-smoker required</span>
+                    <span className="text-sm font-semibold text-ink">Non-smoker required</span>
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className="w-4 h-4 text-forest shrink-0" aria-hidden="true" />
-                    <span className="text-sm font-semibold text-charcoal">No restriction</span>
+                    <CheckCircle2 className="w-4 h-4 text-brand shrink-0" aria-hidden="true" />
+                    <span className="text-sm font-semibold text-ink">No restriction</span>
                   </>
                 )}
               </div>
@@ -345,21 +345,21 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
           </div>
 
           {/* Endometriosis */}
-          <div className="rounded-xl border border-sage/15 overflow-hidden">
-            <div className="px-3 py-1.5 bg-cream border-b border-sage/15">
-              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-forest">Endometriosis</span>
+          <div className="rounded-xl border border-tint/15 overflow-hidden">
+            <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
+              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">Endometriosis</span>
             </div>
             <div className="px-3 py-2.5">
               <div className="flex items-center gap-1.5">
                 {policy.endometriosis_priority_access ? (
                   <>
-                    <CheckCircle2 className="w-4 h-4 text-forest shrink-0" aria-hidden="true" />
-                    <span className="text-sm font-semibold text-charcoal">Priority access</span>
+                    <CheckCircle2 className="w-4 h-4 text-brand shrink-0" aria-hidden="true" />
+                    <span className="text-sm font-semibold text-ink">Priority access</span>
                   </>
                 ) : (
                   <>
-                    <AlertCircle className="w-4 h-4 text-charcoal/40 shrink-0" aria-hidden="true" />
-                    <span className="text-sm font-semibold text-charcoal">Standard</span>
+                    <AlertCircle className="w-4 h-4 text-ink/40 shrink-0" aria-hidden="true" />
+                    <span className="text-sm font-semibold text-ink">Standard</span>
                   </>
                 )}
               </div>
@@ -367,12 +367,12 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
           </div>
 
           {/* Living Children Rule */}
-          <div className="rounded-xl border border-sage/15 overflow-hidden col-span-2">
-            <div className="px-3 py-1.5 bg-cream border-b border-sage/15">
-              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-forest">Living Children Rule</span>
+          <div className="rounded-xl border border-tint/15 overflow-hidden col-span-2">
+            <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
+              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">Living Children Rule</span>
             </div>
             <div className="px-3 py-2.5">
-              <div className="text-sm font-semibold text-charcoal leading-snug">
+              <div className="text-sm font-semibold text-ink leading-snug">
                 {policy.living_children_rule || "Not specified"}
               </div>
             </div>
@@ -381,14 +381,14 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
 
         {/* Additional notes */}
         {policy.additional_notes && (
-          <div className="mt-4 rounded-xl border border-sage/15 overflow-hidden">
-            <div className="px-3 py-1.5 bg-cream border-b border-sage/15">
+          <div className="mt-4 rounded-xl border border-tint/15 overflow-hidden">
+            <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
               <div className="flex items-center gap-2">
-                <Info className="w-3.5 h-3.5 text-forest" aria-hidden="true" />
-                <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-forest">Additional Notes</span>
+                <Info className="w-3.5 h-3.5 text-brand" aria-hidden="true" />
+                <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">Additional Notes</span>
               </div>
             </div>
-            <div className="px-4 py-3 font-sans text-sm text-charcoal/75 leading-relaxed font-light">
+            <div className="px-4 py-3 font-sans text-sm text-ink/75 leading-relaxed font-light">
               {policy.additional_notes}
             </div>
           </div>

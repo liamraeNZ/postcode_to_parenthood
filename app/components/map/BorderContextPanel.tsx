@@ -41,14 +41,14 @@ export function BorderContextPanel({ currentBoard, neighbours, loading }: Border
   if (loading) {
     return (
       <div
-        className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-sage/20"
+        className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-tint/20"
         role="region"
         aria-label="Neighbouring board comparison"
       >
         <div className="animate-pulse space-y-3">
-          <div className="h-4 w-3/4 rounded bg-cream" />
-          <div className="h-3 w-1/2 rounded bg-cream" />
-          <div className="h-3 w-2/3 rounded bg-cream" />
+          <div className="h-4 w-3/4 rounded bg-surface" />
+          <div className="h-3 w-1/2 rounded bg-surface" />
+          <div className="h-3 w-2/3 rounded bg-surface" />
         </div>
       </div>
     );
@@ -58,34 +58,34 @@ export function BorderContextPanel({ currentBoard, neighbours, loading }: Border
 
   return (
     <div
-      className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-sage/20"
+      className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-tint/20"
       role="region"
       aria-label="Neighbouring board comparison"
     >
       {/* Current board */}
       <div className="mb-3">
-        <h4 className="font-mono text-xs font-semibold uppercase tracking-wide text-charcoal/55">
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-wide text-ink/55">
           Your board
         </h4>
         <div className="mt-1 flex items-center justify-between gap-2">
-          <span className="font-sans text-sm font-medium text-charcoal">{currentBoard.name}</span>
-          <span className="shrink-0 rounded-full bg-cream px-2 py-0.5 text-xs font-medium text-charcoal">
+          <span className="font-sans text-sm font-medium text-ink">{currentBoard.name}</span>
+          <span className="shrink-0 rounded-full bg-surface px-2 py-0.5 text-xs font-medium text-ink">
             {formatCycles(currentBoard.cyclesOffered)}
           </span>
         </div>
       </div>
 
       {/* Divider */}
-      <hr className="border-sage/15" />
+      <hr className="border-tint/15" />
 
       {/* Neighbours */}
       <div className="mt-3">
-        <h4 className="font-mono text-xs font-semibold uppercase tracking-wide text-charcoal/55">
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-wide text-ink/55">
           Neighbouring boards
         </h4>
 
         {neighbours.length === 0 ? (
-          <p className="mt-2 font-sans text-xs text-charcoal/55">No neighbouring boards visible</p>
+          <p className="mt-2 font-sans text-xs text-ink/55">No neighbouring boards visible</p>
         ) : (
           <ul className="mt-2 space-y-2">
             {neighbours.map((neighbour) => {
@@ -97,12 +97,12 @@ export function BorderContextPanel({ currentBoard, neighbours, loading }: Border
                     {neighbour.slug ? (
                       <Link
                         to={`/board/${toSlug(neighbour.slug)}`}
-                        className="font-sans text-sm font-medium text-forest hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+                        className="font-sans text-sm font-medium text-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tint"
                       >
                         {neighbour.name}
                       </Link>
                     ) : (
-                      <span className="font-sans text-sm font-medium text-charcoal">{neighbour.name}</span>
+                      <span className="font-sans text-sm font-medium text-ink">{neighbour.name}</span>
                     )}
                   </div>
                   <span
@@ -130,7 +130,7 @@ export function BorderContextPanel({ currentBoard, neighbours, loading }: Border
 
         {/* Summary message when no neighbour offers more */}
         {neighbours.length > 0 && !hasImprovement && (
-          <p className="mt-3 font-sans text-xs text-charcoal/55">
+          <p className="mt-3 font-sans text-xs text-ink/55">
             Your board matches or exceeds neighbouring provision
           </p>
         )}
