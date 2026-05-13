@@ -10,6 +10,7 @@ import StatsTicker from "@/components/home/StatsTicker";
 import HowItWorks from "@/components/home/HowItWorks";
 import TrustBar from "@/components/home/TrustBar";
 import WhyItMatters from "@/components/home/WhyItMatters";
+import MapCTA from "@/components/home/MapCTA";
 import FAQSection from "@/components/home/FAQSection";
 import CTASection from "@/components/home/CTASection";
 
@@ -101,6 +102,7 @@ export default function LandingPage() {
       <HowItWorks />
       <TrustBar />
       <WhyItMatters />
+      <MapCTA />
       <FAQSection />
       <CTASection />
 

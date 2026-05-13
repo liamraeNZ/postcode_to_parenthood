@@ -62,8 +62,8 @@ export function HeroSection({ onGpListChange }: HeroSectionProps) {
 
         {/* Subheading */}
         <p className="reveal stagger-3 mx-auto mt-6 max-w-2xl font-sans text-lg text-off-white/70 md:text-xl">
-          Discover what fertility funding your local NHS area offers — in seconds.
-          Free, independent, and always up to date.
+          Discover what fertility funding your local NHS area offers in seconds.
+          Free, and totally independent.
         </p>
 
         {/* PostcodeSearch */}

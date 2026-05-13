@@ -65,7 +65,7 @@ export default function TrustBar() {
       ref={ref as React.RefObject<HTMLElement>}
       className="py-14 bg-cream border-y border-sage/20"
     >
-      <div className="container">
+      <div className="container mx-auto px-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {trustItems.map((item, i) => (
             <div
