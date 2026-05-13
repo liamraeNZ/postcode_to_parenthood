@@ -88,7 +88,7 @@ export default function HowItWorks() {
         {/* Heading */}
         <h2 className="reveal stagger-1 font-heading text-charcoal text-3xl md:text-4xl lg:text-5xl mb-16">
           Three simple steps to{' '}
-          <em className="text-sage not-italic font-heading italic">
+          <em className="not-italic font-heading italic">
             find your funding
           </em>
         </h2>

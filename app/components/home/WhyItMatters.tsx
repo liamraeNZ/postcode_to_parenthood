@@ -23,15 +23,9 @@ export default function WhyItMatters() {
       className="relative bg-forest overflow-hidden"
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[600px]">
-        {/* Left panel — gradient image fallback */}
+        {/* Left panel — gradient */}
         <div className="relative lg:col-span-5 min-h-[300px] lg:min-h-full">
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(135deg, #0f2419 0%, #1a3d2e 30%, #2d5a45 60%, #7a9e8e 100%)',
-            }}
-          />
+          <div className="absolute inset-0 bg-gradient-to-br from-forest-dark via-forest to-forest-light" />
           {/* Subtle overlay for depth */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-forest/80" />
         </div>
@@ -39,22 +33,25 @@ export default function WhyItMatters() {
         {/* Right panel — text content */}
         <div className="lg:col-span-7 flex flex-col justify-center px-8 py-16 md:px-12 lg:px-16 lg:py-24">
           {/* Heading */}
-          <h2 className="reveal font-heading text-off-white text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
-            Funding rules change by area.{' '}
+          <h2 className="reveal font-heading text-white text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+            Funding rules{' '}
+            <em className="not-italic font-heading italic underline decoration-sand/60 underline-offset-4">
+              change by area.
+            </em>{' '}
             <br className="hidden md:inline" />
             Sometimes{' '}
-            <em className="text-sage-light font-heading italic" style={{ fontStyle: 'italic' }}>
+            <em className="font-heading italic underline decoration-sand/60 underline-offset-4">
               by the mile.
             </em>
           </h2>
 
           {/* Body text */}
-          <p className="reveal stagger-1 font-sans text-off-white/70 text-base md:text-lg font-light leading-relaxed mb-4 max-w-xl">
+          <p className="reveal stagger-1 font-sans text-white/90 text-base md:text-lg font-light leading-relaxed mb-4 max-w-xl">
             Access to NHS-funded fertility treatment depends on where you live.
             This postcode lottery means that identical couples receive vastly
             different levels of support depending on their local health board.
           </p>
-          <p className="reveal stagger-2 font-sans text-off-white/70 text-base md:text-lg font-light leading-relaxed mb-10 max-w-xl">
+          <p className="reveal stagger-2 font-sans text-white/90 text-base md:text-lg font-light leading-relaxed mb-10 max-w-xl">
             We believe everyone deserves to understand their options. Pathway to
             Parenthood makes it simple to find out what funding is available in
             your area.
@@ -64,10 +61,10 @@ export default function WhyItMatters() {
           <div className="reveal stagger-3 grid grid-cols-2 gap-x-8 gap-y-6 max-w-md">
             {stats.map((stat) => (
               <div key={stat.label}>
-                <span className="block font-heading text-sage-light text-2xl md:text-3xl font-semibold">
+                <span className="block font-heading text-white text-2xl md:text-3xl font-semibold">
                   {stat.value}
                 </span>
-                <span className="block font-sans text-off-white/80 text-sm mt-1">
+                <span className="block font-sans text-white/80 text-sm mt-1">
                   {stat.label}
                 </span>
               </div>

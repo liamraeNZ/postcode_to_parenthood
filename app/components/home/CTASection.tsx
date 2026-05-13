@@ -7,20 +7,12 @@ export default function CTASection() {
 
   return (
     <section
-      className="grain relative overflow-hidden py-24 md:py-32"
-      style={{
-        background:
-          'linear-gradient(160deg, #0f2419 0%, #1a3d2e 35%, #2d5a45 65%, #1a3d2e 100%)',
-      }}
+      className="grain relative overflow-hidden bg-forest py-24 md:py-32"
     >
       {/* Dark overlay for depth */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 bg-forest-dark/30"
         aria-hidden="true"
-        style={{
-          background:
-            'linear-gradient(to bottom, rgba(15, 36, 25, 0.4) 0%, rgba(15, 36, 25, 0.7) 100%)',
-        }}
       />
 
       <div
@@ -28,16 +20,16 @@ export default function CTASection() {
         className="relative z-10 mx-auto max-w-3xl px-6 text-center"
       >
         {/* Heading */}
-        <h2 className="reveal stagger-1 font-heading text-4xl font-bold leading-tight tracking-tight text-off-white md:text-5xl lg:text-6xl">
+        <h2 className="reveal stagger-1 font-heading text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl">
           Ready to find{' '}
-          <em className="not-italic font-heading italic text-sage-light">
+          <em className="not-italic font-heading italic">
             your funding
           </em>
           ?
         </h2>
 
         {/* Subheading */}
-        <p className="reveal stagger-2 mx-auto mt-4 max-w-xl font-sans text-lg text-off-white/70">
+        <p className="reveal stagger-2 mx-auto mt-4 max-w-xl font-sans text-lg text-white/90">
           Enter your postcode below and we'll show you exactly what NHS fertility
           funding is available in your area.
         </p>

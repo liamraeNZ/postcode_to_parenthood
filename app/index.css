@@ -10,15 +10,18 @@
     --font-mono: 'DM Mono', monospace;
 
     /* Brand palette */
-    --color-forest: #1a3d2e;
-    --color-forest-light: #2d5a45;
-    --color-sage: #7a9e8e;
-    --color-sage-light: #a8c4b8;
+    --color-forest: #2a9d8f;
+    --color-forest-light: #3db0a2;
+    --color-forest-dark: #1f7a6f;
+    --color-sage: #6ec4b8;
+    --color-sage-light: #a8d8d0;
     --color-cream: #f5f0e8;
     --color-cream-dark: #ede7da;
     --color-blush: #e8c4b8;
     --color-charcoal: #2a2a2a;
     --color-off-white: #f0ede6;
+    --color-sand: #f5efe7;
+    --color-sand-dark: #ebe3d8;
 
     /* Custom easing */
     --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
@@ -72,7 +75,7 @@
     --card-foreground: oklch(0.25 0 0);        /* charcoal */
     --popover: oklch(0.97 0.01 85);
     --popover-foreground: oklch(0.25 0 0);
-    --primary: oklch(0.30 0.05 160);           /* forest green #1a3d2e */
+    --primary: oklch(0.60 0.12 175);           /* teal #2a9d8f */
     --primary-foreground: oklch(0.955 0.015 85); /* warm cream */
     --secondary: oklch(0.93 0.01 85);
     --secondary-foreground: oklch(0.25 0 0);
@@ -92,7 +95,7 @@
     --radius: 1rem;
     --sidebar: oklch(0.955 0.015 85);
     --sidebar-foreground: oklch(0.25 0 0);
-    --sidebar-primary: oklch(0.30 0.05 160);
+    --sidebar-primary: oklch(0.60 0.12 175);
     --sidebar-primary-foreground: oklch(0.955 0.015 85);
     --sidebar-accent: oklch(0.93 0.01 85);
     --sidebar-accent-foreground: oklch(0.25 0 0);
@@ -179,7 +182,7 @@
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px -8px rgba(26, 61, 46, 0.18);
+  box-shadow: 0 12px 32px -8px rgba(42, 157, 143, 0.18);
 }
 
 /* ─── Button press effect ─── */

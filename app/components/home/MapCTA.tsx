@@ -15,17 +15,17 @@ export default function MapCTA() {
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
             {/* Left — text content */}
             <div className="px-8 py-12 md:px-12 lg:py-16">
-              <p className="reveal stagger-1 text-sage-light text-sm font-mono uppercase tracking-[0.2em] mb-4">
+              <p className="reveal stagger-1 text-white/80 text-sm font-mono uppercase tracking-[0.2em] mb-4">
                 Explore visually
               </p>
-              <h2 className="reveal stagger-2 font-heading text-off-white text-2xl md:text-3xl lg:text-4xl leading-tight mb-4">
+              <h2 className="reveal stagger-2 font-heading text-white text-2xl md:text-3xl lg:text-4xl leading-tight mb-4">
                 Curious how funding{' '}
-                <em className="not-italic font-heading italic text-sage-light">
+                <em className="not-italic font-heading italic">
                   varies
                 </em>{' '}
                 across the UK?
               </h2>
-              <p className="reveal stagger-3 font-sans text-off-white/70 text-base font-light leading-relaxed mb-8 max-w-md">
+              <p className="reveal stagger-3 font-sans text-white/90 text-base font-light leading-relaxed mb-8 max-w-md">
                 Our interactive map lets you see fertility funding policies at a
                 glance — compare regions, spot patterns, and find your area
                 without typing a thing.
@@ -53,13 +53,7 @@ export default function MapCTA() {
 
             {/* Right — decorative map preview */}
             <div className="relative hidden lg:block h-full min-h-[320px]">
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'linear-gradient(160deg, #2d5a45 0%, #7a9e8e 40%, #a8c4b8 70%, #7a9e8e 100%)',
-                }}
-              />
+              <div className="absolute inset-0 bg-gradient-to-br from-forest via-sage to-sage-light" />
               {/* Abstract map-like shapes */}
               <div className="absolute inset-0 flex items-center justify-center opacity-30">
                 <svg

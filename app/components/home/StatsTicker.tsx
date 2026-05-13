@@ -19,10 +19,10 @@ export default function StatsTicker() {
       <div className="ticker-track flex w-max items-center gap-12 px-6">
         {[...stats, ...stats].map((stat, i) => (
           <div key={i} className="flex items-baseline gap-2 whitespace-nowrap">
-            <span className="font-heading text-2xl font-semibold text-off-white">
+            <span className="font-heading text-2xl font-semibold text-white">
               {stat.value}
             </span>
-            <span className="font-sans text-sm text-off-white/70">
+            <span className="font-sans text-sm text-white/80">
               {stat.label}
             </span>
           </div>
