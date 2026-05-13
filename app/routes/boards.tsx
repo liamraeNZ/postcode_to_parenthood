@@ -148,30 +148,30 @@ export default function BoardsPage({ loaderData }: Route.ComponentProps) {
         description="Browse summarised fertility funding policies by board. Each page breaks down eligibility, age limits, and cycle availability in plain English."
         breadcrumbCurrent="Health boards"
       />
-      <div className="container mx-auto max-w-3xl px-4 pt-3 pb-6 md:pt-4 md:pb-8">
+      <div className="container mx-auto max-w-3xl px-4 pt-6 pb-8 md:pt-8 md:pb-12">
         {/* Country filter */}
         <CountryFilter
-          className="mb-4"
+          className="mb-5"
           countries={countryCounts}
           selected={selectedCountries}
           onChange={handleCountryChange}
         />
 
         {/* Search input */}
-        <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-deep-slate/40" />
+        <div className="relative mb-5">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/40" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by health board name..."
             aria-label="Search health boards by name"
-            className="w-full pl-10 pr-4 py-3 border-2 border-warm-sand-dark rounded-xl text-base bg-white focus:outline-none focus:border-sage-btn focus:ring-1 focus:ring-sage-btn transition-colors"
+            className="w-full pl-10 pr-4 py-3 border border-sage/20 rounded-xl text-base font-sans bg-white focus:outline-none focus:border-sage focus:ring-2 focus:ring-sage/30 transition-colors"
           />
         </div>
 
         {/* Results count */}
-        <p className="text-sm text-deep-slate/60 mb-4">
+        <p className="font-mono text-xs text-charcoal/50 uppercase tracking-wide mb-4">
           {filtered.length === boards.length
             ? `${boards.length} health boards`
             : `${filtered.length} of ${boards.length} health boards`}
@@ -184,14 +184,14 @@ export default function BoardsPage({ loaderData }: Route.ComponentProps) {
               <li key={board.id}>
                 <Link
                   to={`/board/${toSlug(board.document_folder_name)}`}
-                  className="flex items-start gap-3 px-4 py-3 bg-white border border-warm-sand-dark rounded-xl hover:border-sage-btn hover:shadow-sm transition-all group"
+                  className="card-hover flex items-start gap-3 px-4 py-3.5 bg-white border border-sage/15 rounded-2xl hover:border-forest/40 transition-all group"
                 >
-                  <Building2 className="w-5 h-5 text-sage-btn flex-shrink-0 mt-0.5" />
+                  <Building2 className="w-5 h-5 text-forest flex-shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
-                    <span className="text-deep-slate font-medium group-hover:text-sage-btn transition-colors">
+                    <span className="font-sans text-charcoal font-medium group-hover:text-forest transition-colors">
                       {formatIcbName(board.name)}
                     </span>
-                    <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-deep-slate/70 mt-0.5">
+                    <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 font-sans text-xs text-charcoal/55 mt-0.5">
                       <span>{COUNTRY_LABELS[board.country] || board.country}</span>
                       {board.is_national === 1 && (
                         <span>· National policy</span>
@@ -206,8 +206,8 @@ export default function BoardsPage({ loaderData }: Route.ComponentProps) {
             ))}
           </ul>
         ) : (
-          <div className="p-6 bg-warm-sand rounded-xl text-center">
-            <p className="text-deep-slate/70">
+          <div className="p-6 bg-cream rounded-2xl text-center">
+            <p className="font-sans text-charcoal/60 font-light">
               No health boards match your filter. Try a different name or adjust the country filter.
             </p>
           </div>

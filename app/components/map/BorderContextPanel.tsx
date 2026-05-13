@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { toSlug } from '../../lib/slug';
+import { STATUS_BADGE } from '@/utils/theme';
 
 export interface BorderContextPanelProps {
   currentBoard: { id: string; name: string; cyclesOffered: number | null };
@@ -40,14 +41,14 @@ export function BorderContextPanel({ currentBoard, neighbours, loading }: Border
   if (loading) {
     return (
       <div
-        className="rounded-lg bg-white p-4 shadow-sm ring-1 ring-warm-sand-dark"
+        className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-sage/20"
         role="region"
         aria-label="Neighbouring board comparison"
       >
         <div className="animate-pulse space-y-3">
-          <div className="h-4 w-3/4 rounded bg-warm-sand" />
-          <div className="h-3 w-1/2 rounded bg-warm-sand" />
-          <div className="h-3 w-2/3 rounded bg-warm-sand" />
+          <div className="h-4 w-3/4 rounded bg-cream" />
+          <div className="h-3 w-1/2 rounded bg-cream" />
+          <div className="h-3 w-2/3 rounded bg-cream" />
         </div>
       </div>
     );
@@ -57,34 +58,34 @@ export function BorderContextPanel({ currentBoard, neighbours, loading }: Border
 
   return (
     <div
-      className="rounded-lg bg-white p-4 shadow-sm ring-1 ring-warm-sand-dark"
+      className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-sage/20"
       role="region"
       aria-label="Neighbouring board comparison"
     >
       {/* Current board */}
       <div className="mb-3">
-        <h4 className="font-heading text-xs font-semibold uppercase tracking-wide text-deep-slate/60">
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-wide text-charcoal/55">
           Your board
         </h4>
         <div className="mt-1 flex items-center justify-between gap-2">
-          <span className="text-sm font-medium text-deep-slate">{currentBoard.name}</span>
-          <span className="shrink-0 rounded-full bg-warm-sand px-2 py-0.5 text-xs font-medium text-deep-slate">
+          <span className="font-sans text-sm font-medium text-charcoal">{currentBoard.name}</span>
+          <span className="shrink-0 rounded-full bg-cream px-2 py-0.5 text-xs font-medium text-charcoal">
             {formatCycles(currentBoard.cyclesOffered)}
           </span>
         </div>
       </div>
 
       {/* Divider */}
-      <hr className="border-warm-sand-dark" />
+      <hr className="border-sage/15" />
 
       {/* Neighbours */}
       <div className="mt-3">
-        <h4 className="font-heading text-xs font-semibold uppercase tracking-wide text-deep-slate/60">
+        <h4 className="font-mono text-xs font-semibold uppercase tracking-wide text-charcoal/55">
           Neighbouring boards
         </h4>
 
         {neighbours.length === 0 ? (
-          <p className="mt-2 text-xs text-deep-slate/60">No neighbouring boards visible</p>
+          <p className="mt-2 font-sans text-xs text-charcoal/55">No neighbouring boards visible</p>
         ) : (
           <ul className="mt-2 space-y-2">
             {neighbours.map((neighbour) => {
@@ -96,21 +97,21 @@ export function BorderContextPanel({ currentBoard, neighbours, loading }: Border
                     {neighbour.slug ? (
                       <Link
                         to={`/board/${toSlug(neighbour.slug)}`}
-                        className="text-sm font-medium text-sage-dark hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-green"
+                        className="font-sans text-sm font-medium text-forest hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage"
                       >
                         {neighbour.name}
                       </Link>
                     ) : (
-                      <span className="text-sm font-medium text-deep-slate">{neighbour.name}</span>
+                      <span className="font-sans text-sm font-medium text-charcoal">{neighbour.name}</span>
                     )}
                   </div>
                   <span
                     className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
                       improved
-                        ? 'bg-[#D1FAE5] text-[#065F46]'
+                        ? STATUS_BADGE.improved
                         : worse
-                          ? 'bg-[#FEE2E2] text-[#991B1B]'
-                          : 'bg-warm-sand text-deep-slate'
+                          ? STATUS_BADGE.worse
+                          : STATUS_BADGE.neutral
                     }`}
                   >
                     {improved && (
@@ -129,7 +130,7 @@ export function BorderContextPanel({ currentBoard, neighbours, loading }: Border
 
         {/* Summary message when no neighbour offers more */}
         {neighbours.length > 0 && !hasImprovement && (
-          <p className="mt-3 text-xs text-deep-slate/60">
+          <p className="mt-3 font-sans text-xs text-charcoal/55">
             Your board matches or exceeds neighbouring provision
           </p>
         )}

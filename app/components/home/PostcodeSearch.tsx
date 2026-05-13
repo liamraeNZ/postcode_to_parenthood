@@ -1,19 +1,9 @@
-import { useState, useEffect } from 'react';
-import type { FormEvent, ReactNode } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { Compass, Loader2, MapPin } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog';
 import {
   getIcbFromGpPractice,
   PostcodeLookupError,
@@ -22,12 +12,12 @@ import {
 } from '@/services/postcodeService';
 import type { GpPracticeSummary } from '@/types';
 import { motion, AnimatePresence } from 'motion/react';
+import { GpPracticeList } from '@/components/home/GpPracticeList';
 
 type PostcodeLookupAction = 'search' | 'lookup';
 
 type PostcodeSearchProps = {
   onSearchStarted?: () => void;
-  onGpListChange?: (gpListContent: ReactNode | null) => void;
 };
 
 function getPostcodeLookupErrorMessage(action: PostcodeLookupAction, err: unknown) {
@@ -50,13 +40,12 @@ function logDevError(message: string, err: unknown) {
   }
 }
 
-export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSearchProps) {
+export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
   const navigate = useNavigate();
   const [postcode, setPostcode] = useState('');
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [loadingSelect, setLoadingSelect] = useState(false);
   const [gpPractices, setGpPractices] = useState<GpPracticeSummary[] | null>(null);
-  const [gpPracticeQuery, setGpPracticeQuery] = useState('');
   const [nameSearchOpen, setNameSearchOpen] = useState(false);
   const [nameSearchQuery, setNameSearchQuery] = useState('');
   const [nameSearchLoading, setNameSearchLoading] = useState(false);
@@ -65,30 +54,9 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
   const [selectedGP, setSelectedGP] = useState<GpPracticeSummary | null>(null);
   const [error, setError] = useState('');
 
-  const sortedGpPractices = gpPractices
-    ? [...gpPractices].sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
-    : null;
-
-  const filteredGpPractices = sortedGpPractices
-    ? sortedGpPractices.filter((gp) => {
-        const q = gpPracticeQuery.trim().toLowerCase();
-        if (!q) return true;
-        return (
-          gp.name.toLowerCase().includes(q) ||
-          gp.odsCode.toLowerCase().includes(q) ||
-          (gp.postcode ?? '').toLowerCase().includes(q)
-        );
-      })
-    : null;
-
-  const nameSearchSortedResults = nameSearchResults
-    ? [...nameSearchResults].sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
-    : null;
-
   const resetSearchState = () => {
     setError('');
     setGpPractices(null);
-    setGpPracticeQuery('');
     setSelectedGP(null);
   };
 
@@ -187,170 +155,13 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
     }
   };
 
-  const gpListContent = sortedGpPractices && sortedGpPractices.length > 0 ? (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-    >
-      <Card className="border-2 border-route-teal shadow-md overflow-hidden rounded-lg bg-cream p-4">
-        <div className="flex justify-between items-center mb-2">
-          <div>
-            <CardTitle className="text-deep-slate font-bold text-base">👉 Select your GP practice</CardTitle>
-            <p className="mt-0.5 text-xs text-deep-slate/60">
-              We'll show you the funding policy that applies to your practice.
-            </p>
-          </div>
-          {loadingSelect && (
-            <Badge className="bg-sage-light text-deep-slate hover:bg-sage-light text-[0.75rem] font-bold px-2 py-0.5 rounded-full ring-0 border-none">
-              <span className="inline-flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Finding route
-              </span>
-            </Badge>
-          )}
-        </div>
-
-        <div className="flex items-center gap-2 mb-2">
-          <Input
-            placeholder="Filter by name, postcode, or ODS…"
-            aria-label="Filter GP practices"
-            className="h-8 text-sm"
-            value={gpPracticeQuery}
-            onChange={(e) => setGpPracticeQuery(e.target.value)}
-          />
-          {gpPracticeQuery.trim() ? (
-            <Button type="button" variant="outline" className="h-8 text-xs" onClick={() => setGpPracticeQuery('')}>
-              Clear
-            </Button>
-          ) : null}
-        </div>
-
-        <div className="relative">
-          <div className="max-h-[220px] overflow-y-auto pr-1 -mr-1">
-            <div className="divide-y divide-warm-sand-dark">
-              {filteredGpPractices && filteredGpPractices.length > 0 ? (
-                filteredGpPractices.map((gp) => {
-                  const isSelected = selectedGP?.odsCode === gp.odsCode;
-                  return (
-                    <button
-                      key={gp.odsCode}
-                      type="button"
-                      disabled={loadingSelect}
-                      className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 text-left text-sm transition-colors hover:bg-sage-light/50 ${
-                        isSelected ? 'bg-sage-light font-bold' : ''
-                      } ${loadingSelect ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                      onClick={() => handleSelectGp(gp)}
-                    >
-                      <span className="font-medium text-deep-slate truncate">{gp.name}</span>
-                      <span className="text-xs text-deep-slate/60 whitespace-nowrap shrink-0">
-                        {gp.postcode ? `${gp.postcode} · ` : ''}{gp.odsCode}
-                      </span>
-                    </button>
-                  );
-                })
-              ) : (
-                <div className="text-sm text-deep-slate/60 px-1 py-2">No GP practices match that filter.</div>
-              )}
-            </div>
-          </div>
-          {/* Fade hint to indicate scrollable content */}
-          {filteredGpPractices && filteredGpPractices.length > 6 && (
-            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-cream to-transparent" />
-          )}
-        </div>
-
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <Dialog open={nameSearchOpen} onOpenChange={setNameSearchOpen}>
-            <DialogTrigger render={<Button type="button" variant="outline" className="h-7 text-xs border-warm-sand-dark text-sage-dark hover:bg-sage-light hover:border-route-teal" />}>
-              Can't find your GP? Search by name
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Search for your GP by name</DialogTitle>
-                <DialogDescription>
-                  Search across the UK for active GP practices (useful for digital GP services or a workplace GP).
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="flex items-center gap-2">
-                <Input
-                  placeholder="e.g. Babylon, The Vale Medical Centre…"
-                  aria-label="Search GP practice by name"
-                  className="h-10"
-                  value={nameSearchQuery}
-                  onChange={(e) => setNameSearchQuery(e.target.value)}
-                />
-                <Button
-                  type="button"
-                  className="h-10"
-                  disabled={nameSearchLoading || nameSearchQuery.trim().length < 3}
-                  onClick={handleSearchByName}
-                >
-                  {nameSearchLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
-                </Button>
-              </div>
-
-              {nameSearchError ? <div className="text-sm text-red-600">{nameSearchError}</div> : null}
-
-              <div className="max-h-[360px] overflow-y-auto pr-1 -mr-1">
-                <div className="space-y-2">
-                  {nameSearchSortedResults && nameSearchSortedResults.length > 0 ? (
-                    nameSearchSortedResults.map((gp) => (
-                      <Button
-                        key={gp.odsCode}
-                        type="button"
-                        variant="outline"
-                        className="w-full justify-between rounded-lg"
-                        disabled={loadingSelect}
-                        onClick={() => {
-                          void handleSelectGp(gp);
-                          setNameSearchOpen(false);
-                        }}
-                      >
-                        <span className="text-left">
-                          <span className="block font-bold">{gp.name}</span>
-                          <span className="block text-xs opacity-75">
-                            {gp.postcode ? `${gp.postcode} · ` : null}
-                            {gp.odsCode}
-                          </span>
-                        </span>
-                      </Button>
-                    ))
-                  ) : nameSearchResults && nameSearchResults.length === 0 ? (
-                    <div className="text-sm text-deep-slate/60 px-1 py-2">No GP practices found.</div>
-                  ) : (
-                    <div className="text-sm text-deep-slate/60 px-1 py-2">
-                      Type a name (3+ characters) and search.
-                    </div>
-                  )}
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-
-          {filteredGpPractices ? (
-            <div className="text-xs text-deep-slate/60">
-              {filteredGpPractices.length} practices
-            </div>
-          ) : null}
-        </div>
-      </Card>
-    </motion.div>
-  ) : null;
-
-  // Notify parent of GP list state changes
-  useEffect(() => {
-    onGpListChange?.(gpListContent);
-  }, [gpPractices, gpPracticeQuery, selectedGP, loadingSelect, nameSearchOpen, nameSearchQuery, nameSearchLoading, nameSearchError, nameSearchResults]);
-
   return (
     <div className="w-full space-y-4 md:space-y-6">
       <form
         onSubmit={handleSearch}
-        className="group flex max-w-xl flex-col overflow-hidden rounded-xl border border-warm-sand-dark/80 bg-white shadow-sm transition-[box-shadow] focus-within:border-route-teal/50 focus-within:shadow-[0_0_0_3px_rgba(45,156,154,0.18)] sm:flex-row sm:items-stretch"
+        className="group flex max-w-xl flex-col overflow-hidden rounded-full border border-sage/30 bg-white shadow-sm transition-[box-shadow] focus-within:border-sage/50 focus-within:shadow-[0_0_0_3px_var(--color-focus-ring)] sm:flex-row sm:items-stretch"
       >
-        <div className="relative flex min-h-[3rem] flex-1 items-center border-b border-warm-sand-dark/70 sm:border-b-0 sm:border-r sm:border-warm-sand-dark/70">
+        <div className="relative flex min-h-[3rem] flex-1 items-center border-b border-sage/20 sm:border-b-0">
           <MapPin
             className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-route-teal"
             aria-hidden="true"
@@ -358,7 +169,7 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
           <Input
             placeholder="e.g. SW1A 1AA"
             aria-label="Enter your postcode"
-            className="h-12 w-full rounded-none border-0 bg-transparent py-3 pl-10 pr-3 text-base font-medium shadow-none ring-0 placeholder:text-deep-slate/45 focus-visible:ring-0 sm:h-14 sm:py-4 sm:pl-11 sm:pr-4 sm:text-lg"
+            className="postcode-input h-12 w-full rounded-none border-0 bg-transparent py-3 pl-10 pr-3 font-mono text-base font-medium tracking-wider shadow-none ring-0 placeholder:text-charcoal/40 focus-visible:ring-0 sm:h-14 sm:py-4 sm:pl-11 sm:pr-4 sm:text-lg"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />
@@ -366,7 +177,7 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
         <Button
           type="submit"
           disabled={loadingSearch || loadingSelect}
-          className="h-12 shrink-0 rounded-none border-0 bg-sage-btn px-5 font-semibold text-white shadow-none hover:bg-route-teal-dark disabled:opacity-60 sm:h-auto sm:min-w-[10.5rem]"
+          className="h-12 shrink-0 rounded-full border-0 bg-sage px-5 font-semibold text-white shadow-none hover:bg-sage/90 disabled:opacity-60 sm:h-auto sm:min-w-[10.5rem]"
         >
           {loadingSearch ? (
             <>
@@ -394,12 +205,22 @@ export function PostcodeSearch({ onSearchStarted, onGpListChange }: PostcodeSear
           </motion.div>
         )}
 
-        {/* Show GP list inline only on mobile (lg screens use the right column) */}
-        {onGpListChange ? (
-          <div className="lg:hidden">
-            {gpListContent}
-          </div>
-        ) : gpListContent}
+        {gpPractices && gpPractices.length > 0 && (
+          <GpPracticeList
+            practices={gpPractices}
+            selectedGP={selectedGP}
+            loadingSelect={loadingSelect}
+            onSelectGp={handleSelectGp}
+            nameSearchOpen={nameSearchOpen}
+            onNameSearchOpenChange={setNameSearchOpen}
+            nameSearchQuery={nameSearchQuery}
+            onNameSearchQueryChange={setNameSearchQuery}
+            nameSearchLoading={nameSearchLoading}
+            nameSearchError={nameSearchError}
+            nameSearchResults={nameSearchResults}
+            onSearchByName={handleSearchByName}
+          />
+        )}
       </AnimatePresence>
     </div>
   );

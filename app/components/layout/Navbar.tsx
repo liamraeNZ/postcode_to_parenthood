@@ -1,60 +1,70 @@
 import { Link, useLocation } from "react-router";
-import { Route } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface NavLink {
   to: string;
   label: string;
-  shortLabel: string;
   matchPaths: string[];
 }
 
 const NAV_LINKS: NavLink[] = [
-  { to: "/map", label: "Funding map", shortLabel: "Map", matchPaths: ["/map"] },
-  { to: "/boards", label: "Health boards", shortLabel: "Boards", matchPaths: ["/boards", "/board/"] },
+  { to: "/", label: "Home", matchPaths: ["/"] },
+  { to: "/map", label: "Funding map", matchPaths: ["/map"] },
+  { to: "/boards", label: "Health boards", matchPaths: ["/boards", "/board/"] },
 ];
 
 export function Navbar() {
   const { pathname } = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      setScrolled(window.scrollY > 40);
+    }
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   function isActive(matchPaths: string[]): boolean {
     return matchPaths.some((path) =>
-      path.endsWith("/") ? pathname.startsWith(path) : pathname === path
+      path.endsWith("/") && path !== "/"
+        ? pathname.startsWith(path)
+        : pathname === path
     );
   }
 
-  const homeActive = pathname === "/";
-
   return (
-    <nav className="sticky top-0 z-50 border-b border-warm-sand-dark/60 bg-white/88 backdrop-blur-md supports-[backdrop-filter]:bg-white/75">
-      <div className="container mx-auto flex h-14 items-center justify-between gap-3 px-3 sm:h-16 sm:px-4 md:px-8">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
+        scrolled
+          ? "bg-cream/90 backdrop-blur-md border-b border-sage/20"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto flex h-16 items-center justify-between px-4 md:h-20 md:px-8 max-w-7xl">
+        {/* Logo */}
         <Link
           to="/"
           aria-label="Pathway to Parenthood home"
-          className="group flex min-w-0 items-center gap-2.5 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-route-teal focus-visible:ring-offset-2"
+          className="group flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2"
         >
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sage-light via-white to-blush/90 shadow-sm ring-1 ring-warm-sand-dark/40 transition group-hover:shadow-md">
-            <Route className="h-[1.15rem] w-[1.15rem] text-route-teal-dark" aria-hidden />
-          </div>
-          <span className="hidden min-w-0 truncate font-heading text-[1.05rem] font-semibold tracking-tight text-deep-slate sm:inline md:text-lg">
-            Pathway to Parenthood
-          </span>
-          <span className="truncate font-heading text-base font-semibold tracking-tight text-route-teal-dark sm:hidden">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-forest text-cream font-mono text-sm font-medium">
             P2P
+          </div>
+          <span className="hidden font-heading text-lg font-semibold tracking-tight text-charcoal sm:inline">
+            Pathway to Parenthood
           </span>
         </Link>
 
-        <div className="flex items-center gap-1 sm:gap-2">
-          <Link
-            to="/"
-            aria-current={homeActive ? "page" : undefined}
-            className={`hidden rounded-full px-3 py-2 text-sm font-medium transition-colors md:inline-flex ${
-              homeActive
-                ? "bg-sage-light/90 text-route-teal-dark"
-                : "text-deep-slate/80 hover:bg-sage-light/50 hover:text-deep-slate"
-            }`}
-          >
-            Home
-          </Link>
+        {/* Desktop nav links */}
+        <div className="hidden items-center gap-1 md:flex">
           {NAV_LINKS.map((link) => {
             const active = isActive(link.matchPaths);
             return (
@@ -62,25 +72,87 @@ export function Navbar() {
                 key={link.to}
                 to={link.to}
                 aria-current={active ? "page" : undefined}
-                className={`rounded-full px-2.5 py-2 text-sm font-medium transition-colors sm:px-3 min-h-[44px] min-w-[44px] flex items-center justify-center sm:min-h-0 sm:min-w-0 ${
+                className={`nav-link relative px-4 py-2 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-sage-light/90 text-route-teal-dark"
-                    : "text-deep-slate/85 hover:bg-sage-light/45 hover:text-deep-slate"
+                    ? "text-forest"
+                    : "text-charcoal/70 hover:text-charcoal"
                 }`}
               >
-                <span className="sm:hidden">{link.shortLabel}</span>
-                <span className="hidden sm:inline">{link.label}</span>
+                {link.label}
               </Link>
             );
           })}
           <Link
             to="/search"
             aria-current={pathname === "/search" ? "page" : undefined}
-            className="ml-0.5 inline-flex shrink-0 items-center rounded-full bg-route-teal px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-route-teal-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-route-teal focus-visible:ring-offset-2 sm:ml-1 sm:px-4"
+            className="ml-3 inline-flex items-center rounded-full bg-forest px-5 py-2.5 text-sm font-semibold text-cream shadow-sm transition-all hover:bg-forest-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 btn-press"
           >
-            <span className="hidden sm:inline">Check eligibility</span>
-            <span className="sm:hidden">Check</span>
+            Check eligibility
           </Link>
+        </div>
+
+        {/* Mobile hamburger button */}
+        <button
+          type="button"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+          className="relative flex h-10 w-10 items-center justify-center rounded-lg md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2"
+        >
+          <span className="sr-only">{mobileOpen ? "Close menu" : "Open menu"}</span>
+          <div className="flex h-5 w-6 flex-col items-center justify-center">
+            <span
+              className={`block h-0.5 w-6 rounded-full bg-charcoal transition-all duration-300 ease-out ${
+                mobileOpen ? "translate-y-[4px] rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`block h-0.5 w-6 rounded-full bg-charcoal transition-all duration-300 ease-out mt-1.5 ${
+                mobileOpen ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`block h-0.5 w-6 rounded-full bg-charcoal transition-all duration-300 ease-out mt-1.5 ${
+                mobileOpen ? "-translate-y-[10px] -rotate-45" : ""
+              }`}
+            />
+          </div>
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${
+          mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="border-t border-sage/20 bg-cream/95 backdrop-blur-md px-4 pb-6 pt-4">
+          <div className="flex flex-col gap-1">
+            {NAV_LINKS.map((link) => {
+              const active = isActive(link.matchPaths);
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  aria-current={active ? "page" : undefined}
+                  className={`border-t border-sage/10 px-2 py-3 text-base font-medium transition-colors first:border-t-0 ${
+                    active
+                      ? "text-forest"
+                      : "text-charcoal/70 hover:text-charcoal"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            <Link
+              to="/search"
+              aria-current={pathname === "/search" ? "page" : undefined}
+              className="mt-3 inline-flex items-center justify-center rounded-full bg-forest px-5 py-3 text-base font-semibold text-cream shadow-sm transition-all hover:bg-forest-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 btn-press"
+            >
+              Check eligibility
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

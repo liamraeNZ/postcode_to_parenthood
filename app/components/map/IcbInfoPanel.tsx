@@ -23,18 +23,18 @@ export function IcbInfoPanel({
 
   return (
     <div
-      className="absolute inset-x-0 bottom-0 z-[1000] w-full rounded-t-xl sm:inset-x-auto sm:bottom-auto sm:top-20 sm:right-4 sm:w-72 sm:rounded-xl bg-white shadow-lg ring-1 ring-warm-sand-dark"
+      className="absolute inset-x-0 bottom-0 z-[1000] w-full rounded-t-2xl sm:inset-x-auto sm:bottom-auto sm:top-20 sm:right-4 sm:w-72 sm:rounded-2xl bg-white shadow-lg ring-1 ring-sage/20"
       role="region"
       aria-label={`Policy details for ${icbName}`}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-2 px-4 pt-4 pb-2">
-        <h3 className="font-heading text-sm font-semibold text-deep-slate leading-snug">
+        <h3 className="font-heading text-sm font-semibold text-charcoal leading-snug">
           {icbName}
         </h3>
         <button
           onClick={onClose}
-          className="shrink-0 rounded-md p-1 text-deep-slate/50 hover:bg-warm-sand hover:text-deep-slate transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-green"
+          className="shrink-0 rounded-md p-1 text-charcoal/50 hover:bg-cream hover:text-charcoal transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage"
           aria-label="Close panel"
         >
           <svg
@@ -51,16 +51,16 @@ export function IcbInfoPanel({
       {/* Content */}
       <div className="px-4 pb-4">
         {policy === null ? (
-          <p className="text-sm text-deep-slate/60">No policy data available</p>
+          <p className="font-sans text-sm text-charcoal/55">No policy data available</p>
         ) : (
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-deep-slate/60">Funded cycles</dt>
-              <dd className="font-medium text-deep-slate">{policy.cycles_offered}</dd>
+              <dt className="font-sans text-charcoal/55">Funded cycles</dt>
+              <dd className="font-sans font-medium text-charcoal">{policy.cycles_offered}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-deep-slate/60">Age range</dt>
-              <dd className="font-medium text-deep-slate">
+              <dt className="font-sans text-charcoal/55">Age range</dt>
+              <dd className="font-sans font-medium text-charcoal">
                 {formatAgeRange(policy.min_age, policy.max_age)}
               </dd>
             </div>
@@ -71,7 +71,7 @@ export function IcbInfoPanel({
         {policy !== null && slug && (
           <Link
             to={`/board/${slug}`}
-            className="mt-3 block w-full rounded-lg bg-sage-btn px-3 py-2 text-xs font-bold text-white text-center transition-colors hover:bg-route-teal-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-route-teal focus-visible:ring-offset-1"
+            className="btn-press mt-3 block w-full rounded-full bg-forest px-3 py-2.5 text-xs font-semibold text-white text-center transition-colors hover:bg-forest-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-1"
           >
             View local guidance
           </Link>

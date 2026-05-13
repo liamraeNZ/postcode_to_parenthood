@@ -7,7 +7,7 @@ interface MapControlStripProps {
 
 /**
  * Horizontal strip of pill-style action links displayed above the map.
- * Matches the CountryFilter pill pattern (rounded-lg, border-warm-sand-dark, hover:border-sage-btn).
+ * Matches the CountryFilter pill pattern (rounded-full, border-sage/25, hover:border-forest/50).
  * Horizontally scrollable on mobile (<768px) with no wrapping.
  */
 export function MapControlStrip({ className }: MapControlStripProps) {
@@ -26,7 +26,7 @@ export function MapControlStrip({ className }: MapControlStripProps) {
   );
 
   const linkClasses =
-    "inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium border border-warm-sand-dark bg-white text-deep-slate/70 transition-colors hover:border-sage-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-btn focus-visible:ring-offset-2";
+    "btn-press inline-flex items-center px-3.5 py-1.5 rounded-full text-sm font-medium border border-sage/25 bg-white text-charcoal/70 transition-colors hover:border-forest/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2";
 
   return (
     <nav
