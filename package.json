@@ -60,6 +60,7 @@
     "jsdom": "^25.0.1",
     "mime-types": "^3.0.2",
     "shadcn": "^4.3.1",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.1.14",
     "topojson-server": "^3.0.1",
     "topojson-simplify": "^3.0.3",
