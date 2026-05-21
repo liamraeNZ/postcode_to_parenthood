@@ -35,7 +35,7 @@ function TestHtmlShell({ children }: { children: React.ReactNode }) {
         name: "viewport",
         content: "width=device-width, initial-scale=1",
       }),
-      createElement("title", null, "NHS IVF Funding Eligibility | Pathway to Parenthood")
+      createElement("title", null, "NHS IVF Funding Eligibility | Postcode to Parenthood")
     ),
     createElement(
       "body",
@@ -127,13 +127,13 @@ describe("Integration: Landing Page", () => {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              name: "Pathway to Parenthood",
-              url: "https://pathwaytoparenthood.uk",
+              name: "Postcode to Parenthood",
+              url: "https://postcodetoparenthood.org.uk",
               potentialAction: {
                 "@type": "SearchAction",
                 target: {
                   "@type": "EntryPoint",
-                  urlTemplate: "https://pathwaytoparenthood.uk/?postcode={postcode}",
+                  urlTemplate: "https://postcodetoparenthood.org.uk/?postcode={postcode}",
                 },
                 "query-input": "required name=postcode",
               },
@@ -359,8 +359,8 @@ describe("Integration: Sitemap.xml", () => {
 
     const body = await response.text();
 
-    expect(body).toContain("https://pathwaytoparenthood.uk");
-    expect(body).toContain("https://pathwaytoparenthood.uk/map");
+    expect(body).toContain("https://postcodetoparenthood.org.uk");
+    expect(body).toContain("https://postcodetoparenthood.org.uk/map");
   });
 
   it("contains all active ICB URLs", async () => {
@@ -380,7 +380,7 @@ describe("Integration: Sitemap.xml", () => {
       expect(
         body,
         `Sitemap should contain URL for ICB: ${icb.name} (slug: ${slug})`
-      ).toContain(`https://pathwaytoparenthood.uk/board/${slug}`);
+      ).toContain(`https://postcodetoparenthood.org.uk/board/${slug}`);
     }
   });
 

@@ -52,14 +52,14 @@ export function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          aria-label="Pathway to Parenthood home"
+          aria-label="Postcode to Parenthood home"
           className="group flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tint focus-visible:ring-offset-2"
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand text-surface font-mono text-sm font-medium">
             P2P
           </div>
           <span className="hidden font-heading text-lg font-semibold tracking-tight text-ink sm:inline">
-            Pathway to Parenthood
+            Postcode to Parenthood
           </span>
         </Link>
 

@@ -6,7 +6,7 @@ const faqs = [
   {
     question: 'Is this service free?',
     answer:
-      'Yes, completely. Pathway to Parenthood is a free, independent resource. We do not charge for access to funding information and we have no commercial relationship with any fertility clinic or pharmaceutical company.',
+      'Yes, completely. Postcode to Parenthood is a free, independent resource. We do not charge for access to funding information and we have no commercial relationship with any fertility clinic or pharmaceutical company.',
   },
   {
     question: 'How accurate is the data?',
@@ -26,7 +26,7 @@ const faqs = [
   {
     question: 'Does this cover the whole UK?',
     answer:
-      'Yes. Pathway to Parenthood covers NHS fertility funding policies across the UK, including England, Scotland, Wales, and Northern Ireland. Each nation has different health board structures and funding arrangements.',
+      'Yes. Postcode to Parenthood covers NHS fertility funding policies across the UK, including England, Scotland, Wales, and Northern Ireland. Each nation has different health board structures and funding arrangements.',
   },
 ];
 

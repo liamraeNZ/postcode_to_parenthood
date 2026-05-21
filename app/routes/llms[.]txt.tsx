@@ -1,5 +1,5 @@
 export async function loader() {
-  const body = `# Pathway to Parenthood
+  const body = `# Postcode to Parenthood
 
 > Helping UK residents navigate the IVF postcode lottery by postcode, mapping local NHS fertility guidance to health board policies.
 
@@ -7,10 +7,10 @@ This project is informational only and is not medical, legal, or financial advic
 
 ## Pages
 
-- [Home](https://pathwaytoparenthood.uk/): Postcode search to find your local NHS fertility guidance.
-- [Map](https://pathwaytoparenthood.uk/map): Interactive map showing regional variation in NHS fertility funding across the UK.
-- [Health Board Policy Pages](https://pathwaytoparenthood.uk/sitemap.xml): Individual pages for each health board detailing cycles offered, age limits, BMI requirements, wait times, and notes.
-- [Search](https://pathwaytoparenthood.uk/search): Postcode lookup to identify your local health board.
+- [Home](https://postcodetoparenthood.org.uk/): Postcode search to find your local NHS fertility guidance.
+- [Map](https://postcodetoparenthood.org.uk/map): Interactive map showing regional variation in NHS fertility funding across the UK.
+- [Health Board Policy Pages](https://postcodetoparenthood.org.uk/sitemap.xml): Individual pages for each health board detailing cycles offered, age limits, BMI requirements, wait times, and notes.
+- [Search](https://postcodetoparenthood.org.uk/search): Postcode lookup to identify your local health board.
 
 ## Key Concepts
 

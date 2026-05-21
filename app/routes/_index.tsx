@@ -13,10 +13,10 @@ import FAQSection from "@/components/home/FAQSection";
 import CTASection from "@/components/home/CTASection";
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Pathway to Parenthood | Unlock Your IVF Funding";
+  const title = "Postcode to Parenthood | Unlock Your IVF Funding";
   const description =
     "Don't let your postcode dictate your future. Get an instant breakdown of NHS fertility funding eligibility, cycle availability, and local health board policy.";
-  const canonicalUrl = "https://pathwaytoparenthood.uk";
+  const canonicalUrl = "https://postcodetoparenthood.org.uk";
 
   return [
     { title },
@@ -26,10 +26,15 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:url", content: canonicalUrl },
-    {
-      property: "og:image",
-      content: "https://pathwaytoparenthood.uk/og-image.png",
-    },
+    { property: "og:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:site_name", content: "Postcode to Parenthood" },
+    { property: "og:locale", content: "en_GB" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
   ];
 }
 
@@ -144,15 +149,15 @@ export default function LandingPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "Pathway to Parenthood",
-            url: "https://pathwaytoparenthood.uk",
+            name: "Postcode to Parenthood",
+            url: "https://postcodetoparenthood.org.uk",
             description:
               "A clearer route through NHS IVF funding. Check local eligibility guidance and health board policies by postcode.",
             potentialAction: {
               "@type": "SearchAction",
               target: {
                 "@type": "EntryPoint",
-                urlTemplate: "https://pathwaytoparenthood.uk/search?postcode={postcode}",
+                urlTemplate: "https://postcodetoparenthood.org.uk/search?postcode={postcode}",
               },
               "query-input": "required name=postcode",
             },
