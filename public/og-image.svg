@@ -8,14 +8,76 @@
       <stop offset="0%" style="stop-color:#7C6A5B;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#A08B7A;stop-opacity:1" />
     </linearGradient>
+    <linearGradient id="leaf-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8BA888;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6B8F6B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="leaf-light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#A8C4A0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8BA888;stop-opacity:1" />
+    </linearGradient>
   </defs>
+
+  <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect x="0" y="580" width="1200" height="50" fill="url(#accent)"/>
-  <circle cx="1050" cy="150" r="120" fill="#F5EDE6" opacity="0.6"/>
-  <circle cx="150" cy="500" r="80" fill="#F5EDE6" opacity="0.4"/>
-  <text x="80" y="220" font-family="Georgia, serif" font-size="64" font-weight="bold" fill="#2C2420">Pathway to</text>
-  <text x="80" y="300" font-family="Georgia, serif" font-size="64" font-weight="bold" fill="#2C2420">Parenthood</text>
-  <text x="80" y="380" font-family="Arial, sans-serif" font-size="28" fill="#5C5048">Navigate NHS IVF funding by postcode.</text>
-  <text x="80" y="420" font-family="Arial, sans-serif" font-size="28" fill="#5C5048">Check eligibility, cycles, and local policies.</text>
-  <text x="80" y="520" font-family="monospace" font-size="20" fill="#7C6A5B">postcodetoparenthood.org.uk</text>
+
+  <!-- Bottom accent bar -->
+  <rect x="0" y="590" width="1200" height="40" fill="url(#accent)"/>
+
+  <!-- Soft organic background circles (seed/egg motif) -->
+  <circle cx="1020" cy="180" r="140" fill="#F5EDE6" opacity="0.5"/>
+  <circle cx="1040" cy="160" r="90" fill="#EDE5DB" opacity="0.6"/>
+
+  <!-- Botanical elements - right side branch with leaves -->
+  <!-- Main stem -->
+  <path d="M 880 580 Q 900 480 920 400 Q 940 320 960 260 Q 980 200 1000 160" 
+        stroke="#8BA888" stroke-width="2.5" fill="none" opacity="0.7"/>
+
+  <!-- Leaves along the stem - teardrop/organic shapes -->
+  <ellipse cx="940" cy="380" rx="28" ry="14" fill="url(#leaf-gradient)" opacity="0.5" transform="rotate(-30 940 380)"/>
+  <ellipse cx="970" cy="320" rx="24" ry="12" fill="url(#leaf-light)" opacity="0.45" transform="rotate(25 970 320)"/>
+  <ellipse cx="950" cy="270" rx="22" ry="11" fill="url(#leaf-gradient)" opacity="0.5" transform="rotate(-20 950 270)"/>
+  <ellipse cx="980" cy="220" rx="20" ry="10" fill="url(#leaf-light)" opacity="0.4" transform="rotate(30 980 220)"/>
+  <ellipse cx="990" cy="175" rx="18" ry="9" fill="url(#leaf-gradient)" opacity="0.45" transform="rotate(-25 990 175)"/>
+
+  <!-- Secondary smaller branch -->
+  <path d="M 1050 580 Q 1060 500 1080 440 Q 1100 380 1110 340" 
+        stroke="#A8C4A0" stroke-width="2" fill="none" opacity="0.5"/>
+  <ellipse cx="1085" cy="420" rx="20" ry="10" fill="url(#leaf-light)" opacity="0.4" transform="rotate(20 1085 420)"/>
+  <ellipse cx="1100" cy="370" rx="18" ry="9" fill="url(#leaf-gradient)" opacity="0.35" transform="rotate(-25 1100 370)"/>
+
+  <!-- Seed/sprout motif - bottom left -->
+  <path d="M 140 520 Q 145 500 155 485 Q 165 470 170 460" 
+        stroke="#8BA888" stroke-width="2" fill="none" opacity="0.6"/>
+  <ellipse cx="165" cy="462" rx="14" ry="8" fill="url(#leaf-gradient)" opacity="0.5" transform="rotate(-40 165 462)"/>
+  <ellipse cx="148" cy="478" rx="12" ry="7" fill="url(#leaf-light)" opacity="0.4" transform="rotate(35 148 478)"/>
+  <!-- Seed shape -->
+  <ellipse cx="140" cy="535" rx="10" ry="14" fill="#A08B7A" opacity="0.3"/>
+
+  <!-- Nurturing circle/nest shape - top right area -->
+  <circle cx="1040" cy="160" r="50" fill="none" stroke="#A8C4A0" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 6"/>
+  <circle cx="1040" cy="160" r="35" fill="none" stroke="#8BA888" stroke-width="1" opacity="0.25" stroke-dasharray="3 5"/>
+
+  <!-- Small scattered dots (pollen/seeds) -->
+  <circle cx="820" cy="120" r="3" fill="#A8C4A0" opacity="0.4"/>
+  <circle cx="860" cy="90" r="2" fill="#8BA888" opacity="0.35"/>
+  <circle cx="780" cy="150" r="2.5" fill="#A8C4A0" opacity="0.3"/>
+  <circle cx="900" cy="140" r="2" fill="#8BA888" opacity="0.3"/>
+  <circle cx="750" cy="100" r="1.5" fill="#A8C4A0" opacity="0.25"/>
+  <circle cx="1100" cy="260" r="2.5" fill="#A8C4A0" opacity="0.3"/>
+  <circle cx="1140" cy="300" r="2" fill="#8BA888" opacity="0.25"/>
+
+  <!-- Gentle wave/path line suggesting journey -->
+  <path d="M 0 560 Q 200 545 400 550 Q 600 555 800 548 Q 1000 540 1200 545" 
+        stroke="#A8C4A0" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <path d="M 0 570 Q 300 558 500 562 Q 700 566 900 560 Q 1100 554 1200 558" 
+        stroke="#8BA888" stroke-width="1" fill="none" opacity="0.2"/>
+
+  <!-- Text content -->
+  <text x="80" y="200" font-family="Georgia, serif" font-size="64" font-weight="bold" fill="#2C2420">Postcode to</text>
+  <text x="80" y="280" font-family="Georgia, serif" font-size="64" font-weight="bold" fill="#2C2420">Parenthood</text>
+  <text x="80" y="340" font-family="Arial, sans-serif" font-size="36" fill="#7C6A5B" font-weight="bold">(P2P)</text>
+  <text x="80" y="410" font-family="Arial, sans-serif" font-size="28" fill="#5C5048">Navigate NHS IVF funding by postcode.</text>
+  <text x="80" y="450" font-family="Arial, sans-serif" font-size="28" fill="#5C5048">Check eligibility, cycles, and local policies.</text>
+  <text x="80" y="555" font-family="monospace" font-size="20" fill="#7C6A5B">postcodetoparenthood.org.uk</text>
 </svg>
