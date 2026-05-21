@@ -7,6 +7,8 @@ Allow: /boards
 Allow: /search
 Allow: /policies
 Allow: /policy/
+Allow: /privacy
+Allow: /terms
 Disallow: /admin
 Disallow: /api/
 Disallow: /documents/

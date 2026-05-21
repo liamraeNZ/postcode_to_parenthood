@@ -395,7 +395,7 @@ export async function handleApiRequest(request: Request, env: Env) {
     }
 
     if (url.pathname === '/api/admin/icbs' && request.method === 'GET') {
-      const authErr = checkBasicAuth(request, env);
+      const authErr = await checkBasicAuth(request, env);
       if (authErr) { response = authErr; return response; }
 
       const boards = await listBoards(env.DB);
@@ -404,7 +404,7 @@ export async function handleApiRequest(request: Request, env: Env) {
     }
 
     if (url.pathname === '/api/admin/icbs' && request.method === 'POST') {
-      const authErr = checkBasicAuth(request, env);
+      const authErr = await checkBasicAuth(request, env);
       if (authErr) { response = authErr; return response; }
 
       const body = await readJsonBody(request, { maxBytes: 100_000 });
@@ -449,7 +449,7 @@ export async function handleApiRequest(request: Request, env: Env) {
     }
 
     if (url.pathname.startsWith('/api/admin/icbs/') && !url.pathname.includes('/policies') && request.method === 'PATCH') {
-      const authErr = checkBasicAuth(request, env);
+      const authErr = await checkBasicAuth(request, env);
       if (authErr) { response = authErr; return response; }
 
       const id = url.pathname.slice('/api/admin/icbs/'.length);
@@ -484,7 +484,7 @@ export async function handleApiRequest(request: Request, env: Env) {
     {
       const policiesMatch = url.pathname.match(/^\/api\/admin\/icbs\/([^/]+)\/policies$/);
       if (policiesMatch && request.method === 'GET') {
-        const authErr = checkBasicAuth(request, env);
+        const authErr = await checkBasicAuth(request, env);
         if (authErr) { response = authErr; return response; }
 
         const icbId = policiesMatch[1];
@@ -494,7 +494,7 @@ export async function handleApiRequest(request: Request, env: Env) {
       }
 
       if (policiesMatch && request.method === 'POST') {
-        const authErr = checkBasicAuth(request, env);
+        const authErr = await checkBasicAuth(request, env);
         if (authErr) { response = authErr; return response; }
 
         const icbId = policiesMatch[1];

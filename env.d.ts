@@ -14,3 +14,9 @@ declare module "react-router" {
     };
   }
 }
+
+interface Window {
+  dataLayer: Record<string, unknown>[];
+}
+
+declare const __SITE_LAST_UPDATED__: string;

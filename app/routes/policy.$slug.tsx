@@ -5,6 +5,8 @@ import { findIcbBySlug } from "@/lib/slug";
 import { formatIcbName } from "@/lib/utils";
 import { FileText, Eye, Download, ChevronDown, ChevronRight } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { standardMeta } from "@/lib/meta";
+import { RouteErrorBoundary } from "@/components/errors/RouteErrorBoundary";
 
 interface DocumentFile {
   name: string;
@@ -95,18 +97,14 @@ export function meta({ data }: Route.MetaArgs) {
   return [
     { title },
     { name: "description", content: description },
-    { tagName: "link", rel: "canonical", href: canonicalUrl },
+    ...standardMeta(canonicalUrl),
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:type", content: "article" },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
-    { property: "og:site_name", content: "Postcode to Parenthood" },
-    { property: "og:locale", content: "en_GB" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
   ];
 }
 
@@ -258,4 +256,8 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
       </div>
     </section>
   );
+}
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary resourceName="policy documents" backTo="/policies" backLabel="Browse all policies" />;
 }

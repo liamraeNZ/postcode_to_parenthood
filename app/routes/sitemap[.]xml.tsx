@@ -12,14 +12,16 @@ export async function loader({ context }: Route.LoaderArgs) {
     .bind()
     .all<{ document_folder_name: string; updated_at: string }>();
 
-  const today = new Date().toISOString().slice(0, 10);
+  const staticLastmod = __SITE_LAST_UPDATED__;
 
   const urls = [
-    { loc: baseUrl, lastmod: today, changefreq: "weekly", priority: "1.0" },
-    { loc: `${baseUrl}/map`, lastmod: today, changefreq: "weekly", priority: "0.8" },
-    { loc: `${baseUrl}/search`, lastmod: today, changefreq: "monthly", priority: "0.7" },
-    { loc: `${baseUrl}/boards`, lastmod: today, changefreq: "weekly", priority: "0.8" },
-    { loc: `${baseUrl}/policies`, lastmod: today, changefreq: "weekly", priority: "0.8" },
+    { loc: baseUrl, lastmod: staticLastmod, changefreq: "weekly", priority: "1.0" },
+    { loc: `${baseUrl}/map`, lastmod: staticLastmod, changefreq: "weekly", priority: "0.8" },
+    { loc: `${baseUrl}/search`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.7" },
+    { loc: `${baseUrl}/boards`, lastmod: staticLastmod, changefreq: "weekly", priority: "0.8" },
+    { loc: `${baseUrl}/policies`, lastmod: staticLastmod, changefreq: "weekly", priority: "0.8" },
+    { loc: `${baseUrl}/privacy`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.3" },
+    { loc: `${baseUrl}/terms`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.3" },
     ...boards.map((board) => ({
       loc: `${baseUrl}/board/${toSlug(board.document_folder_name)}`,
       lastmod: board.updated_at.slice(0, 10),

@@ -3,6 +3,7 @@ import { Form, redirect, useActionData } from "react-router";
 import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
 import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
 import { toSlug } from "@/lib/slug";
+import { standardMeta } from "@/lib/meta";
 import { HeroSection } from "@/components/home/HeroSection";
 import StatsTicker from "@/components/home/StatsTicker";
 import HowItWorks from "@/components/home/HowItWorks";
@@ -21,20 +22,14 @@ export function meta({}: Route.MetaArgs) {
   return [
     { title },
     { name: "description", content: description },
-    { tagName: "link", rel: "canonical", href: canonicalUrl },
+    ...standardMeta(canonicalUrl),
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
-    { property: "og:image:width", content: "1200" },
-    { property: "og:image:height", content: "630" },
-    { property: "og:site_name", content: "Postcode to Parenthood" },
-    { property: "og:locale", content: "en_GB" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
   ];
 }
 

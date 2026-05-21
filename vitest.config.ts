@@ -24,6 +24,9 @@ function readD1Migrations(migrationsPath: string) {
 }
 
 export default defineConfig({
+  define: {
+    __SITE_LAST_UPDATED__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+  },
   plugins: [
     cloudflareTest(async () => {
       const migrationsPath = path.join(__dirname, "migrations");

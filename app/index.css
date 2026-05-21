@@ -1,3 +1,6 @@
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/lora";
+@import "@fontsource/dm-mono";
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -5,8 +8,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: 'Playfair Display', Georgia, serif;
-    --font-sans: 'DM Sans', system-ui, sans-serif;
+    --font-heading: 'Lora Variable', Georgia, serif;
+    --font-sans: 'Inter Variable', system-ui, sans-serif;
     --font-mono: 'DM Mono', monospace;
 
     /* Brand palette — semantic names */

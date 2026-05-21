@@ -95,6 +95,9 @@ function apiDevProxy(): Plugin {
 }
 
 export default defineConfig({
+  define: {
+    __SITE_LAST_UPDATED__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+  },
   plugins: [
     apiDevProxy(),
     cloudflareDevProxy(),
