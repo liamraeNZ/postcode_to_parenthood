@@ -10,18 +10,23 @@
     --font-mono: 'DM Mono', monospace;
 
     /* Brand palette — semantic names */
-    --color-brand: #2a9d8f;
-    --color-brand-light: #3db0a2;
-    --color-brand-dark: #1f7a6f;
-    --color-tint: #6ec4b8;
-    --color-tint-light: #a8d8d0;
-    --color-surface: #f5f0e8;
-    --color-surface-dark: #ede7da;
-    --color-warm: #e8c4b8;
-    --color-ink: #2a2a2a;
-    --color-base: #f0ede6;
-    --color-canvas: #f5efe7;
-    --color-canvas-dark: #ebe3d8;
+    --color-primary: #4A2F24;          /* Coffee Brown */
+    --color-secondary: #244A32;        /* Forest Green */
+    --color-accent: #F3D98B;           /* Butter Yellow */
+    --color-background: #FFF8EA;       /* Warm Cream */
+    --color-text: #2F1E18;             /* Soft Espresso */
+    --color-card: #FFFCF5;             /* Warm White */
+
+    /* Derived shades */
+    --color-brand: #4A2F24;
+    --color-brand-light: #6B4A3D;
+    --color-brand-dark: #3A2219;
+    --color-surface: #FFF8EA;
+    --color-surface-dark: #F5EDDA;
+    --color-ink: #2F1E18;
+    --color-base: #FFF8EA;
+    --color-canvas: #FFFCF5;
+    --color-canvas-dark: #F5EDDA;
 
     /* Map choropleth scale */
     --color-map-excellent: #34D399;
@@ -63,7 +68,7 @@
     --color-status-worse-text: #991B1B;
 
     /* Focus ring */
-    --color-focus-ring: rgba(122, 158, 142, 0.4);
+    --color-focus-ring: rgba(74, 47, 36, 0.35);
 
     /* Custom easing */
     --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
@@ -110,73 +115,73 @@
 }
 
 :root {
-    /* Semantic tokens — mapped to Tender Modernism palette */
-    --background: oklch(0.955 0.015 85);       /* warm cream #f5f0e8 */
-    --foreground: oklch(0.25 0 0);             /* charcoal #2a2a2a */
-    --card: oklch(0.97 0.01 85);               /* slightly lighter cream */
-    --card-foreground: oklch(0.25 0 0);        /* charcoal */
-    --popover: oklch(0.97 0.01 85);
-    --popover-foreground: oklch(0.25 0 0);
-    --primary: oklch(0.60 0.12 175);           /* teal #2a9d8f */
-    --primary-foreground: oklch(0.955 0.015 85); /* warm cream */
-    --secondary: oklch(0.93 0.01 85);
-    --secondary-foreground: oklch(0.25 0 0);
-    --muted: oklch(0.93 0.01 85);
-    --muted-foreground: oklch(0.50 0 0);
-    --accent: oklch(0.65 0.05 165);            /* sage #7a9e8e */
-    --accent-foreground: oklch(0.955 0.015 85); /* warm cream */
+    /* Semantic tokens — mapped to new brand palette */
+    --background: #FFF8EA;                     /* Warm Cream */
+    --foreground: #2F1E18;                     /* Soft Espresso */
+    --card: #FFFCF5;                           /* Warm White */
+    --card-foreground: #2F1E18;                /* Soft Espresso */
+    --popover: #FFFCF5;
+    --popover-foreground: #2F1E18;
+    --primary: #4A2F24;                        /* Coffee Brown */
+    --primary-foreground: #FFF8EA;             /* Warm Cream */
+    --secondary: #244A32;                      /* Forest Green */
+    --secondary-foreground: #FFF8EA;           /* Warm Cream */
+    --muted: #F5EDDA;
+    --muted-foreground: #6B4A3D;
+    --accent: #F3D98B;                         /* Butter Yellow */
+    --accent-foreground: #2F1E18;              /* Soft Espresso */
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.90 0.01 85);
-    --input: oklch(0.90 0.01 85);
-    --ring: oklch(0.65 0.05 165);              /* sage for focus rings */
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
+    --border: #E8DCC8;
+    --input: #E8DCC8;
+    --ring: #4A2F24;                           /* Coffee Brown for focus rings */
+    --chart-1: #4A2F24;
+    --chart-2: #244A32;
+    --chart-3: #F3D98B;
+    --chart-4: #6B4A3D;
+    --chart-5: #2F1E18;
     --radius: 1rem;
-    --sidebar: oklch(0.955 0.015 85);
-    --sidebar-foreground: oklch(0.25 0 0);
-    --sidebar-primary: oklch(0.60 0.12 175);
-    --sidebar-primary-foreground: oklch(0.955 0.015 85);
-    --sidebar-accent: oklch(0.93 0.01 85);
-    --sidebar-accent-foreground: oklch(0.25 0 0);
-    --sidebar-border: oklch(0.90 0.01 85);
-    --sidebar-ring: oklch(0.65 0.05 165);
+    --sidebar: #FFF8EA;
+    --sidebar-foreground: #2F1E18;
+    --sidebar-primary: #4A2F24;
+    --sidebar-primary-foreground: #FFF8EA;
+    --sidebar-accent: #F5EDDA;
+    --sidebar-accent-foreground: #2F1E18;
+    --sidebar-border: #E8DCC8;
+    --sidebar-ring: #4A2F24;
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+    --background: #1A120E;
+    --foreground: #FFF8EA;
+    --card: #2A1E18;
+    --card-foreground: #FFF8EA;
+    --popover: #2A1E18;
+    --popover-foreground: #FFF8EA;
+    --primary: #F3D98B;
+    --primary-foreground: #2F1E18;
+    --secondary: #3A5C44;
+    --secondary-foreground: #FFF8EA;
+    --muted: #3A2A22;
+    --muted-foreground: #C4A88E;
+    --accent: #F3D98B;
+    --accent-foreground: #2F1E18;
     --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --border: rgba(255, 248, 234, 0.1);
+    --input: rgba(255, 248, 234, 0.15);
+    --ring: #F3D98B;
+    --chart-1: #F3D98B;
+    --chart-2: #6B4A3D;
+    --chart-3: #3A5C44;
+    --chart-4: #C4A88E;
+    --chart-5: #2F1E18;
+    --sidebar: #2A1E18;
+    --sidebar-foreground: #FFF8EA;
+    --sidebar-primary: #F3D98B;
+    --sidebar-primary-foreground: #2F1E18;
+    --sidebar-accent: #3A2A22;
+    --sidebar-accent-foreground: #FFF8EA;
+    --sidebar-border: rgba(255, 248, 234, 0.1);
+    --sidebar-ring: #F3D98B;
 }
 
 @layer base {
