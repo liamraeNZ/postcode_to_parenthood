@@ -71,10 +71,10 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Local NHS Fertility Policies | Pathway to Parenthood";
+  const title = "Local NHS Fertility Policies | Postcode to Parenthood";
   const description =
     "Browse local NHS fertility funding rules by health board across England, Scotland, Wales, and Northern Ireland.";
-  const canonicalUrl = "https://pathwaytoparenthood.uk/policies";
+  const canonicalUrl = "https://postcodetoparenthood.org.uk/policies";
 
   return [
     { title },
@@ -84,6 +84,13 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:url", content: canonicalUrl },
+    { property: "og:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
+    { property: "og:site_name", content: "Postcode to Parenthood" },
+    { property: "og:locale", content: "en_GB" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
   ];
 }
 

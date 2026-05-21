@@ -3,10 +3,15 @@ export async function loader() {
 Allow: /
 Allow: /map
 Allow: /board/
+Allow: /boards
+Allow: /search
+Allow: /policies
+Allow: /policy/
 Disallow: /admin
 Disallow: /api/
+Disallow: /documents/
 
-Sitemap: https://pathwaytoparenthood.uk/sitemap.xml`;
+Sitemap: https://postcodetoparenthood.org.uk/sitemap.xml`;
 
   return new Response(body, {
     headers: {

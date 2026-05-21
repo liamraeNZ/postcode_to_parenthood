@@ -3,7 +3,7 @@ import { toSlug } from "../lib/slug";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
-  const baseUrl = "https://pathwaytoparenthood.uk";
+  const baseUrl = "https://postcodetoparenthood.org.uk";
 
   const { results: boards } = await db
     .prepare(
@@ -15,18 +15,33 @@ export async function loader({ context }: Route.LoaderArgs) {
   const today = new Date().toISOString().slice(0, 10);
 
   const urls = [
-    { loc: baseUrl, lastmod: today, priority: "1.0" },
-    { loc: `${baseUrl}/map`, lastmod: today, priority: "0.8" },
+    { loc: baseUrl, lastmod: today, changefreq: "weekly", priority: "1.0" },
+    { loc: `${baseUrl}/map`, lastmod: today, changefreq: "weekly", priority: "0.8" },
+    { loc: `${baseUrl}/search`, lastmod: today, changefreq: "monthly", priority: "0.7" },
+    { loc: `${baseUrl}/boards`, lastmod: today, changefreq: "weekly", priority: "0.8" },
+    { loc: `${baseUrl}/policies`, lastmod: today, changefreq: "weekly", priority: "0.8" },
     ...boards.map((board) => ({
       loc: `${baseUrl}/board/${toSlug(board.document_folder_name)}`,
       lastmod: board.updated_at.slice(0, 10),
+      changefreq: "monthly",
       priority: "0.7",
+    })),
+    ...boards.map((board) => ({
+      loc: `${baseUrl}/policy/${toSlug(board.document_folder_name)}`,
+      lastmod: board.updated_at.slice(0, 10),
+      changefreq: "monthly",
+      priority: "0.5",
     })),
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `  <url><loc>${u.loc}</loc><lastmod>${u.lastmod}</lastmod><priority>${u.priority}</priority></url>`).join("\n")}
+${urls.map((u) => `  <url>
+    <loc>${u.loc}</loc>
+    <lastmod>${u.lastmod}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join("\n")}
 </urlset>`;
 
   return new Response(xml, {

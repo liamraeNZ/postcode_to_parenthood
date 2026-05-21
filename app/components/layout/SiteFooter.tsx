@@ -26,7 +26,7 @@ export function SiteFooter() {
                 P2P
               </span>
               <span className="font-heading text-lg font-semibold tracking-tight text-white">
-                Pathway to Parenthood
+                Postcode to Parenthood
               </span>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-white/70">
@@ -66,7 +66,7 @@ export function SiteFooter() {
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col gap-4 border-t border-white/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-white/60">
-            © {new Date().getFullYear()} Pathway to Parenthood. Not affiliated
+            © {new Date().getFullYear()} Postcode to Parenthood. Not affiliated
             with the NHS.
           </p>
           <nav aria-label="Legal" className="flex items-center gap-4">

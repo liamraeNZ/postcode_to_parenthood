@@ -8,10 +8,10 @@ import { TrustDisclaimer } from "@/components/shared/TrustDisclaimer";
 import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Check Postcode | Pathway to Parenthood";
+  const title = "Check Postcode | Postcode to Parenthood";
   const description =
     "Enter your postcode to find local NHS fertility funding guidance, eligibility criteria, and the health board policy that may apply.";
-  const canonicalUrl = "https://pathwaytoparenthood.uk/search";
+  const canonicalUrl = "https://postcodetoparenthood.org.uk/search";
 
   return [
     { title },
@@ -21,6 +21,13 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:url", content: canonicalUrl },
+    { property: "og:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
+    { property: "og:site_name", content: "Postcode to Parenthood" },
+    { property: "og:locale", content: "en_GB" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
   ];
 }
 

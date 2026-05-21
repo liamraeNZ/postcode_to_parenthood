@@ -1,0 +1,21 @@
+{
+  "name": "Postcode to Parenthood",
+  "short_name": "P2P",
+  "description": "Navigate NHS IVF funding eligibility by postcode. Check local health board policies, cycle availability, and eligibility criteria.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFBF7",
+  "theme_color": "#7C6A5B",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

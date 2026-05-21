@@ -251,7 +251,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
         ) as { href: string } | undefined;
 
         expect(canonicalEntry).toBeDefined();
-        expect(canonicalEntry!.href).toBe(`https://pathwaytoparenthood.uk/board/${data.slug}`);
+        expect(canonicalEntry!.href).toBe(`https://postcodetoparenthood.org.uk/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );
@@ -281,7 +281,7 @@ describe("Property 3: ICB Page Meta Tags Are Complete and ICB-Specific", () => {
           (entry: any) => entry.property === "og:url"
         ) as { content: string } | undefined;
         expect(ogUrl).toBeDefined();
-        expect(ogUrl!.content).toBe(`https://pathwaytoparenthood.uk/board/${data.slug}`);
+        expect(ogUrl!.content).toBe(`https://postcodetoparenthood.org.uk/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );
@@ -842,7 +842,7 @@ describe("Property 6: ICB Page Has Valid Structured Data", () => {
       fc.property(icbDataArb, (data) => {
         const result = buildStructuredData(data.icb, data.policies, data.slug);
 
-        expect(result.url).toBe(`https://pathwaytoparenthood.uk/board/${data.slug}`);
+        expect(result.url).toBe(`https://postcodetoparenthood.org.uk/board/${data.slug}`);
       }),
       { numRuns: 100 }
     );

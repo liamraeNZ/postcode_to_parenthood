@@ -83,14 +83,14 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 export function meta({ data }: Route.MetaArgs) {
   if (!data) {
     return [
-      { title: "Health Board Not Found | Pathway to Parenthood" },
+      { title: "Health Board Not Found | Postcode to Parenthood" },
     ];
   }
 
   const { icb, slug } = data;
-  const title = `${formatIcbName(icb.name)} Source Documents | Pathway to Parenthood`;
+  const title = `${formatIcbName(icb.name)} Source Documents | Postcode to Parenthood`;
   const description = `View and download NHS fertility policy source documents published by ${formatIcbName(icb.name)}.`;
-  const canonicalUrl = `https://pathwaytoparenthood.uk/policy/${slug}`;
+  const canonicalUrl = `https://postcodetoparenthood.org.uk/policy/${slug}`;
 
   return [
     { title },
@@ -100,6 +100,13 @@ export function meta({ data }: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "article" },
     { property: "og:url", content: canonicalUrl },
+    { property: "og:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
+    { property: "og:site_name", content: "Postcode to Parenthood" },
+    { property: "og:locale", content: "en_GB" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
   ];
 }
 

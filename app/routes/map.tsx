@@ -28,10 +28,10 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export function meta({}: Route.MetaArgs) {
-  const title = "NHS IVF Funding Map | Pathway to Parenthood";
+  const title = "NHS IVF Funding Map | Postcode to Parenthood";
   const description =
     "Explore the UK IVF postcode lottery with an interactive NHS fertility funding map. Compare health board boundaries and local eligibility rules.";
-  const canonicalUrl = "https://pathwaytoparenthood.uk/map";
+  const canonicalUrl = "https://postcodetoparenthood.org.uk/map";
 
   return [
     { title },
@@ -41,7 +41,15 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "https://pathwaytoparenthood.uk/og-image.png" },
+    { property: "og:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:site_name", content: "Postcode to Parenthood" },
+    { property: "og:locale", content: "en_GB" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
   ];
 }
 

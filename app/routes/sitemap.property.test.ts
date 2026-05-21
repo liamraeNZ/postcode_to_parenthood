@@ -141,7 +141,7 @@ describe("Property 10: Sitemap Contains All Active ICB URLs With Lastmod", () =>
 
         for (const icb of icbs) {
           const expectedSlug = toSlug(icb.document_folder_name);
-          const expectedLoc = `https://pathwaytoparenthood.uk/board/${expectedSlug}`;
+          const expectedLoc = `https://postcodetoparenthood.org.uk/board/${expectedSlug}`;
           expect(xml).toContain(`<loc>${expectedLoc}</loc>`);
         }
       }),
@@ -157,11 +157,11 @@ describe("Property 10: Sitemap Contains All Active ICB URLs With Lastmod", () =>
 
         for (const icb of icbs) {
           const expectedSlug = toSlug(icb.document_folder_name);
-          const expectedLoc = `https://pathwaytoparenthood.uk/board/${expectedSlug}`;
+          const expectedLoc = `https://postcodetoparenthood.org.uk/board/${expectedSlug}`;
 
-          // Extract the <url> block containing this ICB's loc
+          // Extract the <url> block containing this ICB's loc (handles multi-line XML with whitespace)
           const urlBlockRegex = new RegExp(
-            `<url><loc>${expectedLoc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</loc><lastmod>([^<]+)</lastmod>`
+            `<url>\\s*<loc>${expectedLoc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</loc>\\s*<lastmod>([^<]+)</lastmod>`
           );
           const match = xml.match(urlBlockRegex);
           expect(match).not.toBeNull();
@@ -186,12 +186,12 @@ describe("Property 10: Sitemap Contains All Active ICB URLs With Lastmod", () =>
 
         for (const icb of icbs) {
           const expectedSlug = toSlug(icb.document_folder_name);
-          const expectedLoc = `https://pathwaytoparenthood.uk/board/${expectedSlug}`;
+          const expectedLoc = `https://postcodetoparenthood.org.uk/board/${expectedSlug}`;
           const expectedLastmod = icb.updated_at.slice(0, 10);
 
-          // Verify the lastmod in the XML matches the expected date from updated_at
+          // Verify the lastmod in the XML matches the expected date from updated_at (handles multi-line XML)
           const urlBlockRegex = new RegExp(
-            `<url><loc>${expectedLoc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</loc><lastmod>([^<]+)</lastmod>`
+            `<url>\\s*<loc>${expectedLoc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</loc>\\s*<lastmod>([^<]+)</lastmod>`
           );
           const match = xml.match(urlBlockRegex);
           expect(match).not.toBeNull();
