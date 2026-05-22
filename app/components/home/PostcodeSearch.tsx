@@ -5,6 +5,14 @@ import { Compass, Loader2, MapPin } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   getIcbFromGpPractice,
   PostcodeLookupError,
   searchGpPracticesByName,
@@ -53,6 +61,12 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
   const [nameSearchResults, setNameSearchResults] = useState<GpPracticeSummary[] | null>(null);
   const [selectedGP, setSelectedGP] = useState<GpPracticeSummary | null>(null);
   const [error, setError] = useState('');
+  const [virtualGpModalOpen, setVirtualGpModalOpen] = useState(false);
+  const [pendingVirtualGp, setPendingVirtualGp] = useState<{
+    gp: GpPracticeSummary;
+    slug: string;
+    gpPostcode: string;
+  } | null>(null);
 
   const resetSearchState = () => {
     setError('');
@@ -141,6 +155,14 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
 
       if (slug) {
         const gpPostcode = gp.postcode ?? postcode;
+
+        // If this is a virtual GP, show the interstitial instead of navigating directly
+        if (gp.isVirtual) {
+          setPendingVirtualGp({ gp, slug, gpPostcode });
+          setVirtualGpModalOpen(true);
+          return;
+        }
+
         navigate(`/board/${slug}?gpPostcode=${encodeURIComponent(gpPostcode)}`);
       } else {
         setError(
@@ -153,6 +175,20 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
     } finally {
       setLoadingSelect(false);
     }
+  };
+
+  const handleVirtualGpContinue = () => {
+    if (!pendingVirtualGp) return;
+    const { slug, gpPostcode } = pendingVirtualGp;
+    setVirtualGpModalOpen(false);
+    setPendingVirtualGp(null);
+    navigate(`/board/${slug}?gpPostcode=${encodeURIComponent(gpPostcode)}&via=virtual`);
+  };
+
+  const handleVirtualGpCancel = () => {
+    setVirtualGpModalOpen(false);
+    setPendingVirtualGp(null);
+    setSelectedGP(null);
   };
 
   return (
@@ -222,6 +258,36 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
           />
         )}
       </AnimatePresence>
+
+      {/* Virtual GP interstitial modal */}
+      <Dialog open={virtualGpModalOpen} onOpenChange={setVirtualGpModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Online GP service detected</DialogTitle>
+            <DialogDescription>
+              Your GP practice is an online (virtual) service. The funding information we show you is based on where your GP practice is formally registered with the NHS — not your home address.
+            </DialogDescription>
+          </DialogHeader>
+          <p className="text-sm text-ink/70 leading-relaxed">
+            Because online GP services like GP at Hand are registered in a specific area, your NHS funding entitlement is determined by that area's Integrated Care Board (ICB). This may differ from the ICB that covers your home postcode.
+          </p>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              className="text-sm"
+              onClick={handleVirtualGpCancel}
+            >
+              Find a local GP instead
+            </Button>
+            <Button
+              className="bg-tint text-white hover:bg-tint/90 text-sm"
+              onClick={handleVirtualGpContinue}
+            >
+              I understand, continue
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

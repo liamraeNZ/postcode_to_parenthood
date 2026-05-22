@@ -1,10 +1,11 @@
-import { Link } from "react-router";
+import { Link, useRouteLoaderData } from "react-router";
 import { TrustDisclaimer } from "@/components/shared/TrustDisclaimer";
 
 const NAV_LINKS = [
   { to: "/search", label: "Check postcode" },
   { to: "/map", label: "Funding map" },
   { to: "/boards", label: "Health boards" },
+  { to: "/about", label: "About" },
   { to: "/", label: "Home" },
 ] as const;
 
@@ -14,7 +15,20 @@ const LEGAL_LINKS = [
   { to: "/terms", label: "Terms" },
 ] as const;
 
+function formatLastUpdated(isoDate: string): string {
+  const date = new Date(isoDate);
+  const day = date.getUTCDate();
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
+  const month = months[date.getUTCMonth()];
+  const year = date.getUTCFullYear();
+  return `${day} ${month} ${year}`;
+}
+
 export function SiteFooter() {
+  const rootData = useRouteLoaderData("root") as { lastUpdated: string | null } | undefined;
   return (
     <footer className="mt-auto bg-brand-dark text-base">
       <div className="container mx-auto px-4 py-12 md:py-16">
@@ -65,10 +79,17 @@ export function SiteFooter() {
 
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col gap-4 border-t border-white/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-white/60">
-            © {new Date().getFullYear()} Postcode to Parenthood. Not affiliated
-            with the NHS.
-          </p>
+          <div className="space-y-1">
+            {rootData?.lastUpdated && (
+              <p className="text-xs text-white/60">
+                ICB policy data last updated: {formatLastUpdated(rootData.lastUpdated)}
+              </p>
+            )}
+            <p className="text-xs text-white/60">
+              © {new Date().getFullYear()} Postcode to Parenthood. Not affiliated
+              with the NHS.
+            </p>
+          </div>
           <nav aria-label="Legal" className="flex items-center gap-4">
             {LEGAL_LINKS.map((item) => (
               <Link

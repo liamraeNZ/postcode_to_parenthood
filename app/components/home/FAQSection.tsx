@@ -6,27 +6,27 @@ const faqs = [
   {
     question: 'Is this service free?',
     answer:
-      'Yes, completely. Postcode to Parenthood is a free, independent resource. We do not charge for access to funding information and we have no commercial relationship with any fertility clinic or pharmaceutical company.',
+      'Yes, completely. Postcode to Parenthood is a free, independent resource. We don\'t charge for access to funding information and we have no commercial relationship with any fertility clinic or pharmaceutical company.',
   },
   {
     question: 'How accurate is the data?',
     answer:
-      'Our data is sourced directly from official health board policy documents and Freedom of Information requests. We cross-reference multiple sources and update regularly, but we always recommend confirming details with your GP or local health board.',
+      'We source our data directly from official health board policy documents and Freedom of Information requests. We cross-reference multiple sources and update regularly, but we always recommend confirming details with your GP or local health board.',
   },
   {
     question: 'What is a health board?',
     answer:
-      'A health board is the NHS organisation responsible for planning and funding healthcare services in your area, including fertility treatment. Each region of the UK has its own health board with its own fertility funding policy.',
+      'A health board is the NHS organisation responsible for planning and funding healthcare in your area, including fertility treatment. Each region of the UK has its own health board with its own fertility funding policy.',
   },
   {
     question: 'How often is the data updated?',
     answer:
-      'We review and update policy data regularly, and whenever a health board publishes a new or revised fertility policy. Major policy changes are reflected as quickly as possible after publication.',
+      'We review and update policy data regularly, and whenever a health board publishes a new or revised fertility policy. Major policy changes are reflected as quickly as we can after publication.',
   },
   {
     question: 'Does this cover the whole UK?',
     answer:
-      'Yes. Postcode to Parenthood covers NHS fertility funding policies across the UK, including England, Scotland, Wales, and Northern Ireland. Each nation has different health board structures and funding arrangements.',
+      'Yes. We cover NHS fertility funding policies across England, Scotland, Wales, and Northern Ireland. Each nation has different health board structures and funding arrangements.',
   },
 ];
 

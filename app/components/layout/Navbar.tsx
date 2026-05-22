@@ -11,6 +11,7 @@ const NAV_LINKS: NavLink[] = [
   { to: "/", label: "Home", matchPaths: ["/"] },
   { to: "/map", label: "Funding map", matchPaths: ["/map"] },
   { to: "/boards", label: "Health boards", matchPaths: ["/boards", "/board/"] },
+  { to: "/about", label: "About", matchPaths: ["/about"] },
 ];
 
 export function Navbar() {

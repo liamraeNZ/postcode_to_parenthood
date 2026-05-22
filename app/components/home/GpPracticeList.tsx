@@ -140,8 +140,13 @@ export function GpPracticeList({
                       } ${loadingSelect ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                       onClick={() => onSelectGp(gp)}
                     >
-                      <span className="font-sans text-ink truncate">
+                      <span className="font-sans text-ink truncate flex items-center gap-2">
                         {gp.name}
+                        {gp.isVirtual && (
+                          <span className="inline-flex items-center rounded-full bg-tint/10 px-2 py-0.5 text-[11px] font-medium text-tint whitespace-nowrap shrink-0">
+                            Online GP service
+                          </span>
+                        )}
                       </span>
                       <span className="font-mono text-xs text-ink/50 whitespace-nowrap shrink-0">
                         {gp.postcode ? `${gp.postcode} · ` : ''}
@@ -229,8 +234,13 @@ export function GpPracticeList({
                         }}
                       >
                         <span className="text-left">
-                          <span className="block font-medium text-ink">
+                          <span className="flex items-center gap-2 font-medium text-ink">
                             {gp.name}
+                            {gp.isVirtual && (
+                              <span className="inline-flex items-center rounded-full bg-tint/10 px-2 py-0.5 text-[11px] font-medium text-tint whitespace-nowrap">
+                                Online GP service
+                              </span>
+                            )}
                           </span>
                           <span className="block font-mono text-xs text-ink/50">
                             {gp.postcode ? `${gp.postcode} · ` : null}

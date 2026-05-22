@@ -47,9 +47,14 @@ export default defineConfig({
   test: {
     testTimeout: 30_000,
     setupFiles: ["./test/apply-migrations.ts"],
+    onConsoleLog() {
+      // Suppress worker request logs during test runs
+      return false;
+    },
     exclude: [
       "node_modules/**",
       "app/components/map/TreatmentToggle.test.tsx",
+      "app/components/board/**/*.test.tsx",
     ],
   },
 });

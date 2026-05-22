@@ -12,19 +12,19 @@
     --font-sans: 'Inter Variable', system-ui, sans-serif;
     --font-mono: 'DM Mono', monospace;
 
-    /* Brand palette — semantic names */
-    --color-brand: #2a9d8f;
-    --color-brand-light: #3db0a2;
-    --color-brand-dark: #1f7a6f;
-    --color-tint: #6ec4b8;
-    --color-tint-light: #a8d8d0;
-    --color-surface: #f5f0e8;
-    --color-surface-dark: #ede7da;
-    --color-warm: #e8c4b8;
-    --color-ink: #2a2a2a;
-    --color-base: #f0ede6;
-    --color-canvas: #f5efe7;
-    --color-canvas-dark: #ebe3d8;
+    /* Brand palette — semantic names (oklch for opacity modifier support) */
+    --color-brand: oklch(0.588 0.1 175);
+    --color-brand-light: oklch(0.638 0.1 175);
+    --color-brand-dark: oklch(0.488 0.09 175);
+    --color-tint: oklch(0.72 0.08 175);
+    --color-tint-light: oklch(0.82 0.05 175);
+    --color-surface: oklch(0.95 0.015 85);
+    --color-surface-dark: oklch(0.93 0.015 85);
+    --color-warm: oklch(0.83 0.05 40);
+    --color-ink: oklch(0.25 0 0);
+    --color-page: oklch(0.94 0.012 85);
+    --color-canvas: oklch(0.955 0.013 85);
+    --color-canvas-dark: oklch(0.925 0.015 85);
 
     /* Map choropleth scale */
     --color-map-excellent: #34D399;

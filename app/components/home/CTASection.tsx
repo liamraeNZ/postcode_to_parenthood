@@ -30,8 +30,8 @@ export default function CTASection() {
 
         {/* Subheading */}
         <p className="reveal stagger-2 mx-auto mt-4 max-w-xl font-sans text-lg text-white/90">
-          Enter your postcode below and we'll show you exactly what NHS fertility
-          funding is available in your area.
+          Pop your postcode in below and we'll pull up the NHS fertility
+          funding details for your area.
         </p>
 
         {/* PostcodeSearch */}

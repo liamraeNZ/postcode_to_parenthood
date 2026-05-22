@@ -9,6 +9,17 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { standardMeta } from "@/lib/meta";
 import { RouteErrorBoundary } from "@/components/errors/RouteErrorBoundary";
+import type { BoardMeta } from "@/types";
+import { StatusBadge } from "@/components/board/StatusBadge";
+import { InheritedBanner } from "@/components/board/InheritedBanner";
+import { PlainEnglishSummary } from "@/components/board/PlainEnglishSummary";
+import { TransparencyNote } from "@/components/board/TransparencyNote";
+import { StaleDataWarning } from "@/components/board/StaleDataWarning";
+import { PostcodeLotteryNote } from "@/components/board/PostcodeLotteryNote";
+import { WhatNextSection } from "@/components/board/WhatNextSection";
+import { BoroughList } from "@/components/board/BoroughList";
+import { generatePlainEnglishSummary } from "@/lib/generateSummary";
+import { VirtualGpNote } from "@/components/shared/VirtualGpNote";
 
 const LocalMiniMap = React.lazy(() =>
   import("@/components/map/LocalMiniMap").then((mod) => ({ default: mod.LocalMiniMap }))
@@ -51,13 +62,44 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   // Fetch all health boards with document_folder_name (small set ~70 rows)
   const { results: boards } = await db
     .prepare(
-      "SELECT id, name, document_folder_name, country FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'"
+      `SELECT id, name, document_folder_name, country,
+              data_confidence, policy_date, last_verified,
+              predecessor_icb, source_url, policy_pdf_r2_key,
+              boroughs, summary_override
+       FROM health_boards
+       WHERE document_folder_name IS NOT NULL AND status = 'active'`
     )
     .bind()
-    .all<{ id: string; name: string; document_folder_name: string; country: string }>();
+    .all<{
+      id: string;
+      name: string;
+      document_folder_name: string;
+      country: string;
+      data_confidence: BoardMeta['data_confidence'];
+      policy_date: string | null;
+      last_verified: string | null;
+      predecessor_icb: string | null;
+      source_url: string | null;
+      policy_pdf_r2_key: string | null;
+      boroughs: string | null;
+      summary_override: string | null;
+    }>();
 
   const matched = findIcbBySlug(boards, slug) as
-    | { id: string; name: string; document_folder_name: string; country: string }
+    | {
+        id: string;
+        name: string;
+        document_folder_name: string;
+        country: string;
+        data_confidence: BoardMeta['data_confidence'];
+        policy_date: string | null;
+        last_verified: string | null;
+        predecessor_icb: string | null;
+        source_url: string | null;
+        policy_pdf_r2_key: string | null;
+        boroughs: string | null;
+        summary_override: string | null;
+      }
     | undefined;
   if (!matched) {
     throw new Response("Health board not found", { status: 404 });
@@ -70,7 +112,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   const isNationalPolicy = boardsWithSameFolder.length > 1;
 
   // Fetch policies for this board
-  const { results: policies } = await db
+  let { results: policies } = await db
     .prepare(
       `SELECT p.*, t.name as treatment_type_name
        FROM board_policies p
@@ -82,9 +124,80 @@ export async function loader({ params, context }: Route.LoaderArgs) {
     .bind(matched.id)
     .all<Policy>();
 
+  // Policy fallback: if no direct policies, check sub-ICBs (predecessor boards)
+  let policySource: string | null = null;
+
+  if (policies.length === 0) {
+    const { results: subIcbs } = await db
+      .prepare(
+        `SELECT id, name FROM health_boards WHERE parent_board_code = ?1 AND sub_board_code IS NOT NULL`
+      )
+      .bind(matched.id)
+      .all<{ id: string; name: string }>();
+
+    if (subIcbs.length > 0) {
+      // Fetch policies for each sub-ICB and pick the most generous set
+      let bestPolicies: Policy[] = [];
+      let bestCycles = -1;
+      let bestEffectiveFrom = '';
+      let bestSubIcbName = '';
+
+      for (const subIcb of subIcbs) {
+        const { results: subPolicies } = await db
+          .prepare(
+            `SELECT p.*, t.name as treatment_type_name
+             FROM board_policies p
+             JOIN treatment_types t ON t.id = p.treatment_type_id
+             WHERE p.board_id = ?1
+               AND (p.effective_to IS NULL OR p.effective_to >= date('now'))
+             ORDER BY p.effective_from DESC`
+          )
+          .bind(subIcb.id)
+          .all<Policy>();
+
+        if (subPolicies.length === 0) continue;
+
+        // Find the IVF policy to compare cycles_offered
+        const ivfPolicy = subPolicies.find((p) => p.treatment_type_id === 'ivf');
+        const cycles = ivfPolicy?.cycles_offered ?? 0;
+        const effectiveFrom = ivfPolicy?.effective_from ?? '';
+
+        // Pick the set with highest cycles_offered; tiebreak by most recent effective_from
+        if (
+          cycles > bestCycles ||
+          (cycles === bestCycles && effectiveFrom > bestEffectiveFrom)
+        ) {
+          bestPolicies = subPolicies;
+          bestCycles = cycles;
+          bestEffectiveFrom = effectiveFrom;
+          bestSubIcbName = subIcb.name;
+        }
+      }
+
+      if (bestPolicies.length > 0) {
+        policies = bestPolicies;
+        policySource = bestSubIcbName;
+      }
+    }
+  }
+
+  // Build boardMeta from the matched board's enrichment columns
+  const boardMeta: BoardMeta = {
+    data_confidence: matched.data_confidence,
+    policy_date: matched.policy_date,
+    last_verified: matched.last_verified,
+    predecessor_icb: matched.predecessor_icb,
+    source_url: matched.source_url,
+    policy_pdf_r2_key: matched.policy_pdf_r2_key,
+    boroughs: matched.boroughs,
+    summary_override: matched.summary_override,
+  };
+
   return {
     icb: { id: matched.id, name: matched.name, document_folder_name: matched.document_folder_name, country: matched.country },
     policies,
+    policySource,
+    boardMeta,
     isNationalPolicy,
     slug,
   };
@@ -101,7 +214,7 @@ export function meta({ data }: Route.MetaArgs) {
   const { icb, policies, slug, isNationalPolicy } = data;
   const displayName = isNationalPolicy ? formatCountryName(icb.country) : formatIcbName(icb.name);
   const countryName = formatCountryName(icb.country);
-  const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
+  const ivfPolicy = policies.find((p: Policy) => p.treatment_type_id === "ivf");
   const cycles = ivfPolicy?.cycles_offered ?? 0;
   const maxAge = ivfPolicy?.max_age ?? 0;
 
@@ -133,12 +246,16 @@ export function headers({}: Route.HeadersArgs) {
 }
 
 export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
-  const { icb, policies, slug, isNationalPolicy } = loaderData;
+  const { icb, policies, slug, isNationalPolicy, boardMeta = {} as Record<string, any> } = loaderData;
   const countryName = formatCountryName(icb.country);
   const [searchParams] = useSearchParams();
   const gpPostcode = searchParams.get("gpPostcode");
   const boardNameParam = searchParams.get("boardName");
   const displayName = (isNationalPolicy && boardNameParam) ? formatIcbName(boardNameParam) : formatIcbName(icb.name);
+
+  const showBadge = boardMeta?.data_confidence && boardMeta.data_confidence !== 'unconfirmed';
+  const showInheritedBanner = boardMeta?.data_confidence === 'inherited';
+  const isViaVirtualGp = searchParams.get("via") === "virtual";
 
   return (
     <section className="flex flex-1 flex-col">
@@ -147,8 +264,15 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         description={`${countryName}. NHS-funded fertility treatment guidance and eligibility criteria.`}
         breadcrumbCurrent={displayName}
         compact
+        actions={showBadge ? <StatusBadge dataConfidence={boardMeta.data_confidence} /> : undefined}
       />
       <div className="container mx-auto max-w-3xl px-4 pt-6 pb-8 md:pt-8 md:pb-12">
+        {/* Inherited policy caveat banner */}
+        {showInheritedBanner && boardMeta.predecessor_icb && (
+          <div className="mb-5 md:mb-6">
+            <InheritedBanner predecessorIcb={boardMeta.predecessor_icb} />
+          </div>
+        )}
         {/* Postcode search context banner */}
         {gpPostcode && (
           <div className="mb-5 rounded-2xl border border-tint/30 bg-tint-light/40 px-5 py-3.5 md:mb-6">
@@ -160,6 +284,13 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
           </div>
         )}
 
+        {/* Virtual GP note — shown when user arrived via a virtual GP practice */}
+        {isViaVirtualGp && (
+          <div className="mb-5 md:mb-6">
+            <VirtualGpNote />
+          </div>
+        )}
+
         {/* National policy notice */}
         {isNationalPolicy && (
           <div className="mb-4 px-4 py-3 bg-surface border border-tint/20 rounded-2xl">
@@ -167,6 +298,17 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
               <Info className="w-4 h-4 inline-block mr-1.5 -mt-0.5 text-brand" aria-hidden="true" />
               A national <span className="font-semibold">{countryName}</span> policy currently applies to all health boards.
             </p>
+          </div>
+        )}
+
+        {/* Plain English summary — above policy cards */}
+        {policies.length > 0 && (
+          <div className="mb-5 md:mb-6">
+            <PlainEnglishSummary
+              boardMeta={boardMeta}
+              icbName={displayName}
+              policy={policies.find((p) => p.treatment_type_id === "ivf") ?? policies[0]}
+            />
           </div>
         )}
 
@@ -197,6 +339,41 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
             </p>
           </div>
         )}
+
+        {/* Transparency note — below policy cards */}
+        <div className="mt-6 space-y-3">
+          <TransparencyNote
+            icbName={displayName}
+            policyDate={boardMeta.policy_date}
+            sourceUrl={boardMeta.source_url}
+            lastVerified={boardMeta.last_verified}
+          />
+          {/* Stale data warning — below transparency note */}
+          {boardMeta.last_verified && (
+            <StaleDataWarning
+              lastVerified={boardMeta.last_verified}
+              icbName={displayName}
+            />
+          )}
+        </div>
+
+        {/* Postcode lottery awareness note */}
+        <div className="mt-6 md:mt-8">
+          <PostcodeLotteryNote />
+        </div>
+
+        {/* What next? — soft-path guidance buttons */}
+        <div className="mt-5 md:mt-6">
+          <WhatNextSection boardSlug={slug} />
+        </div>
+
+        {/* Borough/area list */}
+        <div className="mt-5 md:mt-6">
+          <BoroughList
+            boroughs={boardMeta.boroughs}
+            dataConfidence={boardMeta.data_confidence}
+          />
+        </div>
 
         {/* Local mini-map showing GP location relative to nearby board boundaries */}
         {gpPostcode && (
@@ -246,6 +423,13 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
           __html: JSON.stringify(buildStructuredData(icb, policies, slug)),
         }}
       />
+      {/* JSON-LD Structured Data - MedicalWebPage schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildMedicalWebPageSchema(icb, policies, slug, boardMeta)),
+        }}
+      />
     </section>
   );
 }
@@ -271,7 +455,7 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
           {/* Cycles Offered */}
           <div className={`rounded-xl border overflow-hidden ${cc.bg} border-tint/15`}>
             <div className={`px-3 py-1.5 ${cc.bg} border-b border-tint/15`}>
-              <span className={`font-mono text-[10px] uppercase font-semibold tracking-wide ${cc.label}`}>Funded Cycles</span>
+              <span className={`font-mono text-[10px] uppercase font-semibold tracking-wide ${cc.label}`}>NHS-funded cycles</span>
             </div>
             <div className="px-3 py-2.5 bg-white">
               <div className={`text-lg font-bold leading-tight ${cc.text}`}>
@@ -307,7 +491,7 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
           {/* BMI */}
           <div className="rounded-xl border border-tint/15 overflow-hidden">
             <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
-              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">BMI Range</span>
+              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">BMI requirement</span>
             </div>
             <div className="px-3 py-2.5">
               <div className="text-lg font-bold text-ink leading-tight">{bmiLabel}</div>
@@ -317,7 +501,7 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
           {/* IUI Rounds */}
           <div className="rounded-xl border border-tint/15 overflow-hidden">
             <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
-              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">IUI Rounds Required</span>
+              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">IUI cycles required before IVF</span>
             </div>
             <div className="px-3 py-2.5">
               <div className="text-lg font-bold text-ink leading-tight">
@@ -373,7 +557,7 @@ export function PolicyCard({ policy }: { policy: Policy; key?: string }) {
           {/* Living Children Rule */}
           <div className="rounded-xl border border-tint/15 overflow-hidden col-span-2">
             <div className="px-3 py-1.5 bg-surface border-b border-tint/15">
-              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">Living Children Rule</span>
+              <span className="font-mono text-[10px] uppercase font-semibold tracking-wide text-brand">Children from previous relationships</span>
             </div>
             <div className="px-3 py-2.5">
               <div className="text-sm font-semibold text-ink leading-snug">
@@ -465,6 +649,48 @@ export function buildStructuredData(
     url: canonicalUrl,
     mainEntity: faqEntries,
   };
+}
+
+export function buildMedicalWebPageSchema(
+  icb: { name: string; document_folder_name: string },
+  policies: Policy[],
+  slug: string,
+  boardMeta: BoardMeta
+) {
+  const canonicalUrl = `https://postcodetoparenthood.org.uk/board/${slug}`;
+  const displayName = formatIcbName(icb.name);
+
+  // Build description from summary_override or generated summary
+  let description = `NHS fertility funding guidance for ${displayName}.`;
+  const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
+  if (boardMeta.summary_override) {
+    description = boardMeta.summary_override;
+  } else if (ivfPolicy) {
+    description = generatePlainEnglishSummary(displayName, ivfPolicy);
+  }
+
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    name: `${displayName} IVF Funding Guidance`,
+    url: canonicalUrl,
+    description,
+    medicalAudience: {
+      "@type": "MedicalAudience",
+      audienceType: "Patient",
+    },
+    reviewedBy: {
+      "@type": "Organization",
+      name: "Postcode to Parenthood",
+      url: "https://postcodetoparenthood.org.uk",
+    },
+  };
+
+  if (boardMeta.last_verified) {
+    schema.lastReviewed = boardMeta.last_verified;
+  }
+
+  return schema;
 }
 
 export function ErrorBoundary() {
