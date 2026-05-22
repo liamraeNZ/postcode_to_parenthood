@@ -12,7 +12,7 @@
     "preview": "wrangler dev",
     "clean": "rm -rf build",
     "lint": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.worker.json --noEmit",
-    "test": "vitest run && vitest run --config vitest.config.components.ts",
+    "test": "bash -c 'set -o pipefail; vitest run 2>&1 | grep -v \"^Using secrets defined in\" | grep -v \"^exception = workerd\"' && vitest run --config vitest.config.components.ts",
     "test:workers": "vitest run",
     "test:components": "vitest run --config vitest.config.components.ts",
     "test:watch": "vitest",
