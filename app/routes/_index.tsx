@@ -159,6 +159,21 @@ export default function LandingPage() {
           }),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Postcode to Parenthood",
+            url: "https://postcodetoparenthood.org.uk",
+            logo: "https://postcodetoparenthood.org.uk/og-image.png",
+            description:
+              "Helping UK residents navigate the IVF postcode lottery by mapping local NHS fertility funding guidance to health board policies.",
+            sameAs: [],
+          }),
+        }}
+      />
     </section>
   );
 }

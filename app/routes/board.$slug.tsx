@@ -416,6 +416,29 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         </nav>
       </div>
 
+      {/* JSON-LD Structured Data - BreadcrumbList schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://postcodetoparenthood.org.uk",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: isNationalPolicy ? formatCountryName(icb.country) : displayName,
+              },
+            ],
+          }),
+        }}
+      />
       {/* JSON-LD Structured Data - FAQPage schema */}
       <script
         type="application/ld+json"
