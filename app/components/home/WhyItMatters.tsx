@@ -53,11 +53,11 @@ export default function WhyItMatters() {
           {/* Body text */}
           <p className="reveal stagger-1 font-sans text-white/90 text-base md:text-lg font-light leading-relaxed mb-4 max-w-xl">
             Access to NHS-funded fertility treatment depends on where you live.
-            This postcode lottery means that identical couples receive vastly
-            different levels of support depending on their local health board.
+            Two couples in identical situations can receive completely different
+            levels of support, just because of their postcode.
           </p>
           <p className="reveal stagger-2 font-sans text-white/90 text-base md:text-lg font-light leading-relaxed mb-10 max-w-xl">
-            We believe everyone deserves to understand their options. Pathway to
+            Everyone deserves to understand their options. Postcode to
             Parenthood makes it simple to find out what funding is available in
             your area.
           </p>

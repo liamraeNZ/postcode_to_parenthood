@@ -12,6 +12,13 @@ export async function loader({ context }: Route.LoaderArgs) {
     .bind()
     .all<{ document_folder_name: string; updated_at: string }>();
 
+  const { results: updates } = await db
+    .prepare(
+      `SELECT slug, published_date FROM updates ORDER BY published_date DESC`
+    )
+    .bind()
+    .all<{ slug: string; published_date: string }>();
+
   const staticLastmod = __SITE_LAST_UPDATED__;
 
   const urls = [
@@ -20,17 +27,27 @@ export async function loader({ context }: Route.LoaderArgs) {
     { loc: `${baseUrl}/search`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.7" },
     { loc: `${baseUrl}/boards`, lastmod: staticLastmod, changefreq: "weekly", priority: "0.8" },
     { loc: `${baseUrl}/policies`, lastmod: staticLastmod, changefreq: "weekly", priority: "0.8" },
+    { loc: `${baseUrl}/about`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.6" },
+    { loc: `${baseUrl}/what-next/eligible`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.6" },
+    { loc: `${baseUrl}/what-next/exploring-options`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.6" },
+    { loc: `${baseUrl}/updates`, lastmod: updates.length > 0 && updates[0].published_date ? updates[0].published_date.slice(0, 10) : staticLastmod, changefreq: "weekly", priority: "0.6" },
     { loc: `${baseUrl}/privacy`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.3" },
     { loc: `${baseUrl}/terms`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.3" },
     ...boards.map((board) => ({
       loc: `${baseUrl}/board/${toSlug(board.document_folder_name)}`,
-      lastmod: board.updated_at.slice(0, 10),
+      lastmod: (board.updated_at ?? staticLastmod).slice(0, 10),
       changefreq: "monthly",
       priority: "0.7",
     })),
     ...boards.map((board) => ({
       loc: `${baseUrl}/policy/${toSlug(board.document_folder_name)}`,
-      lastmod: board.updated_at.slice(0, 10),
+      lastmod: (board.updated_at ?? staticLastmod).slice(0, 10),
+      changefreq: "monthly",
+      priority: "0.5",
+    })),
+    ...updates.map((update) => ({
+      loc: `${baseUrl}/updates/${update.slug}`,
+      lastmod: (update.published_date ?? staticLastmod).slice(0, 10),
       changefreq: "monthly",
       priority: "0.5",
     })),

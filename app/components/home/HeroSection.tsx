@@ -8,7 +8,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="grain relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-base via-canvas to-canvas-dark"
+      className="grain relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-page via-canvas to-canvas-dark"
     >
       {/* Background image — transparent, blending behind text */}
       <div
@@ -21,12 +21,12 @@ export function HeroSection() {
           className="h-full w-full object-cover opacity-65"
         />
         {/* Overlay to blend image into canvasy background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-base/50 via-canvas/40 to-canvas-dark/50" />
+        <div className="absolute inset-0 bg-gradient-to-br from-page/50 via-canvas/40 to-canvas-dark/50" />
       </div>
 
       {/* Subtle warm overlay for depth */}
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-base/50 to-transparent"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-page/50 to-transparent"
         aria-hidden="true"
       />
       <div

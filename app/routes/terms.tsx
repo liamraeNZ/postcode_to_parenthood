@@ -57,7 +57,7 @@ export default function TermsPage() {
             Nothing on this site should be construed as professional advice of
             any kind. You should always consult a qualified professional for
             advice specific to your circumstances. Eligibility criteria and
-            funding policies change frequently — always verify information
+            funding policies change frequently. Always verify information
             directly with your local ICB or Health Board.
           </p>
 

@@ -137,7 +137,7 @@ export default function PrivacyPolicyPage() {
               <tr className="border-b border-tint/10">
                 <td className="py-2 pr-4 font-mono text-xs">__cf_bm</td>
                 <td className="py-2 pr-4">
-                  Cloudflare bot management — helps distinguish legitimate
+                  Cloudflare bot management. Helps distinguish legitimate
                   visitors from automated traffic
                 </td>
                 <td className="py-2">30 minutes</td>
@@ -183,13 +183,13 @@ export default function PrivacyPolicyPage() {
           <p>We use the following third-party services:</p>
           <ul className="list-disc pl-6 space-y-2 mt-2">
             <li>
-              <strong>postcodes.io</strong> — An open-source postcode lookup API
+              <strong>postcodes.io</strong> – An open-source postcode lookup API
               operated by Ideal Postcodes. When you enter a postcode, it is sent
               to this service to determine your local health board. Postcodes.io
               does not receive any other information about you.
             </li>
             <li>
-              <strong>Google Analytics 4</strong> (consent-gated) — Used to
+              <strong>Google Analytics 4</strong> (consent-gated) – Used to
               understand how visitors interact with the site. Only activated if
               you accept non-essential cookies. Google may process data in
               accordance with their{" "}

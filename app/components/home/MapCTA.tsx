@@ -27,7 +27,7 @@ export default function MapCTA() {
               </h2>
               <p className="reveal stagger-3 font-sans text-white/90 text-base font-light leading-relaxed mb-8 max-w-md">
                 Our interactive map lets you see fertility funding policies at a
-                glance — compare regions, spot patterns, and find your area
+                glance. Compare regions, spot patterns, and find your area
                 without typing a thing.
               </p>
               <Link

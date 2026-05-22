@@ -1,5 +1,6 @@
 import { Link, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import type { LinksFunction } from "react-router";
+import type { Route } from "./+types/root";
 import { type ReactNode, useState, useEffect } from "react";
 import CookieConsent from "react-cookie-consent";
 import { Navbar } from "./components/layout/Navbar";
@@ -13,6 +14,19 @@ export const links: LinksFunction = () => [
   { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
   { rel: "manifest", href: "/site.webmanifest" },
 ];
+
+export async function loader({ context }: Route.LoaderArgs) {
+  const db = context.cloudflare.env.DB;
+
+  const result = await db
+    .prepare(
+      `SELECT MAX(last_verified) as last_updated FROM health_boards WHERE data_confidence = 'confirmed'`
+    )
+    .bind()
+    .first<{ last_updated: string | null }>();
+
+  return { lastUpdated: result?.last_updated ?? null };
+}
 
 function ClientOnly({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -32,7 +46,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <Links />
       </head>
       <body>
-        <div className="min-h-screen bg-base font-sans selection:bg-warm selection:text-ink flex flex-col">
+        <div className="min-h-screen bg-page font-sans selection:bg-warm selection:text-ink flex flex-col">
           <Navbar />
           <main className="relative flex flex-1 flex-col pt-16 md:pt-20">{children}</main>
           <SiteFooter />

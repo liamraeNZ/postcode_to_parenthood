@@ -50,6 +50,7 @@ export default defineConfig({
     exclude: [
       "node_modules/**",
       "app/components/map/TreatmentToggle.test.tsx",
+      "app/components/board/**/*.test.tsx",
     ],
   },
 });

@@ -21,6 +21,7 @@ import {
   getIcbFromGpOds,
   searchGpPracticesByName
 } from '../services/ord';
+import { isVirtualGpPractice } from '../lib/virtualGps';
 import {
   bulkLookupPostcodeGeos,
   lookupNearestOutcodes,
@@ -89,7 +90,11 @@ export async function handleApiRequest(request: Request, env: Env) {
           return response;
         }
 
-        response = jsonResponse(out);
+        const withVirtual = out.map((practice) => ({
+          ...practice,
+          isVirtual: isVirtualGpPractice(practice.odsCode, practice.name)
+        }));
+        response = jsonResponse(withVirtual);
         return response;
       }
 
@@ -216,7 +221,10 @@ export async function handleApiRequest(request: Request, env: Env) {
         ranked = candidates.slice().sort((a, b) => a.name.localeCompare(b.name));
       }
 
-      response = jsonResponse(ranked.slice(0, GP_SEARCH_MAX_RESULTS));
+      response = jsonResponse(ranked.slice(0, GP_SEARCH_MAX_RESULTS).map((practice) => ({
+        ...practice,
+        isVirtual: isVirtualGpPractice(practice.odsCode, practice.name)
+      })));
       return response;
     }
 

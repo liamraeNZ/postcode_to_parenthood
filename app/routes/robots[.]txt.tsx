@@ -7,6 +7,9 @@ Allow: /boards
 Allow: /search
 Allow: /policies
 Allow: /policy/
+Allow: /about
+Allow: /what-next/
+Allow: /updates
 Allow: /privacy
 Allow: /terms
 Disallow: /admin

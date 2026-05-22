@@ -15,6 +15,7 @@ interface BoardRow {
   country: string;
   is_national: number | null;
   last_updated: string | null;
+  policy_date: string | null;
 }
 
 interface CountryCount {
@@ -41,12 +42,29 @@ function formatDate(isoDate: string): string {
   return `${day} ${month} ${year}`;
 }
 
+function getPolicyYearBadge(policyDate: string | null): { year: number; className: string } | null {
+  if (!policyDate) return null;
+  const year = new Date(policyDate).getUTCFullYear();
+  if (isNaN(year)) return null;
+
+  if (year < 2021) {
+    // Muted warning styling for very old policies
+    return { year, className: "inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-ink/8 text-ink/50" };
+  }
+  if (year < 2023) {
+    // Amber styling for somewhat outdated policies
+    return { year, className: "inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-amber-100 text-amber-700" };
+  }
+  // Current policies — neutral styling
+  return { year, className: "inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-tint/10 text-ink/50" };
+}
+
 export async function loader({ context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
 
   const { results: boards } = await db
     .prepare(
-      `SELECT id, name, document_folder_name, country, is_national, last_updated
+      `SELECT id, name, document_folder_name, country, is_national, last_updated, policy_date
        FROM health_boards
        WHERE document_folder_name IS NOT NULL AND status = 'active'
        ORDER BY name ASC`
@@ -194,6 +212,15 @@ export default function BoardsPage({ loaderData }: Route.ComponentProps) {
                   <div className="flex-1 min-w-0">
                     <span className="font-sans text-ink font-medium group-hover:text-brand transition-colors">
                       {formatIcbName(board.name)}
+                      {(() => {
+                        const badge = getPolicyYearBadge(board.policy_date);
+                        if (!badge) return null;
+                        return (
+                          <span className={`ml-2 ${badge.className}`}>
+                            {badge.year}
+                          </span>
+                        );
+                      })()}
                     </span>
                     <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 font-sans text-xs text-ink/55 mt-0.5">
                       <span>{COUNTRY_LABELS[board.country] || board.country}</span>
