@@ -7,6 +7,8 @@ import { getCycleColorClasses } from "@/utils/cycleColors";
 import { CheckCircle2, XCircle, AlertCircle, Info, ArrowLeft, MapPin, FileText } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { standardMeta } from "@/lib/meta";
+import { RouteErrorBoundary } from "@/components/errors/RouteErrorBoundary";
 
 const LocalMiniMap = React.lazy(() =>
   import("@/components/map/LocalMiniMap").then((mod) => ({ default: mod.LocalMiniMap }))
@@ -113,20 +115,14 @@ export function meta({ data }: Route.MetaArgs) {
   return [
     { title },
     { name: "description", content: description },
-    { tagName: "link", rel: "canonical", href: canonicalUrl },
+    ...standardMeta(canonicalUrl),
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:type", content: "article" },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
-    { property: "og:image:width", content: "1200" },
-    { property: "og:image:height", content: "630" },
-    { property: "og:site_name", content: "Postcode to Parenthood" },
-    { property: "og:locale", content: "en_GB" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:image", content: "https://postcodetoparenthood.org.uk/og-image.png" },
   ];
 }
 
@@ -469,4 +465,8 @@ export function buildStructuredData(
     url: canonicalUrl,
     mainEntity: faqEntries,
   };
+}
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary resourceName="health board" backTo="/boards" backLabel="Browse all health boards" />;
 }
