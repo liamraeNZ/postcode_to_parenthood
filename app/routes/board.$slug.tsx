@@ -246,7 +246,7 @@ export function headers({}: Route.HeadersArgs) {
 }
 
 export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
-  const { icb, policies, slug, isNationalPolicy, boardMeta = {} as Record<string, any> } = loaderData;
+  const { icb, policies, slug, isNationalPolicy, boardMeta = {} as BoardMeta } = loaderData;
   const countryName = formatCountryName(icb.country);
   const [searchParams] = useSearchParams();
   const gpPostcode = searchParams.get("gpPostcode");
