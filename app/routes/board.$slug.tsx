@@ -481,11 +481,11 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
           __html: JSON.stringify(buildStructuredData(icb, policies, slug)),
         }}
       />
-      {/* JSON-LD Structured Data - MedicalWebPage schema */}
+      {/* JSON-LD Structured Data - Dataset schema (GEO-optimized for LLM extraction) */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildMedicalWebPageSchema(icb, policies, slug, boardMeta)),
+          __html: JSON.stringify(buildGeoDatasetSchema(icb, policies, slug, boardMeta)),
         }}
       />
     </section>
@@ -709,7 +709,12 @@ export function buildStructuredData(
   };
 }
 
-export function buildMedicalWebPageSchema(
+/**
+ * Build a Dataset JSON-LD schema optimized for Generative Engine Optimization (GEO).
+ * Uses schema.org/Dataset with variableMeasured to expose structured eligibility
+ * criteria as key-value pairs that LLMs (ChatGPT, Claude, Perplexity) can extract and cite.
+ */
+export function buildGeoDatasetSchema(
   icb: { name: string; document_folder_name: string },
   policies: Policy[],
   slug: string,
@@ -719,7 +724,7 @@ export function buildMedicalWebPageSchema(
   const displayName = formatIcbName(icb.name);
 
   // Build description from summary_override or generated summary
-  let description = `NHS fertility funding guidance for ${displayName}.`;
+  let description = `NHS fertility funding eligibility criteria for ${displayName}, including IVF cycles offered, age limits, BMI thresholds, and treatment requirements.`;
   const ivfPolicy = policies.find((p) => p.treatment_type_id === "ivf");
   if (boardMeta.summary_override) {
     description = boardMeta.summary_override;
@@ -727,35 +732,114 @@ export function buildMedicalWebPageSchema(
     description = generatePlainEnglishSummary(displayName, ivfPolicy);
   }
 
+  // Build variableMeasured array from policy data
+  const variableMeasured: Array<Record<string, unknown>> = [];
+
+  for (const policy of policies) {
+    const prefix = policies.length > 1 ? `${policy.treatment_type_name}: ` : "";
+
+    variableMeasured.push({
+      "@type": "PropertyValue",
+      name: `${prefix}Funded Cycles`,
+      value: policy.cycles_offered > 0 ? policy.cycles_offered : 0,
+      unitText: "NHS-funded cycles",
+      description: policy.cycles_offered > 0
+        ? `${displayName} offers ${policy.cycles_offered} NHS-funded ${policy.treatment_type_name} cycle${policy.cycles_offered !== 1 ? "s" : ""}.`
+        : `${displayName} does not currently fund ${policy.treatment_type_name}.`,
+    });
+
+    if (policy.max_age > 0) {
+      variableMeasured.push({
+        "@type": "PropertyValue",
+        name: `${prefix}Maximum Age`,
+        value: policy.max_age,
+        unitText: "years",
+        ...(policy.min_age != null && { minValue: policy.min_age }),
+        description: policy.min_age != null
+          ? `Eligible patients must be aged ${policy.min_age}–${policy.max_age}.`
+          : `Eligible patients must be under ${policy.max_age} years old.`,
+      });
+    }
+
+    if (policy.bmi_min != null || policy.bmi_max != null) {
+      variableMeasured.push({
+        "@type": "PropertyValue",
+        name: `${prefix}BMI Threshold`,
+        ...(policy.bmi_min != null && { minValue: policy.bmi_min }),
+        ...(policy.bmi_max != null && { maxValue: policy.bmi_max }),
+        unitText: "kg/m²",
+        description:
+          policy.bmi_min != null && policy.bmi_max != null
+            ? `BMI must be between ${policy.bmi_min} and ${policy.bmi_max}.`
+            : policy.bmi_max != null
+              ? `BMI must be ${policy.bmi_max} or below.`
+              : `BMI must be at least ${policy.bmi_min}.`,
+      });
+    }
+
+    if (policy.living_children_rule) {
+      variableMeasured.push({
+        "@type": "PropertyValue",
+        name: `${prefix}Existing Children Policy`,
+        value: policy.living_children_rule,
+        description: `Children rule: ${policy.living_children_rule}.`,
+      });
+    }
+
+    if (policy.iui_rounds_required > 0) {
+      variableMeasured.push({
+        "@type": "PropertyValue",
+        name: `${prefix}IUI Rounds Required Before IVF`,
+        value: policy.iui_rounds_required,
+        unitText: "cycles",
+        description: `${policy.iui_rounds_required} IUI cycle${policy.iui_rounds_required !== 1 ? "s" : ""} required before IVF referral (applies to same-sex couples and single women).`,
+      });
+    }
+
+    if (policy.smoking_restricted) {
+      variableMeasured.push({
+        "@type": "PropertyValue",
+        name: `${prefix}Smoking Restriction`,
+        value: "Non-smoker required",
+        description: "Both partners must be non-smokers at the time of referral.",
+      });
+    }
+  }
+
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "MedicalWebPage",
-    name: `${displayName} IVF Funding Guidance`,
+    "@type": "Dataset",
+    name: `${displayName} NHS Fertility Funding Eligibility Criteria`,
     url: canonicalUrl,
     description,
-    medicalAudience: {
-      "@type": "MedicalAudience",
-      audienceType: "Patient",
-    },
-    reviewedBy: {
+    isAccessibleForFree: true,
+    creator: {
       "@type": "Organization",
       name: "Postcode to Parenthood",
       url: "https://postcodetoparenthood.org.uk",
     },
+    keywords: [
+      "NHS IVF funding",
+      "fertility treatment eligibility",
+      displayName,
+      "IVF postcode lottery",
+      "NHS fertility policy",
+    ],
+    variableMeasured,
   };
 
+  // Bind dateModified to last_verified timestamp
   if (boardMeta.last_verified) {
-    schema.lastReviewed = boardMeta.last_verified;
+    schema.dateModified = boardMeta.last_verified;
   }
 
-  // Add spatial coverage for SEO — helps search engines associate area names with this page
+  // Add spatial coverage — helps AI engines associate area names with this dataset
   if (boardMeta.boroughs) {
     try {
       const parsed = JSON.parse(boardMeta.boroughs);
       let allAreas: string[] = [];
 
       if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-        // New object format
         if (Array.isArray(parsed.boroughs)) {
           allAreas = allAreas.concat(parsed.boroughs.filter((a: unknown): a is string => typeof a === "string" && (a as string).length > 0));
         }
@@ -763,7 +847,6 @@ export function buildMedicalWebPageSchema(
           allAreas = allAreas.concat(parsed.neighbourhoods.filter((a: unknown): a is string => typeof a === "string" && (a as string).length > 0));
         }
       } else if (Array.isArray(parsed)) {
-        // Legacy flat array
         allAreas = parsed.filter((a: unknown): a is string => typeof a === "string" && (a as string).length > 0);
       }
 

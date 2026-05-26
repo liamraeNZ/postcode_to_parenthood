@@ -254,6 +254,54 @@ export default function PolicySlugPage({ loaderData }: Route.ComponentProps) {
           </div>
         </nav>
       </div>
+
+      {/* JSON-LD Structured Data - Dataset schema (GEO-optimized for LLM extraction) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Dataset",
+            name: `${boardTitle} NHS Fertility Policy Source Documents`,
+            url: `https://postcodetoparenthood.org.uk/policy/${slug}`,
+            description: `Collection of publicly available NHS fertility policy documents published by ${boardTitle}, grouped by year.`,
+            isAccessibleForFree: true,
+            creator: {
+              "@type": "Organization",
+              name: "Postcode to Parenthood",
+              url: "https://postcodetoparenthood.org.uk",
+            },
+            keywords: [
+              "NHS fertility policy documents",
+              "IVF funding policy",
+              boardTitle,
+              "NHS commissioning policy",
+            ],
+            distribution: documents.map((yearGroup) => ({
+              "@type": "DataDownload",
+              name: `${yearGroup.year} policy documents`,
+              description: `${yearGroup.files.length} document${yearGroup.files.length !== 1 ? "s" : ""} from ${yearGroup.year}.`,
+              contentUrl: `https://postcodetoparenthood.org.uk/policy/${slug}`,
+              encodingFormat: "application/pdf",
+            })),
+            variableMeasured: [
+              {
+                "@type": "PropertyValue",
+                name: "Total Documents Available",
+                value: documents.reduce((sum, y) => sum + y.files.length, 0),
+                unitText: "documents",
+              },
+              {
+                "@type": "PropertyValue",
+                name: "Year Range",
+                value: documents.length > 0
+                  ? `${documents[documents.length - 1].year}–${documents[0].year}`
+                  : "None",
+              },
+            ],
+          }),
+        }}
+      />
     </section>
   );
 }
