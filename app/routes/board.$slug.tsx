@@ -307,7 +307,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
           dataConfidence={boardMeta.data_confidence}
         />
       </PageHeader>
-      <div className="container mx-auto max-w-3xl px-4 pt-6 pb-8 md:pt-8 md:pb-12">
+      <div className="container mx-auto max-w-3xl px-4 pt-4 pb-8 md:pt-5 md:pb-12">
         {/* Inherited policy caveat banner */}
         {showInheritedBanner && boardMeta.predecessor_icb && (
           <div className="mb-5 md:mb-6">

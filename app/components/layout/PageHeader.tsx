@@ -93,7 +93,7 @@ export function PageHeader({
           </div>
           {actions ? <div className="shrink-0">{actions}</div> : null}
         </div>
-        {children ? <div className={cn(compact ? "mt-3" : "mt-4")}>{children}</div> : null}
+        {children ? <div className={cn(compact ? "mt-2" : "mt-4")}>{children}</div> : null}
       </div>
     </header>
   );
