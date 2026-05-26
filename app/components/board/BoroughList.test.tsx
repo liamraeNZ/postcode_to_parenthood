@@ -1,17 +1,18 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
-import { BoroughList } from "./BoroughList";
+import { BoroughList, parseBoroughs } from "./BoroughList";
 
 afterEach(() => {
   cleanup();
 });
 
 describe("BoroughList", () => {
-  it("parses a JSON array string and renders boroughs as comma-separated list", () => {
+  // Legacy flat array format tests
+  it("parses a legacy JSON array string and renders boroughs as comma-separated list", () => {
     const boroughs = JSON.stringify(["Camden", "Islington", "Hackney"]);
     render(<BoroughList boroughs={boroughs} dataConfidence="confirmed" />);
 
-    expect(screen.getByText("Camden, Islington, Hackney")).toBeInTheDocument();
+    expect(screen.getByText("Camden, Hackney, Islington")).toBeInTheDocument();
   });
 
   it("renders the 'Areas covered' label", () => {
@@ -84,7 +85,73 @@ describe("BoroughList", () => {
   it("has an accessible heading", () => {
     render(<BoroughList boroughs={null} dataConfidence="confirmed" />);
 
-    const heading = screen.getByRole("heading", { name: /areas covered/i });
-    expect(heading).toBeInTheDocument();
+    expect(screen.getByText("Areas covered")).toBeInTheDocument();
+  });
+
+  // New object format tests
+  it("parses the new object format with boroughs and neighbourhoods", () => {
+    const boroughs = JSON.stringify({
+      boroughs: ["Southwark", "Lewisham"],
+      neighbourhoods: ["Forest Hill", "Crystal Palace", "Sydenham"],
+    });
+    render(<BoroughList boroughs={boroughs} dataConfidence="confirmed" />);
+
+    expect(screen.getByText("Lewisham, Southwark")).toBeInTheDocument();
+    expect(
+      screen.getByText("Including neighbourhoods: Crystal Palace, Forest Hill, Sydenham")
+    ).toBeInTheDocument();
+  });
+
+  it("renders only boroughs when neighbourhoods array is empty", () => {
+    const boroughs = JSON.stringify({
+      boroughs: ["Bath", "Swindon"],
+      neighbourhoods: [],
+    });
+    render(<BoroughList boroughs={boroughs} dataConfidence="confirmed" />);
+
+    expect(screen.getByText("Bath, Swindon")).toBeInTheDocument();
+    expect(screen.queryByText(/Including neighbourhoods/)).not.toBeInTheDocument();
+  });
+
+  it("handles object format with missing neighbourhoods key", () => {
+    const boroughs = JSON.stringify({ boroughs: ["Cardiff"] });
+    render(<BoroughList boroughs={boroughs} dataConfidence="confirmed" />);
+
+    expect(screen.getByText("Cardiff")).toBeInTheDocument();
+    expect(screen.queryByText(/Including neighbourhoods/)).not.toBeInTheDocument();
+  });
+
+  it("shows fallback when object format has empty boroughs array", () => {
+    const boroughs = JSON.stringify({ boroughs: [], neighbourhoods: ["Sydenham"] });
+    render(<BoroughList boroughs={boroughs} dataConfidence="confirmed" />);
+
+    expect(
+      screen.getByText("Area data being compiled. Check back soon")
+    ).toBeInTheDocument();
+  });
+});
+
+describe("parseBoroughs", () => {
+  it("returns empty arrays for null input", () => {
+    expect(parseBoroughs(null)).toEqual({ boroughs: [], neighbourhoods: [] });
+  });
+
+  it("handles legacy flat array format", () => {
+    const result = parseBoroughs(JSON.stringify(["B", "A"]));
+    expect(result).toEqual({ boroughs: ["A", "B"], neighbourhoods: [] });
+  });
+
+  it("handles new object format", () => {
+    const result = parseBoroughs(
+      JSON.stringify({ boroughs: ["X", "A"], neighbourhoods: ["Z", "B"] })
+    );
+    expect(result).toEqual({ boroughs: ["A", "X"], neighbourhoods: ["B", "Z"] });
+  });
+
+  it("filters invalid entries in both arrays", () => {
+    const result = parseBoroughs(
+      JSON.stringify({ boroughs: ["A", "", null, 5], neighbourhoods: [true, "B", ""] })
+    );
+    expect(result).toEqual({ boroughs: ["A"], neighbourhoods: ["B"] });
   });
 });

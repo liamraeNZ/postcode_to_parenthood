@@ -55,6 +55,38 @@ export function formatCountryName(country: string): string {
   return map[country] ?? country;
 }
 
+/**
+ * Parse boroughs JSON for inclusion in meta description.
+ * Returns a truncated comma-separated string (max ~5 areas) or null if empty.
+ * Only uses top-level boroughs (not neighbourhoods) for the meta description.
+ */
+function parseBoroughsForMeta(boroughs: string | null): string | null {
+  if (!boroughs) return null;
+  try {
+    const parsed = JSON.parse(boroughs);
+
+    let valid: string[];
+    // New object format: { boroughs: [...], neighbourhoods: [...] }
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      if (!Array.isArray(parsed.boroughs)) return null;
+      valid = parsed.boroughs.filter((item: unknown): item is string => typeof item === "string" && (item as string).length > 0);
+    } else if (Array.isArray(parsed)) {
+      // Legacy flat array format
+      valid = parsed.filter((item: unknown): item is string => typeof item === "string" && (item as string).length > 0);
+    } else {
+      return null;
+    }
+
+    if (valid.length === 0) return null;
+    // Limit to first 5 to keep meta description reasonable length
+    const shown = valid.slice(0, 5);
+    const suffix = valid.length > 5 ? ` and ${valid.length - 5} more areas` : "";
+    return shown.join(", ") + suffix;
+  } catch {
+    return null;
+  }
+}
+
 export async function loader({ params, context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
   const { slug } = params;
@@ -211,18 +243,22 @@ export function meta({ data }: Route.MetaArgs) {
     ];
   }
 
-  const { icb, policies, slug, isNationalPolicy } = data;
+  const { icb, policies, slug, isNationalPolicy, boardMeta } = data;
   const displayName = isNationalPolicy ? formatCountryName(icb.country) : formatIcbName(icb.name);
   const countryName = formatCountryName(icb.country);
   const ivfPolicy = policies.find((p: Policy) => p.treatment_type_id === "ivf");
   const cycles = ivfPolicy?.cycles_offered ?? 0;
   const maxAge = ivfPolicy?.max_age ?? 0;
 
+  // Parse boroughs for SEO — include area names in meta description
+  const boroughList = parseBoroughsForMeta(boardMeta?.boroughs ?? null);
+  const areasSuffix = boroughList ? ` Covers ${boroughList}.` : "";
+
   const title = `${displayName} IVF Funding Guidance | ${countryName} | Postcode to Parenthood`;
   const description =
     cycles > 0
-      ? `${displayName} in ${countryName} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.`
-      : `${displayName} in ${countryName} NHS fertility funding policy. Check eligibility criteria including age limits, BMI requirements, and treatment options.`;
+      ? `${displayName} in ${countryName} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.${areasSuffix}`
+      : `${displayName} in ${countryName} NHS fertility funding policy. Check eligibility criteria including age limits, BMI requirements, and treatment options.${areasSuffix}`;
   const canonicalUrl = `https://postcodetoparenthood.org.uk/board/${slug}`;
 
   return [
@@ -265,8 +301,13 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         breadcrumbCurrent={displayName}
         compact
         actions={showBadge ? <StatusBadge dataConfidence={boardMeta.data_confidence} /> : undefined}
-      />
-      <div className="container mx-auto max-w-3xl px-4 pt-6 pb-8 md:pt-8 md:pb-12">
+      >
+        <BoroughList
+          boroughs={boardMeta.boroughs}
+          dataConfidence={boardMeta.data_confidence}
+        />
+      </PageHeader>
+      <div className="container mx-auto max-w-3xl px-4 pt-4 pb-8 md:pt-5 md:pb-12">
         {/* Inherited policy caveat banner */}
         {showInheritedBanner && boardMeta.predecessor_icb && (
           <div className="mb-5 md:mb-6">
@@ -367,13 +408,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
           <WhatNextSection boardSlug={slug} />
         </div>
 
-        {/* Borough/area list */}
-        <div className="mt-5 md:mt-6">
-          <BoroughList
-            boroughs={boardMeta.boroughs}
-            dataConfidence={boardMeta.data_confidence}
-          />
-        </div>
+
 
         {/* Local mini-map showing GP location relative to nearby board boundaries */}
         {gpPostcode && (
@@ -711,6 +746,36 @@ export function buildMedicalWebPageSchema(
 
   if (boardMeta.last_verified) {
     schema.lastReviewed = boardMeta.last_verified;
+  }
+
+  // Add spatial coverage for SEO — helps search engines associate area names with this page
+  if (boardMeta.boroughs) {
+    try {
+      const parsed = JSON.parse(boardMeta.boroughs);
+      let allAreas: string[] = [];
+
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        // New object format
+        if (Array.isArray(parsed.boroughs)) {
+          allAreas = allAreas.concat(parsed.boroughs.filter((a: unknown): a is string => typeof a === "string" && (a as string).length > 0));
+        }
+        if (Array.isArray(parsed.neighbourhoods)) {
+          allAreas = allAreas.concat(parsed.neighbourhoods.filter((a: unknown): a is string => typeof a === "string" && (a as string).length > 0));
+        }
+      } else if (Array.isArray(parsed)) {
+        // Legacy flat array
+        allAreas = parsed.filter((a: unknown): a is string => typeof a === "string" && (a as string).length > 0);
+      }
+
+      if (allAreas.length > 0) {
+        schema.spatialCoverage = allAreas.map((area) => ({
+          "@type": "AdministrativeArea",
+          name: area,
+        }));
+      }
+    } catch {
+      // ignore parse errors
+    }
   }
 
   return schema;

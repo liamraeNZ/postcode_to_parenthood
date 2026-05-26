@@ -29,7 +29,10 @@ export function PlainEnglishSummary({ boardMeta, icbName, policy, className }: P
 
   return (
     <div className={cn("rounded-2xl bg-surface/60 border border-tint/15 px-5 py-4", className)}>
-      <p className="font-sans text-sm leading-relaxed text-ink/80">
+      <h4 className="font-sans text-xs font-semibold uppercase tracking-wide text-ink/70 mb-2">
+        Summary
+      </h4>
+      <p className="font-sans text-sm leading-relaxed text-ink">
         {summary}
       </p>
     </div>

@@ -15,6 +15,8 @@ type PageHeaderProps = {
   actions?: ReactNode;
   /** Tighter vertical spacing when the page has large content directly below (e.g. map) */
   compact?: boolean;
+  /** Optional content rendered below the title/description within the header */
+  children?: ReactNode;
 };
 
 export function PageHeader({
@@ -24,6 +26,7 @@ export function PageHeader({
   breadcrumbParents,
   actions,
   compact,
+  children,
 }: PageHeaderProps) {
   return (
     <header className="border-b border-tint/15 bg-gradient-to-b from-surface to-surface-dark/40">
@@ -90,6 +93,7 @@ export function PageHeader({
           </div>
           {actions ? <div className="shrink-0">{actions}</div> : null}
         </div>
+        {children ? <div className={cn(compact ? "mt-2" : "mt-4")}>{children}</div> : null}
       </div>
     </header>
   );
