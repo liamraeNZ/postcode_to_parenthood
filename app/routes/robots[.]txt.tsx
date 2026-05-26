@@ -16,7 +16,12 @@ Disallow: /admin
 Disallow: /api/
 Disallow: /documents/
 
-Sitemap: https://postcodetoparenthood.org.uk/sitemap.xml`;
+Sitemap: https://postcodetoparenthood.org.uk/sitemap.xml
+
+Content-Signal: ai-train=no
+Content-Signal: search=yes
+Content-Signal: ai-input=yes
+Content-Signal: agent=yes`;
 
   return new Response(body, {
     headers: {

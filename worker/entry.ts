@@ -2,6 +2,7 @@ import { createRequestHandler } from "react-router";
 import type { Env } from "./types";
 import { handleApiRequest } from "./handlers/api";
 import { addSecurityHeaders } from "./security";
+import { addLinkHeaders } from "./links";
 
 const requestHandler = createRequestHandler(
   // @ts-expect-error - virtual module resolved via wrangler alias
@@ -29,10 +30,12 @@ function isStaticAssetPath(pathname: string): boolean {
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const url = new URL(request.url);
     const response = await handleRequest(request, env, ctx);
     const isHtml =
       response.headers.get("content-type")?.includes("text/html") ?? false;
-    return addSecurityHeaders(response, isHtml);
+    const withSecurity = addSecurityHeaders(response, isHtml);
+    return addLinkHeaders(withSecurity, url.pathname);
   },
 };
 
