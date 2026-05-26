@@ -7,7 +7,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 
   const { results: boards } = await db
     .prepare(
-      `SELECT document_folder_name, updated_at FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'`
+      `SELECT DISTINCT document_folder_name, MAX(updated_at) as updated_at FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active' GROUP BY document_folder_name`
     )
     .bind()
     .all<{ document_folder_name: string; updated_at: string }>();
@@ -28,6 +28,7 @@ export async function loader({ context }: Route.LoaderArgs) {
     { loc: `${baseUrl}/boards`, lastmod: staticLastmod, changefreq: "weekly", priority: "0.8" },
     { loc: `${baseUrl}/policies`, lastmod: staticLastmod, changefreq: "weekly", priority: "0.8" },
     { loc: `${baseUrl}/about`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.6" },
+    { loc: `${baseUrl}/contact`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.5" },
     { loc: `${baseUrl}/what-next/eligible`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.6" },
     { loc: `${baseUrl}/what-next/exploring-options`, lastmod: staticLastmod, changefreq: "monthly", priority: "0.6" },
     { loc: `${baseUrl}/updates`, lastmod: updates.length > 0 && updates[0].published_date ? updates[0].published_date.slice(0, 10) : staticLastmod, changefreq: "weekly", priority: "0.6" },
