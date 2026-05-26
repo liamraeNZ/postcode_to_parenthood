@@ -39,8 +39,7 @@ export function TransparencyNote({
           ) : (
             <span className="font-medium">policy document</span>
           )}{" "}
-          {icbName} published on {policyDate}. Some ICB policies have not been
-          updated since 2021. We show the most recent document available and flag
+          {icbName} published on {policyDate}. We show the most recent document available and flag
           when policies change. Always confirm your eligibility with your GP.
         </p>
       )}
