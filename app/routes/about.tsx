@@ -2,7 +2,7 @@ import type { Route } from "./+types/about";
 import { standardMeta } from "@/lib/meta";
 import { PageHeader } from "@/components/layout/PageHeader";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   const title =
     "About Postcode to Parenthood | P2P | NHS Fertility Funding";
   const description =
@@ -23,7 +23,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export function headers({}: Route.HeadersArgs) {
+export function headers({ }: Route.HeadersArgs) {
   return {
     "Cache-Control": "public, max-age=3600, s-maxage=86400",
   };
@@ -34,13 +34,28 @@ export default function AboutPage() {
     <section className="flex flex-1 flex-col">
       <PageHeader
         title="About Postcode to Parenthood"
-        description="Making NHS fertility funding information accessible, transparent, and human."
+        description="Two people, no agenda, one goal: make NHS fertility funding rules actually understandable."
         breadcrumbCurrent="About"
       />
       <div className="container mx-auto max-w-3xl px-4 py-8 md:py-12">
         <div className="space-y-12 font-sans text-ink/85 leading-relaxed">
-          {/* P2P Story */}
-          {/* <!-- CONTENT OWNER: Replace placeholder with the founding story --> */}
+          {/* Our Team */}
+          <section aria-labelledby="our-team">
+            <h2
+              id="our-team"
+              className="font-heading text-2xl font-semibold text-ink mb-4"
+            >
+              Our team
+            </h2>
+            <p className="text-base leading-relaxed max-w-prose">
+              There are two of us. A software engineer and someone who has worked
+              in the fertility industry for over ten years. That's it. No board
+              of directors, no investors, no advisory panel of people who've
+              never sat in a waiting room.
+            </p>
+          </section>
+
+          {/* Our Story */}
           <section aria-labelledby="our-story">
             <h2
               id="our-story"
@@ -48,40 +63,86 @@ export default function AboutPage() {
             >
               Our story
             </h2>
-            <p className="text-base leading-relaxed max-w-prose">
-              Postcode to Parenthood started with a simple frustration: finding
-              out what NHS fertility funding you're entitled to shouldn't require
-              hours of searching through policy documents. We're building
-              something better. A single place where anyone can understand their
-              options clearly and quickly.
-            </p>
+            <div className="space-y-4 max-w-prose">
+              <p className="text-base leading-relaxed">
+                We kept seeing the same thing: patients crying, frustrated, confused and exhausted.
+                Not because of bad news from a doctor, but because they'd just
+                discovered that the rules about who gets funded, and how much,
+                make no sense. Move ten miles down the road and your entitlement
+                changes completely. Turn 35 a week before your referral goes
+                through and the door slams shut. The system isn't broken in some
+                abstract policy way. It's broken in a way that fundamentally affects people's lives, 
+                and their chance for parenthood.
+              </p>
+            </div>
           </section>
 
-          {/* Peer-to-peer principle */}
-          <section aria-labelledby="peer-to-peer">
+          {/* Our Goal */}
+          <section aria-labelledby="our-goal">
             <h2
-              id="peer-to-peer"
+              id="our-goal"
               className="font-heading text-2xl font-semibold text-ink mb-4"
             >
-              The peer-to-peer principle
+              Our goal
             </h2>
             <div className="space-y-4 max-w-prose">
               <p className="text-base leading-relaxed">
-                P2P stands for peer-to-peer. This project exists because people
-                going through fertility treatment deserve honest, accessible
-                information, shared by people who understand what it's like to
-                navigate this system.
+                We built this site to fix that. Not the policy (we can't), but
+                the information gap. Because right now, understanding what you're
+                entitled to means wading through dozens of PDF documents written
+                in commissioning language that no normal person should have to
+                decode. We thought: what if someone just laid it all out clearly,
+                in one place, for free?
               </p>
               <p className="text-base leading-relaxed">
-                We're not a clinic, not a charity, and not affiliated with the
-                NHS. We're patients and partners who've been through this process
-                and want to make it less opaque for those who come after us. Every
-                piece of information on this site is something we wished we'd had
-                when we started.
+                So that's what we did.
               </p>
+            </div>
+          </section>
+
+          {/* Radically Transparent */}
+          <section aria-labelledby="radically-transparent">
+            <h2
+              id="radically-transparent"
+              className="font-heading text-2xl font-semibold text-ink mb-4"
+            >
+              Radically transparent
+            </h2>
+            <div className="space-y-4 max-w-prose">
               <p className="text-base leading-relaxed">
-                That means we prioritise clarity over completeness, honesty over
-                reassurance, and being upfront about what we don't know.
+                We think you deserve to know exactly who's behind this and what
+                our motivations are. So here it is, plainly:
+              </p>
+              <ul className="list-disc pl-6 space-y-3 text-base leading-relaxed">
+                <li>
+                  <strong>We do not sell your data.</strong> Not to clinics, not
+                  to pharma companies, not to anyone. There is no analytics
+                  tracking beyond what we need to keep the site running.
+                </li>
+                <li>
+                  <strong>We do not favour any private clinic.</strong> We have no
+                  commercial relationships with fertility providers. No referral
+                  fees, no sponsored listings, no "preferred partners." If a
+                  clinic appears on this site, it's because the NHS policy
+                  mentions them, not because they paid us.
+                </li>
+                <li>
+                  <strong>We are not funded by anyone with a stake in the
+                    system.</strong> This is a volunteer project built in evenings
+                  and weekends because we think it matters.
+                </li>
+                <li>
+                  <strong>We show our working.</strong> Every data point links
+                  back to the source document. If we're unsure about something,
+                  we say so. If something is out of date, we flag it.
+                </li>
+              </ul>
+              <p className="text-base leading-relaxed">
+                P2P stands for peer-to-peer. We're not experts handing down
+                information from above. We're people who've been close to this
+                system, who know how confusing and emotionally draining it is,
+                and who want to make it a little less awful for the next person
+                sitting in that waiting room.
               </p>
             </div>
           </section>
@@ -145,8 +206,6 @@ export default function AboutPage() {
           </section>
 
           {/* Patient panel */}
-          {/* <!-- CONTENT OWNER: Replace placeholder with patient panel details once established --> */}
-          {/* <!-- PATIENT PANEL REVIEW REQUIRED --> */}
           <section aria-labelledby="patient-panel">
             <h2
               id="patient-panel"
@@ -214,7 +273,6 @@ export default function AboutPage() {
           </section>
 
           {/* Get in touch */}
-          {/* <!-- CONTENT OWNER: Replace with actual contact details/form when ready --> */}
           <section aria-labelledby="contact">
             <h2
               id="contact"
@@ -223,9 +281,15 @@ export default function AboutPage() {
               Get in touch
             </h2>
             <p className="text-base leading-relaxed max-w-prose">
-              Spotted an error? Have a suggestion? Want to get involved? We'd
-              love to hear from you. Contact details and a feedback form are
-              coming soon.
+              Spotted an error? Have a suggestion? Want to get involved? Drop us
+              a line at{" "}
+              <a
+                href="mailto:hello@postcodetoparenthood.org.uk"
+                className="text-primary underline font-medium"
+              >
+                hello@postcodetoparenthood.org.uk
+              </a>
+              . We'd love to hear from you.
             </p>
           </section>
         </div>

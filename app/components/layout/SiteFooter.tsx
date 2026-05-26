@@ -6,6 +6,7 @@ const NAV_LINKS = [
   { to: "/map", label: "Funding map" },
   { to: "/boards", label: "Health boards" },
   { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
   { to: "/", label: "Home" },
 ] as const;
 
