@@ -1,8 +1,6 @@
 import type { Route } from "./+types/_index";
 import { Form, redirect, useActionData } from "react-router";
-import { lookupPostcodeAdminLookup } from "../../worker/services/postcodesIo";
-import { resolveBoardFromPostcode, resolveDocumentFolder } from "../../worker/services/icbPolicy";
-import { toSlug } from "@/lib/slug";
+import { resolvePostcodeToBoardSlug } from "@/lib/server/resolveBoard";
 import { standardMeta } from "@/lib/meta";
 import { HeroSection } from "@/components/home/HeroSection";
 import StatsTicker from "@/components/home/StatsTicker";
@@ -47,46 +45,16 @@ export async function action({ request, context }: Route.ActionArgs) {
     return { error: "Please enter a postcode" };
   }
 
-  const db = context.cloudflare.env.DB;
+  const result = await resolvePostcodeToBoardSlug(context.cloudflare.env.DB, postcode);
 
-  const admin = await lookupPostcodeAdminLookup(postcode, {
-    requestId: crypto.randomUUID(),
-  });
-
-  if (!admin) {
+  if (!result) {
     return {
       error:
         "We couldn't find a health board for that postcode. Please check and try again.",
     };
   }
 
-  const resolved = await resolveBoardFromPostcode(db, {
-    country: admin.country,
-    icb: admin.icb,
-    ccg_id: admin.ccg_id,
-    ccg: admin.ccg,
-    nhs_ha: admin.nhs_ha,
-    primary_care_trust: admin.primary_care_trust,
-  });
-
-  if (!resolved) {
-    return {
-      error:
-        "We couldn't find a health board for that postcode. Please check and try again.",
-    };
-  }
-
-  const documentFolder = await resolveDocumentFolder(db, resolved.boardId);
-
-  if (!documentFolder) {
-    return {
-      error:
-        "We couldn't find a health board for that postcode. Please check and try again.",
-    };
-  }
-
-  const slug = toSlug(documentFolder);
-  return redirect(`/board/${slug}?gpPostcode=${encodeURIComponent(postcode)}`);
+  return redirect(`/board/${result.slug}?gpPostcode=${encodeURIComponent(postcode)}`);
 }
 
 export default function LandingPage() {

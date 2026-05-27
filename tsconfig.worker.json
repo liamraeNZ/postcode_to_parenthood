@@ -17,6 +17,7 @@
     "worker.ts",
     "worker/**/*.ts",
     "app/lib/slug.ts",
+    "app/lib/postcode.ts",
     "app/types/admin.ts"
   ]
 }

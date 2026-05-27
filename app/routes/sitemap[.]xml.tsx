@@ -1,16 +1,12 @@
 import type { Route } from "./+types/sitemap[.]xml";
 import { toSlug } from "../lib/slug";
+import { listActiveBoardsForSitemap } from "@/lib/server/boardsRepo";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
   const baseUrl = "https://postcodetoparenthood.org.uk";
 
-  const { results: boards } = await db
-    .prepare(
-      `SELECT DISTINCT document_folder_name, MAX(updated_at) as updated_at FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active' GROUP BY document_folder_name`
-    )
-    .bind()
-    .all<{ document_folder_name: string; updated_at: string }>();
+  const boards = await listActiveBoardsForSitemap(db);
 
   const { results: updates } = await db
     .prepare(

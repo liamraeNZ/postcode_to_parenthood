@@ -8,6 +8,7 @@ import { TreatmentToggle, type TreatmentTypeId } from './TreatmentToggle';
 import { IcbBoundaryLayer, type MapPolicyEntry } from './IcbBoundaryLayer';
 import { MapLegend } from './MapLegend';
 import { IcbInfoPanel } from './IcbInfoPanel';
+import { ErrorBoundary } from '@/components/errors/ErrorBoundary';
 import 'leaflet/dist/leaflet.css';
 
 const VALID_TREATMENTS: TreatmentTypeId[] = ['ivf', 'iui', 'di', 'fet'];
@@ -40,31 +41,12 @@ interface MapDataResponse {
   request_id: string;
 }
 
-// --- Error Boundary ---
+// --- Exported MapPage with error boundary ---
 
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-}
-
-interface ErrorBoundaryState {
-  hasError: boolean;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-class MapErrorBoundary extends (React.Component as any)<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = { hasError: false };
-
-  static getDerivedStateFromError(): ErrorBoundaryState {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error) {
-    console.error('[MapPage] Render error:', error);
-  }
-
-  render(): React.ReactNode {
-    if (this.state.hasError) {
-      return (
+export function MapPage() {
+  return (
+    <ErrorBoundary
+      fallback={
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="text-center">
             <p className="font-heading text-lg font-semibold text-ink">Something went wrong</p>
@@ -73,10 +55,12 @@ class MapErrorBoundary extends (React.Component as any)<ErrorBoundaryProps, Erro
             </p>
           </div>
         </div>
-      );
-    }
-    return this.props.children;
-  }
+      }
+      onError={(error) => console.error('[MapPage] Render error:', error)}
+    >
+      <MapPageContent />
+    </ErrorBoundary>
+  );
 }
 
 // --- Helper: parse treatment from URL ---
@@ -287,15 +271,5 @@ function MapPageContent() {
         />
       )}
     </div>
-  );
-}
-
-// --- Exported MapPage with error boundary ---
-
-export function MapPage() {
-  return (
-    <MapErrorBoundary>
-      <MapPageContent />
-    </MapErrorBoundary>
   );
 }
