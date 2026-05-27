@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { Search } from "lucide-react";
 import { toSlug } from "../lib/slug";
 import { standardMeta } from "@/lib/meta";
+import { listActiveBoards } from "@/lib/server/boardsRepo";
 import { MapControlStrip } from "../components/map/MapControlStrip";
 import { PageHeader } from "@/components/layout/PageHeader";
 
@@ -12,13 +13,7 @@ const LazyMapContent = lazy(() => import("../components/map/MapContent"));
 
 export async function loader({ context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
-
-  const { results: boards } = await db
-    .prepare(
-      "SELECT id, name, document_folder_name FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'"
-    )
-    .bind()
-    .all<{ id: string; name: string; document_folder_name: string }>();
+  const boards = await listActiveBoards(db);
 
   return {
     icbs: boards.map((board) => ({

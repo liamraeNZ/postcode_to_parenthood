@@ -1,5 +1,18 @@
 import type { LogLevel } from './types';
 
+// Re-export shared postcode utilities from the single source of truth
+import {
+  normalizePostcode as _normalizePostcode,
+  normalizeOdsCode as _normalizeOdsCode,
+  redactPostcodeForLogs as _redactPostcodeForLogs,
+  isReasonablePostcodeInput as _isReasonablePostcodeInput,
+} from '../app/lib/postcode';
+
+export const normalizePostcode = _normalizePostcode;
+export const normalizeOdsCode = _normalizeOdsCode;
+export const redactPostcodeForLogs = _redactPostcodeForLogs;
+export const isReasonablePostcodeInput = _isReasonablePostcodeInput;
+
 export function log(level: LogLevel, message: string, meta?: Record<string, unknown>) {
   const payload = {
     level,
@@ -54,20 +67,6 @@ export async function readJsonBody(request: Request, options: { maxBytes: number
   return { ok: true as const, value: parsed };
 }
 
-export function normalizePostcode(input: string) {
-  return input.trim().toUpperCase().replace(/\s+/g, '');
-}
-
-export function normalizeOdsCode(input: string) {
-  return input.trim().toUpperCase();
-}
-
-export function redactPostcodeForLogs(normalizedPostcode: string) {
-  if (!normalizedPostcode) return '';
-  const visible = normalizedPostcode.slice(0, Math.min(3, normalizedPostcode.length));
-  return `${visible}${'*'.repeat(Math.max(0, normalizedPostcode.length - visible.length))}`;
-}
-
 export function truncateForLogs(value: string, maxLength: number) {
   if (value.length <= maxLength) return value;
   return `${value.slice(0, maxLength)}…`;
@@ -83,13 +82,6 @@ export function sanitizeSearchParams(params: URLSearchParams) {
     out[key] = truncateForLogs(value, 80);
   });
   return Object.keys(out).length ? out : undefined;
-}
-
-export function isReasonablePostcodeInput(input: string) {
-  const trimmed = input.trim();
-  if (!trimmed) return false;
-  if (trimmed.length > 16) return false;
-  return /^[A-Za-z0-9 ]+$/.test(trimmed);
 }
 
 export function isReasonableOrgNameInput(input: string) {

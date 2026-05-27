@@ -1,13 +1,11 @@
-export function normalizePostcode(input: string) {
-  return input.trim().toUpperCase().replace(/\s+/g, '');
-}
+// Re-export shared postcode utilities from the single source of truth.
+// The `normalizeUpperTrim` alias is kept for backward compatibility with gpIcb.ts.
+export { normalizePostcode, redactPostcodeForLogs } from '@/lib/postcode';
 
-export function normalizeUpperTrim(input: string) {
+/**
+ * Alias for normalizeOdsCode — trims and uppercases.
+ * Used by the client-side GP ICB lookup.
+ */
+export function normalizeUpperTrim(input: string): string {
   return input.trim().toUpperCase();
-}
-
-export function redactPostcodeForLogs(normalizedPostcode: string) {
-  if (!normalizedPostcode) return '';
-  const visible = normalizedPostcode.slice(0, Math.min(3, normalizedPostcode.length));
-  return `${visible}${'*'.repeat(Math.max(0, normalizedPostcode.length - visible.length))}`;
 }

@@ -1,17 +1,9 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { Compass, Loader2, MapPin } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import {
   getIcbFromGpPractice,
   PostcodeLookupError,
@@ -19,8 +11,10 @@ import {
   searchGpPracticesByPostcode
 } from '@/services/postcodeService';
 import type { GpPracticeSummary } from '@/types';
-import { motion, AnimatePresence } from 'motion/react';
-import { GpPracticeList } from '@/components/home/GpPracticeList';
+
+// Lazy-load heavy post-submit UI (motion, GpPracticeList, Dialog)
+const GpPracticeList = lazy(() => import('@/components/home/GpPracticeList').then(m => ({ default: m.GpPracticeList })));
+const VirtualGpDialog = lazy(() => import('./VirtualGpDialog'));
 
 type PostcodeLookupAction = 'search' | 'lookup';
 
@@ -28,7 +22,7 @@ type PostcodeSearchProps = {
   onSearchStarted?: () => void;
 };
 
-function getPostcodeLookupErrorMestint(action: PostcodeLookupAction, err: unknown) {
+function getPostcodeLookupErrorMessage(action: PostcodeLookupAction, err: unknown) {
   const verb = action === 'search' ? 'search' : 'lookup';
 
   if (err instanceof PostcodeLookupError) {
@@ -85,7 +79,6 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       const result = await searchGpPracticesByPostcode(postcode);
 
       if (result.kind === 'direct') {
-        // Scotland/Wales/NI: skip GP selection, navigate directly to board
         const { resolution } = result;
         if (resolution.redirectUrl) {
           const params = new URLSearchParams({ gpPostcode: postcode });
@@ -109,7 +102,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       }
     } catch (err) {
       logDevError('[PostcodeSearch] gp search failed', err);
-      setError(getPostcodeLookupErrorMestint('search', err));
+      setError(getPostcodeLookupErrorMessage('search', err));
     } finally {
       setLoadingSearch(false);
     }
@@ -132,7 +125,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       if (gps.length === 0) setNameSearchError("We couldn't find any active GP practices with that name.");
     } catch (err) {
       logDevError('[PostcodeSearch] gp name search failed', err);
-      setNameSearchError(getPostcodeLookupErrorMestint('search', err));
+      setNameSearchError(getPostcodeLookupErrorMessage('search', err));
       setNameSearchResults([]);
     } finally {
       setNameSearchLoading(false);
@@ -156,7 +149,6 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       if (slug) {
         const gpPostcode = gp.postcode ?? postcode;
 
-        // If this is a virtual GP, show the interstitial instead of navigating directly
         if (gp.isVirtual) {
           setPendingVirtualGp({ gp, slug, gpPostcode });
           setVirtualGpModalOpen(true);
@@ -171,7 +163,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       }
     } catch (err) {
       logDevError('[PostcodeSearch] gp selection failed', err);
-      setError(getPostcodeLookupErrorMestint('lookup', err));
+      setError(getPostcodeLookupErrorMessage('lookup', err));
     } finally {
       setLoadingSelect(false);
     }
@@ -229,19 +221,16 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
         </Button>
       </form>
 
-      <AnimatePresence mode="wait">
-        {error && (
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="bg-red-50 text-red-600 p-4 rounded-lg text-sm border border-red-100"
-          >
-            {error}
-          </motion.div>
-        )}
+      {/* Error message — uses CSS transition instead of motion to avoid pulling in the library */}
+      {error && (
+        <div className="bg-red-50 text-red-600 p-4 rounded-lg text-sm border border-red-100 animate-in fade-in-0 slide-in-from-top-2 duration-200">
+          {error}
+        </div>
+      )}
 
-        {gpPractices && gpPractices.length > 0 && (
+      {/* GP practice results — lazy-loaded (pulls in motion + dialog only after search) */}
+      {gpPractices && gpPractices.length > 0 && (
+        <Suspense fallback={null}>
           <GpPracticeList
             practices={gpPractices}
             selectedGP={selectedGP}
@@ -256,38 +245,20 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
             nameSearchResults={nameSearchResults}
             onSearchByName={handleSearchByName}
           />
-        )}
-      </AnimatePresence>
+        </Suspense>
+      )}
 
-      {/* Virtual GP interstitial modal */}
-      <Dialog open={virtualGpModalOpen} onOpenChange={setVirtualGpModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Online GP service detected</DialogTitle>
-            <DialogDescription>
-              Your GP practice is an online (virtual) service. The funding information we show you is based on where your GP practice is formally registered with the NHS — not your home address.
-            </DialogDescription>
-          </DialogHeader>
-          <p className="text-sm text-ink/70 leading-relaxed">
-            Because online GP services like GP at Hand are registered in a specific area, your NHS funding entitlement is determined by that area's Integrated Care Board (ICB). This may differ from the ICB that covers your home postcode.
-          </p>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              className="text-sm"
-              onClick={handleVirtualGpCancel}
-            >
-              Find a local GP instead
-            </Button>
-            <Button
-              className="bg-tint text-white hover:bg-tint/90 text-sm"
-              onClick={handleVirtualGpContinue}
-            >
-              I understand, continue
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Virtual GP interstitial modal — lazy-loaded */}
+      {virtualGpModalOpen && (
+        <Suspense fallback={null}>
+          <VirtualGpDialog
+            open={virtualGpModalOpen}
+            onOpenChange={setVirtualGpModalOpen}
+            onContinue={handleVirtualGpContinue}
+            onCancel={handleVirtualGpCancel}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

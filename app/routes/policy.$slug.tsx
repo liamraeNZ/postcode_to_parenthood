@@ -7,6 +7,7 @@ import { FileText, Eye, Download, ChevronDown, ChevronRight } from "lucide-react
 import { PageHeader } from "@/components/layout/PageHeader";
 import { standardMeta } from "@/lib/meta";
 import { RouteErrorBoundary } from "@/components/errors/RouteErrorBoundary";
+import { listActiveBoards } from "@/lib/server/boardsRepo";
 
 interface DocumentFile {
   name: string;
@@ -31,12 +32,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   const { slug } = params;
 
   // Resolve board from slug
-  const { results: boards } = await db
-    .prepare(
-      "SELECT id, name, document_folder_name FROM health_boards WHERE document_folder_name IS NOT NULL AND status = 'active'"
-    )
-    .bind()
-    .all<IcbData>();
+  const boards = await listActiveBoards(db);
 
   const matched = findIcbBySlug(boards, slug) as IcbData | undefined;
   if (!matched) {
