@@ -101,17 +101,6 @@ export function SiteFooter() {
                 {item.label}
               </Link>
             ))}
-            <button
-              type="button"
-              onClick={() => {
-                document.cookie =
-                  "p2p-consent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                window.location.reload();
-              }}
-              className="text-xs text-white/70 transition-colors hover:text-white"
-            >
-              Cookie preferences
-            </button>
           </nav>
         </div>
       </div>

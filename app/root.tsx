@@ -1,8 +1,7 @@
-import { Link, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import type { LinksFunction } from "react-router";
 import type { Route } from "./+types/root";
-import { type ReactNode, useState, useEffect } from "react";
-import CookieConsent from "react-cookie-consent";
+import { type ReactNode } from "react";
 import { Navbar } from "./components/layout/Navbar";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { RouteErrorBoundary } from "./components/errors/RouteErrorBoundary";
@@ -28,12 +27,6 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { lastUpdated: result?.last_updated ?? null };
 }
 
-function ClientOnly({ children }: { children: ReactNode }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  return mounted ? <>{children}</> : null;
-}
-
 export function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en-GB">
@@ -54,23 +47,6 @@ export function Layout({ children }: { children: ReactNode }) {
         <ScrollRestoration />
         <Scripts />
         <Analytics />
-        <ClientOnly>
-          <CookieConsent
-            location="bottom"
-            buttonText="Accept"
-            declineButtonText="Decline"
-            enableDeclineButton
-            cookieName="p2p-consent"
-            expires={365}
-            onAccept={() => window.dispatchEvent(new Event("consent-accepted"))}
-            style={{ background: "#2a2a2a" }}
-            buttonStyle={{ background: "#2a9d8f", color: "#fff", borderRadius: "9999px", padding: "8px 20px" }}
-            declineButtonStyle={{ background: "transparent", border: "1px solid #fff", color: "#fff", borderRadius: "9999px", padding: "8px 20px" }}
-          >
-            We use cookies for analytics to understand how you use this site.{" "}
-            <Link to="/privacy" className="underline">Learn more</Link>
-          </CookieConsent>
-        </ClientOnly>
       </body>
     </html>
   );
