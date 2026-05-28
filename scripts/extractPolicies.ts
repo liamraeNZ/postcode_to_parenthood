@@ -7,7 +7,9 @@
  * generate a migration.
  *
  * Prerequisites:
- *   - GEMINI_API_KEY in .dev.vars or environment
+ *   - Application Default Credentials configured (run: gcloud auth application-default login)
+ *   - GOOGLE_CLOUD_PROJECT env var or --project flag
+ *   - Vertex AI API enabled on the project
  *
  * Run with: npx tsx scripts/extractPolicies.ts
  *
@@ -15,14 +17,15 @@
  *   --icb "Sussex"          Process a single ICB folder only
  *   --dry-run               List files that would be processed without calling Gemini
  *   --output path.json      Custom output path (default: documents/extracted-policies.json)
+ *   --project <id>          Google Cloud project ID (or set GOOGLE_CLOUD_PROJECT)
+ *   --location <region>     Vertex AI region (default: europe-west2)
  */
-import { GoogleGenAI, Type, ThinkingLevel } from '@google/genai';
+import { GoogleGenAI, Type } from '@google/genai';
 import { readFileSync, readdirSync, statSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
-import { config } from 'dotenv';
 
-const MODEL = 'gemini-3.1-pro-preview';
+const MODEL = 'gemini-3.5-flash';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -57,15 +60,20 @@ interface IcbExtraction {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DOCUMENTS_DIR = join(__dirname, '..', 'documents', 'policies');
 
-config({ path: join(__dirname, '..', '.dev.vars') });
+// Resolve project and location from CLI args or environment
+const args = process.argv.slice(2);
+const projectIdx = args.indexOf('--project');
+const locationIdx = args.indexOf('--location');
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-if (!GEMINI_API_KEY) {
-  console.error('Missing GEMINI_API_KEY in .dev.vars or environment');
+const PROJECT = projectIdx !== -1 ? args[projectIdx + 1] : process.env.GOOGLE_CLOUD_PROJECT;
+const LOCATION = locationIdx !== -1 ? args[locationIdx + 1] : (process.env.GOOGLE_CLOUD_LOCATION || 'europe-west2');
+
+if (!PROJECT) {
+  console.error('Missing Google Cloud project. Set GOOGLE_CLOUD_PROJECT or pass --project <id>');
   process.exit(1);
 }
 
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+const ai = new GoogleGenAI({ vertexai: true, project: PROJECT, location: LOCATION });
 
 // ── Prompt ─────────────────────────────────────────────────────────────────
 
@@ -340,7 +348,6 @@ async function extractFromIcb(icbFolder: string): Promise<IcbExtraction | null> 
 // ── CLI ────────────────────────────────────────────────────────────────────
 
 async function main() {
-  const args = process.argv.slice(2);
   const icbFilter = args.includes('--icb') ? args[args.indexOf('--icb') + 1] : null;
   const dryRun = args.includes('--dry-run');
   const outputIdx = args.indexOf('--output');
