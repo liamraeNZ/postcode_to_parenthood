@@ -54,7 +54,7 @@ export default function AboutPage() {
                 clinics. She's lived the full patient journey, the clinical calls,
                 the operational snags, the admin that ultimately shapes the patient
                 experience. From preparation and treatment through to aftercare,
-                across both medical and administrative sides. And her partner. He's the techy one. 
+                across both medical and administrative sides. The other one? He just made the website. (Hi!)
               </p>
               <p className="text-base leading-relaxed mt-6">
                 That's it. No board of directors, no investors, no advisory panel
