@@ -13,8 +13,6 @@ interface BoardRow {
   name: string;
   document_folder_name: string;
   country: string;
-  is_national: number | null;
-  last_updated: string | null;
   policy_date: string | null;
 }
 
@@ -33,13 +31,12 @@ const COUNTRY_LABELS: Record<string, string> = {
 
 const COUNTRY_ORDER = ["ENGLAND", "SCOTLAND", "WALES", "NORTHERN_IRELAND"];
 
-function formatDate(isoDate: string): string {
+function formatPolicyDate(isoDate: string): string {
   const date = new Date(isoDate);
-  const day = date.getUTCDate().toString().padStart(2, "0");
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const month = months[date.getUTCMonth()];
   const year = date.getUTCFullYear();
-  return `${day} ${month} ${year}`;
+  return `${month} ${year}`;
 }
 
 function getPolicyYearBadge(policyDate: string | null): { year: number; className: string } | null {
@@ -64,7 +61,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 
   const { results: boards } = await db
     .prepare(
-      `SELECT id, name, document_folder_name, country, is_national, last_updated, policy_date
+      `SELECT id, name, document_folder_name, country, policy_date
        FROM health_boards
        WHERE document_folder_name IS NOT NULL AND status = 'active'
        ORDER BY name ASC`
@@ -224,11 +221,8 @@ export default function BoardsPage({ loaderData }: Route.ComponentProps) {
                     </span>
                     <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 font-sans text-xs text-ink/55 mt-0.5">
                       <span>{COUNTRY_LABELS[board.country] || board.country}</span>
-                      {board.is_national === 1 && (
-                        <span>· National policy</span>
-                      )}
-                      {board.last_updated && (
-                        <span>· Updated {formatDate(board.last_updated)}</span>
+                      {board.policy_date && (
+                        <span>· Policy from {formatPolicyDate(board.policy_date)}</span>
                       )}
                     </span>
                   </div>
