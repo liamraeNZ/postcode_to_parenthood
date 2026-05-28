@@ -47,12 +47,20 @@ export default function AboutPage() {
             >
               Our team
             </h2>
-            <p className="text-base leading-relaxed max-w-prose">
-              There are two of us. A software engineer and someone who has worked
-              in the fertility industry for over ten years. That's it. No board
-              of directors, no investors, no advisory panel of people who've
-              never sat in a waiting room.
-            </p>
+            <div className="space-y-4 max-w-prose">
+              <p className="text-base leading-relaxed">
+                We're a small team of two; a software engineer and someone with
+                over a decade of hands-on experience in London's leading fertility
+                clinics. She's lived the full patient journey, the clinical calls,
+                the operational snags, the admin that ultimately shapes the patient
+                experience. From preparation and treatment through to aftercare,
+                across both medical and administrative sides.
+              </p>
+              <p className="text-base leading-relaxed mt-6">
+                That's it. No board of directors, no investors, no advisory panel
+                of people who've never sat in a waiting room.
+              </p>
+            </div>
           </section>
 
           {/* Our Story */}
@@ -65,14 +73,20 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 max-w-prose">
               <p className="text-base leading-relaxed">
-                We kept seeing the same thing: patients crying, frustrated, confused and exhausted.
-                Not because of bad news from a doctor, but because they'd just
-                discovered that the rules about who gets funded, and how much,
-                make no sense. Move ten miles down the road and your entitlement
-                changes completely. Turn 35 a week before your referral goes
-                through and the door slams shut. The system isn't broken in some
-                abstract policy way. It's broken in a way that fundamentally affects people's lives, 
-                and their chance for parenthood.
+                We kept seeing the same thing: patients crying, frustrated,
+                confused and exhausted. Not because of bad news from a doctor,
+                but because they'd just discovered that the rules about who gets
+                funded, and how much, make no sense.
+              </p>
+              <p className="text-base leading-relaxed italic text-ink/70">
+                Move ten miles down the road and your entitlement changes
+                completely. Turn 35 a week before your referral goes through and
+                the door slams shut.
+              </p>
+              <p className="text-base leading-relaxed">
+                The system isn't broken in some abstract policy way. It's broken
+                in a way that fundamentally affects people's lives, and their
+                chance for parenthood.
               </p>
             </div>
           </section>
@@ -87,14 +101,19 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 max-w-prose">
               <p className="text-base leading-relaxed">
-                We built this site to fix that. Not the policy (we can't), but
-                the information gap. Because right now, understanding what you're
-                entitled to means wading through dozens of PDF documents written
-                in commissioning language that no normal person should have to
-                decode. We thought: what if someone just laid it all out clearly,
-                in one place, for free?
+                We built this site to <strong>fix</strong> that. Not the policy (we can't), but
+                the information gap.
               </p>
               <p className="text-base leading-relaxed">
+                Right now, understanding what you're entitled to means wading
+                through dozens of PDF documents written in commissioning language
+                that no normal person should have to decode.
+              </p>
+              <p className="text-base leading-relaxed">
+                We thought: what if someone just laid it all out clearly, in one
+                place, for free?
+              </p>
+              <p className="text-base leading-relaxed font-medium text-ink">
                 So that's what we did.
               </p>
             </div>
@@ -109,42 +128,78 @@ export default function AboutPage() {
               Radically transparent
             </h2>
             <div className="space-y-4 max-w-prose">
-              <p className="text-base leading-relaxed">
-                We think you deserve to know exactly who's behind this and what
-                our motivations are. So here it is, plainly:
-              </p>
               <ul className="list-disc pl-6 space-y-3 text-base leading-relaxed">
                 <li>
-                  <strong>We do not sell your data.</strong> Not to clinics, not
-                  to pharma companies, not to anyone. There is no analytics
-                  tracking beyond what we need to keep the site running.
-                </li>
-                <li>
-                  <strong>We do not favour any private clinic.</strong> We have no
-                  commercial relationships with fertility providers. No referral
-                  fees, no sponsored listings, no "preferred partners." If a
-                  clinic appears on this site, it's because the NHS policy
-                  mentions them, not because they paid us.
-                </li>
-                <li>
-                  <strong>We are not funded by anyone with a stake in the
-                    system.</strong> This is a volunteer project built in evenings
-                  and weekends because we think it matters.
+                  <strong>Your data stays with you.</strong> We don't sell
+                  personal information to clinics, pharma companies, or anyone
+                  else. There's no analytics tracking beyond what we need to keep
+                  the site running.
                 </li>
                 <li>
                   <strong>We show our working.</strong> Every data point links
                   back to the source document. If we're unsure about something,
                   we say so. If something is out of date, we flag it.
                 </li>
+                <li>
+                  <strong>Nobody funds us but us.</strong> This is a volunteer
+                  project built in evenings and weekends because we think it
+                  matters. If that ever changes, you'll be the first to know.
+                </li>
               </ul>
+            </div>
+          </section>
+
+          {/* Beyond the NHS */}
+          <section aria-labelledby="beyond-the-nhs">
+            <h2
+              id="beyond-the-nhs"
+              className="font-heading text-2xl font-semibold text-ink mb-4"
+            >
+              Beyond the NHS
+            </h2>
+            <div className="space-y-4 max-w-prose">
               <p className="text-base leading-relaxed">
-                P2P stands for peer-to-peer. We're not experts handing down
-                information from above. We're people who've been close to this
-                system, who know how confusing and emotionally draining it is,
-                and who want to make it a little less awful for the next person
-                sitting in that waiting room.
+                We do not have any commercial relationships with fertility
+                providers. Our focus is currently on NHS-funded treatment and
+                supporting patients through that journey.
+              </p>
+              <p className="text-base leading-relaxed">
+                At the same time, we understand that for many people, getting a
+                second opinion or exploring private fertility options can make a
+                very meaningful difference; whether because of long waiting
+                lists, unsuccessful NHS cycles, access to different treatments,
+                or simply wanting to explore every possible route forward.
+              </p>
+              <p className="text-base leading-relaxed">
+                As the platform grows, we would like to include private fertility
+                options as part of our features in the future. If and when we do,
+                it will be guided by genuine clinical experience and quality of
+                care. From our own experience, we know that personalised care,
+                understanding, transparency, and feeling truly supported can make
+                a real difference throughout the fertility journey. We will also
+                always be fully transparent about how the site is funded.
+              </p>
+              <p className="text-base leading-relaxed font-medium text-ink">
+                For now, however, we remain entirely NHS-focused and self-funded.
               </p>
             </div>
+          </section>
+
+          {/* P2P — Peer to Peer */}
+          <section aria-labelledby="peer-to-peer">
+            <h2
+              id="peer-to-peer"
+              className="font-heading text-2xl font-semibold text-ink mb-4"
+            >
+              Why "P2P"?
+            </h2>
+            <p className="text-base leading-relaxed max-w-prose">
+              P2P stands for peer-to-peer. We're not experts handing down
+              information from above. We're people who've been close to this
+              system, who know how confusing and emotionally draining it is,
+              and who want to make it a little less awful for the next person
+              sitting in that waiting room.
+            </p>
           </section>
 
           {/* How we build our data — real content */}
