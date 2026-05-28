@@ -17,7 +17,7 @@ export function HeroSection() {
       >
         <img
           src="/assets/hand-hold.webp"
-          alt=""
+          alt="Two hands holding together, representing support on the fertility journey"
           className="h-full w-full object-cover opacity-65"
         />
         {/* Overlay to blend image into canvasy background */}
