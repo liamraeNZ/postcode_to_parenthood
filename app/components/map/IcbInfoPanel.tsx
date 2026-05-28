@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import type { MapPolicyEntry } from './IcbBoundaryLayer';
 import { toSlug } from '../../lib/slug';
+import { trackMapViewGuidance } from '@/lib/analytics';
 
 export interface IcbInfoPanelProps {
   icbId: string;
@@ -71,6 +72,7 @@ export function IcbInfoPanel({
         {policy !== null && slug && (
           <Link
             to={`/board/${slug}`}
+            onClick={() => trackMapViewGuidance(slug)}
             className="btn-press mt-3 block w-full rounded-full bg-brand px-3 py-2.5 text-xs font-semibold text-white text-center transition-colors hover:bg-brand-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tint focus-visible:ring-offset-1"
           >
             View local guidance

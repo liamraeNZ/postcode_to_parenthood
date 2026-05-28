@@ -9,6 +9,7 @@ import { IcbBoundaryLayer, type MapPolicyEntry } from './IcbBoundaryLayer';
 import { MapLegend } from './MapLegend';
 import { IcbInfoPanel } from './IcbInfoPanel';
 import { ErrorBoundary } from '@/components/errors/ErrorBoundary';
+import { trackMapIcbClick } from '@/lib/analytics';
 import 'leaflet/dist/leaflet.css';
 
 const VALID_TREATMENTS: TreatmentTypeId[] = ['ivf', 'iui', 'di', 'fet'];
@@ -159,7 +160,11 @@ function MapPageContent() {
   // ICB click handler
   const handleIcbClick = useCallback((icbId: string) => {
     setSelectedIcbId(icbId);
-  }, []);
+    const entries = policyMap.get(icbId);
+    if (entries && entries.length > 0) {
+      trackMapIcbClick(entries[0].board_name);
+    }
+  }, [policyMap]);
 
   // ICB hover handler (currently no-op for state, handled by layer)
   const handleIcbHover = useCallback((_icbId: string | null) => {

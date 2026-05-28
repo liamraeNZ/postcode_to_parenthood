@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import type { Route } from "./+types/board.$slug";
 import { Link, useSearchParams } from "react-router";
 import { findIcbBySlug } from "../lib/slug";
@@ -20,6 +20,7 @@ import { WhatNextSection } from "@/components/board/WhatNextSection";
 import { BoroughList } from "@/components/board/BoroughList";
 import { generatePlainEnglishSummary } from "@/lib/generateSummary";
 import { VirtualGpNote } from "@/components/shared/VirtualGpNote";
+import { trackBoardViewed, trackOutboundDocument } from "@/lib/analytics";
 
 const LocalMiniMap = React.lazy(() =>
   import("@/components/map/LocalMiniMap").then((mod) => ({ default: mod.LocalMiniMap }))
@@ -293,6 +294,10 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
   const showInheritedBanner = boardMeta?.data_confidence === 'inherited';
   const isViaVirtualGp = searchParams.get("via") === "virtual";
 
+  useEffect(() => {
+    trackBoardViewed(slug);
+  }, [slug]);
+
   return (
     <section className="flex flex-1 flex-col">
       <PageHeader
@@ -428,6 +433,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               to={`/policy/${slug}`}
+              onClick={() => trackOutboundDocument(slug)}
               className="btn-press inline-flex items-center gap-2 px-5 py-2.5 bg-brand text-white font-semibold text-sm rounded-full hover:bg-brand-light transition-colors"
             >
               <FileText className="w-4 h-4" />

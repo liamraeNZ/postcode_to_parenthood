@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { trackWhatNextEligible, trackWhatNextExploring } from "@/lib/analytics";
 
 interface WhatNextSectionProps {
   /** Current board slug, used to pass back-link context to What Next pages */
@@ -29,6 +30,7 @@ export function WhatNextSection({ boardSlug }: WhatNextSectionProps) {
       <div className="flex flex-col gap-4">
         <Link
           to={`/what-next/eligible${fromParam}`}
+          onClick={() => trackWhatNextEligible(boardSlug)}
           className="block rounded-xl bg-brand px-6 py-5 text-center font-sans text-base md:text-lg font-medium text-white shadow-sm transition-all hover:bg-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2 active:scale-[0.98]"
         >
           I think I may be eligible. What do I do now?
@@ -36,6 +38,7 @@ export function WhatNextSection({ boardSlug }: WhatNextSectionProps) {
 
         <Link
           to={`/what-next/exploring-options${fromParam}`}
+          onClick={() => trackWhatNextExploring(boardSlug)}
           className="block rounded-xl border-2 border-brand/30 bg-white px-6 py-5 text-center font-sans text-base md:text-lg font-medium text-brand-dark shadow-sm transition-all hover:border-brand/50 hover:bg-tint-light/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-light focus-visible:ring-offset-2 active:scale-[0.98]"
         >
           I&apos;m not sure I&apos;m eligible, or I don&apos;t think I am

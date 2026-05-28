@@ -11,6 +11,12 @@ import {
   searchGpPracticesByPostcode
 } from '@/services/postcodeService';
 import type { GpPracticeSummary } from '@/types';
+import {
+  trackPostcodeSearch,
+  trackPostcodeSearchError,
+  trackGpSelected,
+  trackGpNameSearch,
+} from '@/lib/analytics';
 
 // Lazy-load heavy post-submit UI (motion, GpPracticeList, Dialog)
 const GpPracticeList = lazy(() => import('@/components/home/GpPracticeList').then(m => ({ default: m.GpPracticeList })));
@@ -74,6 +80,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
 
     setLoadingSearch(true);
     resetSearchState();
+    trackPostcodeSearch(postcode);
 
     try {
       const result = await searchGpPracticesByPostcode(postcode);
@@ -102,7 +109,9 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
       }
     } catch (err) {
       logDevError('[PostcodeSearch] gp search failed', err);
-      setError(getPostcodeLookupErrorMessage('search', err));
+      const message = getPostcodeLookupErrorMessage('search', err);
+      setError(message);
+      trackPostcodeSearchError(err instanceof PostcodeLookupError ? err.kind : 'unknown');
     } finally {
       setLoadingSearch(false);
     }
@@ -119,6 +128,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
     setNameSearchLoading(true);
     setNameSearchError('');
     setNameSearchResults(null);
+    trackGpNameSearch();
     try {
       const gps = await searchGpPracticesByName(q);
       setNameSearchResults(gps);
@@ -148,6 +158,7 @@ export function PostcodeSearch({ onSearchStarted }: PostcodeSearchProps) {
 
       if (slug) {
         const gpPostcode = gp.postcode ?? postcode;
+        trackGpSelected(slug);
 
         if (gp.isVirtual) {
           setPendingVirtualGp({ gp, slug, gpPostcode });

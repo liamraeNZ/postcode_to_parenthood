@@ -1,6 +1,7 @@
 import type { Route } from "./+types/contact";
 import { standardMeta } from "@/lib/meta";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { trackContactEmail } from "@/lib/analytics";
 
 export function meta({}: Route.MetaArgs) {
   const title = "Contact Us | Postcode to Parenthood";
@@ -55,6 +56,7 @@ export default function ContactPage() {
                 Email us at{" "}
                 <a
                   href="mailto:hello@postcodetoparenthood.org.uk"
+                  onClick={() => trackContactEmail()}
                   className="text-primary underline font-medium"
                 >
                   hello@postcodetoparenthood.org.uk
