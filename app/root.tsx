@@ -45,7 +45,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
         <ScrollRestoration />
         <Scripts />
-        <script defer src="https://cloud.umami.is/script.js" data-website-id="44f8082d-d6af-4d34-b0d6-ee6791fc5a30" />
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="44f8082d-d6af-4d34-b0d6-ee6791fc5a30" data-domains="postcodetoparenthood.org.uk" />
       </body>
     </html>
   );
