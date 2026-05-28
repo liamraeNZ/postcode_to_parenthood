@@ -49,12 +49,12 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 max-w-prose">
               <p className="text-base leading-relaxed">
-                We're a small team of two; a software engineer and someone with
+                We're a small team of two; one of us has 
                 over a decade of hands-on experience in London's leading fertility
                 clinics. She's lived the full patient journey, the clinical calls,
                 the operational snags, the admin that ultimately shapes the patient
                 experience. From preparation and treatment through to aftercare,
-                across both medical and administrative sides.
+                across both medical and administrative sides. And her partner. He's the techy one. 
               </p>
               <p className="text-base leading-relaxed mt-6">
                 That's it. No board of directors, no investors, no advisory panel
