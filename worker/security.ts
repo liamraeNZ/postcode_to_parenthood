@@ -13,11 +13,11 @@ const SECURITY_HEADERS: Record<string, string> = {
 
 const CSP_DIRECTIVES = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://*.googletagmanager.com https://*.google-analytics.com",
+  "script-src 'self' 'unsafe-inline' https://cloud.umami.is",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: https://*.tile.openstreetmap.org https://*.google-analytics.com",
+  "img-src 'self' data: https://*.tile.openstreetmap.org",
   "font-src 'self'",
-  "connect-src 'self' https://api.postcodes.io https://*.google-analytics.com https://analytics.google.com https://*.googletagmanager.com",
+  "connect-src 'self' https://api.postcodes.io https://cloud.umami.is",
   "frame-ancestors 'none'",
 ];
 

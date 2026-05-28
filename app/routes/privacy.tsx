@@ -59,68 +59,11 @@ export default function PrivacyPolicyPage() {
             Cookies
           </h2>
           <p>
-            We use cookies only when you have given explicit consent via our
-            cookie consent banner. You can accept or decline non-essential
-            cookies at any time.
+            We do not use any analytics or tracking cookies. The only cookies
+            that may be set are infrastructure cookies from Cloudflare.
           </p>
 
-          <h3 className="font-heading text-lg font-medium text-ink mt-6 mb-2">
-            Essential cookies
-          </h3>
-          <table className="w-full text-sm border-collapse mt-2 mb-4">
-            <thead>
-              <tr className="border-b border-tint/20">
-                <th className="text-left py-2 pr-4 font-medium">Cookie</th>
-                <th className="text-left py-2 pr-4 font-medium">Purpose</th>
-                <th className="text-left py-2 font-medium">Duration</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-tint/10">
-                <td className="py-2 pr-4 font-mono text-xs">p2p-consent</td>
-                <td className="py-2 pr-4">
-                  Stores your cookie consent preference
-                </td>
-                <td className="py-2">365 days</td>
-              </tr>
-            </tbody>
-          </table>
 
-          <h3 className="font-heading text-lg font-medium text-ink mt-6 mb-2">
-            Analytics cookies (consent-gated)
-          </h3>
-          <p>
-            These cookies are only set if you accept non-essential cookies via
-            the consent banner. They are used by Google Analytics 4 to help us
-            understand how visitors use the site.
-          </p>
-          <table className="w-full text-sm border-collapse mt-2 mb-4">
-            <thead>
-              <tr className="border-b border-tint/20">
-                <th className="text-left py-2 pr-4 font-medium">Cookie</th>
-                <th className="text-left py-2 pr-4 font-medium">Purpose</th>
-                <th className="text-left py-2 font-medium">Duration</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-tint/10">
-                <td className="py-2 pr-4 font-mono text-xs">_ga</td>
-                <td className="py-2 pr-4">
-                  Distinguishes unique visitors for Google Analytics
-                </td>
-                <td className="py-2">2 years</td>
-              </tr>
-              <tr className="border-b border-tint/10">
-                <td className="py-2 pr-4 font-mono text-xs">
-                  _ga_WLXJK78YSL
-                </td>
-                <td className="py-2 pr-4">
-                  Maintains session state for Google Analytics 4
-                </td>
-                <td className="py-2">2 years</td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3 className="font-heading text-lg font-medium text-ink mt-6 mb-2">
             Infrastructure cookies
@@ -145,16 +88,7 @@ export default function PrivacyPolicyPage() {
             </tbody>
           </table>
 
-          <h2 className="font-heading text-xl font-semibold text-ink mt-8 mb-3">
-            Cookie consent
-          </h2>
-          <p>
-            When you first visit the site, a cookie consent banner will appear.
-            You can choose to accept or decline non-essential cookies. Your
-            preference is stored in the <code>p2p-consent</code> cookie for 365
-            days. You can change your preference at any time using the "Cookie
-            preferences" link in the site footer.
-          </p>
+
 
           <h2 className="font-heading text-xl font-semibold text-ink mt-8 mb-3">
             Cloudflare infrastructure
@@ -188,21 +122,6 @@ export default function PrivacyPolicyPage() {
               to this service to determine your local health board. Postcodes.io
               does not receive any other information about you.
             </li>
-            <li>
-              <strong>Google Analytics 4</strong> (consent-gated) – Used to
-              understand how visitors interact with the site. Only activated if
-              you accept non-essential cookies. Google may process data in
-              accordance with their{" "}
-              <a
-                href="https://policies.google.com/privacy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand underline hover:text-brand/80"
-              >
-                privacy policy
-              </a>
-              .
-            </li>
           </ul>
 
           <h2 className="font-heading text-xl font-semibold text-ink mt-8 mb-3">
@@ -211,8 +130,7 @@ export default function PrivacyPolicyPage() {
           <p>
             To be clear: we do not store postcodes, IP addresses, or any
             personally identifiable information. There are no user accounts, no
-            databases of personal data, and no tracking beyond the
-            consent-gated analytics cookies described above.
+            databases of personal data, and no tracking of any kind.
           </p>
 
           <h2 className="font-heading text-xl font-semibold text-ink mt-8 mb-3">
