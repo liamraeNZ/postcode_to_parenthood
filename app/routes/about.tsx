@@ -1,6 +1,7 @@
 import type { Route } from "./+types/about";
 import { standardMeta } from "@/lib/meta";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { Link } from "react-router";
 
 export function meta({ }: Route.MetaArgs) {
   const title =
@@ -262,6 +263,16 @@ export default function AboutPage() {
                 we can always trace a data point back to its source. Where
                 policies are ambiguous or contradictory, we flag this rather than
                 guessing.
+              </p>
+              <p className="text-base leading-relaxed">
+                For a full list of our data sources and references, see our{" "}
+                <Link
+                  to="/sources"
+                  className="text-primary underline font-medium"
+                >
+                  sources page
+                </Link>
+                .
               </p>
             </div>
           </section>
