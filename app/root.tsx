@@ -37,6 +37,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="color-scheme" content="light" />
         <Meta />
         <Links />
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="44f8082d-d6af-4d34-b0d6-ee6791fc5a30" data-domains="postcodetoparenthood.org.uk,www.postcodetoparenthood.org.uk" />
       </head>
       <body>
         <div className="min-h-screen bg-page font-sans selection:bg-warm selection:text-ink flex flex-col">
@@ -46,7 +47,6 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
         <ScrollRestoration />
         <Scripts />
-        <script defer src="https://cloud.umami.is/script.js" data-website-id="44f8082d-d6af-4d34-b0d6-ee6791fc5a30" data-domains="postcodetoparenthood.org.uk" />
       </body>
     </html>
   );
