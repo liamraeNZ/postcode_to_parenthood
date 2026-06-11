@@ -5,6 +5,7 @@ const NAV_LINKS = [
   { to: "/search", label: "Check postcode" },
   { to: "/map", label: "Funding map" },
   { to: "/boards", label: "Health boards" },
+  { to: "/glossary", label: "Glossary" },
   { to: "/about", label: "About" },
   { to: "/sources", label: "Sources" },
   { to: "/contact", label: "Contact" },

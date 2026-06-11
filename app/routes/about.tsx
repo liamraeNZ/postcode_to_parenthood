@@ -272,7 +272,14 @@ export default function AboutPage() {
                 >
                   sources page
                 </Link>
-                .
+                . If any of the terminology is unfamiliar, our{" "}
+                <Link
+                  to="/glossary"
+                  className="text-primary underline font-medium"
+                >
+                  glossary
+                </Link>
+                {" "}explains everything in plain English.
               </p>
             </div>
           </section>
