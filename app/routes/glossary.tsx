@@ -1,4 +1,5 @@
 import type { Route } from "./+types/glossary";
+import type { ReactNode } from "react";
 import { standardMeta } from "@/lib/meta";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { useState } from "react";
@@ -32,7 +33,9 @@ export function headers({}: Route.HeadersArgs) {
 
 type GlossaryEntry = {
   term: string;
-  definition: string;
+  definition: ReactNode;
+  /** Plain text version of definition for search filtering */
+  searchText?: string;
 };
 
 const glossaryEntries: GlossaryEntry[] = [
@@ -97,14 +100,52 @@ const glossaryEntries: GlossaryEntry[] = [
       "The stage of IVF where one or more embryos are placed into the womb. Single embryo transfer is now standard practice in the UK to reduce the risk of multiple pregnancy.",
   },
   {
+    term: "EMMA and ALICE",
+    definition:
+      "Two tests that analyse the bacteria in your womb lining. EMMA checks whether you have the right balance of helpful bacteria for implantation. ALICE looks specifically for bacteria that cause chronic infection of the womb lining. Often offered together, usually as a private add-on.",
+  },
+  {
     term: "Endometriosis",
     definition:
       "A condition where tissue similar to the womb lining grows in other places, like the ovaries or fallopian tubes. It can affect fertility and is sometimes a factor in eligibility for funded treatment.",
   },
   {
+    term: "Endometrial scar tissue (Asherman's syndrome)",
+    definition:
+      "Bands of scar tissue inside the womb, often caused by previous surgical procedures on the womb (such as after a miscarriage) or by infection. It can reduce the space available for an embryo to implant and may cause lighter or absent periods. Usually treated with a small camera procedure through the cervix to cut away the scar tissue.",
+  },
+  {
+    term: "Endometrial thickness",
+    definition:
+      "The measurement of your womb lining on ultrasound, checked during monitoring scans before embryo transfer. Most clinics want to see a lining of at least 7 to 8mm for transfer to go ahead, though thicker is generally better. A thin lining can sometimes be improved with medication or a longer preparation protocol.",
+  },
+  {
+    term: "ERA (Endometrial Receptivity Analysis)",
+    definition:
+      "A biopsy test that checks whether your womb lining is ready for an embryo at the time of transfer. It looks at which genes are active in a tissue sample to find your personal 'window of implantation'. If yours is shifted earlier or later than average, your clinic can adjust the timing of your transfer. Usually offered privately as an add-on after failed transfers.",
+  },
+  {
+    term: "Euploid embryo",
+    definition: (
+      <>
+        An embryo with the correct number of chromosomes (46 in total), identified through{" "}
+        <a href="#letter-P" className="text-primary underline font-medium">
+          PGT-A
+        </a>{" "}
+        testing. These embryos have a higher chance of implanting and developing into a healthy pregnancy compared to those with too many or too few chromosomes.
+      </>
+    ),
+    searchText: "An embryo with the correct number of chromosomes (46 in total), identified through PGT-A testing. These embryos have a higher chance of implanting and developing into a healthy pregnancy compared to those with too many or too few chromosomes.",
+  },
+  {
     term: "Expectant management",
     definition:
       "The medical term for 'keep trying naturally'. Your clinic gives you advice on timing, lifestyle, and frequency of intercourse, but no active treatment. NICE recommends this for up to 2 years for unexplained infertility before offering IVF.",
+  },
+  {
+    term: "Fertility counselling",
+    definition:
+      "Specialist emotional support offered before, during, and after fertility treatment. HFEA-licensed clinics are required to make counselling available to all patients. It covers the psychological impact of treatment, decisions about donors or surrogacy, and coping with outcomes. Usually free as part of your clinic's service.",
   },
   {
     term: "Fertility MOT",
@@ -115,6 +156,11 @@ const glossaryEntries: GlossaryEntry[] = [
     term: "FET (Frozen Embryo Transfer)",
     definition:
       "Transferring a previously frozen embryo into the womb. Some ICBs fund FET cycles from embryos created during a funded fresh cycle. It's less physically demanding than a full stimulated cycle.",
+  },
+  {
+    term: "Fibroids",
+    definition:
+      "Non-cancerous growths in or around the womb. Their impact on fertility depends on where they are. Submucosal fibroids (inside the womb cavity) are most likely to affect implantation. Intramural fibroids (within the womb wall) may distort the cavity if large. Subserosal fibroids (on the outside) and pedunculated fibroids (attached by a stalk) are less likely to cause fertility problems but may still be relevant depending on size and position.",
   },
   {
     term: "Follicle",
@@ -132,9 +178,31 @@ const glossaryEntries: GlossaryEntry[] = [
       "What counts as one funded IVF 'cycle' varies by ICB. NICE defines it as one episode of ovarian stimulation plus the transfer of any resulting fresh and frozen embryos. But some ICBs interpret this differently, so always check your local policy.",
   },
   {
+    term: "Genetic counselling",
+    definition: (
+      <>
+        A specialist service that helps you understand genetic test results and what they mean for your family. Often offered before or after{" "}
+        <a href="#letter-P" className="text-primary underline font-medium">
+          PGT
+        </a>
+        ,{" "}
+        <a href="#letter-K" className="text-primary underline font-medium">
+          karyotyping
+        </a>
+        , or carrier screening. A genetic counsellor explains risks, how conditions can be inherited, and your options in a way that supports your decision-making.
+      </>
+    ),
+    searchText: "A specialist service that helps you understand genetic test results and what they mean for your family. Often offered before or after PGT, karyotyping, or carrier screening. A genetic counsellor explains risks, how conditions can be inherited, and your options in a way that supports your decision-making.",
+  },
+  {
     term: "GP referral",
     definition:
       "The first step to accessing NHS fertility treatment. Your GP refers you to a fertility clinic after initial investigations. Some ICBs require you to have been trying to conceive for a specific period before they'll refer you.",
+  },
+  {
+    term: "Haemorrhagic cyst",
+    definition:
+      "An ovarian cyst that contains blood, usually formed when a blood vessel in a follicle breaks during ovulation. They're common and often resolve on their own within a few weeks. If one is spotted on a monitoring scan, your clinic may delay treatment until it clears.",
   },
   {
     term: "Health board",
@@ -152,9 +220,14 @@ const glossaryEntries: GlossaryEntry[] = [
       "An X-ray test that checks whether your fallopian tubes are open. A dye is passed through the cervix and X-rays track its movement. It's part of the standard fertility workup and usually done as an outpatient.",
   },
   {
-    term: "HyCoSy",
+    term: "HyCoSy and saline 3D scan",
     definition:
-      "An ultrasound-based alternative to HSG for checking if your fallopian tubes are open. It uses a contrast fluid instead of X-ray dye. Some clinics prefer it because it avoids radiation exposure.",
+      "Ultrasound-based tests for checking the womb and tubes. HyCoSy (Hysterosalpingo Contrast Sonography) uses a contrast fluid to see if your fallopian tubes are open, similar to an HSG but without X-rays. A saline 3D scan (also called saline infusion sonography or SIS) fills the womb with saline to give a detailed 3D image of the cavity, useful for spotting polyps, fibroids, or scar tissue. Some clinics offer both in one appointment.",
+  },
+  {
+    term: "Hydrosalpinx",
+    definition:
+      "A fallopian tube that is blocked and filled with fluid. The fluid can leak into the womb and reduce the chances of an embryo implanting. If a hydrosalpinx is found before IVF, your clinic may recommend clipping or removing the affected tube to improve success rates.",
   },
   {
     term: "ICB (Integrated Care Board)",
@@ -167,6 +240,11 @@ const glossaryEntries: GlossaryEntry[] = [
       "A form of IVF where a single sperm is injected directly into an egg. It's used when sperm quality is poor or when standard IVF hasn't worked. Most ICBs fund ICSI when clinically indicated.",
   },
   {
+    term: "Infertility support groups",
+    definition:
+      "Peer support networks for people going through fertility treatment or struggling to conceive. In the UK, organisations like Fertility Network UK and local clinic-run groups offer online communities, phone lines, and in-person meetups. The HFEA website lists support options, and many clinics have their own patient groups.",
+  },
+  {
     term: "IUI (Intrauterine Insemination)",
     definition:
       "A simpler fertility treatment where prepared sperm is placed directly into the womb around the time of ovulation. Less invasive and less expensive than IVF, and sometimes offered as a first step.",
@@ -177,9 +255,69 @@ const glossaryEntries: GlossaryEntry[] = [
       "A process where eggs are collected from the ovaries and fertilised with sperm in a laboratory. The resulting embryo is then transferred to the womb. 'In vitro' means 'in glass', referring to the lab dish.",
   },
   {
+    term: "Karyotype",
+    definition: (
+      <>
+        A test that maps out all 46 of your chromosomes to check they're the right shape and in the right place. In fertility, it's usually offered to couples with{" "}
+        <a href="#letter-R" className="text-primary underline font-medium">
+          recurrent miscarriage
+        </a>{" "}
+        or repeated IVF failure. It can reveal if one partner is carrying chromosomes that are rearranged in a way that doesn't affect them personally but can cause problems when passed to an embryo.
+      </>
+    ),
+    searchText: "A test that maps out all 46 of your chromosomes to check they're the right shape and in the right place. In fertility, it's usually offered to couples with recurrent miscarriage or repeated IVF failure. It can reveal if one partner is carrying chromosomes that are rearranged in a way that doesn't affect them personally but can cause problems when passed to an embryo.",
+  },
+  {
+    term: "KNOVA",
+    definition: (
+      <>
+        A brand name for a type of{" "}
+        <a href="#letter-N" className="text-primary underline font-medium">
+          NIPT (Non-Invasive Prenatal Testing)
+        </a>
+        .
+      </>
+    ),
+    searchText: "A brand name for a type of NIPT Non-Invasive Prenatal Testing.",
+  },
+  {
     term: "Laparoscopy",
     definition:
       "Keyhole surgery used to look at or treat conditions inside the pelvis, such as endometriosis, fibroids, or blocked fallopian tubes. Sometimes part of the investigation before fertility treatment.",
+  },
+  {
+    term: "Microfluidic sperm selection",
+    definition: (
+      <>
+        A technique used in the lab to separate the healthiest, most active sperm from a sample. The sperm swim through a tiny chip, and only those with good movement and less DNA damage make it through. Sometimes offered as an add-on to{" "}
+        <a href="#letter-I" className="text-primary underline font-medium">
+          ICSI
+        </a>
+        , particularly where{" "}
+        <a href="#letter-S" className="text-primary underline font-medium">
+          sperm DNA fragmentation
+        </a>{" "}
+        is a concern.
+      </>
+    ),
+    searchText: "A technique used in the lab to separate the healthiest, most active sperm from a sample. The sperm swim through a tiny chip, and only those with good movement and less DNA damage make it through. Sometimes offered as an add-on to ICSI, particularly where sperm DNA fragmentation is a concern.",
+  },
+  {
+    term: "Mosaic embryo",
+    definition: (
+      <>
+        An embryo that contains a mix of cells with the correct number of chromosomes and cells with too many or too few, identified through{" "}
+        <a href="#letter-P" className="text-primary underline font-medium">
+          PGT-A
+        </a>{" "}
+        testing. They sit in a grey area between fully normal (
+        <a href="#letter-E" className="text-primary underline font-medium">
+          euploid
+        </a>
+        ) and fully abnormal. Some can still result in healthy pregnancies, and clinics may consider transferring them when no fully normal embryos are available.
+      </>
+    ),
+    searchText: "An embryo that contains a mix of cells with the correct number of chromosomes and cells with too many or too few, identified through PGT-A testing. They sit in a grey area between fully normal (euploid) and fully abnormal. Some can still result in healthy pregnancies, and clinics may consider transferring them when no fully normal embryos are available.",
   },
   {
     term: "Natural cycle IVF",
@@ -189,7 +327,12 @@ const glossaryEntries: GlossaryEntry[] = [
   {
     term: "NICE (National Institute for Health and Care Excellence)",
     definition:
-      "The body that produces evidence-based guidelines for the NHS. Their fertility guideline (NG257) recommends 3 full IVF cycles for eligible women under 42. ICBs aren't required to follow this, and most don't fully.",
+      "The body that produces clinical guidelines for the NHS. Their fertility guideline recommends 3 full IVF cycles for eligible women under 42. ICBs aren't required to follow this, and most don't fully.",
+  },
+  {
+    term: "NIPT (Non-Invasive Prenatal Testing)",
+    definition:
+      "A blood test offered during pregnancy (from around 10 weeks) that screens for chromosomal conditions like Down's syndrome, Edwards' syndrome, and Patau's syndrome. It works by testing tiny traces of the baby's DNA found in the mother's blood. Available on the NHS as a follow-up to higher-chance screening results, or privately as a standalone test.",
   },
   {
     term: "OHSS (Ovarian Hyperstimulation Syndrome)",
@@ -220,6 +363,19 @@ const glossaryEntries: GlossaryEntry[] = [
     term: "PGT (Preimplantation Genetic Testing)",
     definition:
       "Testing embryos for genetic conditions before transfer during IVF. PGT-A screens for chromosome abnormalities, PGT-M tests for specific inherited conditions. Not routinely funded by the NHS.",
+  },
+  {
+    term: "PICSI (Physiological Intracytoplasmic Sperm Injection)",
+    definition: (
+      <>
+        A variation of{" "}
+        <a href="#letter-I" className="text-primary underline font-medium">
+          ICSI
+        </a>{" "}
+        where sperm are selected based on their ability to bind to a substance naturally found around the egg. The idea is that more mature, higher-quality sperm are better at binding to it. Some clinics offer it as an add-on.
+      </>
+    ),
+    searchText: "A variation of ICSI where sperm are selected based on their ability to bind to a substance naturally found around the egg. The idea is that more mature, higher-quality sperm are better at binding to it. Some clinics offer it as an add-on.",
   },
   {
     term: "Postcode lottery",
@@ -272,9 +428,24 @@ const glossaryEntries: GlossaryEntry[] = [
       "A test that checks sperm count, movement, and shape. It's one of the first investigations done and can identify male factor issues early. Usually needs to be repeated to confirm results.",
   },
   {
+    term: "Semen culture",
+    definition:
+      "A lab test that checks for bacterial infection in a semen sample. Infections can affect sperm quality and may cause inflammation that impacts fertility. If bacteria are found, a course of antibiotics is usually prescribed before treatment.",
+  },
+  {
     term: "Single embryo transfer (SET)",
     definition:
       "Transferring just one embryo at a time, which is now the recommended approach in the UK. It reduces the risk of twins or triplets, which carry higher health risks for both parent and babies.",
+  },
+  {
+    term: "Simple cyst",
+    definition:
+      "A fluid-filled sac on the ovary that's usually harmless and often disappears on its own within a cycle or two. Common and typically found incidentally on ultrasound. If one is present at the start of a treatment cycle, your clinic may wait for it to resolve before beginning stimulation.",
+  },
+  {
+    term: "Sperm DNA fragmentation",
+    definition:
+      "Damage to the DNA inside sperm cells. A man can have normal sperm count and movement but still have high fragmentation, which can affect fertilisation, embryo development, and miscarriage risk. Tested separately from a standard semen analysis. Single-stranded breaks (damage to one side of the DNA) are more easily repaired by the egg; double-stranded breaks (damage to both sides) are more severe and harder to overcome.",
   },
   {
     term: "Stimulation (ovarian stimulation)",
@@ -292,6 +463,11 @@ const glossaryEntries: GlossaryEntry[] = [
       "When another person carries a pregnancy for you. NHS funding for surrogacy-related fertility treatment is very limited and varies significantly by ICB.",
   },
   {
+    term: "Thrombophilia screen (thrombotic risk profile)",
+    definition:
+      "A set of blood tests checking for inherited conditions that make your blood more likely to clot than normal. Sometimes offered after recurrent miscarriage, as certain clotting tendencies have been linked to pregnancy loss. The tests look at several natural blood-thinning proteins and clotting factors to see if any are abnormal.",
+  },
+  {
     term: "Trigger injection",
     definition:
       "An injection given during IVF to trigger final egg maturation before collection. Timing is precise, usually 36 hours before the egg collection procedure.",
@@ -299,7 +475,7 @@ const glossaryEntries: GlossaryEntry[] = [
   {
     term: "Two-week wait (2WW)",
     definition:
-      "The period between embryo transfer and taking a pregnancy test. Technically around 10 to 14 days depending on the clinic. Known for being one of the most emotionally challenging parts of the process.",
+      "The period between embryo transfer and taking a pregnancy test. Typically around 10 to 14 days depending on the clinic. Known for being one of the most emotionally challenging parts of the process.",
   },
   {
     term: "Unexplained infertility",
@@ -310,6 +486,19 @@ const glossaryEntries: GlossaryEntry[] = [
     term: "Waiting list",
     definition:
       "The time between being accepted for funded fertility treatment and starting your first cycle. Varies by ICB and clinic, and can range from a few months to over a year depending on your area and demand.",
+  },
+  {
+    term: "ZymOt",
+    definition: (
+      <>
+        A brand name for a{" "}
+        <a href="#letter-M" className="text-primary underline font-medium">
+          microfluidic sperm selection
+        </a>{" "}
+        device.
+      </>
+    ),
+    searchText: "A brand name for a microfluidic sperm selection device.",
   },
 ];
 
@@ -333,7 +522,9 @@ export default function GlossaryPage() {
     ? glossaryEntries.filter(
         (e) =>
           e.term.toLowerCase().includes(filter.toLowerCase()) ||
-          e.definition.toLowerCase().includes(filter.toLowerCase())
+          (e.searchText ?? (typeof e.definition === "string" ? e.definition : ""))
+            .toLowerCase()
+            .includes(filter.toLowerCase())
       )
     : null;
 
