@@ -17,6 +17,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 
   return {
     icbs: boards.map((board) => ({
+      id: board.id,
       name: board.name,
       slug: toSlug(board.document_folder_name),
     })),
@@ -99,7 +100,7 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
         <h2>All Health Board Fertility Policy Pages</h2>
         <ul>
           {icbs.map((icb) => (
-            <li key={icb.slug}>
+            <li key={icb.id}>
               <a href={`/board/${icb.slug}`}>{icb.name} IVF Funding Policy</a>
             </li>
           ))}
