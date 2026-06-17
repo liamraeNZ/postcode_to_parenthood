@@ -214,14 +214,36 @@ export async function resolveBoardIdFromPostcodesIo(
   db: D1Database,
   identifiers: { icb: string | null; ccg_id: string | null; ccg: string | null }
 ) {
-  if (identifiers.icb) {
-    const byIcbName = await resolveBoardIdByName(db, identifiers.icb, 'exact');
-    if (byIcbName) return { boardId: byIcbName, matched_on: 'icb' as const };
-  }
-
+  // Prefer ccg_id — it's the most granular identifier and maps to sub-ICBs
+  // that still hold published policies after the April 2026 ICB mergers.
   if (identifiers.ccg_id) {
     const byCcgId = await resolveBoardIdByCode(db, identifiers.ccg_id);
-    if (byCcgId) return { boardId: byCcgId, matched_on: 'ccg_id' as const };
+    if (byCcgId) {
+      // If the resolved board is a parent without policies, try to find a
+      // sub-board that has policies instead.
+      const hasPolicy = await boardHasPolicy(db, byCcgId);
+      if (hasPolicy) return { boardId: byCcgId, matched_on: 'ccg_id' as const };
+
+      const subWithPolicy = await findSubBoardWithPolicy(db, byCcgId);
+      if (subWithPolicy) return { boardId: subWithPolicy, matched_on: 'ccg_id' as const };
+
+      // Even without policies, it's the best match we have
+      return { boardId: byCcgId, matched_on: 'ccg_id' as const };
+    }
+  }
+
+  if (identifiers.icb) {
+    const byIcbName = await resolveBoardIdByName(db, identifiers.icb, 'exact');
+    if (byIcbName) {
+      const hasPolicy = await boardHasPolicy(db, byIcbName);
+      if (hasPolicy) return { boardId: byIcbName, matched_on: 'icb' as const };
+
+      // Parent board without policies — try sub-boards
+      const subWithPolicy = await findSubBoardWithPolicy(db, byIcbName);
+      if (subWithPolicy) return { boardId: subWithPolicy, matched_on: 'icb' as const };
+
+      return { boardId: byIcbName, matched_on: 'icb' as const };
+    }
   }
 
   if (identifiers.ccg) {
@@ -230,6 +252,27 @@ export async function resolveBoardIdFromPostcodesIo(
   }
 
   return null;
+}
+
+async function boardHasPolicy(db: D1Database, boardId: string): Promise<boolean> {
+  const row = await db
+    .prepare('SELECT 1 AS ok FROM board_policies WHERE board_id = ?1 LIMIT 1')
+    .bind(boardId)
+    .first<{ ok: number }>();
+  return !!row?.ok;
+}
+
+async function findSubBoardWithPolicy(db: D1Database, parentBoardId: string): Promise<string | null> {
+  const row = await db
+    .prepare(
+      `SELECT hb.id FROM health_boards hb
+       INNER JOIN board_policies bp ON bp.board_id = hb.id
+       WHERE hb.parent_board_code = ?1
+       LIMIT 1`
+    )
+    .bind(parentBoardId)
+    .first<{ id: string }>();
+  return row?.id ?? null;
 }
 
 /**

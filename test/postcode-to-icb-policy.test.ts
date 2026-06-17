@@ -56,7 +56,7 @@ const ICB_TEST_CASES: IcbTestCase[] = [
   // --- Sub-ICB test cases ---
   { name: "Cambridgeshire and Peterborough (sub-ICB 06H)", postcode: "CB2 1TN", expectedIcbCode: "06H", goldenFolderName: "Cambridgeshire and Peterborough" },
   { name: "Norfolk and Waveney (sub-ICB 06L)", postcode: "NR1 3JU", expectedIcbCode: "06L", goldenFolderName: "Norfolk and Waveney" },
-  { name: "Suffolk and North East Essex (sub-ICB 07K)", postcode: "IP1 1DH", expectedIcbCode: "07K", goldenFolderName: "Suffolk and North East Essex" },
+  { name: "Suffolk and North East Essex (sub-ICB 07K)", postcode: "IP33 1AQ", expectedIcbCode: "07K", goldenFolderName: "Suffolk and North East Essex" },
   { name: "North Central London (sub-ICB 07P)", postcode: "N1 9GU", expectedIcbCode: "07P", goldenFolderName: "North Central London" },
   { name: "North West London (sub-ICB 08Y)", postcode: "W2 1NY", expectedIcbCode: "08Y", goldenFolderName: "North West London" },
   { name: "Sussex (sub-ICB 09D)", postcode: "BN1 1EE", expectedIcbCode: "09D", goldenFolderName: "Sussex" },
