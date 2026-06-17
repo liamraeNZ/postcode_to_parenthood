@@ -52,16 +52,18 @@ export function HeroSection() {
         {/* Subheading */}
         <p className="reveal stagger-3 mx-auto mt-6 max-w-2xl font-sans text-lg text-ink/70 md:text-xl">
           Discover what fertility funding your local NHS area offers in seconds.
+        </p>
+        <p className="reveal stagger-4 mt-3 font-heading text-xl font-semibold tracking-tight text-brand md:text-2xl">
           Free, and totally independent.
         </p>
 
         {/* PostcodeSearch */}
-        <div className="reveal stagger-4 mx-auto mt-10 max-w-xl">
+        <div className="reveal stagger-5 mx-auto mt-10 max-w-xl">
           <PostcodeSearch />
         </div>
 
         {/* Trust note */}
-        <p className="reveal stagger-5 mt-5 flex items-center justify-center gap-1.5 text-sm text-ink/60">
+        <p className="reveal stagger-6 mt-5 flex items-center justify-center gap-1.5 text-sm text-ink/60">
           <CheckCircle className="h-4 w-4 text-brand" aria-hidden="true" />
           Based on official NHS health board policies — updated regularly
         </p>
