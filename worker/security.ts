@@ -15,7 +15,7 @@ const CSP_DIRECTIVES = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' https://cloud.umami.is",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: https://*.tile.openstreetmap.org",
+  "img-src 'self' data: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com",
   "font-src 'self'",
   "connect-src 'self' https://api.postcodes.io https://cloud.umami.is https://gateway.umami.is",
   "frame-ancestors 'none'",
