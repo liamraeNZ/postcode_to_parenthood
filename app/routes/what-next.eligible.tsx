@@ -85,25 +85,86 @@ export default function WhatNextEligiblePage() {
           </p>
         </div>
 
-        {/* How to approach your GP — placeholder */}
-        {/* CONTENT OWNER: This section needs detailed guidance on preparing for a GP appointment about fertility referrals */}
-        <div className="space-y-3">
+        {/* How to approach your GP */}
+        <div className="space-y-4">
           <h2 className="font-heading text-xl font-semibold text-ink">
             How to approach your GP
           </h2>
-          <p className="font-sans text-base leading-relaxed text-ink/70">
-            Detailed guidance coming soon. Check back shortly.
+          <p className="font-sans text-base leading-relaxed text-ink/75">
+            You don't need to have all the answers before booking an
+            appointment. GPs deal with fertility referrals regularly. But a
+            little preparation helps the conversation go more smoothly.
+          </p>
+          <ul className="list-disc pl-6 space-y-2 text-ink/75">
+            <li>
+              <strong>Note how long you've been trying.</strong> Count in
+              months, not cycles. This is usually the single biggest factor in
+              whether you'll be referred.
+            </li>
+            <li>
+              <strong>Check your local criteria.</strong> Look at the age
+              limits, BMI range, and other requirements for your ICB. You can
+              find these on our{" "}
+              <Link to="/boards" className="text-brand underline">
+                board pages
+              </Link>
+              .
+            </li>
+            <li>
+              <strong>Be ready to discuss lifestyle factors.</strong> Smoking
+              status, alcohol intake, and weight can all affect eligibility.
+              Your GP will ask about these openly.
+            </li>
+            <li>
+              <strong>Write down your questions.</strong> It's easy to forget
+              things in the moment. Common ones: what tests will happen first?
+              How long until a referral? What if I don't meet the criteria?
+            </li>
+          </ul>
+          <p className="font-sans text-base leading-relaxed text-ink/75">
+            One thing to know: your GP can't refer you directly for IVF. They
+            will arrange initial investigations first (blood tests, scans,
+            semen analysis if relevant) and then refer you to a fertility
+            clinic. That clinic handles the funding application.
           </p>
         </div>
 
-        {/* What to expect — placeholder */}
-        {/* CONTENT OWNER: This section needs information about the referral pathway, timelines, and what happens at each stage */}
-        <div className="space-y-3">
+        {/* What to expect */}
+        <div className="space-y-4">
           <h2 className="font-heading text-xl font-semibold text-ink">
             What to expect from the process
           </h2>
-          <p className="font-sans text-base leading-relaxed text-ink/70">
-            Detailed guidance coming soon. Check back shortly.
+          <p className="font-sans text-base leading-relaxed text-ink/75">
+            The exact pathway varies by area, but the general shape is the same
+            across most of England.
+          </p>
+          <ol className="list-decimal pl-6 space-y-3 text-ink/75">
+            <li>
+              <strong>GP appointment.</strong> History, basic tests, lifestyle
+              discussion. This might take one or two visits.
+            </li>
+            <li>
+              <strong>Referral to a fertility clinic.</strong> If tests suggest
+              a problem (or you've been trying long enough), your GP refers you
+              to a specialist. The clinic then checks your eligibility against
+              your ICB's policy.
+            </li>
+            <li>
+              <strong>Funding application.</strong> Most clinics handle this on
+              your behalf. It can take several weeks. You may need to provide
+              extra paperwork.
+            </li>
+            <li>
+              <strong>Treatment begins.</strong> If approved, you'll typically
+              start with less invasive options (ovulation support or IUI) before
+              moving to IVF. If funding is refused, you'll be told why and what
+              your options are.
+            </li>
+          </ol>
+          <p className="font-sans text-base leading-relaxed text-ink/75">
+            Wait times vary a lot. Some areas have 6 to 12 month waits just for
+            an initial fertility clinic appointment. Ask your GP for an honest
+            estimate.
           </p>
         </div>
 
@@ -125,15 +186,82 @@ export default function WhatNextEligiblePage() {
           </Link>
         </div>
 
-        {/* Support & community — placeholder */}
-        {/* CONTENT OWNER: This section needs links to fertility support organisations, communities, and helplines */}
-        {/* PATIENT PANEL REVIEW REQUIRED */}
-        <div className="space-y-3">
+        {/* Support & community */}
+        <div className="space-y-4">
           <h2 className="font-heading text-xl font-semibold text-ink">
-            Support &amp; community
+            Support along the way
           </h2>
-          <p className="font-sans text-base leading-relaxed text-ink/70">
-            Detailed guidance coming soon. Check back shortly.
+          <p className="font-sans text-base leading-relaxed text-ink/75">
+            Fertility treatment is draining, even when things are going well.
+            Talking to people who get it can make a real difference.
+          </p>
+          <ul className="list-disc pl-6 space-y-3 text-ink/75">
+            <li>
+              <strong>The Fertility Foundation</strong> offers grants and
+              support for people who can't afford private treatment.{" "}
+              <a
+                href="https://fertilityfoundation.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand underline"
+              >
+                fertilityfoundation.org
+              </a>
+            </li>
+            <li>
+              <strong>HFEA</strong> (Human Fertilisation and Embryology
+              Authority) has impartial information on treatments, success rates,
+              and how to choose a clinic.{" "}
+              <a
+                href="https://www.hfea.gov.uk/treatments/explore-all-treatments/costs-and-funding/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand underline"
+              >
+                hfea.gov.uk
+              </a>
+            </li>
+            <li>
+              <strong>BICA</strong> (British Infertility Counselling
+              Association) maintains a directory of fertility-specialist
+              counsellors you can contact directly.{" "}
+              <a
+                href="https://www.bica.net/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand underline"
+              >
+                bica.net
+              </a>
+            </li>
+            <li>
+              <strong>Online communities.</strong> Reddit has active forums
+              like{" "}
+              <a
+                href="https://www.reddit.com/r/IVF/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand underline"
+              >
+                r/IVF
+              </a>{" "}
+              where people share experiences, and{" "}
+              <a
+                href="https://www.theivfnetwork.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand underline"
+              >
+                The IVF Network
+              </a>{" "}
+              runs moderated discussion spaces. Just keep in mind that
+              individual stories may not reflect your own situation.
+            </li>
+          </ul>
+          <p className="font-sans text-base leading-relaxed text-ink/75">
+            If you're struggling emotionally, ask your GP about counselling
+            referrals. The emotional weight of this process is real, and there's
+            no reason to carry it alone.
           </p>
         </div>
       </div>
