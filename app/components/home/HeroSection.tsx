@@ -43,7 +43,7 @@ export function HeroSection() {
         {/* Headline */}
         <h1 className="reveal stagger-2 font-heading text-5xl font-bold leading-tight tracking-tight text-ink md:text-6xl lg:text-7xl">
           Your pathway to{' '}
-          <em className="not-italic font-heading italic text-brand">
+          <em className="not-italic font-heading italic text-brand whitespace-nowrap">
             NHS-funded
           </em>{' '}
           fertility treatment
