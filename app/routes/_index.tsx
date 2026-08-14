@@ -12,9 +12,10 @@ import FAQSection from "@/components/home/FAQSection";
 import CTASection from "@/components/home/CTASection";
 
 export function meta({}: Route.MetaArgs) {
-  const title = "Postcode to Parenthood | Unlock Your IVF Funding";
+  const title =
+    "Postcode to Parenthood | NHS IVF Funding by Area";
   const description =
-    "Don't let your postcode dictate your future. Get an instant breakdown of NHS fertility funding eligibility, cycle availability, and local health board policy.";
+    "Find out what NHS fertility treatment your area offers. Enter your postcode and we'll show you the funding, eligibility criteria, and next steps for your local health board.";
   const canonicalUrl = "https://postcodetoparenthood.org.uk";
 
   return [
@@ -115,7 +116,7 @@ export default function LandingPage() {
             name: "Postcode to Parenthood",
             url: "https://postcodetoparenthood.org.uk",
             description:
-              "A clearer route through NHS IVF funding. Check local eligibility guidance and health board policies by postcode.",
+              "Find out what NHS fertility treatment your area offers. Check local eligibility guidance and health board policies by postcode.",
             potentialAction: {
               "@type": "SearchAction",
               target: {
@@ -137,7 +138,7 @@ export default function LandingPage() {
             url: "https://postcodetoparenthood.org.uk",
             logo: "https://postcodetoparenthood.org.uk/og-image.png",
             description:
-              "Helping UK residents navigate the IVF postcode lottery by mapping local NHS fertility funding guidance to health board policies.",
+              "Helping UK residents navigate the IVF postcode lottery by mapping NHS fertility treatment funding to local health board eligibility policies.",
             sameAs: [],
           }),
         }}

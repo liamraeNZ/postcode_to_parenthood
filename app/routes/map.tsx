@@ -25,9 +25,10 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export function meta({}: Route.MetaArgs) {
-  const title = "NHS IVF Funding Map | Postcode to Parenthood";
+  const title =
+    "NHS IVF Criteria by Area | Interactive Funding Map | Postcode to Parenthood";
   const description =
-    "Explore the UK IVF postcode lottery with an interactive NHS fertility funding map. Compare health board boundaries and local eligibility rules.";
+    "View NHS IVF criteria by area on an interactive map. Compare fertility treatment eligibility rules, funded cycles, and age limits across every Integrated Care Board and health board in the UK.";
   const canonicalUrl = "https://postcodetoparenthood.org.uk/map";
 
   return [
@@ -77,8 +78,8 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
     <section className="flex flex-1 flex-col">
       <PageHeader
         compact
-        title="NHS IVF funding map"
-        description="Click a health board area to open its local IVF funding guidance: cycles offered, age limits, and eligibility requirements."
+        title="NHS IVF criteria by area"
+        description="See how fertility treatment funding varies across the UK. Click any area to view its eligibility rules, funded cycles, and age limits."
         breadcrumbCurrent="Funding map"
       />
 
@@ -93,6 +94,21 @@ export default function MapPage({ loaderData }: Route.ComponentProps) {
               </Suspense>
             )}
           </ClientOnly>
+        </div>
+      </div>
+
+      {/* SEO content section — visible summary below the map */}
+      <div className="container mx-auto max-w-3xl px-4 py-8 md:py-10">
+        <h2 className="font-heading text-xl font-semibold text-ink mb-3">
+          Understanding NHS IVF funding by area
+        </h2>
+        <div className="space-y-3 font-sans text-base text-ink/80 leading-relaxed">
+          <p>
+            Each Integrated Care Board (ICB) in England sets its own eligibility criteria for NHS-funded IVF treatment. These criteria typically include age limits, body mass index (BMI) requirements, whether intrauterine insemination (IUI) rounds are required first, and how many full cycles of IVF are offered.
+          </p>
+          <p>
+            In Scotland, Wales, and Northern Ireland, health boards follow national policies, though access can still vary. The map above shows every board boundary so you can quickly compare what fertility treatment funding is available where you live.
+          </p>
         </div>
       </div>
 

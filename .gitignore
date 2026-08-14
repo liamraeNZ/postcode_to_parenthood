@@ -20,3 +20,4 @@ scripts/output/*
 geojson/*
 *.topojson
 manus/
+*.xlsx

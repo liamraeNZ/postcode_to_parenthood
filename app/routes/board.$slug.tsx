@@ -255,7 +255,9 @@ export function meta({ data }: Route.MetaArgs) {
   const boroughList = parseBoroughsForMeta(boardMeta?.boroughs ?? null);
   const areasSuffix = boroughList ? ` Covers ${boroughList}.` : "";
 
-  const title = `${displayName} IVF Funding Guidance | ${countryName} | Postcode to Parenthood`;
+  const title = isNationalPolicy
+    ? `${displayName} NHS IVF Eligibility | Funded Cycles, Age Limits & Criteria | Postcode to Parenthood`
+    : `${displayName} IVF Funding Guidance | ${countryName} | Postcode to Parenthood`;
   const description =
     cycles > 0
       ? `${displayName} in ${countryName} offers ${cycles} NHS-funded IVF cycle${cycles !== 1 ? "s" : ""} for eligible patients up to age ${maxAge}. Check full eligibility criteria including BMI, IUI requirements, and more.${areasSuffix}`
@@ -301,7 +303,7 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
   return (
     <section className="flex flex-1 flex-col">
       <PageHeader
-        title={displayName}
+        title={isNationalPolicy ? `${displayName} NHS IVF eligibility` : displayName}
         description={`${countryName}. NHS-funded fertility treatment guidance and eligibility criteria.`}
         breadcrumbCurrent={displayName}
         compact
@@ -407,6 +409,32 @@ export default function IcbPolicyPage({ loaderData }: Route.ComponentProps) {
         <div className="mt-6 md:mt-8">
           <PostcodeLotteryNote />
         </div>
+
+        {/* Wales-specific eligibility content for SEO */}
+        {icb.country === "WALES" && (
+          <section
+            className="mt-6 md:mt-8 rounded-2xl border border-tint/20 bg-surface/60 px-5 py-5 md:px-6 md:py-6"
+            aria-labelledby="wales-eligibility-heading"
+          >
+            <h3
+              id="wales-eligibility-heading"
+              className="font-heading text-base font-semibold text-ink mb-3"
+            >
+              Who can access NHS-funded IVF in Wales?
+            </h3>
+            <div className="space-y-3 font-sans text-sm leading-relaxed text-ink/80">
+              <p>
+                NHS Wales offers IVF to women aged between 18 and 42 who have a demonstrated fertility problem at investigation. Both married and unmarried couples are eligible, as are same-sex couples requiring donor sperm. The policy applies regardless of relationship status, so cohabiting partners have the same access to NHS-funded IVF treatment as married couples.
+              </p>
+              <p>
+                Eligibility criteria include body mass index (BMI) requirements, typically between 19 and 30, and a minimum period of trying to conceive or insemination at or just prior to NHS-funded IVF treatment. Women aged between 40 and 42 may be offered treatment under slightly different conditions, and those outside this age range will not be added to the waiting list.
+              </p>
+              <p>
+                Wales currently offers one full cycle of in vitro fertilisation (IVF) on the NHS. This includes any frozen embryo transfers arising from that cycle. Patients should confirm current criteria directly with their local health board, as waiting times and specific requirements can vary.
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* What next? — soft-path guidance buttons */}
         <div className="mt-5 md:mt-6">

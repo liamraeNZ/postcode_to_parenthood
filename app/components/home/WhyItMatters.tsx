@@ -59,7 +59,7 @@ export default function WhyItMatters() {
           <p className="reveal stagger-2 font-sans text-white/90 text-base md:text-lg font-light leading-relaxed mb-10 max-w-xl">
             Everyone deserves to understand their options. Postcode to
             Parenthood makes it simple to find out what funding is available in
-            your area.
+            your area, so you can focus on what matters.
           </p>
 
           {/* 2×2 Statistics grid */}
