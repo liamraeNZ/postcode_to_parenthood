@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 export function meta({}: Route.MetaArgs) {
   const title = "Privacy Policy | Postcode to Parenthood";
   const description =
-    "How Postcode to Parenthood handles your data, cookies, and third-party services.";
+    "How we handle your data, cookies, and third-party services on this site.";
   const canonicalUrl = "https://postcodetoparenthood.org.uk/privacy";
 
   return [

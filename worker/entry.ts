@@ -46,6 +46,15 @@ async function handleRequest(
 ): Promise<Response> {
   const url = new URL(request.url);
 
+  // Redirect www to bare domain (prevents duplicate content and hreflang mismatch)
+  if (url.hostname === "www.postcodetoparenthood.org.uk") {
+    url.hostname = "postcodetoparenthood.org.uk";
+    return new Response(null, {
+      status: 301,
+      headers: { Location: url.toString() },
+    });
+  }
+
   // API routes bypass React Router entirely
   if (url.pathname === "/api" || url.pathname.startsWith("/api/")) {
     return handleApiRequest(request, env);

@@ -51,7 +51,7 @@ export function HeroSection() {
 
         {/* Subheading */}
         <p className="reveal stagger-3 mx-auto mt-6 max-w-2xl font-sans text-lg text-ink/70 md:text-xl">
-          Discover what fertility funding your local NHS area offers in seconds.
+          Find out what fertility funding your local NHS area offers. In seconds, not hours.
         </p>
         <p className="reveal stagger-4 mt-3 font-heading text-xl font-semibold tracking-tight text-brand md:text-2xl">
           Free, and totally independent.

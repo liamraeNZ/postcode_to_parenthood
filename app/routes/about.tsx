@@ -5,9 +5,9 @@ import { Link } from "react-router";
 
 export function meta({ }: Route.MetaArgs) {
   const title =
-    "About Postcode to Parenthood | P2P | NHS Fertility Funding";
+    "Postcode to Parenthood | About Us | NHS Fertility Funding Transparency";
   const description =
-    "Learn how Postcode to Parenthood collects and verifies NHS fertility funding data, our methodology, limitations, and the peer-to-peer principle behind the project.";
+    "Postcode to Parenthood is a free, independent project that maps NHS fertility funding policies across the UK. Learn who we are, how we collect data, and why we built this.";
   const canonicalUrl = "https://postcodetoparenthood.org.uk/about";
 
   return [
@@ -35,7 +35,7 @@ export default function AboutPage() {
     <section className="flex flex-1 flex-col">
       <PageHeader
         title="About Postcode to Parenthood"
-        description="Two people, no agenda, one goal: make NHS fertility funding rules actually understandable."
+        description="Postcode to Parenthood is a free, independent project by two people with one goal: make NHS fertility funding rules actually understandable."
         breadcrumbCurrent="About"
       />
       <div className="container mx-auto max-w-3xl px-4 py-8 md:py-12">
