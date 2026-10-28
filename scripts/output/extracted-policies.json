@@ -1216,15 +1216,15 @@
   {
     "icb_folder_name": "Kent and Medway",
     "document_files": [
-      "policies/Kent and Medway/2024/Kent_and_Medway_ART_policy_document_June_2024-1.pdf"
+      "policies/Kent and Medway/2026/kent-and-medway-art-policy-document-final-31012026.pdf"
     ],
-    "document_year": "2024",
+    "document_year": "2026",
     "extracted_at": "2026-04-28T12:51:40.353Z",
     "policies": [
       {
         "treatment_type": "IVF",
-        "cycles_offered": 2,
-        "max_age": 39,
+        "cycles_offered": 1,
+        "max_age": 37,
         "min_age": null,
         "bmi_min": 19,
         "bmi_max": 30,
@@ -1234,7 +1234,7 @@
         "endometriosis_priority_access": null,
         "smoking_restricted": true,
         "living_children_rule": "Neither partner in a couple (or single person) should have a living child from their relationship or any previous relationship, including adopted children.",
-        "additional_notes": "Max 4 embryo transfers total (max 2 fresh). Will not be funded if 3 previous fresh cycles received. AI pathway requires 12 unsuccessful cycles (at least 6 IUI). Unexplained infertility requires 2 years unprotected sex."
+        "additional_notes": "1 IVF/ICSI cycle funded from 1 April 2026 (previously 2). Maximum of 2 embryo transfers funded, no more than 1 from a fresh cycle (previously 4, no more than 2 fresh). Will not be funded if 3 previous fresh cycles have been received. Storage of supernumerary embryos funded for up to 2 years. AI pathway requires 12 unsuccessful cycles (at least 6 IUI). Unexplained infertility requires 2 years of regular unprotected sex."
       },
       {
         "treatment_type": "ICSI",
@@ -1254,7 +1254,7 @@
       {
         "treatment_type": "IUI",
         "cycles_offered": 6,
-        "max_age": 39,
+        "max_age": 37,
         "min_age": null,
         "bmi_min": 19,
         "bmi_max": 30,
@@ -1268,8 +1268,8 @@
       },
       {
         "treatment_type": "FET",
-        "cycles_offered": 4,
-        "max_age": 39,
+        "cycles_offered": 2,
+        "max_age": 37,
         "min_age": null,
         "bmi_min": 19,
         "bmi_max": 30,
@@ -1279,7 +1279,7 @@
         "endometriosis_priority_access": null,
         "smoking_restricted": true,
         "living_children_rule": "Neither partner in a couple (or single person) should have a living child from their relationship or any previous relationship, including adopted children.",
-        "additional_notes": "Maximum of 4 embryo transfer procedures funded (no more than 2 from fresh cycles). All good quality frozen embryos must be transferred before starting the next NHS funded fresh cycle."
+        "additional_notes": "Maximum of 2 embryo transfer procedures funded, no more than 1 from a fresh cycle (from 1 April 2026; previously 4, no more than 2 fresh)."
       }
     ],
     "extraction_confidence": "high",

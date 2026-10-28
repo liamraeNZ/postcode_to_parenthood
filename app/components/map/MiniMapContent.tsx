@@ -18,6 +18,7 @@ import 'leaflet/dist/leaflet.css';
 import { MiniMapBoundaryLayer, type VisibleBoard } from './MiniMapBoundaryLayer';
 import { UserLocationMarker } from './UserLocationMarker';
 import { BorderContextPanel } from './BorderContextPanel';
+import { CARTO_BASEMAP_URL } from '@/lib/mapTiles';
 import type { MapPolicyEntry } from './IcbBoundaryLayer';
 import { toSlug } from '../../lib/slug';
 
@@ -233,7 +234,7 @@ export default function MiniMapContent({
           <InvalidateSize />
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+            url={CARTO_BASEMAP_URL}
           />
           <MiniMapBoundaryLayer
             geoJsonFeatures={geoJsonFeatures}

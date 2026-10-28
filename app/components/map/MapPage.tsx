@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { feature } from 'topojson-client';
+import { CARTO_BASEMAP_URL } from '@/lib/mapTiles';
 import type { Topology, Objects } from 'topojson-specification';
 import type { FeatureCollection, GeoJsonProperties } from 'geojson';
 import { TreatmentToggle, type TreatmentTypeId } from './TreatmentToggle';
@@ -254,7 +255,7 @@ function MapPageContent() {
         <InvalidateSize />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+          url={CARTO_BASEMAP_URL}
         />
         <IcbBoundaryLayer
           geoJsonFeatures={geoJsonFeatures}
