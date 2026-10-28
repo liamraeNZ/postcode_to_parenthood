@@ -62,7 +62,7 @@
     "autoprefixer": "^10.4.21",
     "dotenv": "^17.2.3",
     "fast-check": "^4.7.0",
-    "happy-dom": "^20.9.0",
+    "happy-dom": "^21.0.4",
     "jsdom": "^25.0.1",
     "mime-types": "^3.0.2",
     "shadcn": "^4.3.1",
@@ -72,7 +72,7 @@
     "topojson-simplify": "^3.0.3",
     "tsx": "^4.23.15",
     "typescript": "~5.8.2",
-    "vitest": "^4.1.5",
+    "vitest": "^5.0.5",
     "wrangler": "^4.84.0"
   }
 }
