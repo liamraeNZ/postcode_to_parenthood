@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readdirSync, readFileSync } from "node:fs";
-import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
+import { cloudflareTest } from "@cloudflare/vitest-plugin";
 import { defineConfig } from "vitest/config";
 
 /**
@@ -29,7 +29,7 @@ export default defineConfig({
   },
   plugins: [
     cloudflareTest(async () => {
-      const migrationsPath = path.join(__dirname, "migrations");
+      const migrationsPath = path.join(import.meta.dirname, "migrations");
       const migrations = readD1Migrations(migrationsPath);
       return {
         wrangler: { configPath: "./wrangler.toml" },
@@ -41,7 +41,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./app"),
+      "@": path.resolve(import.meta.dirname, "./app"),
     },
   },
   test: {

@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import type { ReactNode, ErrorInfo } from "react";
 
 interface ErrorBoundaryProps {
@@ -14,17 +14,12 @@ interface ErrorBoundaryState {
 }
 
 /**
- * Generic typed error boundary — the single place in the codebase that uses
- * the React 19 class component workaround (`as any`).
+ * Generic typed error boundary.
  *
  * All map/page error boundaries should use this component rather than
  * re-implementing the pattern.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const BaseComponent = React.Component as any;
-
-export class ErrorBoundary extends BaseComponent<ErrorBoundaryProps, ErrorBoundaryState> {
-  declare props: ErrorBoundaryProps;
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   state: ErrorBoundaryState = { hasError: false };
 
   static getDerivedStateFromError(): ErrorBoundaryState {
