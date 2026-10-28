@@ -463,8 +463,8 @@ describe("Property 4: ICB Page Meta Description Contains Policy Data", () => {
         expect(description).toContain(String(cycles));
         expect(description).toContain(String(maxAge));
 
-        // Description should also mention the ICB name
-        expect(description).toContain(data.icb.name);
+        // Description should also mention the formatted ICB name
+        expect(description).toContain(formatIcbName(data.icb.name));
       }),
       { numRuns: 100 }
     );
@@ -475,6 +475,7 @@ describe("Property 4: ICB Page Meta Description Contains Policy Data", () => {
 import { renderToReadableStream } from "react-dom/server";
 import { createElement } from "react";
 import { PolicyCard, type Policy } from "./board.$slug";
+import { formatIcbName } from "../lib/utils";
 
 /**
  * Feature: seo-optimized-pages, Property 5: ICB page displays all required policy fields
