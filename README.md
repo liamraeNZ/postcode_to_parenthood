@@ -24,7 +24,7 @@ This project is informational only. It is not medical, legal, or financial advic
 | Database | Cloudflare D1 (SQLite) |
 | Storage | Cloudflare R2 (policy PDFs, boundary GeoJSON) |
 | Language | TypeScript ~5.8, strict, ESM-only |
-| Testing | Vitest, fast-check, @cloudflare/vitest-pool-workers, Testing Library |
+| Testing | Vitest, fast-check, @cloudflare/vitest-plugin, Testing Library |
 
 ## Getting started
 
@@ -153,7 +153,7 @@ Production secrets (ADMIN_USERNAME, ADMIN_PASSWORD) are set via `wrangler secret
 
 Two test configurations exist:
 
-- **Worker/integration tests** (`vitest.config.ts`) — run against real D1/R2 bindings using `@cloudflare/vitest-pool-workers`
+- **Worker/integration tests** (`vitest.config.ts`) — run against real D1/R2 bindings using `@cloudflare/vitest-plugin`
 - **Component tests** (`vitest.config.components.ts`) — use happy-dom for React component testing
 
 Property-based tests use fast-check and are suffixed `.property.test.ts`.
